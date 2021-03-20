@@ -15,7 +15,9 @@ namespace final_proj_gulkosafety.Models
         string picture_link;
         int fix_status;
         string description;
-
+        string defect_name;
+        string defect_type_name;
+        
 
         public int Report_num { get => report_num; set => report_num = value; }
         public int Defect_num { get => defect_num; set => defect_num = value; }
@@ -24,8 +26,12 @@ namespace final_proj_gulkosafety.Models
         public string Picture_link { get => picture_link; set => picture_link = value; }
         public int Fix_status { get => fix_status; set => fix_status = value; }
         public string Description { get => description; set => description = value; }
+        public string Defect_name { get => defect_name; set => defect_name = value; }
+        public string Defect_type_name { get => defect_type_name; set => defect_type_name = value; }
 
-        public defect_in_report(int report_num, int defect_num, DateTime fix_date, DateTime fix_time, string picture_link, int fix_status, string description)
+        public defect_in_report() { }
+
+        public defect_in_report(int report_num, int defect_num, DateTime fix_date, DateTime fix_time, string picture_link, int fix_status, string description, string defect_name, string defect_type_name)
         {
             Report_num = report_num;
             Defect_num = defect_num;
@@ -34,9 +40,9 @@ namespace final_proj_gulkosafety.Models
             Picture_link = picture_link;
             Fix_status = fix_status;
             Description = description;
+            Defect_name = defect_name;
+            Defect_type_name = defect_type_name;
         }
-        public defect_in_report() { }
-
 
         public List<defect_in_report> ReadDefectsInReport(int report_num)
         {

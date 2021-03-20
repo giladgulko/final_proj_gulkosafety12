@@ -5,7 +5,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Suez+One&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@1,700&family=Suez+One&display=swap" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
     <link href="projectsStyles.css" rel="stylesheet" />
@@ -25,23 +25,202 @@
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
     <title></title>
     <style type="text/css">
-        #header {
+
+        body {
+            background-color: #eeeeee;
             display: flex;
-            margin-left: 50%;
-            margin-right: 50%;
+            flex-direction: column;
+        }
+
+        #projDetails {
+            background-color: white;
+        }
+
+        form {
+            display: inline;
+            margin: 0px;
+            padding: 0px;
+            text-align: right;
+            font-size: 12px;
+            float: right;
+        }
+
+        #projNumDiv {
+            text-align: center;
+            width: 100%
         }
     </style>
     <script>
-        const v = 'gilad'
+        defects = [];
+        defects_types = [];
+        function buttonEvents() {
+
+            $(document).on("click", ".editBtn", function () {
+                projId = this.getAttribute('project_data')
+                projToEdite = ""
+                for (var i = 0; i < allProj.length; i++) {
+                    if (allProj[i].Project_num == projId) {
+                        projToEdite = allProj[i]
+                    }
+                }
+                console.log(projToEdite)
+                localStorage["project"] = JSON.stringify(projToEdite);
+                window.location = "project.html"
+
+            });
+
+
+            $(document).on("click", ".deleteBtn", function () {
+                projId = this.getAttribute('project_data')
+
+                swal({
+                    title: "Are you sure ??",
+                    text: "",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true
+                })
+                    .then(function (willDelete) {
+                        if (willDelete) delete_proj(projId);
+                        else swal("Not Deleted!");
+                    });
+            });
+        }
 
         $(document).ready(function () {
-            makeReportPage()
-
+            bringDataFromLocal();
+            getDefectsAndTypeS()
         });
+        function bringDataFromLocal() {
+            project = JSON.parse(localStorage["project"]);
+            renderProjectDetails()
+            
+            if (localStorage["report"] != "") {
+                report = JSON.parse(localStorage["report"]);
+                time = report.Time.split('T')
+                date = report.Date.split('T')
+                $('#Date').val(date[0]);
+                $('#time').val(time[1])
+                headLine = "<h1>" + report.Report_num + " דוח ביקור " + "</h1>"
+                $('#projNumDiv').html(headLine)
+                getReportDefect(report.Report_num)
+            }
+            else {
+                $('#projNumDiv').html("דוח ביקור חדש")
+            }
+        }
+        function getReportDefect(num) {
+            api = "../api/defect_in_report?report_num=" + num
+            ajaxCall("GET", api, "", createDt, getError)
 
-        function makeReportPage() {
-            str = "<h1>" + v + "</h1>";
-            $("#header").html(str)
+        }
+        function createDt(data) {
+            console.table(data)
+        }
+        function getError(err) {
+            console.table(err)
+        }
+        function renderProjectDetails() {
+            //alert("in render details");
+            $('#company').val(project.Company);
+            $('#location').val(project.Address)
+            $('#forman').val(project.Foreman_email);
+            $('#projManeger').val(project.Manager_email)
+        }
+        function this1(this1) {
+            alert(this1)
+            let str = "<img src='" + this1 + "'></img>";
+            $("#pic").show()
+            $("#pic").html(str);
+        }
+        function createDt(projdata) {
+
+
+            allProj = projdata;
+
+            try {
+                tbl = $('#projTable').DataTable({
+                    data: projdata,
+                    pageLength: 8,
+                    columns: [
+
+                        { data: "Defect_num" },
+                        { data: "Defect_name" },
+                        { data: "Defect_type_name" },
+                        { data: "Description" },
+                        { data: "Fix_date" },
+                        { data: "Fix_time" },
+                        { data: "Fix_status" },
+                        {
+                            render: function (data, type, row, meta) {
+                                let dataproj = "Picture_link='" + row.Picture_link + "'";
+
+                                editBtn = "<button type='button' class = 'picBtn btn btn-success' " + dataproj + "value='" + row.Picture_link + "' onclick='this1(this.value)'> תמונה </button>";
+
+
+                                return editBtn;
+
+
+                            }
+                        },
+
+                        {
+                            render: function (data, type, row, meta) {
+                                let dataproj = "defect_data='" + row.Defect_num + "'";
+
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataproj + "> Edit </button>";
+
+                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' " + dataproj + "> Delete </button>";
+                                return editBtn + deleteBtn;
+
+
+                            }
+                        },
+
+                    ],
+                });
+
+            }
+
+            catch (err) {
+                alert(err);
+            }
+        }
+        function closePic() {
+            $("#pic").hide()
+        }
+        function getDefectsAndTypeS() {
+            api = "../api/defect"
+            ajaxCall("GET", api, "", getDefects, getError)
+
+            api1 = "../api/defect_type"
+            ajaxCall("GET", api1, "", getDefectsType, getError)
+        }
+        function getDefects(data) {
+            defects = data;
+            console.log(defects)
+        }
+        function getDefectsType(data) {
+            defects_types = data;
+            console.log(defects_types)
+        }
+        function newDefect() {
+            alert("in")
+            str="<option>סוגי ליקויים</option>"
+            for (var i = 0; i < defects_types.length; i++) {
+                str += "<option value='" + defects_types[i].Defect_type_num + "'>" + defects_types[i].Type_name+"</option>"
+            }
+            $("#selectType").html(str)
+        }
+        function createDefectList(value) {
+            str = "<option>ליקויים</option>"
+            for (var i = 0; i < defects.length; i++) {
+                if (defects[i].Defect_type_num==value) {
+                    str += "<option value='" + defects[i].Defect_type_num + "'>" + defects[i].Name + "</option>"
+                }
+               
+            }
+            $("#selectdefect").html(str)
         }
     </script>
 </head>
@@ -69,13 +248,139 @@
         </nav>
     </div>
 
-    <div id="header">
+    <div id="projNumDiv">
 
     </div>
+    <!--פרטי דוח-->
+    <div id="projDetails">
+        <div class="row">
+            <div class="col-md-8 mb-3">
+                <div class="card">
+                    <div class="card-body section1">
+                        <form id="reportDetailsForm">
 
+
+
+                            <div class="form-group row">
+                                <div class="form-group col-sm-4">
+                                    <label for="projManeger">מנהל פרוקיט</label>
+                                    <input type="text" class="form-control" id="projManeger">
+                                </div>
+                                <div class="form-group col-sm-4">
+                                    <label for="tDate"><span class="red-star"> </span>תאריך ביקור</label>
+                                    </br>
+                                    <input type="date" id="Date">
+                                </div>
+                                <div class="form-group col-sm-4">
+                                    <label for="company">שם חברה</label>
+                                    <input type="text" class="form-control" id="company">
+                                </div>
+
+
+
+
+                            </div>
+
+                            <div class="form-group row">
+
+
+
+                                <div class="form-group col-sm-4">
+                                    <label for="forman">מנהל עבודה</label>
+                                    <input type="text" class="form-control" id="forman">
+                                </div>
+
+
+                                <div class="form-group col-sm-4">
+                                    <label for="time">שעה</label>
+                                    </br>
+                                    <input type="time" id="time">
+                                </div>
+                                <div class="form-group col-sm-4">
+                                    <label for="location">מיקום</label>
+                                    <input type="text" class="form-control" id="location">
+                                </div>
+                            </div>
+
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </div>
+    <!--טבלת ליקויים-->
+    <div id="table">
+        <table id="projTable" class="display" style="width:100%" dir="rtl">
+            <thead>
+                <tr>
+
+                    <th>מספר</th>
+                    <th>סוג</th>
+                    <th>שם</th>
+                    <th>תיאור</th>
+                    <th>תאריך תיקון</th>
+                    <th>שעת תיקון</th>
+                    <th>סטטוס</th>
+                    <th>תמונה</th>
+
+                    <th></th>
+                </tr>
+            </thead>
+
+        </table>
+
+    </div>
+    <div id="pic" onclick="closePic()">
+
+    </div>
+  <!--כל החלק מתחת הוא החלון שנפתח ברגע שלוחצים על הוסף ליקוי חדש לדוח-->
+    <div class="w3-container">
+        
+        <button onclick="document.getElementById('id01').style.display='block',newDefect()" >הוסף ליקוי לדוח </button>
+
+        <div id="id01" class="w3-modal">
+            <div class="w3-modal-content">
+                <div class="w3-container">
+                    <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+
+                    <div>
+                        <label for="defect_type">בחר סוג ליקוי</label>
+                        </br>
+                        <select id="selectType" onchange="createDefectList(this.value)">
+                        </select>
+
+                    </div>
+                    <div>
+                        <label for="defect_type">בחר ליקוי</label>
+                        </br>
+                        <select id="selectdefect">
+                        </select>
+
+                    </div>
+                    <div>
+                        <label for="description">תיאור</label>
+                        <input type="text" class="form-control" id="description">
+
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label for="fixDate"><span class="red-star"> </span>תאריך תיקון</label>
+                        </br>
+                        <input type="date" id="fixDate">
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label for="fixTime">עד שעה:</label>
+                        </br>
+                        <input type="time" id="fixTime">
+                    </div>
+                    <button>הוסף ליקוי</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
-
-
-
-
 </html>

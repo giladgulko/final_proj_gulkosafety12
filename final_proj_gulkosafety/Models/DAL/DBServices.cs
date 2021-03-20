@@ -735,49 +735,7 @@ namespace final_proj_gulkosafety.Models.DAL
         }
 
         //read all defects in report
-        public List<defect_in_report> ReadDefectsInReport(int report_num)
-        {
-            SqlConnection con = null;
-            List<defect_in_report> defectsInReportList = new List<defect_in_report>();
-
-            try
-            {
-                con = connect("DBConnectionString");
-
-                String selectSTR = "SELECT * FROM defect_in_report WHERE repoet_num=" + report_num;
-                SqlCommand cmd = new SqlCommand(selectSTR, con);
-
-                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-                while (dr.Read())
-                {
-                    defect_in_report _defectInReport = new defect_in_report();
-
-                    _defectInReport.Report_num = Convert.ToInt32(dr["report_num"]);
-                    _defectInReport.Defect_num = Convert.ToInt32(dr["defect_num"]);
-                    _defectInReport.Fix_date = Convert.ToDateTime(dr["fix_date"]);
-                    _defectInReport.Fix_time = Convert.ToDateTime(dr["fix_time"]);
-                    _defectInReport.Picture_link = (string)dr["picture_link"];
-                    _defectInReport.Fix_status = Convert.ToInt32(dr["fix_status"]);
-                    _defectInReport.Description = (string)dr["description"];
-                    defectsInReportList.Add(_defectInReport);
-                }
-
-                return defectsInReportList;
-            }
-            catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-            finally
-            {
-                if (con != null)
-                {
-                    con.Close();
-                }
-
-            }
-        }
+        
 
         // delete defect in report
         public int DeleteDefectInReport(int report_num, int defect_num)
@@ -994,6 +952,52 @@ namespace final_proj_gulkosafety.Models.DAL
         public void InsertUserType(user_type ut)
         {
 
+        }
+
+        public List<defect_in_report> ReadDefectsInReport(int report_num)
+        {
+            SqlConnection con = null;
+            List<defect_in_report> defectsInReportList = new List<defect_in_report>();
+
+            try
+            {
+                con = connect("DBConnectionString");
+
+                String selectSTR = "select di.*,d.name,dt.type_name,dt.defect_type_num from defect_in_report di inner join defect d on di.defect_num=d.defect_num inner join defect_type dt on d.defect_type_num=dt.defect_type_num where di.report_num=" + report_num;
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                while (dr.Read())
+                {
+                    defect_in_report _defectInReport = new defect_in_report();
+
+                    _defectInReport.Report_num = Convert.ToInt32(dr["report_num"]);
+                    _defectInReport.Defect_num = Convert.ToInt32(dr["defect_num"]);
+                    _defectInReport.Fix_date = Convert.ToDateTime(dr["fix_date"]);
+                    _defectInReport.Fix_time = Convert.ToDateTime("12:30");
+                    _defectInReport.Picture_link = (string)dr["picture_link"];
+                    _defectInReport.Fix_status = Convert.ToInt32(dr["fix_status"]);
+                    _defectInReport.Description = (string)dr["description"];
+                    _defectInReport.Defect_name= (string)dr["name"];
+                    _defectInReport.Defect_type_name= (string)dr["type_name"];
+                    defectsInReportList.Add(_defectInReport);
+                }
+
+                return defectsInReportList;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
         }
     }
 }
