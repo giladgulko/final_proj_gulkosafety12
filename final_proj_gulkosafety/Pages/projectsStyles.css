@@ -36,3 +36,81 @@
     margin-top: 5%;
 }
 
+.btn-primary {
+    color: #fff;
+    background-color: cadetblue;
+    border-color: cadetblue;
+}
+
+h2, .proj {
+    font-family: 'Lucida Console';
+    color: cadetblue;
+    font-weight: bold;
+}
+
+body {
+    background-color: #eeeeee;
+}
+
+.navbar-default {
+    background-color: cadetblue;
+    border-color: #e7e7e7;
+    color: white;
+}
+
+#logo {
+    float: left;
+    position: relative;
+}
+
+.navbar {
+    margin-left: 150px;
+}
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:focus, .navbar-default .navbar-nav > .active > a:hover {
+    font-weight: bold;
+    color: cadetblue;
+    background-color: white;
+    text-align: center;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: white;
+    font-weight: bold;
+    padding-left: 60px;
+}
+
+.glyphicon {
+    top: 20px;
+    padding-left: 60px;
+    
+}
+
+.pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
+    background-color: cadetblue;
+    font-weight: bold;
+}
+.btn-success {
+    background-color: white;
+    color: black;
+    border: 2px solid #569366;
+    margin: 3px;
+}
+
+    .btn-success:hover {
+        background-color: #569366;
+        color: white;
+    }
+
+.btn-danger {
+    background-color: white;
+    color: black;
+    border: 2px solid #bd3636;
+    margin: 3px;
+}
+
+    .btn-danger:hover {
+        background-color: #bd3636;
+        color: white;
+    }
+
