@@ -1,0 +1,38 @@
+﻿
+
+#proj_bar {
+    text-align: center;
+    display: flex;
+    margin-top: 40px
+}
+
+#headline {
+    width: 20%;
+    font-family: 'Suez One', serif;
+    color: blue;
+}
+
+#header {
+    height: 100px;
+    width: 100%;
+    text-align: center
+}
+
+#search {
+    display: flex;
+    height: 60%;
+    margin: auto
+}
+
+#table {
+    margin-top: 30px;
+    padding-left: 12%;
+    padding-right: 12%;
+    text-align: center;
+}
+#pForm {
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 5%;
+}
+
