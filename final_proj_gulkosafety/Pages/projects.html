@@ -189,9 +189,9 @@
                             render: function (data, type, row, meta) {
                                 let dataproj = "project_data='" + row.Project_num + "'";
 
-                                editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataproj + "> Edit </button>";
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataproj + "> עריכה </button>";
 
-                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' " + dataproj + "> Delete </button>";
+                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' " + dataproj + "> מחיקה </button>";
                                 return editBtn + deleteBtn;
 
 
@@ -259,20 +259,12 @@
         <div id="headline">
             <h1 class="proj">פרוייקטים</h1>
         </div>
-        <div id="search">
-            <div style="display:flex;margin-left:40px">
-                <input style="margin-left:10px ;width:60%" type="text" class="form-control" placeholder="">
-                <select style="margin-left:10px">
-                    <option>חפש לפי</option>
-                    <option>1</option>
-                    <option>2</option>
-                </select>
-                <button type="button" class="btn btn-primary">חפש</button>
-            </div>
-            <button id="myBtn" style="margin-left:10px" class="btn btn-primary" onclick="document.getElementById('id01').style.display='block'">הוסף פרוייקט חדש</button>
+        <br />
+        <div id="buttons">
+            <button id="myBtn" style="margin-left:10px" class="btn btn-primary" onclick="addNewProj()">הוסף פרוייקט חדש</button>
             <button id="old_proj_btn" type="button" class="btn btn-primary" onclick="renderOldPROJ()">ארכיון פרוייקטים</button>
         </div>
-    </div>
+    </div>>
     <form id="pForm">
         <table id="projTable" class="display" style="width:100%" dir="rtl">
             <thead>

@@ -108,10 +108,15 @@ body {
     margin: 3px;
 }
 
-    .btn-danger:hover {
-        background-color: #bd3636;
-        color: white;
-    }
+.btn-danger:hover {
+   background-color: #bd3636;
+   color: white;
+}
 th.sorting {
     text-align: center;
+}
+
+#buttons {
+    margin-top: 45px;
+    margin-right: 70px;
 }
