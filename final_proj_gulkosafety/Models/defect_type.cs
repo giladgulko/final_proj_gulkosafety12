@@ -34,5 +34,6 @@ namespace final_proj_gulkosafety.Models
         //   dbs.InsertDefectType(this);
         //  }
 
+
     }
 }

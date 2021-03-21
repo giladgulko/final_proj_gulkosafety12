@@ -1,0 +1,95 @@
+﻿form {
+    display: inline;
+    margin: 0px;
+    padding: 0px;
+    text-align: right;
+    font-size: 12px;
+}
+
+/*#saveBTN {
+            left: 7px;
+            bottom: 5px;
+            position: absolute;
+        }*/
+
+.form-control {
+    font-size: 12px;
+}
+
+.form-group {
+    margin-bottom: 5px;
+}
+
+#main {
+    direction: rtl;
+    text-align: right;
+    background-color: #e4e2e2;
+}
+
+h3 {
+    font-size: 20px;
+    font-weight: bold;
+    color: cadetblue;
+    text-align: right;
+}
+
+.project_name {
+    width: 30%;
+    font-family: 'Lucida Console';
+    color: cadetblue;
+    font-weight: bold;
+}
+
+.card {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.newBTN {
+    float: right;
+}
+
+.navbar-default {
+    background-color: cadetblue;
+    border-color: #e7e7e7;
+    color: white;
+}
+
+#logo {
+    float: left;
+    position: relative;
+}
+
+.navbar {
+    margin-left: 150px;
+}
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:focus, .navbar-default .navbar-nav > .active > a:hover {
+    font-weight: bold;
+    color: cadetblue;
+    background-color: white;
+    text-align: center;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: white;
+    font-weight: bold;
+    padding-left: 60px;
+}
+
+.glyphicon {
+    top: 20px;
+    padding-left: 60px;
+}
+
+.pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
+    background-color: cadetblue;
+    font-weight: bold;
+}
+
+body {
+    background-color: #eeeeee;
+}
+ th{
+     text-align:right;
+ }

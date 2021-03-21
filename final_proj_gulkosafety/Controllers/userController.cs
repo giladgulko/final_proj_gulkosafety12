@@ -18,13 +18,12 @@ namespace final_proj_gulkosafety.Controllers
             return uList;
         }
 
-        // GET api/<controller>/5
-        public string Get(int id)
+        public List<user> Get(string manager_email, string foreman_email)
         {
-            return "value";
+            user p = new user();
+            return p.Read_user_in_project(manager_email, foreman_email);
         }
 
-        // POST one project api/<controller>
         public void Post([FromBody] user u)
         {
             u.InsertUser();
@@ -40,12 +39,6 @@ namespace final_proj_gulkosafety.Controllers
         {
         }
 
-     
-        public List<user> Get(string manager_email, string foreman_email)
-        {
-            user p = new user();
-            return p.Read_user_in_project(manager_email, foreman_email);
-        }
 
     }
 }

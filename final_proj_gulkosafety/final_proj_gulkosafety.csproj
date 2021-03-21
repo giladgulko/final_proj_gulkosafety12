@@ -175,9 +175,9 @@
     <Compile Include="Models\project.cs" />
     <Compile Include="Models\project_type.cs" />
     <Compile Include="Models\proj_type_weight.cs" />
+    <Compile Include="Models\report.cs" />
     <Compile Include="Models\user.cs" />
     <Compile Include="Models\user_type.cs" />
-    <Compile Include="Models\report.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -190,10 +190,14 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Pages\photos\logo.jpeg" />
+    <Content Include="Pages\p.html" />
+    <Content Include="Pages\p1.html" />
     <Content Include="Pages\project.html" />
-    <Content Include="Pages\projects.html" />
     <Content Include="Pages\projectsStyles.css" />
+    <Content Include="Pages\projects.html" />
+    <Content Include="Pages\projectStyleSheet.css" />
     <Content Include="Pages\report.html" />
+    <Content Include="Pages\reportStyleSheet.css" />
     <Content Include="Scripts\ajaxCalls.js" />
     <Content Include="Scripts\ajaxCallsWithKey.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -224,6 +228,7 @@
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="SQLQuery1.sql" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

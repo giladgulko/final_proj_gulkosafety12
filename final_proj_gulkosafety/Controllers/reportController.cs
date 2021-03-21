@@ -12,7 +12,7 @@ namespace final_proj_gulkosafety.Controllers
     {
         //get all project's reports
         public List<report> Get(int proj_num)
-        {
+        { 
             report r = new report();
             List<report> reprotList = r.ReadReport(proj_num);
             return reprotList;
@@ -23,21 +23,14 @@ namespace final_proj_gulkosafety.Controllers
             r.InsertReport();
         }
 
+        public void DeleteReport([FromBody] report r)
+        {
+            r.DeleteReport(r.Report_num);
+        }
+
         // PUT api/<controller>/5
         public void Put(int id, [FromBody] string value)
         {
-        }
-
-        // DELETE api/<controller>/5
-        public void DeleteReport(int report_num)
-        {
-            report r = new report();
-            r.DeleteReport(report_num);
-        }
-        
-        public void UpdateReport([FromBody] report r)
-        {
-            r.UpdateReport(r.Report_num, r.Date, r.Time, r.Comment, r.Grade, r.Project_num, r.User_mail);
         }
     }
 }

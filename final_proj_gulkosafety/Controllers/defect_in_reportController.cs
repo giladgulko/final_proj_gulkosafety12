@@ -19,12 +19,9 @@ namespace final_proj_gulkosafety.Controllers
 
         public void DeleteDefectInReport([FromBody] defect_in_report dr)
         {
-            dr.DeleteDefectInReport(dr.Report_num, dr.Defect_num);
+            dr.DeleteDefectInReport(dr.Report_num,dr.Defect_num);
         }
-        public void UpdateDefectInReport([FromBody] defect_in_report dr)
-        {
-            dr.UpdateDefectInReport(dr.Defect_num, dr.Fix_date, dr.Fix_time, dr.Picture_link, dr.Fix_status, dr.Description);
-        }
+
         // POST api/<controller>
         public void Post([FromBody]string value)
         {

@@ -1,0 +1,92 @@
+﻿
+body {
+    background-color: #eeeeee;
+    display: flex;
+    flex-direction: column;
+}
+
+#projDetails {
+    background-color: white;
+}
+
+form {
+    display: inline;
+    margin: 0px;
+    padding: 0px;
+    text-align: right;
+    font-size: 12px;
+    float: right;
+}
+
+#projNumDiv {
+    text-align: center;
+    width: 100%
+}
+
+.navbar-default {
+    background-color: cadetblue;
+    border-color: #e7e7e7;
+    color: white;
+}
+
+#logo {
+    float: left;
+    position: relative;
+}
+
+.navbar {
+    margin-left: 150px;
+}
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:focus, .navbar-default .navbar-nav > .active > a:hover {
+    font-weight: bold;
+    color: cadetblue;
+    background-color: white;
+    text-align: center;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: white;
+    font-weight: bold;
+    padding-left: 60px;
+}
+
+.glyphicon {
+    top: 20px;
+    padding-left: 60px;
+}
+
+.pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
+    background-color: cadetblue;
+    font-weight: bold;
+}
+
+body {
+    background-color: #eeeeee;
+}
+#headline {
+    width: 20%;
+    font-family: 'Suez One', serif;
+    color: blue;
+}
+h1, .proj {
+    font-family: 'Lucida Console';
+    color: cadetblue;
+    font-weight: bold;
+}
+img.logo {
+    position: absolute;
+}
+.w3-modal-content{
+    direction:rtl;
+}
+#btn_add_defect {
+    float: left;
+    margin-top: 25px;
+    color: #fff;
+    background-color: cadetblue;
+    border-color: cadetblue;
+}
+.form-group.col-sm-4 {
+    float: right;
+}

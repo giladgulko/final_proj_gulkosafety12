@@ -235,7 +235,7 @@ namespace final_proj_gulkosafety.Models.DAL
         private String BuildupdateCommand(int proj_num, string manager_email, string foreman_email)
         {
             String command;
-            command = "UPDATE project SET manager_email='" + manager_email + "' foreman_email='" + foreman_email + "'WHERE project_num =" + proj_num;
+            command = "UPDATE project SET manager_email='" + manager_email + "', foreman_email='" + foreman_email + "' WHERE project_num =" + proj_num;
 
             return command;
         }
@@ -285,7 +285,7 @@ namespace final_proj_gulkosafety.Models.DAL
         private String BuildupdateCommand(project p)
         {
             String command;
-            command = "UPDATE project SET name='" + p.Name + "'company='" + p.Company + "'address='" + p.Address + "'start_date='" + p.Start_date + "'end_date='" + p.End_date + "status=" + p.Status + "description='" + p.Description + "safety_lvl=" + p.Safety_lvl + "project_type_num=" + p.Project_type_num + "manager_email='" + p.Manager_email + "'foreman_email='" + p.Foreman_email + "' WHERE project_num =" + p.Project_num;
+            command = "UPDATE project SET name='" + p.Name + "', company='" + p.Company + "', address='" + p.Address + "', start_date='" + p.Start_date.ToString("yyyy-MM-dd") + "', end_date='" + p.End_date.ToString("yyyy-MM-dd") + "', status=" + p.Status + ", description='" + p.Description + "', safety_lvl=" + p.Safety_lvl + ", project_type_num=" + p.Project_type_num + ", manager_email='" + p.Manager_email + "', foreman_email='" + p.Foreman_email + "' WHERE project_num =" + p.Project_num;
 
             return command;
         }
@@ -529,7 +529,7 @@ namespace final_proj_gulkosafety.Models.DAL
         private String BuildDeleteCommand(int proj_num)
         {
             String command;
-            command = "delete from project where project_num="+proj_num;
+            command = "delete from project where project_num=" + proj_num;
             return command;
         }
 
@@ -678,7 +678,7 @@ namespace final_proj_gulkosafety.Models.DAL
 
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
-            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', '{10}')", _project.Name, _project.Company, _project.Address, _project.Start_date, _project.End_date, _project.Status, _project.Description, _project.Safety_lvl, _project.Project_type_num, _project.Manager_email, _project.Foreman_email);
+            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', '{10}')", _project.Name, _project.Company, _project.Address, _project.Start_date.ToString("yyyy-MM-dd"), _project.End_date.ToString("yyyy-MM-dd"), _project.Status, _project.Description, _project.Safety_lvl, _project.Project_type_num, _project.Manager_email, _project.Foreman_email);
             String prefix = "INSERT INTO project " + "(name,company,address,start_date,end_date,status,description,safety_lvl,project_type_num,manager_email,foreman_email)";
             command = prefix + sb.ToString();
 
@@ -686,56 +686,95 @@ namespace final_proj_gulkosafety.Models.DAL
 
         }
 
-        //update project detail
-        public int UpdateProjectDeatails(project p)
+        //read all defects in report
+        public List<defect_in_report> ReadDefectsInReport(int report_num)
         {
-
-            SqlConnection con;
-            SqlCommand cmd;
+            SqlConnection con = null;
+            List<defect_in_report> defectsInReportList = new List<defect_in_report>();
 
             try
             {
                 con = connect("DBConnectionString");
+
+                String selectSTR = "select di.*,d.name,dt.type_name,dt.defect_type_num from defect_in_report di inner join defect d on di.defect_num=d.defect_num inner join defect_type dt on d.defect_type_num=dt.defect_type_num where di.report_num=" + report_num;
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                while (dr.Read())
+                {
+                    defect_in_report _defectInReport = new defect_in_report();
+
+                    _defectInReport.Report_num = Convert.ToInt32(dr["report_num"]);
+                    _defectInReport.Defect_num = Convert.ToInt32(dr["defect_num"]);
+                    _defectInReport.Fix_date = Convert.ToDateTime(dr["fix_date"]);
+                    _defectInReport.Fix_time = Convert.ToDateTime("12:30");
+                    _defectInReport.Picture_link = (string)dr["picture_link"];
+                    _defectInReport.Fix_status = Convert.ToInt32(dr["fix_status"]);
+                    _defectInReport.Description = (string)dr["description"];
+                    _defectInReport.Defect_name = (string)dr["name"];
+                    _defectInReport.Defect_type_name = (string)dr["type_name"];
+                    defectsInReportList.Add(_defectInReport);
+                }
+
+                return defectsInReportList;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception("The connection to sever is not good");
+                // write to log
+                throw (ex);
             }
-
-            String cStr = BuildupdateProjectCommand(p);
-
-            cmd = CreateCommand(cStr, con);
-
-            try
-            {
-                int numEffected = cmd.ExecuteNonQuery();
-                return numEffected;
-            }
-            catch (Exception)
-            {
-                throw new Exception("The update of project details failed");
-            }
-
             finally
             {
                 if (con != null)
                 {
                     con.Close();
                 }
+
             }
-
         }
+        //public List<defect_in_report> ReadDefectsInReport(int report_num)
+        //{
+        //    SqlConnection con = null;
+        //    List<defect_in_report> defectsInReportList = new List<defect_in_report>();
 
-        private String BuildupdateProjectCommand(project p)
-        {
-            String command;
-            command = "UPDATE project SET name='" + p.Name + "'company='" + p.Company + "'address='" + p.Address + "'start_date='" + p.Start_date + "'end_date='" + p.End_date + "status=" + p.Status + "description='" + p.Description + "safety_lvl=" + p.Safety_lvl + "project_type_num=" + p.Project_type_num + "manager_email='" + p.Manager_email + "'foreman_email='" + p.Foreman_email + "' WHERE project_num =" + p.Project_num;
+        //    try
+        //    {
+        //        con = connect("DBConnectionString");
 
-            return command;
-        }
+        //        String selectSTR = "SELECT * FROM defect_in_report WHERE repoet_num=" + report_num;
+        //        SqlCommand cmd = new SqlCommand(selectSTR, con);
 
-        //read all defects in report
-        
+        //        SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+        //        while (dr.Read())
+        //        {
+        //            defect_in_report _defectInReport = new defect_in_report();
+
+        //            _defectInReport.Report_num = Convert.ToInt32(dr["report_num"]);
+        //            _defectInReport.Defect_num = Convert.ToInt32(dr["defect_num"]);
+        //            _defectInReport.Fix_date = Convert.ToDateTime(dr["fix_date"]);
+        //            _defectInReport.Fix_time = Convert.ToDateTime(dr["fix_time"]);
+        //            _defectInReport.Picture_link = (string)dr["picture_link"];
+        //            _defectInReport.Fix_status = Convert.ToInt32(dr["fix_status"]);
+        //            _defectInReport.Description = (string)dr["description"];
+        //            defectsInReportList.Add(_defectInReport);
+        //        }
+
+        //        return defectsInReportList;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // write to log
+        //        throw (ex);
+        //    }
+        //    finally
+        //    {
+        //        if (con != null)
+        //        {
+        //            con.Close();
+        //        }
+
+        //    }
+        //}
 
         // delete defect in report
         public int DeleteDefectInReport(int report_num, int defect_num)
@@ -926,64 +965,29 @@ namespace final_proj_gulkosafety.Models.DAL
 
         public List<project_type> ReadProjectTypes()
         {
-            List<project_type> ptlist = new List<project_type>();
-            return ptlist;
-        }
-        //insert a whole new project type- with weights
-        public void InsertProjectType(project_type pt)
-        {
 
-        }
-        //returns all users
-        public List<user> ReadUsers()
-        {
-            List<user> ulist = new List<user>();
-            return ulist;
-        }
-
-
-        //returns all user types
-        public List<user_type> ReadUserTypes()
-        {
-            List<user_type> utlist = new List<user_type>();
-            return utlist;
-        }
-        //insert a new user type
-        public void InsertUserType(user_type ut)
-        {
-
-        }
-
-        public List<defect_in_report> ReadDefectsInReport(int report_num)
-        {
             SqlConnection con = null;
-            List<defect_in_report> defectsInReportList = new List<defect_in_report>();
+            List<project_type> ptlist = new List<project_type>();
 
             try
             {
-                con = connect("DBConnectionString");
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
 
-                String selectSTR = "select di.*,d.name,dt.type_name,dt.defect_type_num from defect_in_report di inner join defect d on di.defect_num=d.defect_num inner join defect_type dt on d.defect_type_num=dt.defect_type_num where di.report_num=" + report_num;
+                String selectSTR = "SELECT * FROM [project_type]";
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
-                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
                 while (dr.Read())
                 {
-                    defect_in_report _defectInReport = new defect_in_report();
-
-                    _defectInReport.Report_num = Convert.ToInt32(dr["report_num"]);
-                    _defectInReport.Defect_num = Convert.ToInt32(dr["defect_num"]);
-                    _defectInReport.Fix_date = Convert.ToDateTime(dr["fix_date"]);
-                    _defectInReport.Fix_time = Convert.ToDateTime("12:30");
-                    _defectInReport.Picture_link = (string)dr["picture_link"];
-                    _defectInReport.Fix_status = Convert.ToInt32(dr["fix_status"]);
-                    _defectInReport.Description = (string)dr["description"];
-                    _defectInReport.Defect_name= (string)dr["name"];
-                    _defectInReport.Defect_type_name= (string)dr["type_name"];
-                    defectsInReportList.Add(_defectInReport);
+                    project_type pt = new project_type();
+                    pt.Project_type_num = Convert.ToInt32(dr["project_type_num"]);
+                    pt.Project_type_name = (string)dr["project_type_name"];
+                    ptlist.Add(pt);
                 }
 
-                return defectsInReportList;
+                return ptlist;
             }
             catch (Exception ex)
             {
@@ -998,6 +1002,116 @@ namespace final_proj_gulkosafety.Models.DAL
                 }
 
             }
+        }
+        //insert a whole new project type- with weights
+        public void InsertProjectType(project_type pt)
+        {
+
+        }
+        ////returns all users
+        //public List<user> ReadUsers()
+        //{
+        //        SqlConnection con = null;
+        //        List<user> userList = new List<user>();
+
+        //        try
+        //        {
+        //            con = connect("DBConnectionString");
+        //            String selectSTR = "";
+
+        //            selectSTR = "SELECT * FROM user";
+
+
+
+        //            SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+        //            // get a reader
+        //            SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+        //            while (dr.Read())
+        //            {
+        //                user u = new user();
+        //                u.Email = (string)dr["email"];
+        //                u.Name = (string)dr["name"];
+        //                u.Phone = (string)dr["phone"];
+        //                u.Password = (string)dr["password"];
+        //                u.User_type_num = Convert.ToInt32(dr["user_type_num"]);
+        //                userList.Add(u);
+        //            }
+
+        //            return userList;
+        //        }
+        //        catch (Exception)
+        //        {
+        //            // write to log
+        //            throw new Exception("Can not read users");
+        //        }
+        //        finally
+        //        {
+        //            if (con != null)
+        //            {
+        //                con.Close();
+        //            }
+
+        //        }
+        //}
+
+        // get all defect
+        public List<user> ReadUsers()
+        {
+            SqlConnection con = null;
+            List<user> uList = new List<user>();
+
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+                String selectSTR = "SELECT * FROM [user]";
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {
+                    user u = new user();
+                    u.Email = (string)dr["email"];
+                    u.Name = (string)dr["name"];
+                    u.Phone = (string)dr["phone"];
+                    u.Password = (string)dr["password"];
+                    u.User_type_num = Convert.ToInt32(dr["user_type_num"]);
+                    uList.Add(u);
+                }
+
+                return uList;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
+
+
+        //returns all user types
+        public List<user_type> ReadUserTypes()
+        {
+            List<user_type> utlist = new List<user_type>();
+            return utlist;
+        }
+        //insert a new user type
+        public void InsertUserType(user_type ut)
+        {
+
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -14,8 +15,6 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
 
-
-
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
@@ -23,33 +22,9 @@
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
-    <title></title>
-    <style type="text/css">
+    <link href="reportStyleSheet.css" rel="stylesheet" />
+    <title>דוח ביקור</title>
 
-        body {
-            background-color: #eeeeee;
-            display: flex;
-            flex-direction: column;
-        }
-
-        #projDetails {
-            background-color: white;
-        }
-
-        form {
-            display: inline;
-            margin: 0px;
-            padding: 0px;
-            text-align: right;
-            font-size: 12px;
-            float: right;
-        }
-
-        #projNumDiv {
-            text-align: center;
-            width: 100%
-        }
-    </style>
     <script>
         defects = [];
         defects_types = [];
@@ -94,7 +69,7 @@
         function bringDataFromLocal() {
             project = JSON.parse(localStorage["project"]);
             renderProjectDetails()
-            
+
             if (localStorage["report"] != "") {
                 report = JSON.parse(localStorage["report"]);
                 time = report.Time.split('T')
@@ -206,181 +181,205 @@
         }
         function newDefect() {
             alert("in")
-            str="<option>סוגי ליקויים</option>"
+            str = "<option>סוגי ליקויים</option>"
             for (var i = 0; i < defects_types.length; i++) {
-                str += "<option value='" + defects_types[i].Defect_type_num + "'>" + defects_types[i].Type_name+"</option>"
+                str += "<option value='" + defects_types[i].Defect_type_num + "'>" + defects_types[i].Type_name + "</option>"
             }
             $("#selectType").html(str)
         }
         function createDefectList(value) {
             str = "<option>ליקויים</option>"
             for (var i = 0; i < defects.length; i++) {
-                if (defects[i].Defect_type_num==value) {
+                if (defects[i].Defect_type_num == value) {
                     str += "<option value='" + defects[i].Defect_type_num + "'>" + defects[i].Name + "</option>"
                 }
-               
+
             }
             $("#selectdefect").html(str)
+        }
+        function addDefectToReport(value) {
+
+            New_defect = {
+                select_Type: ("#selectType").val(),
+                select_defect: ("#selectdefect").val(),
+                description: ("#description").val(),
+                fix_Date: ("#fixDate").val(),
+                fix_Time: ("#fixTime").val(),
+                status: 0
+            }
+
+            api = "../api/defect_in_report";
+            ajaxCall("GET", api, JSON.stringify(New_defect), getDefectsInReport, getError)
+            window.location.reload(true);
         }
     </script>
 </head>
 <body>
-    <div id="nav" dir="rtl">
-        <nav dir="rtl" class="navbar navbar-default" style="float:right">
-            <div style="float:right" dir="rtl" class="container-fluid">
-
-                <ul class="nav navbar-nav">
-                    <li><a href="#">הגדרות</a></li>
-                    <li><a href="#">התראות</a></li>
-                    <li><a href="#">סטטיסטיקות</a></li>
-                    <li><a href="#">משתמשים</a></li>
-                    <li><a href="#">הזמנות</a></li>
-                    <li><a href="#">אישורים</a></li>
-                    <li><a href="#">הדרכות</a></li>
-                    <li class="active"><a href="#">פרויקטים</a></li>
-                    <li><a href="#">Home</a></li>
-                </ul>
-
-                <div class="navbar-header">
-                    <img class="logo" src="photos/logo.jpeg" height="50" />
-                </div>
-            </div>
-        </nav>
+    <div id="logo">
+        <img class="logo" src="photos/logo.jpeg" height="50" />
     </div>
-
-    <div id="projNumDiv">
-
-    </div>
-    <!--פרטי דוח-->
-    <div id="projDetails">
-        <div class="row">
-            <div class="col-md-8 mb-3">
-                <div class="card">
-                    <div class="card-body section1">
-                        <form id="reportDetailsForm">
-
-
-
-                            <div class="form-group row">
-                                <div class="form-group col-sm-4">
-                                    <label for="projManeger">מנהל פרוקיט</label>
-                                    <input type="text" class="form-control" id="projManeger">
-                                </div>
-                                <div class="form-group col-sm-4">
-                                    <label for="tDate"><span class="red-star"> </span>תאריך ביקור</label>
-                                    </br>
-                                    <input type="date" id="Date">
-                                </div>
-                                <div class="form-group col-sm-4">
-                                    <label for="company">שם חברה</label>
-                                    <input type="text" class="form-control" id="company">
-                                </div>
-
-
-
-
-                            </div>
-
-                            <div class="form-group row">
-
-
-
-                                <div class="form-group col-sm-4">
-                                    <label for="forman">מנהל עבודה</label>
-                                    <input type="text" class="form-control" id="forman">
-                                </div>
-
-
-                                <div class="form-group col-sm-4">
-                                    <label for="time">שעה</label>
-                                    </br>
-                                    <input type="time" id="time">
-                                </div>
-                                <div class="form-group col-sm-4">
-                                    <label for="location">מיקום</label>
-                                    <input type="text" class="form-control" id="location">
-                                </div>
-                            </div>
-
-
-                        </form>
-                    </div>
-                </div>
-            </div>
-
+    <nav class="navbar navbar-default navbar-static-top">
+        <div class="container" style="float:right">
+            <ul class="nav navbar-nav">
+                <li><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="#"></a></li>
+                <li></li>
+                <li><span class="glyphicon glyphicon-bell" aria-hidden="true"></span><a href="#"></a></li>
+                <li><a href="#">סטטיסטיקות</a></li>
+                <li><a href="#">משתמשים</a></li>
+                <li><a href="#">הזמנות</a></li>
+                <li><a href="#">אישורים</a></li>
+                <li><a href="#">הדרכות</a></li>
+                <li class="active"><a href="#">פרויקטים</a></li>
+                <li><a href="#">התחברות</a></li>
+                <li><span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="#"></a></li>
+            </ul>
         </div>
-
-
-
-    </div>
-    <!--טבלת ליקויים-->
-    <div id="table">
-        <table id="projTable" class="display" style="width:100%" dir="rtl">
-            <thead>
-                <tr>
-
-                    <th>מספר</th>
-                    <th>סוג</th>
-                    <th>שם</th>
-                    <th>תיאור</th>
-                    <th>תאריך תיקון</th>
-                    <th>שעת תיקון</th>
-                    <th>סטטוס</th>
-                    <th>תמונה</th>
-
-                    <th></th>
-                </tr>
-            </thead>
-
-        </table>
-
-    </div>
-    <div id="pic" onclick="closePic()">
-
-    </div>
-  <!--כל החלק מתחת הוא החלון שנפתח ברגע שלוחצים על הוסף ליקוי חדש לדוח-->
-    <div class="w3-container">
-        
-        <button onclick="document.getElementById('id01').style.display='block',newDefect()" >הוסף ליקוי לדוח </button>
-
-        <div id="id01" class="w3-modal">
-            <div class="w3-modal-content">
-                <div class="w3-container">
-                    <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-
-                    <div>
-                        <label for="defect_type">בחר סוג ליקוי</label>
-                        </br>
-                        <select id="selectType" onchange="createDefectList(this.value)">
-                        </select>
-
-                    </div>
-                    <div>
-                        <label for="defect_type">בחר ליקוי</label>
-                        </br>
-                        <select id="selectdefect">
-                        </select>
-
-                    </div>
-                    <div>
-                        <label for="description">תיאור</label>
-                        <input type="text" class="form-control" id="description">
-
-                    </div>
-                    <div class="form-group col-sm-4">
-                        <label for="fixDate"><span class="red-star"> </span>תאריך תיקון</label>
-                        </br>
-                        <input type="date" id="fixDate">
-                    </div>
-                    <div class="form-group col-sm-4">
-                        <label for="fixTime">עד שעה:</label>
-                        </br>
-                        <input type="time" id="fixTime">
-                    </div>
-                    <button>הוסף ליקוי</button>
-                </div>
-            </div>
+    </nav>
+    <div id="proj_bar" dir="rtl">
+        <div id="headline">
+            <h1 class="proj">דוח ביקור</h1>
         </div>
     </div>
+        <div id="projNumDiv">
+
+        </div>
+        <!--פרטי דוח-->
+        <div id="projDetails">
+            <div class="row">
+                <div class="col-md-8 mb-3">
+                    <div class="card">
+                        <div class="card-body section1">
+                            <form id="reportDetailsForm">
+
+
+
+                                <div class="form-group row">
+                                    <div class="form-group col-sm-4">
+                                        <label for="projManeger">מנהל פרויקט</label>
+                                        <input type="text" class="form-control" id="projManeger">
+                                    </div>
+                                    <div class="form-group col-sm-4">
+                                        <label for="tDate"><span class="red-star"> </span>תאריך ביקור</label>
+                                        <br />
+                                        <input type="date" id="Date">
+                                    </div>
+                                    <div class="form-group col-sm-4">
+                                        <label for="company">שם חברה</label>
+                                        <input type="text" class="form-control" id="company">
+                                    </div>
+
+
+
+
+                                </div>
+
+                                <div class="form-group row">
+
+
+
+                                    <div class="form-group col-sm-4">
+                                        <label for="forman">מנהל עבודה</label>
+                                        <input type="text" class="form-control" id="forman">
+                                    </div>
+
+
+                                    <div class="form-group col-sm-4">
+                                        <label for="time">שעה</label>
+                                        <br />
+                                        <input type="time" id="time">
+                                    </div>
+                                    <div class="form-group col-sm-4">
+                                        <label for="location">מיקום</label>
+                                        <input type="text" class="form-control" id="location">
+                                    </div>
+                                </div>
+
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+        </div>
+        <!--טבלת ליקויים-->
+        <div id="table">
+            <table id="projTable" class="display" style="width:100%" dir="rtl">
+                <thead>
+                    <tr>
+
+                        <th>מספר</th>
+                        <th>סוג</th>
+                        <th>שם</th>
+                        <th>תיאור</th>
+                        <th>תאריך תיקון</th>
+                        <th>שעת תיקון</th>
+                        <th>סטטוס</th>
+                        <th>תמונה</th>
+
+                        <th></th>
+                    </tr>
+                </thead>
+
+            </table>
+
+        </div>
+        <div id="pic" onclick="closePic()">
+
+        </div>
+        <!--כל החלק מתחת הוא החלון שנפתח ברגע שלוחצים על הוסף ליקוי חדש לדוח-->
+        <div class="w3-container">
+
+            <button id="btn_add_defect" class="btn btn-primary" onclick="document.getElementById('id01').style.display='block',newDefect()">הוסף ליקוי לדוח </button>
+
+            <div id="id01" class="w3-modal">
+                <div class="w3-modal-content">
+                    <div class="w3-container">
+                        <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                        <div>
+                            <button onclick="window.close()"></button>
+                        </div>
+                        <br />
+                        <div id="section1">
+                            <div>
+                                <label for="defect_type">בחר סוג ליקוי:</label>
+                                <br />
+                                <select id="selectType" onchange="createDefectList(this.value)"></select>
+
+                            </div>
+                            <div>
+                                <label for="defect_type">בחר ליקוי:</label>
+                                <br />
+                                <select id="selectdefect"></select>
+
+                            </div>
+                        </div>
+                        <div>
+                            <label for="description">תיאור:</label>
+                            <input type="text" class="form-control" id="description">
+
+                        </div>
+                        <div id="section2">
+                            <div class="form-group col-sm-4">
+                                <label for="fixDate"><span class="red-star"> </span>תאריך תיקון:</label>
+                                <br />
+                                <input type="date" id="fixDate">
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label for="fixTime">עד שעה:</label>
+                                <br />
+                                <input type="time" id="fixTime">
+                            </div>
+                        </div>
+                        <div>
+                            <button id="btn_add_defect" class="btn btn-primary" onclick="#">הוסף ליקוי</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 </body>
 </html>

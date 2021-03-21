@@ -10,7 +10,6 @@ namespace final_proj_gulkosafety.Controllers
 {
     public class projectController : ApiController
     {
-        // GET all projects api/<controller>
         public List<project> Get()
         {
             project p = new project();
@@ -31,10 +30,10 @@ namespace final_proj_gulkosafety.Controllers
         }
 
         // PUT api/<controller>/5
-        public void PutProjectDeatails([FromBody] project p)
-        {
-            p.UpdateProjectDeatails(p);
-        }
+        //public void PutProjectDeatails([FromBody] project p)
+        //{
+        //    p.UpdateProjectDeatails(p.Project_num, p.Name, p.Company, p.Address, p.Start_date, p.End_date, p.Status, p.Description, p.Safety_lvl, p.Project_type_num, p.Manager_email, p.Foreman_email);
+        //}
         public void PutProjectStatus([FromBody] project p)
         {
             p.UpdateProjectStatus(p.Project_num, p.Status);

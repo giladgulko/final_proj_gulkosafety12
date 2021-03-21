@@ -17,7 +17,7 @@ namespace final_proj_gulkosafety.Models
         string description;
         string defect_name;
         string defect_type_name;
-        
+
 
         public int Report_num { get => report_num; set => report_num = value; }
         public int Defect_num { get => defect_num; set => defect_num = value; }

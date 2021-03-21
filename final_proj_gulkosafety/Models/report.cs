@@ -55,16 +55,9 @@ namespace final_proj_gulkosafety.Models
         public void DeleteReport(int report_num)
         {
             DBServices dbs = new DBServices();
-            dbs.DeleteReport(report_num);
+            dbs.DeleteProject(report_num);
 
         }
-        public void UpdateReport(int report_num, DateTime date, DateTime time, string comment, double grade, int project_num, string user_mail)
-        {
-            DBServices dbs = new DBServices();
-            dbs.UpdateReport(report_num, date, time, comment, grade, project_num, user_mail);
-
-        }
-
 
     }
 }

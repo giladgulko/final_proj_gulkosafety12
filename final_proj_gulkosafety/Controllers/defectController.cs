@@ -10,6 +10,7 @@ namespace final_proj_gulkosafety.Controllers
 {
     public class defectController : ApiController
     {
+
         public List<defect> Get()
         {
             defect _defect = new defect();

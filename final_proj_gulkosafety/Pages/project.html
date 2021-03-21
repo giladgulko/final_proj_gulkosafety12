@@ -23,8 +23,28 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
     <style type="text/css">
 
+        .nav.navbar-nav {
+            display: contents;
+        }
+
+        .container {
+            float: right;
+            position: absolute;
+        }
+
+        #table {
+            margin-top: 30px;
+            padding-left: 12%;
+            padding-right: 12%;
+            text-align: center;
+        }
+
+        .red-star {
+            color: red;
+        }
 
         form {
             display: inline;
@@ -33,12 +53,6 @@
             text-align: right;
             font-size: 12px;
         }
-
-        /*#saveBTN {
-            left: 7px;
-            bottom: 5px;
-            position: absolute;
-        }*/
 
         .form-control {
             font-size: 12px;
@@ -51,7 +65,6 @@
         #main {
             direction: rtl;
             text-align: right;
-            background-color: #e4e2e2;
         }
 
         h3 {
@@ -60,13 +73,6 @@
             color: cadetblue;
             text-align: right;
             margin-top: 0px;
-        }
-
-        .project_name {
-            width: 30%;
-            font-family: 'Lucida Console';
-            color: cadetblue;
-            font-weight: bold;
         }
 
         .section1 {
@@ -87,7 +93,7 @@
             text-align: left;
         }
 
-        #editDetailsBTN {
+        #editDetailsBTN, #editContactsBTN, #saveDetailsBTN, #saveContactsBTN {
             background-color: transparent;
             border: 0px;
         }
@@ -104,18 +110,41 @@
             text-align: left;
             /*margin-bottom:0px;*/
         }
-        /*table {
-            margin-top: 30px;
-            padding-left: 12%;
-            padding-right: 12%;
-            text-align: center;
-        }*/
+
         body {
             background-color: #eeeeee;
         }
-        
-    </style>
 
+        .proj {
+            font-family: 'Lucida Console';
+            color: cadetblue;
+            font-weight: bold;
+        }
+
+
+        .navbar-default {
+            background-color: cadetblue;
+            border-color: #e7e7e7;
+            color: white;
+        }
+
+        #logo {
+            float: left;
+        }
+
+        #proj_bar {
+            text-align: right;
+            display: flex;
+            margin-top: 15px
+        }
+
+        #headline {
+            width: 20%;
+            font-family: 'Suez One', serif;
+            color: blue;
+        }
+
+    </style>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
@@ -123,35 +152,116 @@
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
-
     <script>
 
 
         $(document).ready(function () {
             reports = [];
             projContacts = [];
+            projectTypes = [];
             contactList = [];
 
-            //edit project button- projects html
-            if (localStorage["project"] != "") {
-                project = JSON.parse(localStorage["project"]);
-                renderProjectDetails();
-                getProjectContacts();
-                editProjBtnEvents();
-            }
-            //new project button- projects html
-            else buildNewProjectPage();
+            managerSelect = document.getElementById('manager');
+            foremanSelect = document.getElementById('foreman');
+            projectTypeSelect = document.getElementById('projectType');
 
-            $("#newReportBTN").on("click", function () {
-                //change to report page
+            $("#projectDetailsForm").submit(f1);
+            $("#contactsDetailsForm").submit(f2);
+
+            getContactList();
+
+            //edit project button- projects html
+            project = JSON.parse(localStorage["project"]);
+            renderProjectDetails();
+            editProjBtnEvents();
+
+            $("#newBTN").on("click", function () {
+                markSelected(this);
+                localStorage["report"] = "";
+                window.location = "report.html";
             });
         });
 
+        function f2() {
+            updateProjContacts();
+            return false;
+        }
+
+        function updateProjContacts() {
+            let manager_email = $('#manager').val();
+            let foreman_email = $('#foreman').val();
+            let api = "../api/project?project_num=" + project.Project_num + "&manager_email =" + manager_email + "&foreman_email=" + foreman_email;
+            ajaxCall("PUT", api, "", updateProjContactsSuccess, getError);
+        }
+
+        function updateProjContactsSuccess(data) {
+            alert("saved");
+            $(".groupContacts").prop('disabled', true);
+            $("#editContactsBTN").show();
+            $("#saveContactsBTN").hide();
+        }
+        function getError(data) {
+            alert("error");
+        }
+
+        function f1() {
+            updateProject();
+            return false;
+        }
+
+        function updateProject() {
+            let projToEdit = {
+                Project_num: project.Project_num,
+                Name: $('#projectName').val(),
+                Company: $('#company').val(),
+                Address: $('#address').val(),
+                Start_date: $('#startDate').val().split("T")[0],
+                End_date: $('#endDate').val().split("T")[0],
+                Status: $('#status').val(),
+                Description: $('#description').val(),
+                Safety_lvl: project.Safety_lvl,
+                Project_type_num: $('#projectType').val(),
+                Manager_email: project.Manager_email,
+                Foreman_email: project.Foreman_email
+            }
+
+            ajaxCall("PUT", "../api/project", JSON.stringify(projToEdit), updateProjectSuccess, getError);
+        }
+
+        function updateProjectSuccess(data) {
+            alert("saved");
+            $(".groupDetails").prop('disabled', true);
+            $("#editDetailsBTN").show();
+            $("#saveDetailsBTN").hide();
+        }
+
         function editProjBtnEvents() {
             $('#reportsTable').show();
-            $('#noReports').hide();
+            $("#saveDetailsBTN").hide();
+            $("#saveContactsBTN").hide();
+            $("#saveProject").hide();
+
+            $(".groupDetails").prop('disabled', true);
+            $(".groupContacts").prop('disabled', true);
+
+            //edit project details
+            $("#editDetailsBTN").on("click", function () {
+                $(".groupDetails").prop('disabled', false);
+                $("#editDetailsBTN").hide();
+                $("#saveDetailsBTN").show();
+            });
+
+            // edit project contacts
+            $("#editContactsBTN").on("click", function () {
+                $(".groupContacts").prop('disabled', false);
+                $("#editContactsBTN").hide();
+                $("#saveContactsBTN").show();
+                renderContactList();
+            });
+
+            //reports table BTNs
             $(document).on("click", ".editBtn", function () {
                 markSelected(this);
                 reportNum = this.getAttribute('data-reportId');
@@ -165,7 +275,7 @@
                 localStorage["report"] = JSON.stringify(reportToEdit);
                 window.location = "report.html"
             });
-
+            //reports table BTNs
             $(document).on("click", ".deleteBtn", function () {
                 markSelected(this);
                 var report_num = this.getAttribute('data-reportId');
@@ -181,12 +291,18 @@
                 });
             });
         }
-        //new project page
-        function buildNewProjectPage() {
-            //newPageBtnEvents();
-            $("#reportsTable.display").hide();
-            $("#noReports").show();
-            getContactList();
+
+
+        function getProjectTypes() {
+            let api = "../api/project_type";
+            ajaxCall("GET", api, "", getProjTypesSuccess, getError);
+        }
+
+        function getProjTypesSuccess(data) {
+            projectTypes = data;
+            for (i = 0; i < projectTypes.length; i++) {
+                projectTypeSelect.innerHTML += "<option value=" + projectTypes[i].Project_type_num + ">" + projectTypes[i].Project_type_name + "</option>";
+            }
         }
 
         //get a list of all contacts for contact section list
@@ -197,27 +313,48 @@
 
         //render contacts into lists
         function getContactListSuccess(data) {
+            alert("in success contact list");
             contactList = data;
-            managerSelect = document.getElementById('manager');
-            foremanSelect = document.getElementById('foreman');
-            managerSelect.innerHTML += "<option>בחר מנהל פרויקט</option > ";
-            foremanSelect.innerHTML += "<option>בחר מנהל עבודה</option > ";
+            renderContacts();
+        }
+
+        function renderContactList() {
             for (i = 0; i < contactList.length; i++) {
-                managerSelect.innerHTML += "<option>" + contactList[i].Name + "</option > ";
-                foremanSelect.innerHTML += "<option>" + contactList[i].Name + " </option>";
+                if (project.Manager_email != contactList[i].Email) {
+                    managerSelect.innerHTML += "<option value=" + contactList[i].Email + ">" + contactList[i].Name + ", " + contactList[i].Phone + "</option > ";
+                }
+                if (project.Foreman_email != contactList[i].Email) {
+                    foremanSelect.innerHTML += "<option value=" + contactList[i].Email + ">" + contactList[i].Name + ", " + contactList[i].Phone + " </option>";
+                }
+
             }
+        }
+
+        function renderContacts() {
+            alert("in render contacts");
+            for (i = 0; i < contactList.length; i++) {
+                if (project.Manager_email == contactList[i].Email) {
+                    managerSelect.innerHTML = "";
+                    managerSelect.innerHTML += "<option value=" + contactList[i].Email + ">" + contactList[i].Name + ", " + contactList[i].Phone + "</option > ";
+                }
+                if (project.Foreman_email == contactList[i].Email) {
+                    foremanSelect.innerHTML += "<option value=" + contactList[i].Email + ">" + contactList[i].Name + ", " + contactList[i].Phone + " </option>";
+                }
+            }
+            getReports();
+
         }
 
         // Delete a report from the server
         function DeleteReport(report_num) {
-            ajaxCall("DELETE", "../api/report/" + report_num, "", deleteReportSuccess, error);
+            ajaxCall("DELETE", "../api/report/" + report_num, "", deleteReportSuccess, getError);
         }
 
 
         // success callback function after delete report
         function deleteReportSuccess(data) {
             swal("הדוח נמחק בהצלחה!", "Great Job", "success");
-            location.reload();
+            window.location.reload();
         }
 
         // mark the selected row
@@ -229,37 +366,20 @@
 
         function renderProjectDetails() {
             //alert("in render details");
+            
+            $('.proj').append(project.Name);
             $('#projectNum').val(project.Project_num);
+            $('#projectName').val(project.Name);
+            $('#projectType').append($('<option>', { value: project.Project_type_num })
+                .text(project.Project_type_num));
             $('#status').val(project.Status);
-            $('#startDate').val(project.Start_date);
-            $('#endDate').val(project.End_date);
+            $('#startDate').val(project.Start_date.split("T")[0]);
+            $('#endDate').val(project.End_date.split("T")[0]);
             $('#company').val(project.Company);
             $('#address').val(project.Address);
             $('#safetyLevel').val(project.Safety_lvl);
             $('#description').val(project.Description);
-        }
 
-        function getProjectContacts() {
-            //alert("in get contacts");
-            let manager_email = project.Manager_email;
-            let foreman_email = project.Foreman_email;
-
-            let api = "../api/user?manager_email=" + manager_email + "&foreman_email=" + foreman_email;
-            ajaxCall("GET", api, "", getProjectContactsSuccess, getError);
-        }
-
-        function getProjectContactsSuccess(data) {
-            projContacts = data;
-            managerSelect = document.getElementById('manager');
-            foremanSelect = document.getElementById('foreman');
-
-            for (i = 0; i < projContacts.length; i++) {
-                if (projContacts[i].Email == project.Manager_email)
-                    managerSelect.innerHTML += "<option>" + projContacts[i].Name + "</option > ";
-                else
-                    foremanSelect.innerHTML += "<option>" + projContacts[i].Name + " </option>";
-            }
-            getReports();
         }
 
         function getError(err) {
@@ -274,245 +394,279 @@
 
         function getReportsSuccess(data) {
             reports = data;
-            let reportsToShow = [];
-            for (i = 0; i < reports.length; i++) {
-                let r = {
-                    Report_num: reports[i].Report_num,
-                    Date: reports[i].Date,
-                    Time: reports[i].Time,
-                    Grade: reports[i].Grade
+            let gradesArr = [];
+            let reportNumArr = [];
+            if (reports != "") {
+                let reportsToShow = [];
+                for (i = 0; i < reports.length; i++) {
+                    gradesArr.push(reports[i].Grade);
+                    reportNumArr.push(reports[i].Report_num);
+                    let r = {
+                        Report_num: reports[i].Report_num,
+                        Date: reports[i].Date.split("T")[0],
+                        Time: reports[i].Time.split('T'),
+                        Grade: reports[i].Grade
+                    }
+                    reportsToShow.push(r);
                 }
-                reportsToShow.push(r);
-            }
 
-            try {
-                tbl = $('#reportsTable').DataTable({
-                    data: reportsToShow,
-                    pageLength: 5,
-                    columns: [
-                        { data: "Report_num" },
-                        { data: "Date" },
-                        { data: "Time" },
-                        { data: "Grade" },
-                        {
-                            render: function (data, type, row, meta) {
-                                let dataReport = "data-reportId='" + row.Report_num + "'";
-                                editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataReport + "> צפייה ועריכת  דוח </button>";
-                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' " + dataReport + "> מחק </button>";
-                                return editBtn + deleteBtn;
+                try {
+                    tbl = $('#reportsTable').DataTable({
+                        data: reportsToShow,
+                        pageLength: 5,
+                        columns: [
+                            { data: "Report_num" },
+                            { data: "Date" },
+                            { data: "Time" },
+                            { data: "Grade" },
+                            {
+                                render: function (data, type, row, meta) {
+                                    let dataReport = "data-reportId='" + row.Report_num + "'";
+                                    editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataReport + "> צפייה ועריכת  דוח </button>";
+                                    deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' " + dataReport + "> מחק </button>";
+                                    return editBtn + deleteBtn;
+                                }
                             }
-                        }
-                    ],
+                        ],
+                    });
+
+                }
+
+                catch (err) {
+                    alert(err);
+                }
+                buildGradesGraph(gradesArr, reportNumArr);
+            }
+
+
+        }
+
+        function buildGradesGraph(gradesArr, reportNumArr) {
+            TESTER = document.getElementById('chartContainer');
+            Plotly.newPlot(TESTER, [{
+                x: reportNumArr,
+                y: gradesArr
+            }], {
+                    margin: { t: 0 }
                 });
-
-            }
-
-            catch (err) {
-                alert(err);
-            }
-            buildGradesGraph();
         }
-
-        function buildGradesGraph() {
-            var chart = new CanvasJS.Chart("chartContainer", {
-                animationEnabled: true,
-                theme: "light2",
-                data: [{
-                    type: "line",
-                    indexLabelFontSize: 16,
-                    dataPoints: [
-                        { y: 450 },
-                        { y: 414 },
-                        { y: 520, indexLabel: "\u2191 highest", markerColor: "red", markerType: "triangle" },
-                        { y: 460 },
-                        { y: 480 },
-                        { y: 410, indexLabel: "\u2193 lowest", markerColor: "DarkSlateGrey", markerType: "cross" }
-                    ]
-                }]
-            });
-            chart.render();
-        }
-
     </script>
 </head>
 <body>
-        <div id="main">
-            <!--<div id="projName">
-                <div class="row">
-                    <label for="projectName">שם פרויקט</label>
-                    <input type="text" class="form-control" id="projectName">
-                </div>
-            </div>-->
-            <div class="row">
-                <div class="col-md-8 mb-3">
-                    <div class="card">
-                        <div class="card-body section1">
-                            <form id="projectDetailsForm">
-                                <div class="form-group row">
-                                    <div class="form-group col-sm-6">
-                                        <h3>פרטי הפרויקט</h3>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="form-group col-sm-4">
-                                        <label for="projectNum">מס' פרויקט</label>
-                                        <input type="text" class="form-control" id="projectNum">
-                                    </div>
-
-
-                                    <div class="form-group col-sm-4">
-                                        <label for="status"><span class="red-star">★ </span>סטאטוס</label>
-                                        <select class="form-control" id="status" required>
-                                            <option value="">בחר סטאטוס</option>
-                                            <option value="1"> פתוח </option>
-                                            <option value="0"> סגור </option>
-                                        </select>
-                                    </div>
-
-
-                                    <div class="form-group col-sm-4">
-                                        <label for="startDate"><span class="red-star">★ </span>תאריך התחלה</label>
-                                        </br>
-                                        <input type="date" id="startDate">
-                                    </div>
-
-
-                                </div>
-
-                                <div class="form-group row">
-
-                                    <div class="form-group col-sm-4">
-                                        <label for="company"><span class="red-star">★ </span>חברה</label>
-                                        <input type="text" class="form-control" id="company" required>
-                                    </div>
-
-                                    <div class="form-group col-sm-4">
-                                        <label for="address"><span class="red-star">★ </span>כתובת</label>
-                                        <input type="text" class="form-control" id="address" required>
-                                    </div>
-
-
-                                    <div class="form-group col-sm-4">
-                                        <label for="endDate"><span class="red-star">★ </span>תאריך סיום</label>
-                                        </br>
-                                        <input type="date" id="endDate">
-                                    </div>
-
-                                </div>
-                                <div class="form-group row">
-                                    <div class="form-group col-sm-8">
-                                        <label for="description">תיאור</label>
-                                        <textarea rows="4" class="form-control" id="description" placeholder="הזן תיאור פרויקט"></textarea>
-                                    </div>
-                                    <div class="form-group col-sm-4 editLocation">
-                                        <p>
-                                            <button type="button" id="editDetailsBTN" class="btn btn-default btn-sm">
-                                                <span class="glyphicon glyphicon-pencil"></span>
-                                            </button>
-                                        </p>
-                                    </div>
-                                </div>
-                                <!--<button type="submit" class="btn btn-primary btn-xs" id="saveBTN">שמור</button>-->
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <div class="card">
-                        <div class="card-body section1">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-8 mb-3">
-                    <div class="card">
-                        <div class="card-body section2">
-                            <form id="contactsDetailsForm">
-                                <div class="form-group row">
-                                    <div class="form-group col-sm-6">
-                                        <h3>אנשי קשר</h3>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="form-group col-sm-6">
-                                        <label for="manager"><span class="red-star">★ </span>מנהל פרויקט</label>
-                                        <select class="form-control" id="manager" required></select>
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        <label for="foreman"><span class="red-star">★ </span>מנהל עבודה</label>
-                                        <select class="form-control" id="foreman" required></select>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="form-group col editLocation">
-                                        <p>
-                                            <button type="button" id="editDetailsBTN" class="btn btn-default btn-sm">
-                                                <span class="glyphicon glyphicon-pencil"></span>
-                                            </button>
-                                        </p>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <div class="card">
-                        <div class="card-body section2">
-                            <div class="row">
-                                <div class="col">
-                                    <h3>התראות</h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-8 mb-3">
-                    <div class="card">
-                        <div class="card-body section2">
+    <div id="logo">
+        <img class="logo" src="photos/logo.jpeg" height="50" />
+    </div>
+    <nav class="navbar navbar-default navbar-static-top">
+        <div class="container" style="float:right">
+            <ul class="nav navbar-nav">
+                <li><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="#"></a></li>
+                <li></li>
+                <li><span class="glyphicon glyphicon-bell" aria-hidden="true"></span><a href="#"></a></li>
+                <li><a href="#">סטטיסטיקות</a></li>
+                <li><a href="#">משתמשים</a></li>
+                <li><a href="#">הזמנות</a></li>
+                <li><a href="#">אישורים</a></li>
+                <li><a href="#">הדרכות</a></li>
+                <li class="active"><a href="#">פרויקטים</a></li>
+                <li><a href="#">התחברות</a></li>
+                <li><span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="#"></a></li>
+            </ul>
+        </div>
+    </nav>
+    <div id="proj_bar" dir="rtl">
+        <div id="headline">
+            <h1 class="proj"></h1>
+        </div>
+    </div>
+    <div id="main">
+        <div class="row">
+            <div class="col-md-8 mb-3">
+                <div class="card">
+                    <div class="card-body section1">
+                        <form id="projectDetailsForm" onsubmit="return false">
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <h3>דוחות ביקור</h3>
-                                </div>
-                                <div class="col-sm-6 newBTN">
-                                    <button class='btn btn-primary'>חדש</button>
+                                    <h3>פרטי הפרויקט</h3>
                                 </div>
                             </div>
-                            <table id="reportsTable" class="display" style="width:100%" dir="rtl">
-                                <thead>
-                                    <tr>
-                                        <th>מס' דוח</th>
-                                        <th>תאריך</th>
-                                        <th>שעה</th>
-                                        <th>ציון דוח</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                            </table>
-                            <p id="noReports">אין רשומות </p>
-                        </div>
+                            <div class="row">
+                                <div class="form-group col-sm-6">
+                                    <label for="projectName"><span class="red-star">★ </span>שם הפרויקט</label>
+                                    <input type="text" class="form-control groupDetails" id="projectName"
+                                           oninvalid="this.setCustomValidity('הכנס שם פרויקט')"
+                                           oninput="this.setCustomValidity('')" required>
+                                </div>
+
+
+                                <div class="form-group col-sm-4">
+                                    <label for="projectType"><span class="red-star">★ </span>סוג הפרויקט</label>
+                                    <select class="form-control groupDetails" id="projectType" required></select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4">
+                                    <label for="projectNum">מס' פרויקט</label>
+                                    <input type="text" class="form-control groupDetails" id="projectNum">
+                                </div>
+
+
+                                <div class="form-group col-sm-4">
+                                    <label for="status"><span class="red-star">★ </span>סטאטוס</label>
+                                    <select class="form-control groupDetails" id="status" required>
+                                        <option value="">בחר סטאטוס</option>
+                                        <option value="1"> פתוח </option>
+                                        <option value="0"> סגור </option>
+                                    </select>
+                                </div>
+
+
+                                <div class="form-group col-sm-4">
+                                    <label for="startDate"><span class="red-star">★ </span>תאריך התחלה</label>
+                                    </br>
+                                    <input type="date" class="groupDetails" id="startDate" required>
+                                </div>
+
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="form-group col-sm-4">
+                                    <label for="company"><span class="red-star">★ </span>חברה</label>
+                                    <input type="text" class="form-control groupDetails" id="company" required>
+                                </div>
+
+                                <div class="form-group col-sm-4">
+                                    <label for="address"><span class="red-star">★ </span>כתובת</label>
+                                    <input type="text" class="form-control groupDetails" id="address" required>
+                                </div>
+
+
+                                <div class="form-group col-sm-4">
+                                    <label for="endDate"><span class="red-star">★ </span>תאריך סיום</label>
+                                    </br>
+                                    <input type="date" class="groupDetails" id="endDate" required>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-8">
+                                    <label for="description">תיאור</label>
+                                    <textarea rows="4" class="form-control groupDetails" id="description" placeholder="הזן תיאור פרויקט"></textarea>
+                                </div>
+                                <div class="form-group col-sm-4 editLocation">
+                                    <p>
+                                        <button type="button" id="editDetailsBTN" class="btn btn-default btn-sm">
+                                            <span class="glyphicon glyphicon-pencil"></span>
+                                        </button>
+                                        <button type="submit" id="saveDetailsBTN" class="btn btn-default btn-sm">
+                                            <span class="glyphicon glyphicon-floppy-disk"></span>
+                                        </button>
+                                    </p>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <div class="col-md-4 mb-3">
-                    <div class="card">
-                        <div class="card-body section2">
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body section1">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 mb-3">
+                <div class="card">
+                    <div class="card-body section2">
+                        <form id="contactsDetailsForm" onsubmit="return false">
                             <div class="row">
-                                <div class="col">
-                                    <h3>ציוני דוחות</h3>
+                                <div class="form-group col-sm-6">
+                                    <h3>אנשי קשר</h3>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="form-group col-sm-6">
+                                    <label for="manager"><span class="red-star">★ </span>מנהל פרויקט</label>
+                                    <select class="form-control groupContacts" id="manager" required></select>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <label for="foreman"><span class="red-star">★ </span>מנהל עבודה</label>
+                                    <select class="form-control groupContacts" id="foreman" required></select>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col">
-                                    <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+                                <div class="form-group col editLocation">
+                                    <p>
+                                        <button type="button" id="editContactsBTN" class="btn btn-default btn-sm">
+                                            <span class="glyphicon glyphicon-pencil"></span>
+                                        </button>
+                                        <button type="submit" id="saveContactsBTN" class="btn btn-default btn-sm">
+                                            <span class="glyphicon glyphicon-floppy-disk"></span>
+                                        </button>
+                                    </p>
                                 </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body section2">
+                        <div class="row">
+                            <div class="col">
+                                <h3>התראות</h3>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-8 mb-3">
+                <div class="card">
+                    <div class="card-body section2">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h3>דוחות ביקור</h3>
+                            </div>
+                            <div class="col-sm-6">
+                                <button class='btn btn-primary' id="newBTN">חדש</button>
+                            </div>
+                        </div>
+                        <table id="reportsTable" class="display" style="width:100%" dir="rtl">
+                            <thead>
+                                <tr>
+                                    <th>מס' דוח</th>
+                                    <th>תאריך</th>
+                                    <th>שעה</th>
+                                    <th>ציון דוח</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body section2">
+                        <div class="row">
+                            <div class="col">
+                                <h3>ציוני דוחות</h3>
+                            </div>
+                        </div>
+                        <div id="chartContainer">
+                            <!--<div class="col">
+                                <div id="chartContainer"></div>
+                            </div>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

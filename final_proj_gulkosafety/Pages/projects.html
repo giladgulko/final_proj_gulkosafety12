@@ -5,38 +5,104 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Suez+One&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@1,700&family=Suez+One&display=swap" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-    <link href="projectsStyles.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
-
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
     <link href="projectsStyles.css" rel="stylesheet" />
-
     <title>הפרויקטים שלי</title>
     <style>
-
-
     </style>
     <script>
         status = 1
         statues1proj = []
         status0proj = []
+        contactList = [];
+        projectTypes = [];
         $(document).ready(function () {
 
             getProjData();
             buttonEvents();
+
+            getContactList();
+            getProjectTypes();
+
+            $("#newProjForm").submit(f1);
         });
+
+        //get a list of all contacts for contact section list
+        function getContactList() {
+            let api = "../api/user";
+            ajaxCall("GET", api, "", getContactListSuccess, getError);
+        }
+
+        //render contacts into lists
+        function getContactListSuccess(data) {
+            alert("in success contact list");
+            contactList = data;
+            renderContacts();
+        }
+
+        function renderContacts() {
+            alert("in render contacts");
+            managerSelect = document.getElementById('manager');
+            foremanSelect = document.getElementById('foreman');
+            for (i = 0; i < contactList.length; i++) {
+                managerSelect.innerHTML += "<option value=" + contactList[i].Email + ">" + contactList[i].Name + ", " + contactList[i].Phone + "</option > ";
+                foremanSelect.innerHTML += "<option value=" + contactList[i].Email + ">" + contactList[i].Name + ", " + contactList[i].Phone + " </option>";
+            }
+
+        }
+
+        function getProjectTypes() {
+            let api = "../api/project_type";
+            ajaxCall("GET", api, "", getProjTypesSuccess, getError);
+        }
+
+        function getProjTypesSuccess(data) {
+            projectTypes = data;
+            projectTypeSelect = document.getElementById('projectType');
+            for (i = 0; i < projectTypes.length; i++) {
+                projectTypeSelect.innerHTML += "<option value=" + projectTypes[i].Project_type_num + ">" + projectTypes[i].Project_type_name + "</option>";
+            }
+        }
+
+        function f1() {
+            createNewProj();
+            return false;
+        }
+        function createNewProj() {
+            let newProj = {
+                Name: $('#projectName').val(),
+                Company: $('#company').val(),
+                Address: $('#address').val(),
+                Start_date: $('#startDate').val().split("T")[0],
+                End_date: $('#endDate').val().split("T")[0],
+                Status: $('#status').val(),
+                Description: $('#description').val(),
+                Safety_lvl: 100,
+                Project_type_num: document.getElementById("projectType").value,
+                Manager_email: $('#manager').val(),
+                Foreman_email: $('#foreman').val()
+            }
+            ajaxCall("POST", "../api/project", JSON.stringify(newProj), createNewProjSuccess, getError);
+        }
+
+        function createNewProjSuccess(data) {
+            alert("הפרויקט נשמר בהצלחה");
+            location.reload();
+        }
 
         function buttonEvents() {
 
@@ -173,7 +239,7 @@
         <img class="logo" src="photos/logo.jpeg" height="50" />
     </div>
     <nav class="navbar navbar-default navbar-static-top">
-        <div  class="container" style="float:right">
+        <div class="container" style="float:right">
             <ul class="nav navbar-nav">
                 <li><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="#"></a></li>
                 <li></li>
@@ -186,12 +252,9 @@
                 <li class="active"><a href="#">פרויקטים</a></li>
                 <li><a href="#">התחברות</a></li>
                 <li><span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="#"></a></li>
-
             </ul>
-
         </div>
     </nav>
-
     <div id="proj_bar" dir="rtl">
         <div id="headline">
             <h1 class="proj">פרוייקטים</h1>
@@ -206,17 +269,14 @@
                 </select>
                 <button type="button" class="btn btn-primary">חפש</button>
             </div>
-
-            <button id="myBtn" style="margin-left:10px" class="btn btn-primary" onclick="addNewProj()">הוסף פרוייקט חדש</button>
+            <button id="myBtn" style="margin-left:10px" class="btn btn-primary" onclick="document.getElementById('id01').style.display='block'">הוסף פרוייקט חדש</button>
             <button id="old_proj_btn" type="button" class="btn btn-primary" onclick="renderOldPROJ()">ארכיון פרוייקטים</button>
         </div>
-
     </div>
     <form id="pForm">
         <table id="projTable" class="display" style="width:100%" dir="rtl">
             <thead>
                 <tr>
-
                     <th>מספר פרוייקט</th>
                     <th>שם</th>
                     <th>חברה</th>
@@ -227,8 +287,110 @@
                     <th></th>
                 </tr>
             </thead>
-
         </table>
     </form>
+    <div class="w3-container">
+        <div id="id01" class="w3-modal">
+            <div class="w3-modal-content">
+                <div class="w3-container" dir="rtl">
+                    <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                    <form id="newProjForm">
+                        <h2>פרויקט חדש</h2>
+                        <table class="display" style="width:100%" dir="rtl">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="projectName"><span class="red-star">★ </span>שם הפרויקט</label>
+                                            <input type="text" class="form-control groupDetails" id="projectName"
+                                                   oninvalid="this.setCustomValidity('הכנס שם פרויקט')"
+                                                   oninput="this.setCustomValidity('')" required>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="projectType"><span class="red-star">★ </span>סוג הפרויקט</label>
+                                            <select class="form-control groupDetails" id="projectType" required></select>
+                                        </div>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="status"><span class="red-star">★ </span>סטאטוס</label>
+                                            <select class="form-control groupDetails" id="status" required>
+                                                <option value="">בחר סטאטוס</option>
+                                                <option value="1"> פתוח </option>
+                                                <option value="0"> סגור </option>
+                                            </select>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="startDate"><span class="red-star">★ </span>תאריך התחלה</label>
+                                            </br>
+                                            <input type="date" class="groupDetails" id="startDate" required>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="endDate"><span class="red-star">★ </span>תאריך סיום</label>
+                                            </br>
+                                            <input type="date" class="groupDetails" id="endDate" required>
+                                        </div>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="company"><span class="red-star">★ </span>חברה</label>
+                                            <input type="text" class="form-control groupDetails" id="company" required>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="address"><span class="red-star">★ </span>כתובת</label>
+                                            <input type="text" class="form-control groupDetails" id="address" required>
+                                        </div>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="description">תיאור</label>
+                                            <textarea rows="4" class="form-control groupDetails" id="description" placeholder="הזן תיאור פרויקט"></textarea>
+                                        </div>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="manager"><span class="red-star">★ </span>מנהל פרויקט</label>
+                                            <select class="form-control groupContacts" id="manager" required>
+                                                <option value="">בחר מנהל פרויקט</option>
+                                            </select>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="foreman"><span class="red-star">★ </span>מנהל עבודה</label>
+                                            <select class="form-control groupContacts" id="foreman" required>
+                                                <option value="">בחר מנהל עבודה</option>
+                                            </select>
+                                        </div>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <input type="submit" class="btn btn-primary" value="שמור" />
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

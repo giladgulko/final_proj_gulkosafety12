@@ -64,10 +64,10 @@ namespace final_proj_gulkosafety.Models
             dbs.InsertProject(this);
         }
 
-        public void UpdateProjectDeatails(project p)
+        public void UpdateProjectDetails()
         {
             DBServices dbs = new DBServices();
-            dbs.UpdateProjectDeatails(p);
+            dbs.UpdateProjectDetails(this);
 
         }
 

@@ -1,0 +1,252 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>New Project</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="../Scripts/ajaxCallsWithKey.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        #main {
+            direction: rtl;
+        }
+
+        #menu {
+            display: flex;
+            justify-content: space-around;
+            align-items: stretch;
+            height: 50px;
+        }
+
+        .project_name {
+            width: 30%;
+            font-family: 'Lucida Console';
+            color: cadetblue;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        h3 {
+            font-family: 'Lucida Console';
+            color: cadetblue;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        h5 {
+            font-family: 'Lucida Console';
+            color: cadetblue;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .safety_level {
+            border: solid 1px;
+            width: 30%;
+            float: left;
+            height: 250px;
+        }
+
+        .project_detail {
+            border: solid 1px;
+            width: 70%;
+            height: 250px;
+        }
+
+        .alrets {
+            border: solid 1px;
+            width: 30%;
+            float: left;
+            height: 200px;
+        }
+
+        .project_contacts {
+            border: solid 1px;
+            width: 70%;
+            height: 200px;
+        }
+
+        .graf_grades {
+            border: solid 1px;
+            width: 30%;
+            float: left;
+            height: 200px;
+        }
+
+        .reports_list {
+            border: solid 1px;
+            width: 70%;
+            height: 200px;
+        }
+
+        .detail1 {
+            float: right;
+        }
+
+        #btn_close {
+            background-color: cadetblue;
+            color: black;
+            font-weight: bold;
+            margin-right: 1300px;
+        }
+
+        body {
+            font-family: Arial;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        form.search input[type=text] {
+            padding: 10px;
+            font-size: 17px;
+            border: 1px solid grey;
+            float: left;
+            width: 60%;
+            background: #f1f1f1;
+        }
+
+        form.search button {
+            float: left;
+            width: 20%;
+            padding: 10px;
+            background-color: cadetblue;
+            color: white;
+            font-size: 17px;
+            border: 1px solid grey;
+            border-left: none;
+            cursor: pointer;
+        }
+
+            form.search button:hover {
+                background: #0b7dda;
+            }
+
+        form.search::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+    </style>
+    <script>
+
+        $(document).ready(function () {
+            getProject();
+
+        })
+
+        function getProject() {
+            let api = "../api/project"
+            ajaxCall("GET", api, "", getSuccess, getError);
+        }
+
+        function getSuccess(data) {
+            console.log(data);
+            Project_details(data)
+        }
+
+        function getError(arr) {
+            console.log(arr);
+        }
+
+        function Project_details(data) {
+            for (var k in data) {
+
+                str += '<div class="tbl_proj_details"><h3>מספר פרויקט</h3>' + data[k].Project_num;
+                str += '<h3>סטאטוס</h3>' + data[k].Status;
+                str += '<h3>תיאור פרויקט</h3>' + data[k].Description;
+                str += '<p><h3>חברה</h3>' + data[k].Company + '</p>';
+                str += '<h3>תאריך התחלה</h3>' + data[k].Start_date;
+                str += '<h3>כתובת</h3>' + data[k].Address;
+                str += '<h3>תאריך סיום</h3>' + data[k].End_date;
+            }
+            $(tbl_proj_details).html(str);
+        }
+
+
+
+
+
+
+
+
+
+    </script>
+</head>
+<body>
+    <div id="main">
+        <div id="menu">
+            <nav dir="rtl" class="navbar navbar-default" style="float:right">
+                <div style="float:right" dir="rtl" class="container-fluid">
+
+                    <ul class="nav navbar-nav">
+                        <li><a href="#">הגדרות</a></li>
+                        <li><a href="#">התראות</a></li>
+                        <li><a href="#">סטטיסטיקות</a></li>
+                        <li><a href="#">משתמשים</a></li>
+                        <li><a href="#">הזמנות</a></li>
+                        <li><a href="#">אישורים</a></li>
+                        <li><a href="#">הדרכות</a></li>
+                        <li><a href="#">פרויקטים</a></li>
+                        <li class="active"><a href="#">Home</a></li>
+                    </ul>
+
+                    <div class="navbar-header">
+                        <img class="logo" src="photos/logo.jpeg" height="50" />
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div class="project_name">
+            <h1>פרויקט גורדון</h1>
+
+        </div>
+        <div id="section1">
+            <div class="safety_level">
+                <h3>רמת הבטיחות בפרויקט</h3>
+            </div>
+            <div class="project_detail">
+                <h3>פרטי הפרויקט</h3>
+                <div id="tbl_proj_details">
+
+                </div>
+            </div>
+        </div>
+        <div id="section2">
+            <div class="alrets">
+                <h3>הודעות</h3>
+            </div>
+            <div class="project_contacts">
+                <h3>אנשי קשר בפרויקט</h3>
+                <button style="margin-left:10px" type="button" class="btn btn-primary">איש קשר חדש</button>
+            </div>
+        </div>
+        <div id="section3">
+            <div class="graf_grades">
+                <h3>ציוני דוחות ביקור</h3>
+            </div>
+            <div class="reports_list">
+                <h3>דוחות ביקור</h3>
+
+                <form class="search" action="/action_page.php" style="max-width:300px">
+                    <input type="text" placeholder="חפש" name="search2">
+                    <button type="submit"><i class="fa fa-search"></i></button>
+                </form>
+                <button style="margin-left:10px" type="button" class="btn btn-primary">דוח חדש</button>
+
+
+            </div>
+        </div>
+        <div id="footer">
+            <button id="btn_close">סגור</button>
+
+        </div>
+    </div>
+</body>
+
+</html>
