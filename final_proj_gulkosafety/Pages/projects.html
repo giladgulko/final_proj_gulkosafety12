@@ -1,19 +1,17 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Suez+One&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@1,700&family=Suez+One&display=swap" rel="stylesheet">
-
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-    <link href="projectsStyles.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
-
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
@@ -22,11 +20,8 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
     <link href="projectsStyles.css" rel="stylesheet" />
-
     <title>הפרויקטים שלי</title>
     <style>
-
-
     </style>
     <script>
         status = 1
@@ -123,9 +118,9 @@
                             render: function (data, type, row, meta) {
                                 let dataproj = "project_data='" + row.Project_num + "'";
 
-                                editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataproj + "> Edit </button>";
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataproj + "> עריכה </button>";
 
-                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' " + dataproj + "> Delete </button>";
+                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' " + dataproj + "> מחיקה </button>";
                                 return editBtn + deleteBtn;
 
 
@@ -159,8 +154,6 @@
                 $('#projTable').dataTable().fnAddData(statues1proj);
             }
 
-
-
         }
         function addNewProj() {
             localStorage.clear()
@@ -173,7 +166,7 @@
         <img class="logo" src="photos/logo.jpeg" height="50" />
     </div>
     <nav class="navbar navbar-default navbar-static-top">
-        <div  class="container" style="float:right">
+        <div class="container" style="float:right">
             <ul class="nav navbar-nav">
                 <li><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="#"></a></li>
                 <li></li>
@@ -186,37 +179,23 @@
                 <li class="active"><a href="#">פרויקטים</a></li>
                 <li><a href="#">התחברות</a></li>
                 <li><span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="#"></a></li>
-
             </ul>
-
         </div>
     </nav>
-
     <div id="proj_bar" dir="rtl">
         <div id="headline">
             <h1 class="proj">פרוייקטים</h1>
         </div>
-        <div id="search">
-            <div style="display:flex;margin-left:40px">
-                <input style="margin-left:10px ;width:60%" type="text" class="form-control" placeholder="">
-                <select style="margin-left:10px">
-                    <option>חפש לפי</option>
-                    <option>1</option>
-                    <option>2</option>
-                </select>
-                <button type="button" class="btn btn-primary">חפש</button>
-            </div>
-
+        <br />
+        <div id="buttons">
             <button id="myBtn" style="margin-left:10px" class="btn btn-primary" onclick="addNewProj()">הוסף פרוייקט חדש</button>
             <button id="old_proj_btn" type="button" class="btn btn-primary" onclick="renderOldPROJ()">ארכיון פרוייקטים</button>
         </div>
-
     </div>
     <form id="pForm">
         <table id="projTable" class="display" style="width:100%" dir="rtl">
             <thead>
                 <tr>
-
                     <th>מספר פרוייקט</th>
                     <th>שם</th>
                     <th>חברה</th>
@@ -227,7 +206,6 @@
                     <th></th>
                 </tr>
             </thead>
-
         </table>
     </form>
 </body>

@@ -1,6 +1,4 @@
-﻿
-
-#proj_bar {
+﻿#proj_bar {
     text-align: center;
     display: flex;
     margin-top: 40px
@@ -30,6 +28,7 @@
     padding-right: 12%;
     text-align: center;
 }
+
 #pForm {
     margin-left: 10%;
     margin-right: 10%;
@@ -42,7 +41,7 @@
     border-color: cadetblue;
 }
 
-h2, .proj {
+h1, .proj {
     font-family: 'Lucida Console';
     color: cadetblue;
     font-weight: bold;
@@ -83,13 +82,13 @@ body {
 .glyphicon {
     top: 20px;
     padding-left: 60px;
-    
 }
 
 .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
     background-color: cadetblue;
     font-weight: bold;
 }
+
 .btn-success {
     background-color: white;
     color: black;
@@ -114,3 +113,11 @@ body {
         color: white;
     }
 
+th.sorting {
+    text-align: center;
+}
+
+#buttons {
+    margin-top: 45px;
+    margin-right: 70px;
+}
