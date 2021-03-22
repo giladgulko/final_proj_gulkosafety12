@@ -6,7 +6,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Suez+One&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@1,700&family=Suez+One&display=swap" rel="stylesheet">
 
-    <title></title>
+    <title>פרויקט</title>
 
 
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
@@ -22,129 +22,8 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-    <style type="text/css">
-
-        .nav.navbar-nav {
-            display: contents;
-        }
-
-        .container {
-            float: right;
-            position: absolute;
-        }
-
-        #table {
-            margin-top: 30px;
-            padding-left: 12%;
-            padding-right: 12%;
-            text-align: center;
-        }
-
-        .red-star {
-            color: red;
-        }
-
-        form {
-            display: inline;
-            margin: 0px;
-            padding: 0px;
-            text-align: right;
-            font-size: 12px;
-        }
-
-        .form-control {
-            font-size: 12px;
-        }
-
-        .form-group {
-            margin-bottom: 5px;
-        }
-
-        #main {
-            direction: rtl;
-            text-align: right;
-        }
-
-        h3 {
-            font-size: 20px;
-            font-weight: bold;
-            color: cadetblue;
-            text-align: right;
-            margin-top: 0px;
-        }
-
-        .section1 {
-            min-height: 320px;
-        }
-
-        .section2 {
-            min-height: 200px;
-        }
-
-        .card {
-            margin-left: 10px;
-            margin-right: 10px;
-        }
-
-        .newBTN {
-            float: right;
-            text-align: left;
-        }
-
-        #editDetailsBTN, #editContactsBTN, #saveDetailsBTN, #saveContactsBTN {
-            background-color: transparent;
-            border: 0px;
-        }
-
-        .editLocation {
-            position: absolute;
-            margin: 0;
-            padding: 5px;
-            bottom: 0;
-            left: 0;
-        }
-
-        p {
-            text-align: left;
-            /*margin-bottom:0px;*/
-        }
-
-        body {
-            background-color: #eeeeee;
-        }
-
-        .proj {
-            font-family: 'Lucida Console';
-            color: cadetblue;
-            font-weight: bold;
-        }
 
 
-        .navbar-default {
-            background-color: cadetblue;
-            border-color: #e7e7e7;
-            color: white;
-        }
-
-        #logo {
-            float: left;
-        }
-
-        #proj_bar {
-            text-align: right;
-            display: flex;
-            margin-top: 15px
-        }
-
-        #headline {
-            width: 20%;
-            font-family: 'Suez One', serif;
-            color: blue;
-        }
-
-    </style>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
@@ -154,6 +33,7 @@
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
+    <link href="projectStyleSheet.css" rel="stylesheet" />
     <script>
 
 
@@ -366,7 +246,7 @@
 
         function renderProjectDetails() {
             //alert("in render details");
-            
+
             $('.proj').append(project.Name);
             $('#projectNum').val(project.Project_num);
             $('#projectName').val(project.Name);
@@ -522,7 +402,7 @@
 
                                 <div class="form-group col-sm-4">
                                     <label for="startDate"><span class="red-star">★ </span>תאריך התחלה</label>
-                                    </br>
+                                    <br />
                                     <input type="date" class="groupDetails" id="startDate" required>
                                 </div>
 
@@ -544,7 +424,7 @@
 
                                 <div class="form-group col-sm-4">
                                     <label for="endDate"><span class="red-star">★ </span>תאריך סיום</label>
-                                    </br>
+                                    <br />
                                     <input type="date" class="groupDetails" id="endDate" required>
                                 </div>
 
@@ -633,7 +513,7 @@
                                 <h3>דוחות ביקור</h3>
                             </div>
                             <div class="col-sm-6">
-                                <button class='btn btn-primary' id="newBTN">חדש</button>
+                                <button class='btn btn-primary' id="newBTN">דוח ביקור חדש</button>
                             </div>
                         </div>
                         <table id="reportsTable" class="display" style="width:100%" dir="rtl">

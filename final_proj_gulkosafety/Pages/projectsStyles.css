@@ -92,19 +92,18 @@ body {
 .btn-success {
     background-color: white;
     color: black;
-    border: 2px solid #569366;
+    border: 3px solid #569366;
     margin: 3px;
 }
-
-    .btn-success:hover {
+ .btn-success:hover {
         background-color: #569366;
         color: white;
-    }
+ }
 
 .btn-danger {
     background-color: white;
     color: black;
-    border: 2px solid #bd3636;
+    border: 3px solid #bd3636;
     margin: 3px;
 }
 
