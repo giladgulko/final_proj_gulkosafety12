@@ -23,8 +23,9 @@ namespace final_proj_gulkosafety.Controllers
         }
 
         // POST api/<controller>
-        public void Post([FromBody]string value)
+        public void Post([FromBody]defect_in_report dr)
         {
+            dr.InsertDefectInReport();
         }
 
         // PUT api/<controller>/5
