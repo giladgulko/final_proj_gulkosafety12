@@ -17,13 +17,11 @@ namespace final_proj_gulkosafety.Controllers
             return pList;
         }
 
-        // GET api/<controller>/5
         public string Get(int id)
         {
             return "value";
         }
 
-        // POST one project api/<controller>
         public void Post([FromBody] project p)
         {
             p.Insert();
