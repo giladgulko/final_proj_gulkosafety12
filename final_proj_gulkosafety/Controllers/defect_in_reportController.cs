@@ -21,11 +21,11 @@ namespace final_proj_gulkosafety.Controllers
         {
             dr.DeleteDefectInReport(dr.Report_num,dr.Defect_num);
         }
-
-        // POST api/<controller>
-        public void Post([FromBody]string value)
+        public void Post([FromBody] project p)
         {
+            p.Insert();
         }
+
 
         // PUT api/<controller>/5
         public void Put(int id, [FromBody]string value)

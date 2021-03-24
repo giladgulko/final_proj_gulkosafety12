@@ -732,50 +732,7 @@ namespace final_proj_gulkosafety.Models.DAL
 
             }
         }
-        //public List<defect_in_report> ReadDefectsInReport(int report_num)
-        //{
-        //    SqlConnection con = null;
-        //    List<defect_in_report> defectsInReportList = new List<defect_in_report>();
-
-        //    try
-        //    {
-        //        con = connect("DBConnectionString");
-
-        //        String selectSTR = "SELECT * FROM defect_in_report WHERE repoet_num=" + report_num;
-        //        SqlCommand cmd = new SqlCommand(selectSTR, con);
-
-        //        SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-        //        while (dr.Read())
-        //        {
-        //            defect_in_report _defectInReport = new defect_in_report();
-
-        //            _defectInReport.Report_num = Convert.ToInt32(dr["report_num"]);
-        //            _defectInReport.Defect_num = Convert.ToInt32(dr["defect_num"]);
-        //            _defectInReport.Fix_date = Convert.ToDateTime(dr["fix_date"]);
-        //            _defectInReport.Fix_time = Convert.ToDateTime(dr["fix_time"]);
-        //            _defectInReport.Picture_link = (string)dr["picture_link"];
-        //            _defectInReport.Fix_status = Convert.ToInt32(dr["fix_status"]);
-        //            _defectInReport.Description = (string)dr["description"];
-        //            defectsInReportList.Add(_defectInReport);
-        //        }
-
-        //        return defectsInReportList;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // write to log
-        //        throw (ex);
-        //    }
-        //    finally
-        //    {
-        //        if (con != null)
-        //        {
-        //            con.Close();
-        //        }
-
-        //    }
-        //}
-
+       
         // delete defect in report
         public int DeleteDefectInReport(int report_num, int defect_num)
         {
@@ -971,13 +928,13 @@ namespace final_proj_gulkosafety.Models.DAL
 
             try
             {
-                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+                con = connect("DBConnectionString"); 
 
                 String selectSTR = "SELECT * FROM [project_type]";
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
 
-                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); 
 
                 while (dr.Read())
                 {
@@ -1064,13 +1021,13 @@ namespace final_proj_gulkosafety.Models.DAL
 
             try
             {
-                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+                con = connect("DBConnectionString"); 
 
                 String selectSTR = "SELECT * FROM [user]";
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
 
-                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); 
 
                 while (dr.Read())
                 {
@@ -1098,6 +1055,60 @@ namespace final_proj_gulkosafety.Models.DAL
                 }
 
             }
+
+        }
+
+        //insert new defect in report
+        public int InsertDefectInReport(defect_in_report _defect_in_report)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); 
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            String cStr = BuildInsertCommand(_defect_in_report); 
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); 
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+        private String BuildInsertCommand(defect_in_report _defect_in_report)
+        {
+            String command;
+
+            StringBuilder sb = new StringBuilder();
+            
+            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}', '{4}','{5}','{6}')", _defect_in_report.Report_num, _defect_in_report.Defect_num, _defect_in_report.Fix_date, _defect_in_report.Fix_time, _defect_in_report.Picture_link,_defect_in_report.Fix_status,_defect_in_report.Description);
+            String prefix = "INSERT INTO user " + "(report_num,defect_num,fix_date,picture_link,fix_status,description)";
+            command = prefix + sb.ToString();
+
+            return command;
 
         }
 
