@@ -1,6 +1,6 @@
 ﻿form {
     display: inline;
-    margin: 0px;
+    /*margin: 0px;*/
     padding: 0px;
     text-align: right;
     font-size: 12px;
@@ -79,10 +79,7 @@ h3 {
     font-weight: bold;
     padding-left: 60px;
 }
-.glyphicon {
-    top: 20px;
-    padding-left: 60px;
-}
+
 .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
     background-color: cadetblue;
     font-weight: bold;

@@ -193,7 +193,7 @@ namespace final_proj_gulkosafety.Models.DAL
 
         }
         //update project user
-        public int UpdateProjectUser(int proj_num, string manager_email, string foreman_email)
+        public int UpdateProjectUser(project p)
         {
 
             SqlConnection con;
@@ -208,7 +208,7 @@ namespace final_proj_gulkosafety.Models.DAL
                 throw new Exception("The connection to sever is not good");
             }
 
-            String cStr = BuildupdateCommand(proj_num, manager_email, foreman_email);
+            String cStr = BuildupdateContactsCommand(p);
 
             cmd = CreateCommand(cStr, con);
 
@@ -232,10 +232,10 @@ namespace final_proj_gulkosafety.Models.DAL
 
         }
 
-        private String BuildupdateCommand(int proj_num, string manager_email, string foreman_email)
+        private String BuildupdateContactsCommand(project p)
         {
             String command;
-            command = "UPDATE project SET manager_email='" + manager_email + "', foreman_email='" + foreman_email + "' WHERE project_num =" + proj_num;
+            command = "UPDATE project SET manager_email='" + p.Manager_email + "', foreman_email='" + p.Foreman_email + "' WHERE project_num =" + p.Project_num;
 
             return command;
         }
