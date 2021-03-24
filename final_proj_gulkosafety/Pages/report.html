@@ -191,26 +191,30 @@
             str = "<option>ליקויים</option>"
             for (var i = 0; i < defects.length; i++) {
                 if (defects[i].Defect_type_num == value) {
-                    str += "<option value='" + defects[i].Defect_type_num + "'>" + defects[i].Name + "</option>"
+                    str += "<option value='" + defects[i].Defect_num + "'>" + defects[i].Name + "</option>"
                 }
 
             }
             $("#selectdefect").html(str)
         }
-        function addDefectToReport(value) {
-
+        function addDefectToReport() {
+           
             New_defect = {
-                select_Type: ("#selectType").val(),
-                select_defect: ("#selectdefect").val(),
-                description: ("#description").val(),
-                fix_Date: ("#fixDate").val(),
-                fix_Time: ("#fixTime").val(),
-                status: 0
+                Report_num: report.Report_num,
+                Defect_num: $("#selectdefect").val(),
+                Fix_Date: $("#fixDate").val(),
+                Fix_Time: $("#fixTime").val(),
+                Picture_link: "",
+                Fix_status: 0,
+                Description: $("#description").val()
+               
+                  
             }
+            console.log(New_defect)
 
-            api = "../api/defect_in_report";
-            ajaxCall("GET", api, JSON.stringify(New_defect), getDefectsInReport, getError)
-            window.location.reload(true);
+            //api = "../api/defect_in_report";
+            //ajaxCall("GET", api, JSON.stringify(New_defect), getDefectsInReport, getError)
+          //  window.location.reload(true);
         }
     </script>
 </head>
@@ -375,7 +379,7 @@
                             </div>
                         </div>
                         <div>
-                            <button id="btn_add_defect" class="btn btn-primary" onclick="#">הוסף ליקוי</button>
+                            <button id="btn_add_defect" class="btn btn-primary" onclick="addDefectToReport()">הוסף ליקוי</button>
                         </div>
                     </div>
                 </div>

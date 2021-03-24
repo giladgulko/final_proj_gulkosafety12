@@ -21,9 +21,17 @@ namespace final_proj_gulkosafety.Controllers
         {
             dr.DeleteDefectInReport(dr.Report_num,dr.Defect_num);
         }
+<<<<<<< HEAD
+
+        // POST api/<controller>
+        public void Post([FromBody]defect_in_report dr)
+        {
+            dr.InsertDefectInReport();
+=======
         public void Post([FromBody] project p)
         {
             p.Insert();
+>>>>>>> 9a587fe4a3b89db6cc6067c094d4873e96c4a269
         }
 
 
