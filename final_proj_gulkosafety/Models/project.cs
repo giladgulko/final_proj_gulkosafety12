@@ -37,6 +37,13 @@ namespace final_proj_gulkosafety.Models
             Foreman_email = foreman_email;
         }
 
+        public project(int project_num, string manager_email, string foreman_email)
+        {
+            Project_num = project_num;
+            Manager_email = manager_email;
+            Foreman_email = foreman_email;
+        }
+
         public int Project_num { get => project_num; set => project_num = value; }
         public string Name { get => name; set => name = value; }
         public string Company { get => company; set => company = value; }
@@ -77,10 +84,10 @@ namespace final_proj_gulkosafety.Models
             dbs.UpdateProjectStatus(proj_num, status);
         }
 
-        public void UpdateProjectUser(int proj_num, string manager_email, string foreman_email)
+        public void UpdateProjectUser()
         {
             DBServices dbs = new DBServices();
-            dbs.UpdateProjectUser(proj_num, manager_email, foreman_email);
+            dbs.UpdateProjectUser(this);
         }
         public void DeleteProject(int proj_num)
         {

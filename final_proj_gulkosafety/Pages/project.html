@@ -47,24 +47,29 @@
             foremanSelect = document.getElementById('foreman');
             projectTypeSelect = document.getElementById('projectType');
 
-            $("#projectDetailsForm").submit(f1);
-            $("#contactsDetailsForm").submit(f2);
+            $("#projectDetailsForm").submit(saveProjForm);
+            $("#contactsDetailsForm").submit(saveContactForm);
 
-            getContactList();
 
-            //edit project button- projects html
+            //get info from local storage
             project = JSON.parse(localStorage["project"]);
-            renderProjectDetails();
-            editProjBtnEvents();
+            contactList = JSON.parse(localStorage["contactList"]);
+            projectTypes = JSON.parse(localStorage["projectTypes"]);
 
+            editProjBtnEvents();
+            renderProjectDetails();
+            renderProjContacts();
+
+            //new report btn
             $("#newBTN").on("click", function () {
                 markSelected(this);
                 localStorage["report"] = "";
+                localStorage["projContacts"] = JSON.stringify(projContacts);
                 window.location = "report.html";
             });
         });
 
-        function f2() {
+        function saveContactForm() {
             updateProjContacts();
             return false;
         }
@@ -72,8 +77,17 @@
         function updateProjContacts() {
             let manager_email = $('#manager').val();
             let foreman_email = $('#foreman').val();
-            let api = "../api/project?project_num=" + project.Project_num + "&manager_email =" + manager_email + "&foreman_email=" + foreman_email;
-            ajaxCall("PUT", api, "", updateProjContactsSuccess, getError);
+            let project_num = project.Project_num;
+
+            let proj = {
+                Project_num: project.Project_num,
+                Manager_email: manager_email,
+                Foreman_email: foreman_email
+            }
+
+
+            let api = "../api/project?project_num=" + project_num;
+            ajaxCall("PUT", api, JSON.stringify(proj), updateProjContactsSuccess, getError);
         }
 
         function updateProjContactsSuccess(data) {
@@ -81,12 +95,13 @@
             $(".groupContacts").prop('disabled', true);
             $("#editContactsBTN").show();
             $("#saveContactsBTN").hide();
+            $("#cancelEditContactsBTN").hide();
         }
         function getError(data) {
             alert("error");
         }
 
-        function f1() {
+        function saveProjForm() {
             updateProject();
             return false;
         }
@@ -115,13 +130,15 @@
             $(".groupDetails").prop('disabled', true);
             $("#editDetailsBTN").show();
             $("#saveDetailsBTN").hide();
+            $("#cancelEditDetailsBTN").hide(); 
         }
 
         function editProjBtnEvents() {
             $('#reportsTable').show();
             $("#saveDetailsBTN").hide();
             $("#saveContactsBTN").hide();
-            $("#saveProject").hide();
+            $("#cancelEditDetailsBTN").hide(); 
+            $("#cancelEditContactsBTN").hide();
 
             $(".groupDetails").prop('disabled', true);
             $(".groupContacts").prop('disabled', true);
@@ -129,8 +146,19 @@
             //edit project details
             $("#editDetailsBTN").on("click", function () {
                 $(".groupDetails").prop('disabled', false);
+                $("#projectNum").prop('disabled', true);
                 $("#editDetailsBTN").hide();
                 $("#saveDetailsBTN").show();
+                $("#cancelEditDetailsBTN").show();
+            });
+
+            //cancel edit project details
+            $("#cancelEditDetailsBTN").on("click", function () {
+                $(".groupDetails").prop('disabled', true);
+                $("#editDetailsBTN").show();
+                $("#saveDetailsBTN").hide();
+                $("#cancelEditDetailsBTN").hide();
+                renderProjectDetails();
             });
 
             // edit project contacts
@@ -138,7 +166,17 @@
                 $(".groupContacts").prop('disabled', false);
                 $("#editContactsBTN").hide();
                 $("#saveContactsBTN").show();
+                $("#cancelEditContactsBTN").show();
                 renderContactList();
+            });
+
+            //cancel edit project contacts
+            $("#cancelEditContactsBTN").on("click", function () {
+                $(".groupContacts").prop('disabled', true);
+                $("#editContactsBTN").show();
+                $("#saveContactsBTN").hide();
+                $("#cancelEditContactsBTN").hide();
+                renderProjContacts();
             });
 
             //reports table BTNs
@@ -153,6 +191,7 @@
                 }
                 console.log(reportToEdit);
                 localStorage["report"] = JSON.stringify(reportToEdit);
+                localStorage["projContacts"] = JSON.stringify(projContacts);
                 window.location = "report.html"
             });
             //reports table BTNs
@@ -172,32 +211,6 @@
             });
         }
 
-
-        function getProjectTypes() {
-            let api = "../api/project_type";
-            ajaxCall("GET", api, "", getProjTypesSuccess, getError);
-        }
-
-        function getProjTypesSuccess(data) {
-            projectTypes = data;
-            for (i = 0; i < projectTypes.length; i++) {
-                projectTypeSelect.innerHTML += "<option value=" + projectTypes[i].Project_type_num + ">" + projectTypes[i].Project_type_name + "</option>";
-            }
-        }
-
-        //get a list of all contacts for contact section list
-        function getContactList() {
-            let api = "../api/user";
-            ajaxCall("GET", api, "", getContactListSuccess, getError);
-        }
-
-        //render contacts into lists
-        function getContactListSuccess(data) {
-            alert("in success contact list");
-            contactList = data;
-            renderContacts();
-        }
-
         function renderContactList() {
             for (i = 0; i < contactList.length; i++) {
                 if (project.Manager_email != contactList[i].Email) {
@@ -210,11 +223,11 @@
             }
         }
 
-        function renderContacts() {
-            alert("in render contacts");
+        function renderProjContacts() {
+           
             for (i = 0; i < contactList.length; i++) {
                 if (project.Manager_email == contactList[i].Email) {
-                    managerSelect.innerHTML = "";
+                    projContacts.push(contactList[i]);
                     managerSelect.innerHTML += "<option value=" + contactList[i].Email + ">" + contactList[i].Name + ", " + contactList[i].Phone + "</option > ";
                 }
                 if (project.Foreman_email == contactList[i].Email) {
@@ -246,12 +259,12 @@
 
         function renderProjectDetails() {
             //alert("in render details");
-
+            $('.proj').text('');
             $('.proj').append(project.Name);
             $('#projectNum').val(project.Project_num);
             $('#projectName').val(project.Name);
             $('#projectType').append($('<option>', { value: project.Project_type_num })
-                .text(project.Project_type_num));
+                .text(Project_type_num));
             $('#status').val(project.Status);
             $('#startDate').val(project.Start_date.split("T")[0]);
             $('#endDate').val(project.End_date.split("T")[0]);
@@ -259,7 +272,6 @@
             $('#address').val(project.Address);
             $('#safetyLevel').val(project.Safety_lvl);
             $('#description').val(project.Description);
-
         }
 
         function getError(err) {
@@ -442,6 +454,9 @@
                                         <button type="submit" id="saveDetailsBTN" class="btn btn-default btn-sm">
                                             <span class="glyphicon glyphicon-floppy-disk"></span>
                                         </button>
+                                        <button type="button" id="cancelEditDetailsBTN" class="btn btn-default btn-sm">
+                                           בטל עריכה
+                                        </button>
                                     </p>
                                 </div>
                             </div>
@@ -484,6 +499,9 @@
                                         </button>
                                         <button type="submit" id="saveContactsBTN" class="btn btn-default btn-sm">
                                             <span class="glyphicon glyphicon-floppy-disk"></span>
+                                        </button>
+                                        <button type="button" id="cancelEditContactsBTN" class="btn btn-default btn-sm">
+                                            בטל עריכה
                                         </button>
                                     </p>
                                 </div>

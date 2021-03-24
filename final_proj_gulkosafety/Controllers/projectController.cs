@@ -27,18 +27,20 @@ namespace final_proj_gulkosafety.Controllers
             p.Insert();
         }
 
-        // PUT api/<controller>/5
-        //public void PutProjectDeatails([FromBody] project p)
-        //{
-        //    p.UpdateProjectDeatails(p.Project_num, p.Name, p.Company, p.Address, p.Start_date, p.End_date, p.Status, p.Description, p.Safety_lvl, p.Project_type_num, p.Manager_email, p.Foreman_email);
-        //}
-        public void PutProjectStatus([FromBody] project p)
+        //PUT api/<controller>/5
+        public void PutProjectDetails([FromBody] project p)
         {
-            p.UpdateProjectStatus(p.Project_num, p.Status);
+            p.UpdateProjectDetails();
         }
-        public void PutProjectUser([FromBody] project p)
+
+        //public void PutProjectStatus([FromBody] project p)
+        //{
+        //    p.UpdateProjectStatus(p.Project_num, p.Status);
+        //}
+
+        public void PutProjectUsers(int project_num, [FromBody] project p)
         {
-            p.UpdateProjectUser(p.Project_num, p.Manager_email,p.Foreman_email);
+            p.UpdateProjectUser();
         }
 
         // DELETE api/<controller>/5
