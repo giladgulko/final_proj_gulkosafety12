@@ -69,11 +69,5 @@ namespace final_proj_gulkosafety.Models
         }
 
 
-        public void InsertDefectInReport()
-        {
-            DBServices dbs = new DBServices();
-            dbs.InsertDefectInReport(this);
-        }
-
     }
 }

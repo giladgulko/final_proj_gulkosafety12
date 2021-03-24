@@ -31,7 +31,7 @@
         function buttonEvents() {
 
             $(document).on("click", ".editBtn", function () {
-                projId = this.getAttribute('project_data')
+                projId = this.getAttribute('defect_data')
                 projToEdite = ""
                 for (var i = 0; i < allProj.length; i++) {
                     if (allProj[i].Project_num == projId) {
@@ -46,7 +46,7 @@
 
 
             $(document).on("click", ".deleteBtn", function () {
-                projId = this.getAttribute('project_data')
+                projId = this.getAttribute('defect_data')
 
                 swal({
                     title: "Are you sure ??",
@@ -56,7 +56,7 @@
                     dangerMode: true
                 })
                     .then(function (willDelete) {
-                        if (willDelete) delete_proj(projId);
+                        if (willDelete) delete_defect_in_report(projId);
                         else swal("Not Deleted!");
                     });
             });
@@ -212,9 +212,15 @@
             }
             console.log(New_defect)
 
-            //api = "../api/defect_in_report";
-            //ajaxCall("GET", api, JSON.stringify(New_defect), getDefectsInReport, getError)
-          //  window.location.reload(true);
+            api = "../api/defect_in_report";
+            ajaxCall("POST", api, JSON.stringify(New_defect), postDefectsInReport, getError)
+           
+        }
+        function postDefectsInReport() {
+            window.location.reload(true);
+        }
+        function delete_defect_in_report(d) {
+            alert(d)
         }
     </script>
 </head>
@@ -379,7 +385,7 @@
                             </div>
                         </div>
                         <div>
-                            <button id="btn_add_defect" class="btn btn-primary" onclick="addDefectToReport()">הוסף ליקוי</button>
+                            <button id="btn_add_defect" class="btn btn-primary" onclick="addDefectToReport(1)">הוסף ליקוי</button>
                         </div>
                     </div>
                 </div>

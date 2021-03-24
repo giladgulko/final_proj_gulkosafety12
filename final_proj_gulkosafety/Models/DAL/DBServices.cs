@@ -1103,9 +1103,9 @@ namespace final_proj_gulkosafety.Models.DAL
             String command;
 
             StringBuilder sb = new StringBuilder();
-            
-            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}', '{4}','{5}','{6}')", _defect_in_report.Report_num, _defect_in_report.Defect_num, _defect_in_report.Fix_date, _defect_in_report.Fix_time, _defect_in_report.Picture_link,_defect_in_report.Fix_status,_defect_in_report.Description);
-            String prefix = "INSERT INTO user " + "(report_num,defect_num,fix_date,picture_link,fix_status,description)";
+
+            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}', '{4}','{5}','{6}')", _defect_in_report.Report_num, _defect_in_report.Defect_num, _defect_in_report.Fix_date.ToString("yyyy-MM-dd"), _defect_in_report.Fix_time.ToString("HH:mm"), _defect_in_report.Picture_link, _defect_in_report.Fix_status, _defect_in_report.Description); ;
+            String prefix = "INSERT INTO defect_in_report " + "(report_num,defect_num,fix_date,fix_time,picture_link,fix_status,description)";
             command = prefix + sb.ToString();
 
             return command;
