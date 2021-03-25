@@ -59,6 +59,7 @@
             editProjBtnEvents();
             renderProjectDetails();
             renderProjContacts();
+            renderProjTypes();
 
             //new report btn
             $("#newBTN").on("click", function () {
@@ -102,7 +103,14 @@
         }
 
         function saveProjForm() {
-            updateProject();
+            $("#dateError").hide();
+            var endDate = document.getElementById('endDate').value;
+            var startDate = document.getElementById('startDate').value;
+            if (startDate > endDate) {
+                $('#endDate').after('<p id="dateError">תאריך התחלה גדול מתאריך הסיום</p>');  
+            }
+            else updateProject();
+
             return false;
         }
 
@@ -223,6 +231,14 @@
             }
         }
 
+        function renderProjTypes() {
+            projectType = document.getElementById('projectType');
+            for (i = 0; i < projectTypes.length; i++) {
+                projectType.innerHTML += "<option value=" + projectTypes[i].Project_type_num + ">" + projectTypes[i].Project_type_name + "</option>";
+            }
+            $('#projectType').val(project.Project_type_num);
+        }
+
         function renderProjContacts() {
            
             for (i = 0; i < contactList.length; i++) {
@@ -263,8 +279,6 @@
             $('.proj').append(project.Name);
             $('#projectNum').val(project.Project_num);
             $('#projectName').val(project.Name);
-            $('#projectType').append($('<option>', { value: project.Project_type_num })
-                .text(Project_type_num));
             $('#status').val(project.Status);
             $('#startDate').val(project.Start_date.split("T")[0]);
             $('#endDate').val(project.End_date.split("T")[0]);

@@ -5,7 +5,6 @@
 }
 
 #headline {
-    width: 20%;
     font-family: 'Suez One', serif;
     color: blue;
 }
@@ -118,4 +117,8 @@ th.sorting {
 #buttons {
     margin-top: 45px;
     margin-right: 70px;
+}
+#dateError {
+    color: red;
+
 }
