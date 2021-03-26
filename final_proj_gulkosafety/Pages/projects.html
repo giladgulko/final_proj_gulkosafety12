@@ -49,14 +49,12 @@
 
         //render contacts into lists
         function getContactListSuccess(data) {
-            alert("in success contact list");
             contactList = data;
             localStorage["contactList"] = JSON.stringify(contactList);
             renderContacts();
         }
 
         function renderContacts() {
-            alert("in render contacts");
             managerSelect = document.getElementById('manager');
             foremanSelect = document.getElementById('foreman');
             for (i = 0; i < contactList.length; i++) {

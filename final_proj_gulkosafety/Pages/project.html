@@ -40,6 +40,7 @@
         $(document).ready(function () {
             reports = [];
             projContacts = [];
+            projContactsTest = [];
             projectTypes = [];
             contactList = [];
 
@@ -55,6 +56,7 @@
             contactList = JSON.parse(localStorage["contactList"]);
             projectTypes = JSON.parse(localStorage["projectTypes"]);
 
+            getReports();
             editProjBtnEvents();
             renderProjectDetails();
             renderProjContacts();
@@ -70,6 +72,13 @@
             let manager_email = $('#manager').val();
             let foreman_email = $('#foreman').val();
             let project_num = project.Project_num;
+
+            for (i = 0; i < contactList.length; i++) {
+                if (manager_email == contactList[i].Email)
+                    projContactsTest.push({ manager: contactList[i] });
+                if (foreman_email == contactList[i].Email)
+                    projContactsTest.push({ foreman: contactList[i] });
+            }
 
             let proj = {
                 Project_num: project.Project_num,
@@ -88,9 +97,11 @@
             $("#editContactsBTN").show();
             $("#saveContactsBTN").hide();
             $("#cancelEditContactsBTN").hide();
+            //update local storage
+            localStorage["projContacts"] = JSON.stringify(projContactsTest);
         }
         function getError(data) {
-            alert("error");
+            alert("פרטי אנשי הקשר לא נשמרו! נסה שוב");
         }
 
         function saveProjForm() {
@@ -120,7 +131,7 @@
                 Manager_email: project.Manager_email,
                 Foreman_email: project.Foreman_email
             }
-
+            localStorage["project"] = JSON.stringify(projToEdit);
             ajaxCall("PUT", "../api/project", JSON.stringify(projToEdit), updateProjectSuccess, getError);
         }
 
@@ -242,14 +253,14 @@
            
             for (i = 0; i < contactList.length; i++) {
                 if (project.Manager_email == contactList[i].Email) {
-                    projContacts.push(contactList[i]);
+                    projContacts.push({ manager: contactList[i] });
                     managerSelect.innerHTML += "<option value=" + contactList[i].Email + ">" + contactList[i].Name + ", " + contactList[i].Phone + "</option > ";
                 }
                 if (project.Foreman_email == contactList[i].Email) {
                     foremanSelect.innerHTML += "<option value=" + contactList[i].Email + ">" + contactList[i].Name + ", " + contactList[i].Phone + " </option>";
+                    projContacts.push({ foreman: contactList[i] });
                 }
-            }
-            getReports();
+            } 
 
         }
 
