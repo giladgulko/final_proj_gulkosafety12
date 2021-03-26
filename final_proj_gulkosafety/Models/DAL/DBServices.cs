@@ -625,7 +625,7 @@ namespace final_proj_gulkosafety.Models.DAL
 
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
-            sb.AppendFormat("Values('{0}','{1}','{2}','{3}','{4}')", _report.Date, _report.Time, _report.Grade, _report.Comment, _report.Project_num);
+            sb.AppendFormat("Values('{0}','{1}','{2}','{3}','{4}')", _report.Date.ToString("yyyy-MM-dd"), _report.Time.ToString("HH:mm"), _report.Grade, _report.Comment, _report.Project_num);
             String prefix = "INSERT INTO report " + "(date,time,grade,comment,project_num)";
             command = prefix + sb.ToString();
 

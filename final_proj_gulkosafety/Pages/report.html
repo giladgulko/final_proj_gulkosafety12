@@ -28,37 +28,41 @@
     <script>
         defects = [];
         defects_types = [];
-      
+        currentReportDefects = [];
      
 
         $(document).ready(function () {
             bringDataFromLocal();
-            getDefectsAndTypeS()
+            getDefectsAndTypeS();
+            $("#reportDetailsForm").submit(saveNewReport);
         });
         function bringDataFromLocal() {
             project = JSON.parse(localStorage["project"]);
-            renderProjectDetails()
+            renderProjectDetails();
 
             if (localStorage["report"] != "") {
                 
                 $("#save_new_report").hide();
                 report = JSON.parse(localStorage["report"]);
-                time = report.Time.split('T')
-                date = report.Date.split('T')
+                time = report.Time.split('T');
+                date = report.Date.split('T');
                 $('#Date').val(date[0]);
-                $('#time').val(time[1])
-                headLine = "<h1>" + report.Report_num + " דוח ביקור " + "</h1>"
-                $('#proj_bar').html(headLine)
-                getReportDefect(report.Report_num)
+                $('#time').val(time[1]);
+                headLine = "<h1>" + report.Report_num + " דוח ביקור " + "</h1>";
+                $('#proj_bar').html(headLine);
+                $("#defectsTBL").show();
+                getReportDefect(report.Report_num);
             }
             else {
-                $('#proj_bar').html("דוח ביקור חדש")
+                headLine = "<h1>דוח ביקור חדש</h1>";
+                $('#proj_bar').html(headLine);
+                $("#defectsTBL").hide();
                // api = "../api/report";
                 //ajaxCall("GET", api, JSON.stringify(project),getNewReportsuccess, getError)
 
-                headLine = "<h1>" + report.Report_num + " דוח ביקור " + "</h1>"
-                $('#proj_bar').html(headLine)
-                $("#projTable").hide();
+                //headLine = "<h1>" + report.Report_num + " דוח ביקור " + "</h1>"
+                //$('#proj_bar').html(headLine)
+                //$("#projTable").hide();
                 
 
             }
@@ -74,9 +78,9 @@
             ajaxCall("GET", api, "", createDt, getError)
 
         }
-        function createDt(data) {
-            console.table(data)
-        }
+        //function createDt(data) {
+        //    console.table(data)
+        //}
         function getError(err) {
             console.table(err)
         }
@@ -93,14 +97,14 @@
             $("#pic").show()
             $("#pic").html(str);
         }
-        function createDt(projdata) {
+        function createDt(defectsdata) {
 
 
-            allProj = projdata;
+            currentReportDefects = defectsdata;
 
             try {
                 tbl = $('#projTable').DataTable({
-                    data: projdata,
+                    data: defectsdata,
                     pageLength: 8,
                     columns: [
 
@@ -224,19 +228,34 @@
                 Report_num: report.Report_num,
                 Defect_num: def_num
             }
-            ajaxCall("DELETE", "../api/defect_in_report", JSON.stringify(defectToDelete), deleteDefect, getError)
+            ajaxCall("DELETE", "../api/defect_in_report", JSON.stringify(defectToDelete), deleteDefect, getError);
         }
         function deleteDefect() {
             window.location.reload(true) 
         }
-        function saveReport(){
+
+        function saveNewReport() {
+            let date = $('#Date').val();
+            if (date < project.Start_date || date > project.End_date) {
+                $('#Date').after('<p id="dateError">תאריך התחלה גדול מתאריך הסיום</p>'); 
+            }
+            else {
+                let reportToSave = {
+                    Date: $('#Date').val(),
+                    Time: $('#time').val(),
+                    Comment: $('#description').val(),
+                    Grade: 100,
+                    Project_num: project.Project_num,
+                    User_mail: "gulkosafety@gmail.com"//change in the future - from local storage- user loged in
+                }
+                ajaxCall("POST", "../api/report", JSON.stringify(reportToSave), insertReportSuccess, getError);
+            }
+            return false;
 
         }
-        function save_new_reportBTN() {
-            $('#company').val(project.Company);
-            $('#location').val(project.Address)
-            $('#forman').val(project.Foreman_email);
-            $('#projManeger').val(project.Manager_email)
+
+        function insertReportSuccess() {
+            alert("הדוח נשמר בהצלחה! הוסף ליקויים לדוח");
         }
     </script>
 </head>
@@ -264,7 +283,7 @@
     <div id="proj_bar" dir="rtl">
     </div>
     <!--פרטי דוח-->
-    <div class="mainCards">
+    <div id="reportDetails" class="mainCards">
         <form id="reportDetailsForm">
             <div class="row">
                 <div class="form-group col-sm-4">
@@ -274,7 +293,7 @@
                 <div class="form-group col-sm-4">
                     <label for="tDate"><span class="red-star">★</span>תאריך ביקור</label>
                     <br />
-                    <input type="date" id="Date">
+                    <input type="date" id="Date" required>
                 </div>
                 <div class="form-group col-sm-4">
                     <label for="projManeger">מנהל פרויקט</label>
@@ -290,7 +309,7 @@
                 <div class="form-group col-sm-4">
                     <label for="time"><span class="red-star">★</span>שעה</label>
                     <br />
-                    <input type="time" id="time">
+                    <input type="time" id="time" required>
                 </div>
                 <div class="form-group col-sm-4">
                     <label for="forman">מנהל עבודה</label>
@@ -303,13 +322,13 @@
                     <textarea rows="2" class="form-control groupDetails" id="description" placeholder="הזן הערות לדוח"></textarea>
                 </div>
             </div>
-            <div id="save_new_report">
-                <button onclick="save_new_reportBTN()">שמור דוח חדש</button>
+            <div id="save_new_report" class="row">
+                <button type="submit">שמור דוח חדש</button>
             </div>
         </form>
     </div>
     <!--טבלת ליקויים-->
-    <div class="mainCards">
+    <div id="defectsTBL" class="mainCards">
         <div id="table">
             <table id="projTable" class="display" style="width:100%" dir="rtl">
                 <thead>
@@ -386,11 +405,6 @@
                     </div>
                 </div>
             </div>
-            <div id="saveReport">
-                <button onclick="saveReport()">
-                    שמור דוח
-                </button>
 
-            </div>
 </body>
 </html>
