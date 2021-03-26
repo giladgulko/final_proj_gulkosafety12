@@ -79,22 +79,34 @@ h1, .proj {
     color: cadetblue;
     font-weight: bold;
 }
+h3 {
+    font-size: 20px;
+    font-weight: bold;
+    color: cadetblue;
+    padding-right: 15px;
+    margin-top: 0px;
+}
 img.logo {
     position: absolute;
 }
 .w3-modal-content{
     direction:rtl;
 }
-#btn_add_defect {
+#btn_add_defect, #saveReport, #calcGrade {
     float: left;
-    margin-top: 25px;
     color: #fff;
     background-color: cadetblue;
     border-color: cadetblue;
 }
-/*.form-group.col-sm-4 {
+#calcGrade {
+    margin-left: 15px;
+}
+
+#saveReport {
     float: right;
-}*/
+    margin-right: 15px;
+}
+
 .btn-success {
     background-color: white;
     color: black;

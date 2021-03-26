@@ -266,14 +266,15 @@
 
         // Delete a report from the server
         function DeleteReport(report_num) {
-            ajaxCall("DELETE", "../api/report/" + report_num, "", deleteReportSuccess, getError);
+            let api = "../api/report?report_num=" + report_num;
+            ajaxCall("DELETE", api, "", deleteReportSuccess, getError);
         }
 
 
         // success callback function after delete report
         function deleteReportSuccess(data) {
             swal("הדוח נמחק בהצלחה!", "Great Job", "success");
-            window.location.reload();
+            location.reload();
         }
 
         // mark the selected row
@@ -351,6 +352,7 @@
                 catch (err) {
                     alert(err);
                 }
+                localStorage["gradesArr"] = JSON.stringify(gradesArr);
                 buildGradesGraph(gradesArr, reportNumArr);
             }
 

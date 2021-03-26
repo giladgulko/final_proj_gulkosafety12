@@ -42,7 +42,8 @@
 
             if (localStorage["report"] != "") {
                 
-                $("#save_new_report").hide();
+                $("#saveNewReport").hide();
+
                 report = JSON.parse(localStorage["report"]);
                 time = report.Time.split('T');
                 date = report.Date.split('T');
@@ -51,19 +52,13 @@
                 headLine = "<h1>" + report.Report_num + " דוח ביקור " + "</h1>";
                 $('#proj_bar').html(headLine);
                 $("#defectsTBL").show();
+
                 getReportDefect(report.Report_num);
             }
             else {
                 headLine = "<h1>דוח ביקור חדש</h1>";
                 $('#proj_bar').html(headLine);
                 $("#defectsTBL").hide();
-               // api = "../api/report";
-                //ajaxCall("GET", api, JSON.stringify(project),getNewReportsuccess, getError)
-
-                //headLine = "<h1>" + report.Report_num + " דוח ביקור " + "</h1>"
-                //$('#proj_bar').html(headLine)
-                //$("#projTable").hide();
-                
 
             }
         }
@@ -74,8 +69,8 @@
             $("#")
         }
         function getReportDefect(num) {
-            api = "../api/defect_in_report?report_num=" + num
-            ajaxCall("GET", api, "", createDt, getError)
+            api = "../api/defect_in_report?report_num=" + num;
+            ajaxCall("GET", api, "", createDt, getError);
 
         }
         //function createDt(data) {
@@ -196,18 +191,16 @@
                 Fix_Time: $("#fixTime").val(),
                 Picture_link: "",
                 Fix_status: 0,
-                Description: $("#description").val()
-               
-                  
+                Description: $("#description").val()    
             }
             console.log(New_defect)
-
+            //currentReportDefects.push(New_defect);
             api = "../api/defect_in_report";
             ajaxCall("POST", api, JSON.stringify(New_defect), postDefectsInReport, getError)
            
         }
         function postDefectsInReport() {
-            window.location.reload(true);
+            location.reload();
         }
         function deleteAlert(def_num){
             swal({
@@ -231,7 +224,7 @@
             ajaxCall("DELETE", "../api/defect_in_report", JSON.stringify(defectToDelete), deleteDefect, getError);
         }
         function deleteDefect() {
-            window.location.reload(true) 
+            location.reload();
         }
 
         function saveNewReport() {
@@ -256,6 +249,34 @@
 
         function insertReportSuccess() {
             alert("הדוח נשמר בהצלחה! הוסף ליקויים לדוח");
+            let api = "../api/report";
+            //ajaxCall("GET", api, localStorage["project"], getLastReportSuccess, getError);
+            ajaxCall("GET", api, JSON.stringify(project), getLastReportSuccess, getError);
+        }
+
+        function getLastReportSuccess(lastReport) {
+            localStorage["report"] = JSON.stringify(lastReport);
+            location.reload();
+        }
+
+        function calcGrade() {
+            let curentReport = [];
+            for (i = 0; i < currentReportDefects.length; i++) {
+                for (j = 0; j < defects.length; j++) {
+                    if (currentReportDefects[i].Defect_num == defects[j].Defect_num) {
+                        let defect = {
+                            Defect_num: currentReportDefects[i].Defect_num,
+                            Defect_type_num: defects[j].Defect_type_num,
+                            Grade: defects[j].Grade
+                        }
+                        curentReport.push(defect);
+                    }
+                } 
+            }
+            localStorage["curentReport"] = JSON.stringify(curentReport);
+            //get to project type weights- build controller
+            //get last report defects- build functions db and all
+            //call safety_lvl script function  
         }
     </script>
 </head>
@@ -322,13 +343,21 @@
                     <textarea rows="2" class="form-control groupDetails" id="description" placeholder="הזן הערות לדוח"></textarea>
                 </div>
             </div>
-            <div id="save_new_report" class="row">
-                <button type="submit">שמור דוח חדש</button>
+            <div id="saveNewReport" class="row">
+                <button type="submit" id="saveReport" class="btn btn-primary">שמור</button>
             </div>
         </form>
     </div>
     <!--טבלת ליקויים-->
     <div id="defectsTBL" class="mainCards">
+        <div class="row">
+            <div class="col-sm-6">
+                <button id="btn_add_defect" class="btn btn-primary" onclick="document.getElementById('id01').style.display='block',newDefect()">הוסף ליקוי לדוח </button>
+            </div>
+            <div class="col-sm-6">
+                <h3>ליקויים שנמצאו באתר ובסביבתו:</h3>
+            </div>
+        </div>
         <div id="table">
             <table id="projTable" class="display" style="width:100%" dir="rtl">
                 <thead>
@@ -350,61 +379,61 @@
             </table>
 
         </div>
+        <div class="row">
+            <button id="calcGrade" class="btn btn-primary" onclick="calcGrade()">חשב ציון דוח</button>
         </div>
-            <div id="pic" onclick="closePic()">
+    </div>
+    <div id="pic" onclick="closePic()">
 
-            </div>
-            <!--כל החלק מתחת הוא החלון שנפתח ברגע שלוחצים על הוסף ליקוי חדש לדוח-->
-            <div class="w3-container">
-
-                <button id="btn_add_defect" class="btn btn-primary" onclick="document.getElementById('id01').style.display='block',newDefect()">הוסף ליקוי לדוח </button>
-
-                <div id="id01" class="w3-modal">
-                    <div class="w3-modal-content">
-                        <div class="w3-container">
-                            <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-                            <div>
-                                <button onclick="window.close()"></button>
-                            </div>
+    </div>
+    <!--כל החלק מתחת הוא החלון שנפתח ברגע שלוחצים על הוסף ליקוי חדש לדוח-->
+    <div class="w3-container">
+        <div id="id01" class="w3-modal">
+            <div class="w3-modal-content">
+                <div class="w3-container">
+                    <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                    <div>
+                        <button onclick="window.close()"></button>
+                    </div>
+                    <br />
+                    <div id="section1">
+                        <div>
+                            <label for="defect_type">בחר סוג ליקוי:</label>
                             <br />
-                            <div id="section1">
-                                <div>
-                                    <label for="defect_type">בחר סוג ליקוי:</label>
-                                    <br />
-                                    <select id="selectType" onchange="createDefectList(this.value)"></select>
+                            <select id="selectType" onchange="createDefectList(this.value)"></select>
 
-                                </div>
-                                <div>
-                                    <label for="defect_type">בחר ליקוי:</label>
-                                    <br />
-                                    <select id="selectdefect"></select>
-
-                                </div>
-                            </div>
-                            <div>
-                                <label for="description">תיאור:</label>
-                                <input type="text" class="form-control" id="description">
-
-                            </div>
-                            <div id="section2">
-                                <div class="form-group col-sm-4">
-                                    <label for="fixDate"><span class="red-star"> </span>תאריך תיקון:</label>
-                                    <br />
-                                    <input type="date" id="fixDate">
-                                </div>
-                                <div class="form-group col-sm-4">
-                                    <label for="fixTime">עד שעה:</label>
-                                    <br />
-                                    <input type="time" id="fixTime">
-                                </div>
-                            </div>
-                            <div>
-                                <button id="btn_add_defect" class="btn btn-primary" onclick="addDefectToReport(1)">הוסף ליקוי</button>
-                            </div>
                         </div>
+                        <div>
+                            <label for="defect_type">בחר ליקוי:</label>
+                            <br />
+                            <select id="selectdefect"></select>
+
+                        </div>
+                    </div>
+                    <div>
+                        <label for="description">תיאור:</label>
+                        <input type="text" class="form-control" id="description">
+
+                    </div>
+                    <div id="section2">
+                        <div class="form-group col-sm-4">
+                            <label for="fixDate"><span class="red-star"> </span>תאריך תיקון:</label>
+                            <br />
+                            <input type="date" id="fixDate">
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label for="fixTime">עד שעה:</label>
+                            <br />
+                            <input type="time" id="fixTime">
+                        </div>
+                    </div>
+                    <div>
+                        <button id="btn_add_defect" class="btn btn-primary" onclick="addDefectToReport(1)">הוסף ליקוי</button>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
 </body>
 </html>

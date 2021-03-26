@@ -905,7 +905,7 @@ namespace final_proj_gulkosafety.Models.DAL
                 }
                 return defectTypeList;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw new Exception("Can not read defect type");
             }
