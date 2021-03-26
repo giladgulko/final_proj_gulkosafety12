@@ -38,7 +38,7 @@
             getContactList();
             getProjectTypes();
 
-            $("#newProjForm").submit(f1);
+            $("#newProjForm").submit(newProjForm);
         });
 
         //get a list of all contacts for contact section list
@@ -80,8 +80,14 @@
             localStorage["projectTypes"] = JSON.stringify(projectTypes);
         }
 
-        function f1() {
-            createNewProj();
+        function newProjForm() {
+            $("#dateError").hide();
+            var endDate = document.getElementById('endDate').value;
+            var startDate = document.getElementById('startDate').value;
+            if (startDate > endDate) {
+                $('#endDate').after('<p id="dateError">תאריך התחלה גדול מתאריך הסיום</p>');
+            }
+            else createNewProj();
             return false;
         }
         function createNewProj() {
@@ -230,10 +236,6 @@
 
 
         }
-        function addNewProj() {
-            localStorage.clear()
-            window.location = "project.html"
-        }
     </script>
 </head>
 <body>
@@ -263,7 +265,7 @@
         </div>
         <br />
         <div id="buttons">
-            <button id="myBtn" style="margin-left:10px" class="btn btn-primary" onclick="addNewProj()">הוסף פרוייקט חדש</button>
+            <button id="myBtn" style="margin-left:10px" class="btn btn-primary" onclick="document.getElementById('id01').style.display='block'">הוסף פרוייקט חדש</button>
             <button id="old_proj_btn" type="button" class="btn btn-primary" onclick="renderOldPROJ()">ארכיון פרוייקטים</button>
         </div>
     </div>>
@@ -289,6 +291,7 @@
                 <div class="w3-container" dir="rtl">
                     <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                     <form id="newProjForm">
+                        </br>
                         <h2>פרויקט חדש</h2>
                         <table class="display" style="width:100%" dir="rtl">
                             <thead>
@@ -304,7 +307,9 @@
                                     <th>
                                         <div class="form-group">
                                             <label for="projectType"><span class="red-star">★ </span>סוג הפרויקט</label>
-                                            <select class="form-control groupDetails" id="projectType" required></select>
+                                            <select class="form-control groupDetails" id="projectType" required>
+                                                <option value="">בחר סוג פרויקט</option>
+                                            </select>
                                         </div>
                                     </th>
                                 </tr>
@@ -374,6 +379,7 @@
                                         </div>
                                     </th>
                                 </tr>
+                                </br>
                                 <tr>
                                     <th>
                                         <input type="submit" class="btn btn-primary" value="שמור" />
