@@ -50,7 +50,6 @@
             $("#projectDetailsForm").submit(saveProjForm);
             $("#contactsDetailsForm").submit(saveContactForm);
 
-
             //get info from local storage
             project = JSON.parse(localStorage["project"]);
             contactList = JSON.parse(localStorage["contactList"]);
@@ -60,14 +59,6 @@
             renderProjectDetails();
             renderProjContacts();
             renderProjTypes();
-
-            //new report btn
-            $("#newBTN").on("click", function () {
-                markSelected(this);
-                localStorage["report"] = "";
-                localStorage["projContacts"] = JSON.stringify(projContacts);
-                window.location = "report.html";
-            });
         });
 
         function saveContactForm() {
@@ -216,6 +207,14 @@
                     if (willDelete) DeleteReport(report_num);
                     else swal("המחיקה בוטלה!");
                 });
+            });
+
+            //new report btn
+            $("#newBTN").on("click", function () {
+                markSelected(this);
+                localStorage["report"] = "";
+                localStorage["projContacts"] = JSON.stringify(projContacts);
+                window.location = "report.html";
             });
         }
 

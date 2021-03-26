@@ -33,6 +33,11 @@
     margin-right: 10%;
     margin-top: 5%;
 }
+.form-group {
+    margin-bottom: 5px;
+    text-align: right;
+    max-width: 80%;
+}
 
 .btn-primary {
     color: #fff;
@@ -40,7 +45,7 @@
     border-color: cadetblue;
 }
 
-h1, .proj {
+h1,h2,.proj {
     font-family: 'Lucida Console';
     color: cadetblue;
     font-weight: bold;
@@ -118,7 +123,11 @@ th.sorting {
     margin-top: 45px;
     margin-right: 70px;
 }
-#dateError {
-    color: red;
 
+.red-star, #dateError {
+    color: red;
+}
+
+th{
+    text-align: right;
 }

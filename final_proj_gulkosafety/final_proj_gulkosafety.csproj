@@ -198,6 +198,7 @@
     <Content Include="Pages\projectStyleSheet.css" />
     <Content Include="Pages\report.html" />
     <Content Include="Pages\reportStyleSheet.css" />
+    <Content Include="Pages\test.html" />
     <Content Include="Scripts\ajaxCalls.js" />
     <Content Include="Scripts\ajaxCallsWithKey.js" />
     <Content Include="Scripts\bootstrap.js" />
