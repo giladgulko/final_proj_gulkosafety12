@@ -1,26 +1,39 @@
-﻿
+﻿#proj_bar {
+    text-align: right;
+    display: flex;
+    margin-top: 15px;
+    margin-right: 50px;
+}
+h1 {
+    direction: ltr;
+}
 body {
     background-color: #eeeeee;
     display: flex;
     flex-direction: column;
 }
 
-#projDetails {
+.mainCards {
     background-color: white;
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-bottom:15px;
+    direction: rtl;
+    padding: 15px;
 }
 
 form {
     display: inline;
     margin: 0px;
     padding: 0px;
-    text-align: right;
-    font-size: 12px;
-    float: right;
+    font-size: 13px;
 }
-
-#projNumDiv {
-    text-align: center;
-    width: 100%
+.form-group {
+    margin-bottom: 5px;
+    float:right;
+}
+input {
+    max-width: fit-content;
 }
 
 .navbar-default {
@@ -61,15 +74,6 @@ form {
     font-weight: bold;
 }
 
-body {
-    background-color: #eeeeee;
-}
-#headline {
-    width: 30%;
-    font-family: 'Lucida Console';
-    color: cadetblue;
-    font-weight: bold;
-}
 h1, .proj {
     font-family: 'Lucida Console';
     color: cadetblue;
@@ -88,10 +92,9 @@ img.logo {
     background-color: cadetblue;
     border-color: cadetblue;
 }
-.form-group.col-sm-4 {
+/*.form-group.col-sm-4 {
     float: right;
-}
-
+}*/
 .btn-success {
     background-color: white;
     color: black;
@@ -113,4 +116,8 @@ img.logo {
     background-color: #bd3636;
     color: white;
 
+}
+#table{
+    padding-left:20px;
+    padding-right:20px;
 }

@@ -48,16 +48,16 @@
                 $('#Date').val(date[0]);
                 $('#time').val(time[1])
                 headLine = "<h1>" + report.Report_num + " דוח ביקור " + "</h1>"
-                $('#projNumDiv').html(headLine)
+                $('#proj_bar').html(headLine)
                 getReportDefect(report.Report_num)
             }
             else {
-                $('#projNumDiv').html("דוח ביקור חדש")
+                $('#proj_bar').html("דוח ביקור חדש")
                // api = "../api/report";
                 //ajaxCall("GET", api, JSON.stringify(project),getNewReportsuccess, getError)
 
                 headLine = "<h1>" + report.Report_num + " דוח ביקור " + "</h1>"
-                $('#projNumDiv').html(headLine)
+                $('#proj_bar').html(headLine)
                 $("#projTable").hide();
                 
 
@@ -66,7 +66,7 @@
         function getNewReportsuccess(report) {
            
             headLine = "<h1>" + report.Report_num + " דוח ביקור " + "</h1>"
-            $('#projNumDiv').html(headLine)
+            $('#proj_bar').html(headLine)
             $("#")
         }
         function getReportDefect(num) {
@@ -230,9 +230,7 @@
             window.location.reload(true) 
         }
         function saveReport(){
-            if (true) {
 
-            }
         }
         function save_new_reportBTN() {
             $('#company').val(project.Company);
@@ -264,79 +262,54 @@
         </div>
     </nav>
     <div id="proj_bar" dir="rtl">
-        <div id="headline">
-            <h1 class="proj">דוח ביקור</h1>
-        </div>
     </div>
-        <div id="projNumDiv">
-
-        </div>
-        <!--פרטי דוח-->
-        <div id="projDetails">
+    <!--פרטי דוח-->
+    <div class="mainCards">
+        <form id="reportDetailsForm">
             <div class="row">
-                <div class="col-md-8 mb-3">
-                    <div class="card">
-                        <div class="card-body section1">
-                            <form id="reportDetailsForm">
-
-
-
-                                <div class="form-group row">
-                                    <div class="form-group col-sm-4">
-                                        <label for="projManeger">מנהל פרויקט</label>
-                                        <input type="text" class="form-control" id="projManeger">
-                                    </div>
-                                    <div class="form-group col-sm-4">
-                                        <label for="tDate"><span class="red-star"> </span>תאריך ביקור</label>
-                                        <br />
-                                        <input type="date" id="Date">
-                                    </div>
-                                    <div class="form-group col-sm-4">
-                                        <label for="company">שם חברה</label>
-                                        <input type="text" class="form-control" id="company">
-                                    </div>
-
-
-
-
-                                </div>
-
-                                <div class="form-group row">
-
-
-
-                                    <div class="form-group col-sm-4">
-                                        <label for="forman">מנהל עבודה</label>
-                                        <input type="text" class="form-control" id="forman">
-                                    </div>
-
-
-                                    <div class="form-group col-sm-4">
-                                        <label for="time">שעה</label>
-                                        <br />
-                                        <input type="time" id="time">
-                                    </div>
-                                    <div class="form-group col-sm-4">
-                                        <label for="location">מיקום</label>
-                                        <input type="text" class="form-control" id="location">
-                                    </div>
-                                </div>
-
-                                <div id="save_new_report">
-                                    <button onclick="save_new_reportBTN()">שמור דוח חדש</button>
-
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+                <div class="form-group col-sm-4">
+                    <label for="company">שם חברה</label>
+                    <input type="text" class="form-control" id="company">
                 </div>
-
+                <div class="form-group col-sm-4">
+                    <label for="tDate"><span class="red-star">★</span>תאריך ביקור</label>
+                    <br />
+                    <input type="date" id="Date">
+                </div>
+                <div class="form-group col-sm-4">
+                    <label for="projManeger">מנהל פרויקט</label>
+                    <input type="text" class="form-control" id="projManeger">
+                </div>
             </div>
 
-
-
-        </div>
-        <!--טבלת ליקויים-->
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <label for="location">מיקום</label>
+                    <input type="text" class="form-control" id="location">
+                </div>
+                <div class="form-group col-sm-4">
+                    <label for="time"><span class="red-star">★</span>שעה</label>
+                    <br />
+                    <input type="time" id="time">
+                </div>
+                <div class="form-group col-sm-4">
+                    <label for="forman">מנהל עבודה</label>
+                    <input type="text" class="form-control" id="forman">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-8">
+                    <label for="description">הערות</label>
+                    <textarea rows="2" class="form-control groupDetails" id="description" placeholder="הזן הערות לדוח"></textarea>
+                </div>
+            </div>
+            <div id="save_new_report">
+                <button onclick="save_new_reportBTN()">שמור דוח חדש</button>
+            </div>
+        </form>
+    </div>
+    <!--טבלת ליקויים-->
+    <div class="mainCards">
         <div id="table">
             <table id="projTable" class="display" style="width:100%" dir="rtl">
                 <thead>
@@ -358,65 +331,66 @@
             </table>
 
         </div>
-        <div id="pic" onclick="closePic()">
-
         </div>
-        <!--כל החלק מתחת הוא החלון שנפתח ברגע שלוחצים על הוסף ליקוי חדש לדוח-->
-        <div class="w3-container">
+            <div id="pic" onclick="closePic()">
 
-            <button id="btn_add_defect" class="btn btn-primary" onclick="document.getElementById('id01').style.display='block',newDefect()">הוסף ליקוי לדוח </button>
+            </div>
+            <!--כל החלק מתחת הוא החלון שנפתח ברגע שלוחצים על הוסף ליקוי חדש לדוח-->
+            <div class="w3-container">
 
-            <div id="id01" class="w3-modal">
-                <div class="w3-modal-content">
-                    <div class="w3-container">
-                        <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-                        <div>
-                            <button onclick="window.close()"></button>
-                        </div>
-                        <br />
-                        <div id="section1">
+                <button id="btn_add_defect" class="btn btn-primary" onclick="document.getElementById('id01').style.display='block',newDefect()">הוסף ליקוי לדוח </button>
+
+                <div id="id01" class="w3-modal">
+                    <div class="w3-modal-content">
+                        <div class="w3-container">
+                            <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                             <div>
-                                <label for="defect_type">בחר סוג ליקוי:</label>
-                                <br />
-                                <select id="selectType" onchange="createDefectList(this.value)"></select>
+                                <button onclick="window.close()"></button>
+                            </div>
+                            <br />
+                            <div id="section1">
+                                <div>
+                                    <label for="defect_type">בחר סוג ליקוי:</label>
+                                    <br />
+                                    <select id="selectType" onchange="createDefectList(this.value)"></select>
 
+                                </div>
+                                <div>
+                                    <label for="defect_type">בחר ליקוי:</label>
+                                    <br />
+                                    <select id="selectdefect"></select>
+
+                                </div>
                             </div>
                             <div>
-                                <label for="defect_type">בחר ליקוי:</label>
-                                <br />
-                                <select id="selectdefect"></select>
+                                <label for="description">תיאור:</label>
+                                <input type="text" class="form-control" id="description">
 
                             </div>
-                        </div>
-                        <div>
-                            <label for="description">תיאור:</label>
-                            <input type="text" class="form-control" id="description">
-
-                        </div>
-                        <div id="section2">
-                            <div class="form-group col-sm-4">
-                                <label for="fixDate"><span class="red-star"> </span>תאריך תיקון:</label>
-                                <br />
-                                <input type="date" id="fixDate">
+                            <div id="section2">
+                                <div class="form-group col-sm-4">
+                                    <label for="fixDate"><span class="red-star"> </span>תאריך תיקון:</label>
+                                    <br />
+                                    <input type="date" id="fixDate">
+                                </div>
+                                <div class="form-group col-sm-4">
+                                    <label for="fixTime">עד שעה:</label>
+                                    <br />
+                                    <input type="time" id="fixTime">
+                                </div>
                             </div>
-                            <div class="form-group col-sm-4">
-                                <label for="fixTime">עד שעה:</label>
-                                <br />
-                                <input type="time" id="fixTime">
+                            <div>
+                                <button id="btn_add_defect" class="btn btn-primary" onclick="addDefectToReport(1)">הוסף ליקוי</button>
                             </div>
-                        </div>
-                        <div>
-                            <button id="btn_add_defect" class="btn btn-primary" onclick="addDefectToReport(1)">הוסף ליקוי</button>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    <div id="saveReport">
-        <button onclick="saveReport()">
-            שמור דוח
-        </button>
+            <div id="saveReport">
+                <button onclick="saveReport()">
+                    שמור דוח
+                </button>
 
-    </div>
+            </div>
 </body>
 </html>
