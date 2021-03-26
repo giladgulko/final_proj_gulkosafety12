@@ -58,6 +58,12 @@ namespace final_proj_gulkosafety.Models
             dbs.DeleteProject(report_num);
 
         }
-
+        public report readLastReport(int proj_num)
+        {
+            DBServices dbs = new DBServices();
+            report lastreport = dbs.ReadLastReport(proj_num);
+            return lastreport;
+        }
+        
     }
 }

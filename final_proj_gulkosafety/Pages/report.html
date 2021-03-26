@@ -28,39 +28,8 @@
     <script>
         defects = [];
         defects_types = [];
-        function buttonEvents() {
-
-            $(document).on("click", ".editBtn", function () {
-                projId = this.getAttribute('defect_data')
-                projToEdite = ""
-                for (var i = 0; i < allProj.length; i++) {
-                    if (allProj[i].Project_num == projId) {
-                        projToEdite = allProj[i]
-                    }
-                }
-                console.log(projToEdite)
-                localStorage["project"] = JSON.stringify(projToEdite);
-                window.location = "project.html"
-
-            });
-
-
-            $(document).on("click", ".deleteBtn", function () {
-                projId = this.getAttribute('defect_data')
-
-                swal({
-                    title: "Are you sure ??",
-                    text: "",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true
-                })
-                    .then(function (willDelete) {
-                        if (willDelete) delete_defect_in_report(projId);
-                        else swal("Not Deleted!");
-                    });
-            });
-        }
+      
+     
 
         $(document).ready(function () {
             bringDataFromLocal();
@@ -71,6 +40,8 @@
             renderProjectDetails()
 
             if (localStorage["report"] != "") {
+                
+                $("#save_new_report").hide();
                 report = JSON.parse(localStorage["report"]);
                 time = report.Time.split('T')
                 date = report.Date.split('T')
@@ -82,7 +53,21 @@
             }
             else {
                 $('#projNumDiv').html("דוח ביקור חדש")
+               // api = "../api/report";
+                //ajaxCall("GET", api, JSON.stringify(project),getNewReportsuccess, getError)
+
+                headLine = "<h1>" + report.Report_num + " דוח ביקור " + "</h1>"
+                $('#projNumDiv').html(headLine)
+                $("#projTable").hide();
+                
+
             }
+        }
+        function getNewReportsuccess(report) {
+           
+            headLine = "<h1>" + report.Report_num + " דוח ביקור " + "</h1>"
+            $('#projNumDiv').html(headLine)
+            $("#")
         }
         function getReportDefect(num) {
             api = "../api/defect_in_report?report_num=" + num
@@ -141,12 +126,13 @@
 
                         {
                             render: function (data, type, row, meta) {
-                                let dataproj = "defect_data='" + row.Defect_num + "'";
+                                let dataproj = "project_data='" + row.Defect_num + "'";
 
-                                editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataproj + "> Edit </button>";
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataproj + "> עריכה </button>";
 
-                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' " + dataproj + "> Delete </button>";
+                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='  " + row.Defect_num + "' onclick='deleteAlert(this.value)'> מחיקה </button>";
                                 return editBtn + deleteBtn;
+
 
 
                             }
@@ -219,8 +205,40 @@
         function postDefectsInReport() {
             window.location.reload(true);
         }
-        function delete_defect_in_report(d) {
-            alert(d)
+        function deleteAlert(def_num){
+            swal({
+                title: "Are you sure ??",
+                text: "",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true
+            })
+                .then(function (willDelete) {
+                    if (willDelete) delete_defect_in_report(def_num);
+                    else swal("Not Deleted!");
+                });
+        }
+        function delete_defect_in_report(def_num) {
+            
+            defectToDelete = {
+                Report_num: report.Report_num,
+                Defect_num: def_num
+            }
+            ajaxCall("DELETE", "../api/defect_in_report", JSON.stringify(defectToDelete), deleteDefect, getError)
+        }
+        function deleteDefect() {
+            window.location.reload(true) 
+        }
+        function saveReport(){
+            if (true) {
+
+            }
+        }
+        function save_new_reportBTN() {
+            $('#company').val(project.Company);
+            $('#location').val(project.Address)
+            $('#forman').val(project.Foreman_email);
+            $('#projManeger').val(project.Manager_email)
         }
     </script>
 </head>
@@ -304,7 +322,10 @@
                                     </div>
                                 </div>
 
+                                <div id="save_new_report">
+                                    <button onclick="save_new_reportBTN()">שמור דוח חדש</button>
 
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -391,5 +412,11 @@
                 </div>
             </div>
         </div>
+    <div id="saveReport">
+        <button onclick="saveReport()">
+            שמור דוח
+        </button>
+
+    </div>
 </body>
 </html>

@@ -18,6 +18,13 @@ namespace final_proj_gulkosafety.Controllers
             return reprotList;
         }
 
+        public report Get([FromBody] project p)
+        {
+            report r = new report();
+            r.readLastReport(p.Project_num);
+            return r ;
+        }
+
         public void Post([FromBody] report r)
         {
             r.InsertReport();

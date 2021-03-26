@@ -1124,5 +1124,48 @@ namespace final_proj_gulkosafety.Models.DAL
         {
 
         }
+        public report ReadLastReport(int proj_num)
+        {
+            SqlConnection con = null;
+            report lastreport = new report();
+
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+                String selectSTR = "select top 1* from report where project_num="+ proj_num + " order by report_num desc" ;
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                // Read till the end of the data into a row
+
+                lastreport.Report_num = Convert.ToInt32(dr["report_num"]);
+                lastreport.Date = Convert.ToDateTime(dr["date"]);
+                lastreport.Time = Convert.ToDateTime(dr["time"]);
+                lastreport.Comment = (string)dr["comment"];
+                lastreport.Grade = Convert.ToDouble(dr["grade"]);
+                lastreport.Project_num = Convert.ToInt32(dr["project_num"]);
+                lastreport.User_mail = (string)dr["user_email"];
+                   
+                
+
+                return lastreport;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
     }
 }
