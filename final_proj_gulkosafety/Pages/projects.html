@@ -19,10 +19,12 @@
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
+
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
     <link href="projectsStyles.css" rel="stylesheet" />
     <title>הפרויקטים שלי</title>
     <style>
+
     </style>
     <script>
         status = 1
@@ -39,6 +41,19 @@
             getProjectTypes();
 
             $("#newProjForm").submit(newProjForm);
+
+            //menu function
+            var wWidth = $(window).width();
+            if (wWidth > 768) {
+                $("ul.bts-nav li").hover(function () {
+                    $(this).children("ul").slideToggle(400);
+                });
+            }
+            else {
+                $("ul.bts-nav li a").click(function () {
+                    $(this).next("ul").slideToggle(400);
+                });
+            }
         });
 
         //get a list of all contacts for contact section list
@@ -240,23 +255,42 @@
     <div id="logo">
         <img class="logo" src="photos/logo.jpeg" height="50" />
     </div>
-    <nav class="navbar navbar-default navbar-static-top">
-        <div class="container" style="float:right">
-            <ul class="nav navbar-nav">
-                <li><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="#"></a></li>
-                <li></li>
-                <li><span class="glyphicon glyphicon-bell" aria-hidden="true"></span><a href="#"></a></li>
-                <li><a href="#">סטטיסטיקות</a></li>
-                <li><a href="#">משתמשים</a></li>
-                <li><a href="#">הזמנות</a></li>
-                <li><a href="#">אישורים</a></li>
-                <li><a href="#">הדרכות</a></li>
-                <li class="active"><a href="#">פרויקטים</a></li>
-                <li><a href="#">התחברות</a></li>
-                <li><span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="#"></a></li>
-            </ul>
-        </div>
-    </nav>
+    <div class="body-wrap">
+        <nav class="navbar navbar-inverse">
+            <div class="container1">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarMenu" aria-expanded="false">
+                        <span id="navigation" class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="navbarMenu">
+                    <ul class="nav navbar-nav navbar-right  bts-nav">
+                        <li><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="#"></a></li>
+                        <li></li>
+                        <li class="nav-item">
+                            <span class="glyphicon glyphicon-bell" aria-hidden="true"></span><a href="#"></a>
+                        </li>
+
+                        <li><a href="#">סטטיסטיקות</a></li>
+                        <li><a href="#">משתמשים</a></li>
+                        <li><a href="#">הזמנות</a></li>
+                        <li><a href="#">אישורים</a></li>
+                        <li><a href="#">הדרכות</a></li>
+                        <li class="active"><a href="#">פרויקטים<span class="sr-only">(current)</span></a></li>
+                        <li><a href="#">התחברות</a></li>
+                        <li>
+                            <span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="#"></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!--NavBar-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <div id="proj_bar" dir="rtl">
         <div id="headline">
             <h1 class="proj">פרוייקטים</h1>
@@ -325,14 +359,14 @@
                                     <th>
                                         <div class="form-group">
                                             <label for="startDate"><span class="red-star">★ </span>תאריך התחלה</label>
-                                            </br>
+                                            <br />
                                             <input type="date" class="groupDetails" id="startDate" required>
                                         </div>
                                     </th>
                                     <th>
                                         <div class="form-group">
                                             <label for="endDate"><span class="red-star">★ </span>תאריך סיום</label>
-                                            </br>
+                                            <br />
                                             <input type="date" class="groupDetails" id="endDate" required>
                                         </div>
                                     </th>
