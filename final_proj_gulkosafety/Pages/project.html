@@ -347,14 +347,26 @@
         }
 
         function buildGradesGraph(gradesArr, reportNumArr) {
-            TESTER = document.getElementById('chartContainer');
-            Plotly.newPlot(TESTER, [{
+            var trace1 = {
                 x: reportNumArr,
-                y: gradesArr
-            }], {
-                    margin: { t: 0 }
-                });
+                y: gradesArr,
+                type: 'scatter'
+            };
+
+            var data = [trace1];
+
+            Plotly.newPlot('chartContainer', data);
         }
+
+        //function buildGradesGraph(gradesArr, reportNumArr) {
+        //    TESTER = document.getElementById('chartContainer');
+        //    Plotly.newPlot(TESTER, [{
+        //        x: reportNumArr,
+        //        y: gradesArr
+        //    }], {
+        //            margin: { t: 0 }
+        //        });
+        //}
     </script>
 </head>
 <body>
