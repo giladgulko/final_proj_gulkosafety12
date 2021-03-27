@@ -236,7 +236,7 @@
                 let reportToSave = {
                     Date: $('#Date').val(),
                     Time: $('#time').val(),
-                    Comment: $('#description').val(),
+                    Comment: $('#comments').val(),
                     Grade: 100,
                     Project_num: project.Project_num,
                     User_mail: "gulkosafety@gmail.com"//change in the future - from local storage- user loged in
@@ -339,8 +339,8 @@
             </div>
             <div class="row">
                 <div class="form-group col-sm-8">
-                    <label for="description">הערות</label>
-                    <textarea rows="2" class="form-control groupDetails" id="description" placeholder="הזן הערות לדוח"></textarea>
+                    <label for="comments">הערות</label>
+                    <textarea rows="2" class="form-control groupDetails" id="comments" placeholder="הזן הערות לדוח"></textarea>
                 </div>
             </div>
             <div id="saveNewReport" class="row">
