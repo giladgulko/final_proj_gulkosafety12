@@ -965,55 +965,7 @@ namespace final_proj_gulkosafety.Models.DAL
         {
 
         }
-        ////returns all users
-        //public List<user> ReadUsers()
-        //{
-        //        SqlConnection con = null;
-        //        List<user> userList = new List<user>();
-
-        //        try
-        //        {
-        //            con = connect("DBConnectionString");
-        //            String selectSTR = "";
-
-        //            selectSTR = "SELECT * FROM user";
-
-
-
-        //            SqlCommand cmd = new SqlCommand(selectSTR, con);
-
-        //            // get a reader
-        //            SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
-
-        //            while (dr.Read())
-        //            {
-        //                user u = new user();
-        //                u.Email = (string)dr["email"];
-        //                u.Name = (string)dr["name"];
-        //                u.Phone = (string)dr["phone"];
-        //                u.Password = (string)dr["password"];
-        //                u.User_type_num = Convert.ToInt32(dr["user_type_num"]);
-        //                userList.Add(u);
-        //            }
-
-        //            return userList;
-        //        }
-        //        catch (Exception)
-        //        {
-        //            // write to log
-        //            throw new Exception("Can not read users");
-        //        }
-        //        finally
-        //        {
-        //            if (con != null)
-        //            {
-        //                con.Close();
-        //            }
-
-        //        }
-        //}
-
-        // get all defect
+       
         public List<user> ReadUsers()
         {
             SqlConnection con = null;
@@ -1166,6 +1118,99 @@ namespace final_proj_gulkosafety.Models.DAL
                 }
 
             }
+        }
+
+        public List<proj_type_weight> ReadProj_type_weight(int proj_type)
+        {
+            SqlConnection con = null;
+            List<proj_type_weight> ptwList = new List<proj_type_weight>();
+
+            try
+            {
+                con = connect("DBConnectionString");
+
+                String selectSTR = "select* from weight_type_defects where project_type_num="+ proj_type;
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dr.Read())
+                {
+                    proj_type_weight ptw = new proj_type_weight();
+                    ptw.Project_type_num = Convert.ToInt32(dr["project_type_num"]);
+                    ptw.Defect_type_num = Convert.ToInt32(dr["defect_type_num"]);
+                    ptw.Weight = Convert.ToDouble(dr["weight"]);
+                    
+                    ptwList.Add(ptw);
+                }
+
+                return ptwList;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
+
+        public List<defect_in_report> readLastReportDefects(int proj_num, DateTime date)
+        {
+            SqlConnection con = null;
+            List<defect_in_report> lastDinR = new List<defect_in_report>();
+
+            try
+            {
+                con = connect("DBConnectionString");
+
+                String selectSTR = "select * from defect_in_report where report_num=(select top 1 report_num from report where project_num=" + proj_num + " and date <'"+date+"' order by report_num desc)";
+
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dr.Read())
+                {
+                    defect_in_report _defectInReport = new defect_in_report();
+
+                    _defectInReport.Report_num = Convert.ToInt32(dr["report_num"]);
+                    _defectInReport.Defect_num = Convert.ToInt32(dr["defect_num"]);
+                    _defectInReport.Fix_date = Convert.ToDateTime(dr["fix_date"]);
+                    _defectInReport.Fix_time = Convert.ToDateTime("12:30");
+                    _defectInReport.Picture_link = (string)dr["picture_link"];
+                    _defectInReport.Fix_status = Convert.ToInt32(dr["fix_status"]);
+                    _defectInReport.Description = (string)dr["description"];
+                    _defectInReport.Defect_name = (string)dr["name"];
+                    _defectInReport.Defect_type_name = (string)dr["type_name"];
+                    lastDinR.Add(_defectInReport);
+                }
+
+                return lastDinR;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
         }
     }
 }

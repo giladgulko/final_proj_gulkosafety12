@@ -29,19 +29,28 @@
         defects = [];
         defects_types = [];
         currentReportDefects = [];
-     
+        ptwList=[]
 
         $(document).ready(function () {
             bringDataFromLocal();
             getDefectsAndTypeS();
             $("#reportDetailsForm").submit(saveNewReport);
+            //get all weight by project type.
+            let api = "../api/proj_type_weight?proj_type=" + project.Project_type_num;
+            ajaxCall("GET", api, "", getPTWSuccess, getError);
+          // let api1 = "../api/defect_in_report?proj_num=" + project.Project_num + "&reportDate=" + report.Date.split('T');
+            //ajaxCall("GET", api1, "", getPTWSuccess, getError);
         });
+
+        function getLastReportSuccess(lastReport) {
+            console.log(lastReport)
+        }
         function bringDataFromLocal() {
             project = JSON.parse(localStorage["project"]);
             renderProjectDetails();
 
             if (localStorage["report"] != "") {
-                
+
                 $("#saveNewReport").hide();
 
                 report = JSON.parse(localStorage["report"]);
@@ -63,7 +72,7 @@
             }
         }
         function getNewReportsuccess(report) {
-           
+
             headLine = "<h1>" + report.Report_num + " דוח ביקור " + "</h1>"
             $('#proj_bar').html(headLine)
             $("#")
@@ -183,7 +192,7 @@
             $("#selectdefect").html(str)
         }
         function addDefectToReport() {
-           
+
             New_defect = {
                 Report_num: report.Report_num,
                 Defect_num: $("#selectdefect").val(),
@@ -191,18 +200,18 @@
                 Fix_Time: $("#fixTime").val(),
                 Picture_link: "",
                 Fix_status: 0,
-                Description: $("#description").val()    
+                Description: $("#description").val()
             }
             console.log(New_defect)
             //currentReportDefects.push(New_defect);
             api = "../api/defect_in_report";
             ajaxCall("POST", api, JSON.stringify(New_defect), postDefectsInReport, getError)
-           
+
         }
         function postDefectsInReport() {
             location.reload();
         }
-        function deleteAlert(def_num){
+        function deleteAlert(def_num) {
             swal({
                 title: "Are you sure ??",
                 text: "",
@@ -216,7 +225,7 @@
                 });
         }
         function delete_defect_in_report(def_num) {
-            
+
             defectToDelete = {
                 Report_num: report.Report_num,
                 Defect_num: def_num
@@ -230,7 +239,7 @@
         function saveNewReport() {
             let date = $('#Date').val();
             if (date < project.Start_date || date > project.End_date) {
-                $('#Date').after('<p id="dateError">תאריך התחלה גדול מתאריך הסיום</p>'); 
+                $('#Date').after('<p id="dateError">תאריך התחלה גדול מתאריך הסיום</p>');
             }
             else {
                 let reportToSave = {
@@ -271,12 +280,20 @@
                         }
                         curentReport.push(defect);
                     }
-                } 
+                }
             }
             localStorage["curentReport"] = JSON.stringify(curentReport);
+            
+           
+       
             //get to project type weights- build controller
             //get last report defects- build functions db and all
-            //call safety_lvl script function  
+            //call safety_lvl script function
+        }
+
+       function getPTWSuccess(ptwList){
+           ptwList = ptwList
+           console.table(ptwList)
         }
     </script>
 </head>

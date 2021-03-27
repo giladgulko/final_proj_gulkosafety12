@@ -68,6 +68,13 @@ namespace final_proj_gulkosafety.Models
             dbs.InsertDefectInReport(this);
         }
 
+        public List<defect_in_report> readLastReportDefect(int proj_num,DateTime date)
+        {
+            DBServices dbs = new DBServices();
+            List<defect_in_report> lastReportDefect = dbs.readLastReportDefects(proj_num, date);
+            return lastReportDefect;
 
+
+        }
     }
 }

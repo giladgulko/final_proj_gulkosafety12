@@ -32,9 +32,9 @@ form {
     margin-bottom: 5px;
     float:right;
 }
-input {
+/*input {
     max-width: fit-content;
-}
+}*/
 
 .navbar-default {
     background-color: cadetblue;
@@ -95,9 +95,9 @@ w3-container{
 .w3-modal-content {
     direction: rtl;
 }
-#selectdefect {
+/*#selectdefect {
     max-width: -webkit-fill-available;
-}
+}*/
 
 #btn_add_defect, #saveReport, #calcGrade {
     float: left;
