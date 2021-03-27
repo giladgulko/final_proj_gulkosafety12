@@ -36,18 +36,18 @@ input {
     max-width: fit-content;
 }
 
-.navbar-default {
+/*.navbar-default {
     background-color: cadetblue;
     border-color: #e7e7e7;
     color: white;
-}
+}*/
 
-#logo {
+/*#logo {
     float: left;
     position: relative;
-}
+}*/
 
-.navbar {
+/*.navbar {
     margin-left: 150px;
 }
 
@@ -72,7 +72,7 @@ input {
 .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
     background-color: cadetblue;
     font-weight: bold;
-}
+}*/
 
 h1, .proj {
     font-family: 'Lucida Console';
@@ -86,9 +86,9 @@ h3 {
     padding-right: 15px;
     margin-top: 0px;
 }
-img.logo {
+/*img.logo {
     position: absolute;
-}
+}*/
 .w3-modal-content{
     direction:rtl;
 }
@@ -133,3 +133,48 @@ img.logo {
     padding-left:20px;
     padding-right:20px;
 }
+.glyphicon {
+    top: 18px;
+    font-size: 16px;
+}
+
+.body-wrap {
+    justify-content: space-between;
+}
+
+div#navbarMenu {
+    background-color: cadetblue;
+    color: WHITE;
+    FONT-WEIGHT: bold;
+    border: 1px solid;
+    border-color: cadetblue;
+    font-family: 'Segoe UI';
+}
+
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:focus, .navbar-inverse .navbar-nav > .active > a:hover {
+    color: cadetblue;
+    background-color: #eeeeee;
+    FONT-WEIGHT: bold;
+    border-color: cadetblue
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.navbar-inverse {
+    background-color: cadetblue;
+    border: 0px solid;
+    border-color: cadetblue;
+}
+
+img {
+    padding-left: 10px;
+}
+
+.navbar-collapse {
+    text-align: center;
+}
+
