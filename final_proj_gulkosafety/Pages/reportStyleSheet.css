@@ -32,10 +32,12 @@ form {
     margin-bottom: 5px;
     float:right;
 }
+.red-star{
+    color:red;
+}
 /*input {
     max-width: fit-content;
 }*/
-
 .navbar-default {
     background-color: cadetblue;
     border-color: #e7e7e7;

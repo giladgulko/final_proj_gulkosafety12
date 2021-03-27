@@ -1092,16 +1092,16 @@ namespace final_proj_gulkosafety.Models.DAL
                 SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
 
                 // Read till the end of the data into a row
-
-                lastreport.Report_num = Convert.ToInt32(dr["report_num"]);
-                lastreport.Date = Convert.ToDateTime(dr["date"]);
-                lastreport.Time = Convert.ToDateTime(dr["time"]);
-                lastreport.Comment = (string)dr["comment"];
-                lastreport.Grade = Convert.ToDouble(dr["grade"]);
-                lastreport.Project_num = Convert.ToInt32(dr["project_num"]);
-                lastreport.User_mail = (string)dr["user_email"];
-                   
-                
+                while (dr.Read())
+                {
+                    lastreport.Report_num = Convert.ToInt32(dr["report_num"]);
+                    lastreport.Date = Convert.ToDateTime(dr["date"]);
+                    lastreport.Time = Convert.ToDateTime(dr["time"]);
+                    lastreport.Comment = (string)dr["comment"];
+                    lastreport.Grade = Convert.ToDouble(dr["grade"]);
+                    lastreport.Project_num = Convert.ToInt32(dr["project_num"]);
+                    lastreport.User_mail = (string)dr["user_email"];
+                }
 
                 return lastreport;
             }

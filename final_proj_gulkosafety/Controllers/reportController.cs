@@ -14,17 +14,17 @@ namespace final_proj_gulkosafety.Controllers
         //[HttpGet]
         //[Route("api/report/")]
         public List<report> Get(int proj_num)
-        { 
+        {
             report r = new report();
             List<report> reprotList = r.ReadReport(proj_num);
             return reprotList;
         }
 
-        public report GetLastReport([FromBody] project p)
+        [Route("api/report/{project_num}/lastReport")]
+        public report GetLastReport(int project_num)
         {
             report r = new report();
-            r.readLastReport(p.Project_num);
-            return r ;
+            return r.readLastReport(project_num);
         }
 
         public void Post([FromBody] report r)

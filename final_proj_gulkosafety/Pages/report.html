@@ -58,6 +58,7 @@
                 date = report.Date.split('T');
                 $('#Date').val(date[0]);
                 $('#time').val(time[1]);
+                $('#comments').val(report.Comment);
                 headLine = "<h1>" + report.Report_num + " דוח ביקור " + "</h1>";
                 $('#proj_bar').html(headLine);
                 $("#defectsTBL").show();
@@ -258,9 +259,9 @@
 
         function insertReportSuccess() {
             alert("הדוח נשמר בהצלחה! הוסף ליקויים לדוח");
-            let api = "../api/report";
+            let api = "../api/report/" + project.Project_num +"/lastReport";
             //ajaxCall("GET", api, localStorage["project"], getLastReportSuccess, getError);
-            ajaxCall("GET", api, JSON.stringify(project), getLastReportSuccess, getError);
+            ajaxCall("GET", api,"", getLastReportSuccess, getError);
         }
 
         function getLastReportSuccess(lastReport) {
