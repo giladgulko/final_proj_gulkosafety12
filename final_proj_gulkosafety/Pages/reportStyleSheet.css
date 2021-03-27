@@ -89,9 +89,16 @@ h3 {
 img.logo {
     position: absolute;
 }
-.w3-modal-content{
-    direction:rtl;
+w3-container{
+    margin-top:50px;
 }
+.w3-modal-content {
+    direction: rtl;
+}
+#selectdefect {
+    max-width: -webkit-fill-available;
+}
+
 #btn_add_defect, #saveReport, #calcGrade {
     float: left;
     color: #fff;

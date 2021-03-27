@@ -190,8 +190,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Pages\photos\logo.jpeg" />
-    <Content Include="Pages\p.html" />
-    <Content Include="Pages\p1.html" />
     <Content Include="Pages\project.html" />
     <Content Include="Pages\projectsStyles.css" />
     <Content Include="Pages\projects.html" />
