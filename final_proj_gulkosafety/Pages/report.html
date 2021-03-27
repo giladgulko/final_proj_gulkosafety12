@@ -14,7 +14,8 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
@@ -29,7 +30,7 @@
         defects = [];
         defects_types = [];
         currentReportDefects = [];
-        ptwList=[]
+        ptwList = []
 
         $(document).ready(function () {
             bringDataFromLocal();
@@ -38,7 +39,7 @@
             //get all weight by project type.
             let api = "../api/proj_type_weight?proj_type=" + project.Project_type_num;
             ajaxCall("GET", api, "", getPTWSuccess, getError);
-          // let api1 = "../api/defect_in_report?proj_num=" + project.Project_num + "&reportDate=" + report.Date.split('T');
+            // let api1 = "../api/defect_in_report?proj_num=" + project.Project_num + "&reportDate=" + report.Date.split('T');
             //ajaxCall("GET", api1, "", getPTWSuccess, getError);
         });
 
@@ -283,17 +284,17 @@
                 }
             }
             localStorage["curentReport"] = JSON.stringify(curentReport);
-            
-           
-       
+
+
+
             //get to project type weights- build controller
             //get last report defects- build functions db and all
             //call safety_lvl script function
         }
 
-       function getPTWSuccess(ptwList){
-           ptwList = ptwList
-           console.table(ptwList)
+        function getPTWSuccess(ptwList) {
+            ptwList = ptwList
+            console.table(ptwList)
         }
     </script>
 </head>
@@ -301,23 +302,42 @@
     <div id="logo">
         <img class="logo" src="photos/logo.jpeg" height="50" />
     </div>
-    <nav class="navbar navbar-default navbar-static-top">
-        <div class="container" style="float:right">
-            <ul class="nav navbar-nav">
-                <li><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="#"></a></li>
-                <li></li>
-                <li><span class="glyphicon glyphicon-bell" aria-hidden="true"></span><a href="#"></a></li>
-                <li><a href="#">סטטיסטיקות</a></li>
-                <li><a href="#">משתמשים</a></li>
-                <li><a href="#">הזמנות</a></li>
-                <li><a href="#">אישורים</a></li>
-                <li><a href="#">הדרכות</a></li>
-                <li class="active"><a href="#">פרויקטים</a></li>
-                <li><a href="#">התחברות</a></li>
-                <li><span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="#"></a></li>
-            </ul>
-        </div>
-    </nav>
+    <div class="body-wrap">
+        <nav class="navbar navbar-inverse">
+            <div class="container1">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarMenu" aria-expanded="false">
+                        <span id="navigation" class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="navbarMenu">
+                    <ul class="nav navbar-nav navbar-right  bts-nav">
+                        <li><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="#"></a></li>
+                        <li></li>
+                        <li class="nav-item">
+                            <span class="glyphicon glyphicon-bell" aria-hidden="true"></span><a href="#"></a>
+                        </li>
+
+                        <li><a href="#">סטטיסטיקות</a></li>
+                        <li><a href="#">משתמשים</a></li>
+                        <li><a href="#">הזמנות</a></li>
+                        <li><a href="#">אישורים</a></li>
+                        <li><a href="#">הדרכות</a></li>
+                        <li class="active"><a href="#">פרויקטים<span class="sr-only">(current)</span></a></li>
+                        <li><a href="#">התחברות</a></li>
+                        <li>
+                            <span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="#"></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!--NavBar-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <div id="proj_bar" dir="rtl">
     </div>
     <!--פרטי דוח-->
