@@ -55,7 +55,7 @@ namespace final_proj_gulkosafety.Models
         public void DeleteReport(int report_num)
         {
             DBServices dbs = new DBServices();
-            dbs.DeleteProject(report_num);
+            dbs.DeleteReport(report_num);
 
         }
         public report readLastReport(int proj_num)

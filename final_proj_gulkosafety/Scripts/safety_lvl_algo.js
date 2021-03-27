@@ -1,6 +1,6 @@
 ﻿
 
-function safetyLVL(curentReport, lastREPORTdefects, gradeARR, projTypeWEIGHT) {
+function safetyLVL(curentReport, lastREPORTdefects, gradesARR, projTypeWEIGHT) {
     const maxGradeForDefectType = 25
     //מספר הנקודות שיורדות כתוצאה מבדיקת כללים בדוח הנוכחי
     const point = 5

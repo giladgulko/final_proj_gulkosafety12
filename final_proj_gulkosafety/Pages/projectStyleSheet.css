@@ -1,16 +1,9 @@
 ﻿form {
     display: inline;
-    /*margin: 0px;*/
     padding: 0px;
     text-align: right;
     font-size: 12px;
 }
-
-/*#saveBTN {
-            left: 7px;
-            bottom: 5px;
-            position: absolute;
-        }*/
 
 .form-control {
     font-size: 12px;
@@ -39,17 +32,10 @@ h3 {
     color: cadetblue;
     font-weight: bold;
 }
-#headline{
-    width:30%;
-}
 
 .card {
     margin-left: 10px;
     margin-right: 10px;
-}
-
-.newBTN {
-    float: right;
 }
 
 .navbar-default {
@@ -119,11 +105,6 @@ body {
     min-height: 200px;
 }
 
-.card {
-    margin-left: 10px;
-    margin-right: 10px;
-}
-
 .newBTN {
     float: right;
     text-align: left;
@@ -167,13 +148,7 @@ p {
 #proj_bar {
     text-align: right;
     display: flex;
-    margin-top: 15px
-}
-
-#headline {
-    width: 20%;
-    font-family: 'Suez One', serif;
-    color: blue;
+    margin-top: 15px;
 }
 
 .btn-success {
