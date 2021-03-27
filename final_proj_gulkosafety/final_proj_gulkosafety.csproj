@@ -163,6 +163,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\projectController.cs" />
     <Compile Include="Controllers\project_typeController.cs" />
+    <Compile Include="Controllers\proj_type_weightController.cs" />
     <Compile Include="Controllers\reportController.cs" />
     <Compile Include="Controllers\userController.cs" />
     <Compile Include="Controllers\user_typeController.cs" />
@@ -193,9 +194,8 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Pages\pdfTEST.html" />
     <Content Include="Pages\photos\logo.jpeg" />
-    <Content Include="Pages\p.html" />
-    <Content Include="Pages\p1.html" />
     <Content Include="Pages\project.html" />
     <Content Include="Pages\projectsStyles.css" />
     <Content Include="Pages\projects.html" />

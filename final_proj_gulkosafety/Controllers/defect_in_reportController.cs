@@ -16,7 +16,13 @@ namespace final_proj_gulkosafety.Controllers
             List<defect_in_report> defect_in_reportList = defectsInReport.ReadDefectsInReport(report_num);
             return defect_in_reportList;
         }
-
+        //מחזירה את כל הליקוים בדוח שלפני הדוח הנוכחי. בשביל השוואה בין הדוחות, לאלגוריתם החכם
+        public List<defect_in_report> GetLastReportDefects(int proj_num,DateTime reportDate)
+        {
+            defect_in_report LastReportDefect = new defect_in_report();
+            List<defect_in_report> LastReportDefects = LastReportDefect.readLastReportDefect(proj_num, reportDate);
+            return LastReportDefects;
+        }
         public void DeleteDefectInReport([FromBody] defect_in_report dr)
         {
             dr.DeleteDefectInReport(dr.Report_num,dr.Defect_num);
