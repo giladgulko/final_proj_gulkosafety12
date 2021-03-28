@@ -71,6 +71,10 @@ body {
     background-color: transparent;
     border: 0px;
 }
+span.glyphicon.glyphicon-floppy-disk, span.glyphicon.glyphicon-pencil {
+    font-size: 20px;
+    top: 3px;
+}
 
 .editLocation {
     position: absolute;

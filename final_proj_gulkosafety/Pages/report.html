@@ -29,7 +29,10 @@
         defects = [];
         defects_types = [];
         currentReportDefects = [];
-        ptwList = []
+        lastReportDefects = [];
+        allReports = [];
+        ptwList = [];
+        tableID = "";
 
         $(document).ready(function () {
             bringDataFromLocal();
@@ -38,13 +41,12 @@
             //get all weight by project type.
             let api = "../api/proj_type_weight?proj_type=" + project.Project_type_num;
             ajaxCall("GET", api, "", getPTWSuccess, getError);
-            // let api1 = "../api/defect_in_report?proj_num=" + project.Project_num + "&reportDate=" + report.Date.split('T');
-            //ajaxCall("GET", api1, "", getPTWSuccess, getError);
+
         });
 
-        function getLastReportSuccess(lastReport) {
-            console.log(lastReport)
-        }
+        //function getLastReportSuccess(lastReport) {
+        //    console.log(lastReport)
+        //}
         function bringDataFromLocal() {
             project = JSON.parse(localStorage["project"]);
             renderProjectDetails();
@@ -61,16 +63,21 @@
                 $('#comments').val(report.Comment);
                 headLine = "<h1>" + report.Report_num + " דוח ביקור " + "</h1>";
                 $('#proj_bar').html(headLine);
-                $("#defectsTBL").show();
-
                 getReportDefect(report.Report_num);
             }
             else {
                 headLine = "<h1>דוח ביקור חדש</h1>";
                 $('#proj_bar').html(headLine);
                 $("#defectsTBL").hide();
-
             }
+        }
+
+        function checkLastReportDefects(){
+            if (localStorage["allReports"] != "") {
+                let api = "../api/defect_in_report?proj_num=" + project.Project_num + "&reportDate=" + report.Date.split('T');
+                ajaxCall("GET", api, "", getLastRDefectSuccess, getError);
+            }
+            else $("#lastReportdefectsTBL").hide();
         }
         function getNewReportsuccess(report) {
 
@@ -78,10 +85,30 @@
             $('#proj_bar').html(headLine)
             $("#")
         }
-        function getReportDefect(num) {
-            api = "../api/defect_in_report?report_num=" + num;
-            ajaxCall("GET", api, "", createDt, getError);
+        function getLastRDefectSuccess(defects) {
+            lastReportDefects = defects;
+            if (lastReportDefects != "") {
+                let notFixeDefects = [];
+                for (i = 0; i < lastReportDefects.length; i++) {
+                    if (lastReportDefects[i].Fix_status == 0)
+                        notFixeDefects.push(lastReportDefects[i]);
+                }
+                if (notFixeDefects.length > 0) {
+                    tableID = "#lastReportTable";
+                    createDt(notFixeDefects);
+                }
+                else $("#allDefectsFixed").append("<h3>כל הליקויים משבוע קודם תוקנו</h3>");
+            }
+            else $("#lastReportdefectsTBL").hide();
+        }
+                
 
+        function getReportDefect(reportNum) {
+            $("#defectsTBL").show();
+            tableID = "#defectTable";
+            let api = "../api/defect_in_report?report_num=" + reportNum;
+            ajaxCall("GET", api, "", createDt, getError);
+            checkLastReportDefects();
         }
         //function createDt(data) {
         //    console.table(data)
@@ -104,11 +131,10 @@
         }
         function createDt(defectsdata) {
 
-
             currentReportDefects = defectsdata;
 
             try {
-                tbl = $('#projTable').DataTable({
+                tbl = $(tableID).DataTable({
                     data: defectsdata,
                     pageLength: 8,
                     columns: [
@@ -155,6 +181,7 @@
             catch (err) {
                 alert(err);
             }
+            
         }
         function closePic() {
             $("#pic").hide()
@@ -385,20 +412,19 @@
             </div>
         </form>
     </div>
-    <!--טבלת ליקויים-->
-    <div id="defectsTBL" class="mainCards">
+    <!--last report defect table-->
+    <div id="lastReportdefectsTBL" class="mainCards">
         <div class="row">
-            <div class="col-sm-6">
-                <button id="btn_add_defect" class="btn btn-primary" onclick="document.getElementById('id01').style.display='block',newDefect()">הוסף ליקוי לדוח </button>
+            <div id="allDefectsFixed" class="col-sm-6">
             </div>
             <div class="col-sm-6">
-                <h3>ליקויים שנמצאו באתר ובסביבתו:</h3>
+                <h3>ליקויים שלא תוקנו מהביקור הקודם:</h3>
             </div>
         </div>
         <br />
         <br />
-        <div id="table">
-            <table id="projTable" class="display" style="width:100%" dir="rtl">
+        <div id="table1">
+            <table id="lastReportTable" class="display" style="width:100%" dir="rtl">
                 <thead>
                     <tr>
 
@@ -416,61 +442,94 @@
                 </thead>
 
             </table>
+        </div>
+        </div>
+        <!--טבלת ליקויים-->
+        <div id="defectsTBL" class="mainCards">
+            <div class="row">
+                <div class="col-sm-6">
+                    <button id="btn_add_defect" class="btn btn-primary" onclick="document.getElementById('id01').style.display='block',newDefect()">הוסף ליקוי לדוח </button>
+                </div>
+                <div class="col-sm-6">
+                    <h3>ליקויים שנמצאו באתר ובסביבתו:</h3>
+                </div>
+            </div>
+            <br />
+            <br />
+            <div id="table">
+                <table id="defectTable" class="display" style="width:100%" dir="rtl">
+                    <thead>
+                        <tr>
+
+                            <th>מספר</th>
+                            <th>סוג</th>
+                            <th>שם</th>
+                            <th>תיאור</th>
+                            <th>תאריך תיקון</th>
+                            <th>שעת תיקון</th>
+                            <th>סטטוס</th>
+                            <th>תמונה</th>
+
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                </table>
+
+            </div>
+            <div class="row">
+                <button id="calcGrade" class="btn btn-primary" onclick="calcGrade()">חשב ציון דוח</button>
+            </div>
+        </div>
+        <div id="pic" onclick="closePic()">
 
         </div>
-        <div class="row">
-            <button id="calcGrade" class="btn btn-primary" onclick="calcGrade()">חשב ציון דוח</button>
-        </div>
-    </div>
-    <div id="pic" onclick="closePic()">
+        <!--כל החלק מתחת הוא החלון שנפתח ברגע שלוחצים על הוסף ליקוי חדש לדוח-->
+        <div class="w3-container">
+            <div id="id01" class="w3-modal">
+                <div class="w3-modal-content">
+                    <div class="w3-container">
+                        <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                        <br />
+                        <br />
+                        <div id="section1">
+                            <div>
+                                <label for="defect_type">בחר סוג ליקוי:</label>
+                                <br />
+                                <select id="selectType" onchange="createDefectList(this.value)"></select>
 
-    </div>
-    <!--כל החלק מתחת הוא החלון שנפתח ברגע שלוחצים על הוסף ליקוי חדש לדוח-->
-    <div class="w3-container">
-        <div id="id01" class="w3-modal">
-            <div class="w3-modal-content">
-                <div class="w3-container">
-                    <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-                    <br />
-                    <br />
-                    <div id="section1">
-                        <div>
-                            <label for="defect_type">בחר סוג ליקוי:</label>
-                            <br />
-                            <select id="selectType" onchange="createDefectList(this.value)"></select>
+                            </div>
+                            <div>
+                                <label for="defect_type">בחר ליקוי:</label>
+                                <br />
+                                <select id="selectdefect" style="max-width:-webkit-fill-available;"></select>
 
+                            </div>
                         </div>
                         <div>
-                            <label for="defect_type">בחר ליקוי:</label>
-                            <br />
-                            <select id="selectdefect" style="max-width:-webkit-fill-available;" ></select>
+                            <label for="description">תיאור:</label>
+                            <input type="text" class="form-control" id="description">
 
                         </div>
-                    </div>
-                    <div>
-                        <label for="description">תיאור:</label>
-                        <input type="text" class="form-control" id="description">
-
-                    </div>
-                    <div id="section2">
-                        <div class="form-group col-sm-4">
-                            <label for="fixDate"><span class="red-star"> </span>תאריך תיקון:</label>
-                            <br />
-                            <input type="date" id="fixDate">
+                        <div id="section2">
+                            <div class="form-group col-sm-4">
+                                <label for="fixDate"><span class="red-star"> </span>תאריך תיקון:</label>
+                                <br />
+                                <input type="date" id="fixDate">
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label for="fixTime">עד שעה:</label>
+                                <br />
+                                <input type="time" id="fixTime">
+                            </div>
                         </div>
-                        <div class="form-group col-sm-4">
-                            <label for="fixTime">עד שעה:</label>
-                            <br />
-                            <input type="time" id="fixTime">
+                        <div>
+                            <button id="btn_add_defect" class="btn btn-primary" onclick="addDefectToReport(1)">הוסף ליקוי</button>
                         </div>
-                    </div>
-                    <div>
-                        <button id="btn_add_defect" class="btn btn-primary" onclick="addDefectToReport(1)">הוסף ליקוי</button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
 </body>
 </html>

@@ -34,8 +34,9 @@
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
-    <link href="styles/projectStyleSheet.css" rel="stylesheet" />
     <link href="styles/nav_bar_style.css" rel="stylesheet" />
+    <link href="styles/projectStyleSheet.css" rel="stylesheet" />
+
     <script>
 
 
@@ -315,46 +316,46 @@
             reports = data;
             let gradesArr = [];
             let reportNumArr = [];
-                let reportsToShow = [];
-                for (i = 0; i < reports.length; i++) {
-                    gradesArr.push(reports[i].Grade);
-                    reportNumArr.push(reports[i].Report_num);
-                    let r = {
-                        Report_num: reports[i].Report_num,
-                        Date: reports[i].Date.split("T")[0],
-                        Time: reports[i].Time.split('T'),
-                        Grade: reports[i].Grade
-                    }
-                    reportsToShow.push(r);
+            let reportsToShow = [];
+            for (i = 0; i < reports.length; i++) {
+                gradesArr.push(reports[i].Grade);
+                reportNumArr.push(reports[i].Report_num);
+                let r = {
+                    Report_num: reports[i].Report_num,
+                    Date: reports[i].Date.split("T")[0],
+                    Time: reports[i].Time.split('T'),
+                    Grade: reports[i].Grade
                 }
+                reportsToShow.push(r);
+            }
 
-                try {
-                    tbl = $('#reportsTable').DataTable({
-                        data: reportsToShow,
-                        pageLength: 5,
-                        columns: [
-                            { data: "Report_num" },
-                            { data: "Date" },
-                            { data: "Time" },
-                            { data: "Grade" },
-                            {
-                                render: function (data, type, row, meta) {
-                                    let dataReport = "data-reportId='" + row.Report_num + "'";
-                                    editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataReport + "> צפייה ועריכת  דוח </button>";
-                                    deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' " + dataReport + "> מחק </button>";
-                                    return editBtn + deleteBtn;
-                                }
+            try {
+                tbl = $('#reportsTable').DataTable({
+                    data: reportsToShow,
+                    pageLength: 5,
+                    columns: [
+                        { data: "Report_num" },
+                        { data: "Date" },
+                        { data: "Time" },
+                        { data: "Grade" },
+                        {
+                            render: function (data, type, row, meta) {
+                                let dataReport = "data-reportId='" + row.Report_num + "'";
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataReport + "> צפייה ועריכת  דוח </button>";
+                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' " + dataReport + "> מחק </button>";
+                                return editBtn + deleteBtn;
                             }
-                        ],
-                    });
+                        }
+                    ],
+                });
 
-                }
+            }
 
-                catch (err) {
-                    alert(err);
-                }
-                localStorage["gradesArr"] = JSON.stringify(gradesArr);
-                buildGradesGraph(gradesArr, reportNumArr);
+            catch (err) {
+                alert(err);
+            }
+            localStorage["gradesArr"] = JSON.stringify(gradesArr);
+            buildGradesGraph(gradesArr, reportNumArr);
             if (reports != "") {
                 localStorage["allReports"] = JSON.stringify(reports);
             }
