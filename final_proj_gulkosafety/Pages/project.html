@@ -313,7 +313,6 @@
             reports = data;
             let gradesArr = [];
             let reportNumArr = [];
-            if (reports != "") {
                 let reportsToShow = [];
                 for (i = 0; i < reports.length; i++) {
                     gradesArr.push(reports[i].Grade);
@@ -354,8 +353,10 @@
                 }
                 localStorage["gradesArr"] = JSON.stringify(gradesArr);
                 buildGradesGraph(gradesArr, reportNumArr);
+            if (reports != "") {
+                localStorage["allReports"] = JSON.stringify(reports);
             }
-
+            else localStorage["allReports"] = "";
 
         }
 
