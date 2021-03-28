@@ -16,7 +16,6 @@
 #main {
     direction: rtl;
     text-align: right;
-    /*background-color: #e4e2e2;*/
 }
 
 h3 {
@@ -37,54 +36,12 @@ h3 {
     margin-left: 10px;
     margin-right: 10px;
 }
-
-.navbar-default {
-    background-color: cadetblue;
-    border-color: #e7e7e7;
-    color: white;
-}
-
-#logo {
-    float: left;
-    position: relative;
-}
-
-.navbar {
-    margin-left: 150px;
-}
-
-.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:focus, .navbar-default .navbar-nav > .active > a:hover {
-    font-weight: bold;
-    color: cadetblue;
-    background-color: white;
-    text-align: center;
-}
-
-.navbar-default .navbar-nav > li > a {
-    color: white;
-    font-weight: bold;
-    padding-left: 60px;
-}
-
-.pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
-    background-color: cadetblue;
-    font-weight: bold;
-}
-
 body {
     background-color: #eeeeee;
 }
  th{
      text-align:right;
  }
-.nav.navbar-nav {
-    display: contents;
-}
-
-.container {
-    float: right;
-}
-
 #table {
     margin-top: 30px;
     padding-left: 12%;
@@ -133,18 +90,6 @@ p {
     color: cadetblue;
     font-weight: bold;
 }
-
-
-.navbar-default {
-    background-color: cadetblue;
-    border-color: #e7e7e7;
-    color: white;
-}
-
-#logo {
-    float: left;
-}
-
 #proj_bar {
     text-align: right;
     display: flex;
@@ -177,4 +122,56 @@ p {
     color: #fff;
     background-color: cadetblue;
     border-color: cadetblue;
+}
+/*.glyphicon {
+    top: 18px;
+    font-size: 16px;
+}
+
+.body-wrap {
+    justify-content: space-between;
+}
+
+div#navbarMenu {
+    background-color: cadetblue;
+    color: WHITE;
+    FONT-WEIGHT: bold;
+    border: 1px solid;
+    border-color: cadetblue;
+    font-family: 'Segoe UI';
+}
+
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:focus, .navbar-inverse .navbar-nav > .active > a:hover {
+    color: cadetblue;
+    background-color: #eeeeee;
+    FONT-WEIGHT: bold;
+    border-color: cadetblue
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.navbar-inverse {
+    background-color: cadetblue;
+    border: 0px solid;
+    border-color: cadetblue;
+}
+
+img {
+    padding-left: 10px;
+}
+
+.navbar-collapse {
+    text-align: center;
+}*/
+
+ul.nav.navbar-nav.navbar-right.bts-nav {
+    flex-direction: inherit;
+}
+nav.navbar.navbar-inverse {
+    float: right;
+    display: contents;
 }

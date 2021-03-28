@@ -16,7 +16,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
@@ -33,7 +34,8 @@
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
-    <link href="projectStyleSheet.css" rel="stylesheet" />
+    <link href="styles/projectStyleSheet.css" rel="stylesheet" />
+    <link href="styles/nav_bar_style.css" rel="stylesheet" />
     <script>
 
 
@@ -109,7 +111,7 @@
             var endDate = document.getElementById('endDate').value;
             var startDate = document.getElementById('startDate').value;
             if (startDate > endDate) {
-                $('#endDate').after('<p id="dateError">תאריך התחלה גדול מתאריך הסיום</p>');  
+                $('#endDate').after('<p id="dateError">תאריך התחלה גדול מתאריך הסיום</p>');
             }
             else updateProject();
 
@@ -140,14 +142,14 @@
             $(".groupDetails").prop('disabled', true);
             $("#editDetailsBTN").show();
             $("#saveDetailsBTN").hide();
-            $("#cancelEditDetailsBTN").hide(); 
+            $("#cancelEditDetailsBTN").hide();
         }
 
         function editProjBtnEvents() {
             $('#reportsTable').show();
             $("#saveDetailsBTN").hide();
             $("#saveContactsBTN").hide();
-            $("#cancelEditDetailsBTN").hide(); 
+            $("#cancelEditDetailsBTN").hide();
             $("#cancelEditContactsBTN").hide();
 
             $(".groupDetails").prop('disabled', true);
@@ -250,7 +252,7 @@
         }
 
         function renderProjContacts() {
-           
+
             for (i = 0; i < contactList.length; i++) {
                 if (project.Manager_email == contactList[i].Email) {
                     projContacts.push({ manager: contactList[i] });
@@ -260,7 +262,7 @@
                     foremanSelect.innerHTML += "<option value=" + contactList[i].Email + ">" + contactList[i].Name + ", " + contactList[i].Phone + " </option>";
                     projContacts.push({ foreman: contactList[i] });
                 }
-            } 
+            }
 
         }
 
@@ -386,23 +388,42 @@
     <div id="logo">
         <img class="logo" src="photos/logo.jpeg" height="50" />
     </div>
-    <nav class="navbar navbar-default navbar-static-top">
-        <div class="container" style="float:right">
-            <ul class="nav navbar-nav">
-                <li><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="#"></a></li>
-                <li></li>
-                <li><span class="glyphicon glyphicon-bell" aria-hidden="true"></span><a href="#"></a></li>
-                <li><a href="#">סטטיסטיקות</a></li>
-                <li><a href="#">משתמשים</a></li>
-                <li><a href="#">הזמנות</a></li>
-                <li><a href="#">אישורים</a></li>
-                <li><a href="#">הדרכות</a></li>
-                <li class="active"><a href="#">פרויקטים</a></li>
-                <li><a href="#">התחברות</a></li>
-                <li><span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="#"></a></li>
-            </ul>
-        </div>
-    </nav>
+    <div class="body-wrap">
+        <nav class="navbar navbar-inverse">
+            <div class="container1">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarMenu" aria-expanded="false">
+                        <span id="navigation" class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="navbarMenu">
+                    <ul class="nav navbar-nav navbar-right  bts-nav">
+                        <li><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="#"></a></li>
+                        <li></li>
+                        <li class="nav-item">
+                            <span class="glyphicon glyphicon-bell" aria-hidden="true"></span><a href="#"></a>
+                        </li>
+
+                        <li><a href="#">סטטיסטיקות</a></li>
+                        <li><a href="#">משתמשים</a></li>
+                        <li><a href="#">הזמנות</a></li>
+                        <li><a href="#">אישורים</a></li>
+                        <li><a href="#">הדרכות</a></li>
+                        <li class="active"><a href="#">פרויקטים<span class="sr-only">(current)</span></a></li>
+                        <li><a href="#">התחברות</a></li>
+                        <li>
+                            <span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="#"></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!--NavBar-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <div id="proj_bar" dir="rtl">
         <div id="headline">
             <h1 class="proj"></h1>
@@ -493,7 +514,7 @@
                                             <span class="glyphicon glyphicon-floppy-disk"></span>
                                         </button>
                                         <button type="button" id="cancelEditDetailsBTN" class="btn btn-default btn-sm">
-                                           בטל עריכה
+                                            בטל עריכה
                                         </button>
                                     </p>
                                 </div>
