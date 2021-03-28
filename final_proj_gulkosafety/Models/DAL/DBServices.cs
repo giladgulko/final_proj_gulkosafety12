@@ -1172,7 +1172,7 @@ namespace final_proj_gulkosafety.Models.DAL
             {
                 con = connect("DBConnectionString");
 
-                String selectSTR = "select * from defect_in_report where report_num=(select top 1 report_num from report where project_num=" + proj_num + " and date <'"+date+"' order by report_num desc)";
+                String selectSTR = "select di.*,d.name,dt.type_name,dt.defect_type_num from defect_in_report di inner join defect d on di.defect_num=d.defect_num inner join defect_type dt on d.defect_type_num=dt.defect_type_num where di.report_num=(select top 1 report_num from report where project_num=" + proj_num + " and date <'"+date.ToString("yyyy-MM-dd") + "' order by report_num desc)";
 
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
