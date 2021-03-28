@@ -12,33 +12,7 @@
     <link href="styles/nav_bar_style.css" rel="stylesheet" />
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
     <style>
-        .container {
-            height: 70%;
-            border: 1px solid;
-            width: 50%;
-        }
-        
 
-        /*.alert {
-            padding: 20px;
-            background-color: #f44336;
-            color: white;
-        }
-
-        .closebtn {
-            margin-left: 15px;
-            color: white;
-            font-weight: bold;
-            float: right;
-            font-size: 22px;
-            line-height: 20px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-            .closebtn:hover {
-                color: black;
-            }*/
         .alert {
             font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
             color: cadetblue;
@@ -73,7 +47,7 @@
         }
         function renderAlerts() {
             for (i = 0; i < alertList.length; i++) {
-                document.getElementById('alertsInProjects').innerHTML += "<div class='alert alert-success'><strong> יהיעיהבי </strong> " + alertList[i].Content + " </div> ";
+                document.getElementById('alertsInProjects').innerHTML += "<div class='alert alert-success'><strong> " + alertList[i].Date + " </strong> " + alertList[i].Content + " </div> ";
             }
 
         }
