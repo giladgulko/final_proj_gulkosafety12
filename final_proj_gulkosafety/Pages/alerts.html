@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>התראות</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="../Scripts/ajaxCallsWithKey.js"></script>
+    <style>
+        #alertsInProjects {
+            height: 70%;
+            border: 1px solid;
+            width: 50%;
+        }
+        .alert {
+            padding: 20px;
+            background-color: #f44336;
+            color: white;
+        }
+
+        .closebtn {
+            margin-left: 15px;
+            color: white;
+            font-weight: bold;
+            float: right;
+            font-size: 22px;
+            line-height: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+            .closebtn:hover {
+                color: black;
+            }
+    </style>
+    <script>
+
+        $(document).ready(function () {
+
+            allReports = JSON.parse(localStorage["allReports"]);
+            for (var i = 0; i < length; i++) {
+
+            }
+            function getReportDefect(num) {
+                api = "../api/defect_in_report?report_num=" + num;
+                ajaxCall("GET", api, "", createDt, getError);
+
+            }
+
+            function getDefectInReports() {
+                let proj_num = project.Project_num;
+                let api = "../api/report?proj_num=" + proj_num;
+                ajaxCall("GET", api, "", getReportsSuccess, getError);
+            }
+
+            function getAllReport() {
+
+                let api = "../api/report"
+                ajaxCall("GET", api, "", getReportSuccess, getError);
+            }
+
+            NewAlert = {
+                Content: content,
+                Date: Date.now(),
+                Alert_type_num: 'ליקוי לא תוקן בזמן',
+                Status: 1,
+
+            }
+
+          
+            //document.getElementById("alertsInProjects").innerHTML(str);
+        });
+
+    </script>
+</head>
+<body>
+    <div id="alertsInProjects">
+        <div class="alert">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            <strong>Danger!</strong> Indicates a dangerous or potentially negative action.
+        </div>
+    </div>
+    <div id="otherAlerts">
+
+
+    </div>
+
+</body>
+</html>

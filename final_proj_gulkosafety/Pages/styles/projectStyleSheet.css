@@ -86,7 +86,7 @@ p {
 }
 
 .proj {
-    font-family: 'Lucida Console';
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     color: cadetblue;
     font-weight: bold;
 }
@@ -123,51 +123,6 @@ p {
     background-color: cadetblue;
     border-color: cadetblue;
 }
-/*.glyphicon {
-    top: 18px;
-    font-size: 16px;
-}
-
-.body-wrap {
-    justify-content: space-between;
-}
-
-div#navbarMenu {
-    background-color: cadetblue;
-    color: WHITE;
-    FONT-WEIGHT: bold;
-    border: 1px solid;
-    border-color: cadetblue;
-    font-family: 'Segoe UI';
-}
-
-.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:focus, .navbar-inverse .navbar-nav > .active > a:hover {
-    color: cadetblue;
-    background-color: #eeeeee;
-    FONT-WEIGHT: bold;
-    border-color: cadetblue
-}
-
-.navbar-inverse .navbar-nav > li > a {
-    color: white;
-    font-weight: bold;
-    font-size: 15px;
-}
-
-.navbar-inverse {
-    background-color: cadetblue;
-    border: 0px solid;
-    border-color: cadetblue;
-}
-
-img {
-    padding-left: 10px;
-}
-
-.navbar-collapse {
-    text-align: center;
-}*/
-
 ul.nav.navbar-nav.navbar-right.bts-nav {
     flex-direction: inherit;
 }
@@ -175,3 +130,7 @@ nav.navbar.navbar-inverse {
     float: right;
     display: contents;
 }
+.body-wrap {
+    background-color: cadetblue;
+}
+
