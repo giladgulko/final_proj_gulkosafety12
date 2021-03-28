@@ -59,7 +59,6 @@ w3-container{
 /*#selectdefect {
     max-width: -webkit-fill-available;
 }*/
-
 #btn_add_defect, #saveReport, #calcGrade {
     float: left;
     color: #fff;
