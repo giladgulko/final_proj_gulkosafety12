@@ -45,8 +45,8 @@
     border-color: cadetblue;
 }
 
-h1,h2,.proj {
-    font-family: 'Lucida Console';
+h1, h2, h1.proj {
+    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
     color: cadetblue;
     font-weight: bold;
 }
