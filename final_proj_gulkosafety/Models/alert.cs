@@ -1,4 +1,5 @@
-﻿using System;
+﻿using final_proj_gulkosafety.Models.DAL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -33,5 +34,11 @@ namespace final_proj_gulkosafety.Models
         public string User_email { get => user_email; set => user_email = value; }
         public int Status { get => status; set => status = value; }
 
+        public List<alert> Read(string user_email)
+        {
+            DBServices dbs = new DBServices();
+            List<alert> alertList = dbs.ReadAlerts(user_email);
+            return alertList;
+        }
     }
 }

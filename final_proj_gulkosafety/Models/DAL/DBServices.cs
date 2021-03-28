@@ -1212,5 +1212,51 @@ namespace final_proj_gulkosafety.Models.DAL
             }
 
         }
+
+        //read alerts
+        public List<alert> ReadAlerts(string user_email)
+        {
+            SqlConnection con = null;
+            List<alert> alertsList = new List<alert>();
+
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+                String selectSTR = "SELECT * FROM alert WHERE user_email='" + user_email + "'and status=0";
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+
+                    alert _alert = new alert();
+                    _alert.Alert_num = Convert.ToInt32(dr["alert_num"]);
+                    _alert.Content = (string)dr["content"];
+                    _alert.Date = Convert.ToDateTime(dr["date"]);
+                    _alert.Alert_type_num = Convert.ToInt32(dr["alert_type_num"]);
+                    _alert.User_email = (string)dr["user_email"];
+                    _alert.Status = Convert.ToInt32(dr["status"]);
+                    alertsList.Add(_alert);
+                }
+
+                return alertsList;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
     }
 }

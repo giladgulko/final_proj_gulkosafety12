@@ -4,14 +4,22 @@
     <meta charset="utf-8" />
     <title>התראות</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="styles/nav_bar_style.css" rel="stylesheet" />
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
     <style>
-        #alertsInProjects {
+        .container {
             height: 70%;
             border: 1px solid;
             width: 50%;
         }
-        .alert {
+        
+
+        /*.alert {
             padding: 20px;
             background-color: #f44336;
             color: white;
@@ -30,59 +38,100 @@
 
             .closebtn:hover {
                 color: black;
-            }
+            }*/
+        .alert {
+            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+            color: cadetblue;
+            font-weight: bold;
+        }
+
+        #alert_bar {
+            text-align: right;
+            display: flex;
+            margin-top: 15px;
+        }
+
     </style>
     <script>
 
         $(document).ready(function () {
-
-            allReports = JSON.parse(localStorage["allReports"]);
-            for (var i = 0; i < length; i++) {
-
-            }
-            function getReportDefect(num) {
-                api = "../api/defect_in_report?report_num=" + num;
-                ajaxCall("GET", api, "", createDt, getError);
-
-            }
-
-            function getDefectInReports() {
-                let proj_num = project.Project_num;
-                let api = "../api/report?proj_num=" + proj_num;
-                ajaxCall("GET", api, "", getReportsSuccess, getError);
-            }
-
-            function getAllReport() {
-
-                let api = "../api/report"
-                ajaxCall("GET", api, "", getReportSuccess, getError);
-            }
-
-            NewAlert = {
-                Content: content,
-                Date: Date.now(),
-                Alert_type_num: 'ליקוי לא תוקן בזמן',
-                Status: 1,
-
-            }
-
-          
-            //document.getElementById("alertsInProjects").innerHTML(str);
+            alertList = [];
+            getAlerts();
         });
 
+        function getAlerts() {//צריך לקחת את היוזר מהלוקאל סטורג-של מי שנמצא בלוג אין
+            let user_email = "gulkosafety@gmail.com";
+            let api = "../api/alert?user_email=" + user_email;
+            ajaxCall("GET", api, "", getAlertsSuccess, getError)
+        }
+        function getError() {
+            alert("err")
+        }
+        function getAlertsSuccess(data) {
+            alertList = data;
+            renderAlerts();
+        }
+        function renderAlerts() {
+            for (i = 0; i < alertList.length; i++) {
+                document.getElementById('alertsInProjects').innerHTML += "<div class='alert alert-success'><strong> יהיעיהבי </strong> " + alertList[i].Content + " </div> ";
+            }
+
+        }
     </script>
 </head>
 <body>
-    <div id="alertsInProjects">
-        <div class="alert">
-            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-            <strong>Danger!</strong> Indicates a dangerous or potentially negative action.
+    <div id="logo">
+        <img class="logo" src="photos/logo.jpeg" height="50" />
+    </div>
+    <div class="body-wrap">
+        <nav class="navbar navbar-inverse">
+            <div class="container1">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarMenu" aria-expanded="false">
+                        <span id="navigation" class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="navbarMenu">
+                    <ul class="nav navbar-nav navbar-right  bts-nav">
+                        <li><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="#"></a></li>
+                        <li></li>
+                        <li class="nav-item">
+                            <span class="glyphicon glyphicon-bell" aria-hidden="true"></span><a href="#"></a>
+                        </li>
+
+                        <li><a href="#">סטטיסטיקות</a></li>
+                        <li><a href="#">משתמשים</a></li>
+                        <li><a href="#">הזמנות</a></li>
+                        <li><a href="#">אישורים</a></li>
+                        <li><a href="#">הדרכות</a></li>
+                        <li class="active"><a href="#">פרויקטים<span class="sr-only">(current)</span></a></li>
+                        <li><a href="#">התחברות</a></li>
+                        <li>
+                            <span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="#"></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!--NavBar-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <div id="alert_bar" dir="rtl">
+        <div id="headline">
+            <h1 class="alert">התראות</h1>
         </div>
     </div>
-    <div id="otherAlerts">
+
+    <div id="alertsInProjects"></div>
+
+    <!--<div id="otherAlerts">
 
 
-    </div>
+    </div>-->
 
 </body>
 </html>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using final_proj_gulkosafety.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -10,11 +11,12 @@ namespace final_proj_gulkosafety.Controllers
     public class alertController : ApiController
     {
         // GET api/<controller>
-        public IEnumerable<string> Get()
+        public List<alert> Get(string user_email)
         {
-            return new string[] { "value1", "value2" };
+            alert a = new alert();
+            List<alert> aList = a.Read(user_email);
+            return aList;
         }
-
         // GET api/<controller>/5
         public string Get(int id)
         {
