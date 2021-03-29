@@ -36,6 +36,8 @@
         userType = 1;
 
         $(document).ready(function () {
+            if (userType != 1)
+                viewOnlyPageBtn();
             bringDataFromLocal();
             getDefectsAndTypeS();
             $("#reportDetailsForm").submit(saveNewReport);
@@ -45,9 +47,13 @@
 
         });
 
-        //function getLastReportSuccess(lastReport) {
-        //    console.log(lastReport)
-        //}
+        function viewOnlyPageBtn() {
+            $(".form-control").prop('disabled', true);
+            $("#btn_add_defect").hide();
+            $("#calcGrade").hide();
+            $('.fixBTNs').hide();
+        }
+
         function bringDataFromLocal() {
             project = JSON.parse(localStorage["project"]);
             renderProjectDetails();
@@ -73,7 +79,7 @@
             }
         }
 
-        function checkLastReportDefects() {
+        function checkLastReportDefects(){
             if (localStorage["allReports"] != "") {
                 let api = "../api/defect_in_report?proj_num=" + project.Project_num + "&reportDate=" + report.Date.split('T');
                 ajaxCall("GET", api, "", getLastRDefectSuccess, getError);
@@ -102,7 +108,7 @@
             }
             else $("#lastReportdefectsTBL").hide();
         }
-
+                
 
         function getReportDefect(reportNum) {
             $("#defectsTBL").show();
@@ -125,9 +131,28 @@
             $('#projManeger').val(project.Manager_email)
         }
 
+        function editDefectImg(defectNum){
+            $('#showImg').hide();
+            $('.image').hide();
+            $("#uploadImg").show();
+            $('#mask').addClass('showing');
+            $('html').addClass('hide-scroll');
+            var id = '#dialog';
+
+            //if close button is clicked
+            $('.window .close').click(function (e) {
+                ////Cancel the link behavior
+                e.preventDefault();
+
+                $('#mask').removeClass('showing');
+                $('html').removeClass('hide-scroll');
+            });
+
+            //insert pic
+        }
+
         function checkImg(this1) {
 
-            if (userType == 1) {
                 $('#uploadImg').hide();
                 $('#mask').addClass('showing');
                 $('html').addClass('hide-scroll');
@@ -145,58 +170,37 @@
                     $('#mask').removeClass('showing');
                     $('html').removeClass('hide-scroll');
                 });
-
-            }
-            else {
-                $('#showImg').hide();
-                $('#mask').addClass('showing');
-                $('html').addClass('hide-scroll');
-                var id = '#dialog';
-                $('.image').hide();
-
-                //if close button is clicked
-                $('.window .close').click(function (e) {
-                    ////Cancel the link behavior
-                    e.preventDefault();
-
-                    $('#mask').removeClass('showing');
-                    $('html').removeClass('hide-scroll');
-                });
-            }
-
-            //$("#pic").show()
-            //$("#pic").html(str);
         }
 
-        function uploadImg() {
-            var data = new FormData();
-            var files = $("#img").get(0).files;
-            for (f = 0; f < files.length; f++) {
-                data.append("UploadedImages", files[f]);
-            }
-            data.append("name", $("#fnameTB").val() + $("#lnameTB").val()); // append what ever data you want to send along with the files. See how you extract it in the controller.
+        //function uploadImg() {
+        //    var data = new FormData();
+        //    var files = $("#img").get(0).files;
+        //    for (f = 0; f < files.length; f++) {
+        //        data.append("UploadedImages", files[f]);
+        //    }
+        //    data.append("name", $("#fnameTB").val() + $("#lnameTB").val()); // append what ever data you want to send along with the files. See how you extract it in the controller.
 
-            // Ajax upload
-            $.ajax({
-                type: "POST",
-                url: "../api/Customer/UploadImg",
-                contentType: false,
-                processData: false,
-                data: data,
-                success: UploadSuccess,
-                error: Uploaderror
-            });
-            return false;
-        }
+        //    // Ajax upload
+        //    $.ajax({
+        //        type: "POST",
+        //        url: "../api/Customer/UploadImg",
+        //        contentType: false,
+        //        processData: false,
+        //        data: data,
+        //        success: UploadSuccess,
+        //        error: Uploaderror
+        //    });
+        //    return false;
+        //}
 
-        function UploadSuccess(data) {
-            console.log(data);
-            alert("Image uploaded successfully");
-        }
-        function Uploaderror(err) {
-            console.log(err);
-            alert("Image upload failed");
-        }
+        //function UploadSuccess(data) {
+        //    console.log(data);
+        //    alert("Image uploaded successfully");
+        //}
+        //function Uploaderror(err) {
+        //    console.log(err);
+        //    alert("Image upload failed");
+        //}
 
         function createDt(defectsdata) {
 
@@ -228,12 +232,12 @@
                                 else {
                                     let dataproj = "Defect_num='" + row.Defect_num + "'";
 
-                                    editBtn = "<button type='button' class = 'picBtn btn btn-success' " + dataproj + "value='" + row.Picture_link + "' onclick='checkImg(this.value)'> תמונה חסרה </button>";
+                                    editBtn = "<button type='button' class = 'picBtn btn btn-success' " + dataproj + " value='" + row.Picture_link + "' disabled> תמונה חסרה </button>";
 
 
                                     return editBtn;
                                 }
-
+      
 
                             }
                         },
@@ -241,13 +245,16 @@
                         {
                             render: function (data, type, row, meta) {
                                 let dataproj = "project_data='" + row.Defect_num + "'";
-
-                                editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataproj+ "> עריכה </button>";
-
-                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='  " + row.Defect_num + "' onclick='deleteAlert(this.value)'> מחיקה </button>";
-                                return editBtn + deleteBtn;
-
-
+                                if (userType == 1) {
+                                    editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataproj + "> עריכה </button>";
+                                    deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='  " + row.Defect_num + "' onclick='deleteAlert(this.value)'> מחיקה </button>";
+                                    return editBtn + deleteBtn;
+                                }
+                                else {
+                                    editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataproj + " onclick='editDefectImg(this.project_data)'> ערוך תמונת ליקוי </button>";
+                                    return editBtn;
+                                }
+                                
 
                             }
                         },
@@ -260,7 +267,7 @@
             catch (err) {
                 alert(err);
             }
-
+            
         }
         //function closePic() {
         //    $("#pic").hide()
@@ -362,29 +369,12 @@
             return false;
 
         }
-        //function EditDefectInReport() {
-        //    let defectAfterEdit = {
-        //        Report_num: report.Report_num,
-        //        Defect_num: ,
-        //        Fix_date: $("#").val(),
-        //        Fix_Time: $("#").val(),
-        //        Picture_link: $("#price").val(),
-        //        Fix_status: $("#").val(),
-        //        Description: $("#").val(),
-        //        Defect_name: $("").val(),
-        //        Defect_type_name: $("#"),
-        //    }
-
-        //    // update a new defect in report to the server
-        //    ajaxCall("PUT", "../api/defect_in_report", JSON.stringify(defectAfterEdit), updateSuccess, error);
-        //    return false;
-        //}
 
         function insertReportSuccess() {
             alert("הדוח נשמר בהצלחה! הוסף ליקויים לדוח");
-            let api = "../api/report/" + project.Project_num + "/lastReport";
+            let api = "../api/report/" + project.Project_num +"/lastReport";
             //ajaxCall("GET", api, localStorage["project"], getLastReportSuccess, getError);
-            ajaxCall("GET", api, "", getLastReportSuccess, getError);
+            ajaxCall("GET", api,"", getLastReportSuccess, getError);
         }
 
         function getLastReportSuccess(lastReport) {
@@ -407,17 +397,15 @@
                 }
             }
             localStorage["curentReport"] = JSON.stringify(curentReport);
-
-
-
-            //get to project type weights- build controller
-            //get last report defects- build functions db and all
-            //call safety_lvl script function
         }
 
         function getPTWSuccess(ptwList) {
             ptwList = ptwList
             console.table(ptwList)
+        }
+
+        function updateDefectStatus() {
+
         }
     </script>
 </head>
@@ -449,7 +437,7 @@
                         <li><a href="#">הזמנות</a></li>
                         <li><a href="#">אישורים</a></li>
                         <li><a href="#">הדרכות</a></li>
-                        <li class="active"><a href="projects.html">פרויקטים<span class="sr-only">(current)</span></a></li>
+                        <li class="active"><a href="#">פרויקטים<span class="sr-only">(current)</span></a></li>
                         <li><a href="#">התחברות</a></li>
                         <li>
                             <span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="#"></a>
@@ -474,7 +462,7 @@
                 <div class="form-group col-sm-4">
                     <label for="tDate"><span class="red-star">★</span>תאריך ביקור</label>
                     <br />
-                    <input type="date" id="Date" required>
+                    <input type="date" id="Date" class="form-control" required>
                 </div>
                 <div class="form-group col-sm-4">
                     <label for="projManeger">מנהל פרויקט</label>
@@ -490,7 +478,7 @@
                 <div class="form-group col-sm-4">
                     <label for="time"><span class="red-star">★</span>שעה</label>
                     <br />
-                    <input type="time" id="time" required>
+                    <input type="time" id="time" class="form-control" required>
                 </div>
                 <div class="form-group col-sm-4">
                     <label for="forman">מנהל עבודה</label>
@@ -513,18 +501,19 @@
             <div class="inner">
                 <div id="dialog" class="window">
                     <a href="#" class="close">x</a>
-                    <div id="uploadImg" class="row">
-                        <div class="col-sm-6">
-                            <input type="file" id="img" />
-                        </div>
-                        <div class="col-sm-6">
+                    <div id="uploadImg" class="row" dir="rtl">
+                        <div class="col-12">
                             <h3>העלה תמונה לליקוי:</h3>
+                        </div>
+                        <br />
+                        <div class="col-12">
+                            <input type="file" id="img" />
                         </div>
                     </div>
                     <div id="showImg">
                         <div id="popupfoot"> <img src="#" class="image" alt="Loading..." /> </div>
-                        <button class="btn btn-primary" onclick="changeDefectStatus()">אשר תקינות ליקוי</button>
-                        <button class="btn btn-primary">ליקוי לא תוקן</button>
+                        <button class="btn btn-danger fixBTNs">ליקוי לא תוקן</button>
+                        <button class="btn btn-success fixBTNs" onclick="updateDefectStatus()">אשר תקינות ליקוי</button>
                     </div>
 
                 </div>
@@ -563,7 +552,6 @@
             </table>
         </div>
     </div>
-]
     <!--טבלת ליקויים-->
     <div id="defectsTBL" class="mainCards">
         <div class="row">
