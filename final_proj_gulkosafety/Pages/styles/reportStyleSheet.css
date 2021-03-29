@@ -50,8 +50,10 @@ h3 {
     padding-right: 15px;
     margin-top: 0px;
 }
-w3-container{
-    margin-top:50px;
+.w3-container {
+    margin-top: 50px;
+    margin: 20px;
+    padding: 10px;
 }
 .w3-modal-content {
     direction: rtl;
@@ -59,7 +61,7 @@ w3-container{
 /*#selectdefect {
     max-width: -webkit-fill-available;
 }*/
-#btn_add_defect, #saveReport, #calcGrade {
+#btn_add_defect, #saveReport, #calcGrade, #addDefectToRBtn, #btn_update_defect {
     float: left;
     color: #fff;
     background-color: cadetblue;
