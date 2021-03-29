@@ -828,7 +828,7 @@ namespace final_proj_gulkosafety.Models.DAL
         }
 
         //update report
-        public int UpdateReport(int report_num, DateTime date, DateTime time, string comment, double grade, int project_num, string user_mail)
+        public int UpdateReport(report r)
         {
 
             SqlConnection con;
@@ -843,7 +843,7 @@ namespace final_proj_gulkosafety.Models.DAL
                 throw new Exception("The connection to sever is not good");
             }
 
-            String cStr = BuildupdateCommand(report_num, date, time, comment, grade, project_num, user_mail);
+            String cStr = BuildUpdateReportCommand(r);
 
             cmd = CreateCommand(cStr, con);
 
@@ -852,7 +852,7 @@ namespace final_proj_gulkosafety.Models.DAL
                 int numEffected = cmd.ExecuteNonQuery();
                 return numEffected;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw new Exception("The update of report failed");
             }
@@ -866,10 +866,10 @@ namespace final_proj_gulkosafety.Models.DAL
             }
 
         }
-        private String BuildupdateCommand(int report_num, DateTime date, DateTime time, string comment, double grade, int project_num, string user_mail)
+        private String BuildUpdateReportCommand(report r)
         {
             String command;
-            command = "UPDATE report SET date='" + date + "'time='" + time + "'comment='" + comment + "grade=" + grade + "project_num=" + project_num + "'user_mail='" + user_mail + "'WHERE report_num =" + report_num;
+            command = "UPDATE report SET date='" + r.Date.ToString("yyyy-MM-dd") + "', time='" + r.Time.ToString("HH:ss") + "', comment='" + r.Comment + "' WHERE report_num =" + r.Report_num;
 
             return command;
         }

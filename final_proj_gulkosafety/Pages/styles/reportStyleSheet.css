@@ -171,3 +171,25 @@ h3 {
 .hide-scroll, .hide-scroll body {
     overflow: hidden !important
 }
+
+#editReportBTN, #updateReportBTN {
+    background-color: transparent;
+    border: 0px;
+}
+
+span.glyphicon.glyphicon-floppy-disk, span.glyphicon.glyphicon-pencil {
+    font-size: 20px;
+    top: 3px;
+}
+
+.editReportDetailsBtns {
+    position: relative;
+    margin: 0;
+    padding: 5px;
+    left: 0px;
+    top: 50px;
+}
+
+p {
+    text-align: left;
+}

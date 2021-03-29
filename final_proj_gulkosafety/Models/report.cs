@@ -64,6 +64,13 @@ namespace final_proj_gulkosafety.Models
             report lastreport = dbs.ReadLastReport(proj_num);
             return lastreport;
         }
-        
+
+        public void UpdateReport()
+        {
+            DBServices dbs = new DBServices();
+            dbs.UpdateReport(this);
+        }
+
+
     }
 }
