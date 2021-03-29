@@ -51,14 +51,14 @@
     font-size: 20px;
 }
 .alert-Safety-level {
-    color: #e67300;
+    color: #ca7521;
     background-color: #ffb366;
     border-color: #bce8f1;
     direction: rtl;
     font-size: 20px;
 }
 .alert-defect {
-    color: #e6e600;
+    color: #b7a124;
     background-color: #ffff80;
     border-color: #ffff1a;
     direction: rtl;
@@ -66,7 +66,8 @@
 }
 .date {
     font-size: 16px;
-    float:left;
+    float: left;
+    direction: rtl;
 }
 
 #ph {
