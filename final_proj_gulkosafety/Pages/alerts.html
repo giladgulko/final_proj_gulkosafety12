@@ -18,67 +18,43 @@
 
         $(document).ready(function () {
             alertList = [];
-            $("#Manger_Alerts").hide();
-            $("#User_Alerts").hide();
             getAlerts();
             $("#btns").hide();
             $("#buttonUpload").click(uploadDefectPhoto);
-            $("#fixed").click()
         });
 
         function getAlerts() {
-            let manager_email = "gulkosafety@gmail.com";
-            if (user_email == manager_email) {
 
-                let api = "../api/alert?user_email=" + manager_email;
-                ajaxCall("GET", api, "", getAlertsManagerSuccess, getError)
-            }
-            else {
-                let api = "../api/alert?user_email=" + user_email;
-                ajaxCall("GET", api, "", getAlertsUserSuccess, getError)
-            }
+            let api = "../api/alert?user_email=" + user_email;
+            ajaxCall("GET", api, "", getAlertsuccess, getError);
         }
+           
         function getError() {
             alert("err")
         }
-        function getAlertsManagerSuccess(data) {
-            $("#Manger_Alerts").show();
+        function getAlertsuccess(data) {
             alertList = data;
-            renderManagerAlerts();
+            renderAlerts();
         }
-        function getAlertsUserSuccess(data) {
-            $("#User_Alerts").show();
-            alertList = data;
-            renderUserAlerts();
-        }
-        function renderManagerAlerts() {
+
+        function renderAlerts() {
             for (i = 0; i < alertList.length; i++) {
                 if (alertList[i].Alert_type_num == 1) {
-                    document.getElementById('Manger_Alerts').innerHTML += "<div class='alert alert-Safety-level><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong>&nbsp" + alertList[i].Content + " </div> ";
+                    document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-Safety-level><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong>&nbsp" + alertList[i].Content + " </div> " ;
                 }
                 if (alertList[i].Alert_type_num == 2) {
-                    document.getElementById('Manger_Alerts').innerHTML += "<div class='alert alert-certificate'><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong>&nbsp" + alertList[i].Content + " </div> ";
+                    document.getElementById('Alerts_div').innerHTML += "<div  class='alert alert-certificate'><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong>&nbsp" + alertList[i].Content + " </div> ";
                 }
                 if (alertList[i].Alert_type_num == 3) {
-                    document.getElementById('Manger_Alerts').innerHTML += "<div class='alert alert-Defective-repair'><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong>&nbsp" + alertList[i].Content + " </div> ";
+                    document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-Defective-repair'><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong>&nbsp" + alertList[i].Content + " </div> ";
 
                 }
                 if (alertList[i].Alert_type_num == 4) {
-                    document.getElementById('Manger_Alerts').innerHTML += "<div class='alert alert-instruction'><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong>&nbsp" + alertList[i].Content + " </div> ";
+                    document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-instruction'><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong>&nbsp" + alertList[i].Content + " </div> ";
 
                 }
                 if (alertList[i].Alert_type_num == 5) {
-                    document.getElementById('Manger_Alerts').innerHTML += "<div class='alert alert-defect'><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong>&nbsp" + alertList[i].Content + " </div> ";
-
-                }
-            }
-
-        }
-        function renderUserAlerts() {
-            for (i = 0; i < alertList.length; i++) {
-
-                if (alertList[i].Alert_type_num == 3) {
-                    document.getElementById('User_Alerts').innerHTML += "<div class='alert alert-Defective-repair'><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong>&nbsp" + alertList[i].Content + " </div> ";
+                    document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-defect'><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong>&nbsp" + alertList[i].Content + " </div> ";
 
                 }
             }
@@ -124,9 +100,10 @@
             else {
                 imgStr = "<img src='../" + data + "'/>";
             }
-
-            document.getElementById("ph").innerHTML = imgStr;
-            document.getElementById('Manger_Alerts').innerHTML += "<div class='alert alert-Defective-repair'><strong class='date'> " + Date.now() + " </strong>&nbsp תמונה חדשה הועלתה</div> ";
+            if (user_email == "gulkosafety@gmail.com") {
+                document.getElementById("ph").innerHTML = imgStr;
+                document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-Defective-repair'><strong class='date'> " + Date.now() + " </strong>&nbsp תמונה חדשה הועלתה</div> ";
+            }
         }
 
         function error(data) {
@@ -162,7 +139,7 @@
                         <li><a href="#">הזמנות</a></li>
                         <li><a href="#">אישורים</a></li>
                         <li><a href="#">הדרכות</a></li>
-                        <li><a href="#">פרויקטים</a></li>
+                        <li><a href="projects.html">פרויקטים</a></li>
                         <li><a href="#">התחברות</a></li>
                         <li>
                             <span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="#"></a>
@@ -181,9 +158,7 @@
         </div>
     </div>
 
-    <div id="Manger_Alerts"></div>
-    <br />
-    <div id="User_Alerts"></div>
+    <div id="Alerts_div"></div>
 
     <div method="post" enctype="multipart/form-data" id="formUpload">
         <div>
