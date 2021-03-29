@@ -39,7 +39,7 @@ form {
     max-width: fit-content;
 }*/
 h1, .proj {
-    font-family: 'Lucida Console';
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     color: cadetblue;
     font-weight: bold;
 }

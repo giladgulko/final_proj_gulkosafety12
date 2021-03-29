@@ -73,7 +73,7 @@
             }
         }
 
-        function checkLastReportDefects(){
+        function checkLastReportDefects() {
             if (localStorage["allReports"] != "") {
                 let api = "../api/defect_in_report?proj_num=" + project.Project_num + "&reportDate=" + report.Date.split('T');
                 ajaxCall("GET", api, "", getLastRDefectSuccess, getError);
@@ -102,7 +102,7 @@
             }
             else $("#lastReportdefectsTBL").hide();
         }
-                
+
 
         function getReportDefect(reportNum) {
             $("#defectsTBL").show();
@@ -162,7 +162,7 @@
                     $('#mask').removeClass('showing');
                     $('html').removeClass('hide-scroll');
                 });
-            } 
+            }
 
             //$("#pic").show()
             //$("#pic").html(str);
@@ -233,7 +233,7 @@
 
                                     return editBtn;
                                 }
-      
+
 
                             }
                         },
@@ -242,7 +242,7 @@
                             render: function (data, type, row, meta) {
                                 let dataproj = "project_data='" + row.Defect_num + "'";
 
-                                editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataproj + "> עריכה </button>";
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataproj+ "> עריכה </button>";
 
                                 deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='  " + row.Defect_num + "' onclick='deleteAlert(this.value)'> מחיקה </button>";
                                 return editBtn + deleteBtn;
@@ -260,7 +260,7 @@
             catch (err) {
                 alert(err);
             }
-            
+
         }
         //function closePic() {
         //    $("#pic").hide()
@@ -362,12 +362,29 @@
             return false;
 
         }
+        //function EditDefectInReport() {
+        //    let defectAfterEdit = {
+        //        Report_num: report.Report_num,
+        //        Defect_num: ,
+        //        Fix_date: $("#").val(),
+        //        Fix_Time: $("#").val(),
+        //        Picture_link: $("#price").val(),
+        //        Fix_status: $("#").val(),
+        //        Description: $("#").val(),
+        //        Defect_name: $("").val(),
+        //        Defect_type_name: $("#"),
+        //    }
+
+        //    // update a new defect in report to the server
+        //    ajaxCall("PUT", "../api/defect_in_report", JSON.stringify(defectAfterEdit), updateSuccess, error);
+        //    return false;
+        //}
 
         function insertReportSuccess() {
             alert("הדוח נשמר בהצלחה! הוסף ליקויים לדוח");
-            let api = "../api/report/" + project.Project_num +"/lastReport";
+            let api = "../api/report/" + project.Project_num + "/lastReport";
             //ajaxCall("GET", api, localStorage["project"], getLastReportSuccess, getError);
-            ajaxCall("GET", api,"", getLastReportSuccess, getError);
+            ajaxCall("GET", api, "", getLastReportSuccess, getError);
         }
 
         function getLastReportSuccess(lastReport) {
@@ -432,7 +449,7 @@
                         <li><a href="#">הזמנות</a></li>
                         <li><a href="#">אישורים</a></li>
                         <li><a href="#">הדרכות</a></li>
-                        <li class="active"><a href="#">פרויקטים<span class="sr-only">(current)</span></a></li>
+                        <li class="active"><a href="projects.html">פרויקטים<span class="sr-only">(current)</span></a></li>
                         <li><a href="#">התחברות</a></li>
                         <li>
                             <span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="#"></a>
@@ -546,6 +563,7 @@
             </table>
         </div>
     </div>
+]
     <!--טבלת ליקויים-->
     <div id="defectsTBL" class="mainCards">
         <div class="row">
