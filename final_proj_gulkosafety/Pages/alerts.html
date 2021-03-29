@@ -10,66 +10,9 @@
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link href="styles/nav_bar_style.css" rel="stylesheet" />
+    <link href="styles/alertsStyles.css" rel="stylesheet" />
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
-    <style>
 
-        .alert {
-            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-            color: cadetblue;
-            font-weight: bold;
-        }
-        #alert_bar {
-            text-align: right;
-            display: flex;
-            margin-top: 15px;
-        }
-        #Manger_Alerts {
-            margin: auto;
-            width: 50%;
-            border: 3px solid cadetblue;
-            padding: 10px;
-            height: 100%;
-        }
-        #User_Alerts {
-            margin: auto;
-            width: 50%;
-            border: 3px solid cadetblue;
-            padding: 10px;
-            height: 100%;
-        }
-        #active {
-            color: cadetblue;
-            background-color: #eeeeee;
-            FONT-WEIGHT: bold;
-            border-color: cadetblue;
-        }
-        .alert-success {
-            color: darkkhaki;
-            background-color: beige;
-            border-color: #d6e9c6;
-            direction: rtl;
-            font-size: 20px;
-        }
-        .alert-danger {
-            direction: rtl;
-            font-size: 20px;
-        }
-        .date {
-            font-size: 16px;
-        }
-        .alert-info {
-            color: darkviolet;
-            direction: rtl;
-            font-size: 20px;
-        }
-        #ph{
-            height:50%;
-        }
-        img {
-            height: 5%;
-            width: 10%;
-        }
-    </style>
     <script>
         var user_email = "gulkosafety@gmail.com";// צריך לקחת את היוזר מהלוקאל סטורג - של מי שנמצא בלוג אין
 
@@ -83,8 +26,7 @@
             $("#fixed").click()
         });
 
-        function getAlerts()
-        {
+        function getAlerts() {
             let manager_email = "gulkosafety@gmail.com";
             if (user_email == manager_email) {
 
@@ -111,11 +53,22 @@
         }
         function renderManagerAlerts() {
             for (i = 0; i < alertList.length; i++) {
-                if (alertList[i].Alert_type_num == 2) { 
-                document.getElementById('Manger_Alerts').innerHTML += "<div class='alert alert-success'><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong>&nbsp" + alertList[i].Content + " </div> ";
+                if (alertList[i].Alert_type_num == 1) {
+                    document.getElementById('Manger_Alerts').innerHTML += "<div class='alert alert-Safety-level><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong>&nbsp" + alertList[i].Content + " </div> ";
+                }
+                if (alertList[i].Alert_type_num == 2) {
+                    document.getElementById('Manger_Alerts').innerHTML += "<div class='alert alert-certificate'><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong>&nbsp" + alertList[i].Content + " </div> ";
                 }
                 if (alertList[i].Alert_type_num == 3) {
-                    document.getElementById('Manger_Alerts').innerHTML += "<div class='alert alert-info'><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong>&nbsp" + alertList[i].Content + " </div> ";
+                    document.getElementById('Manger_Alerts').innerHTML += "<div class='alert alert-Defective-repair'><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong>&nbsp" + alertList[i].Content + " </div> ";
+
+                }
+                if (alertList[i].Alert_type_num == 4) {
+                    document.getElementById('Manger_Alerts').innerHTML += "<div class='alert alert-instruction'><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong>&nbsp" + alertList[i].Content + " </div> ";
+
+                }
+                if (alertList[i].Alert_type_num == 5) {
+                    document.getElementById('Manger_Alerts').innerHTML += "<div class='alert alert-defect'><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong>&nbsp" + alertList[i].Content + " </div> ";
 
                 }
             }
@@ -125,14 +78,14 @@
             for (i = 0; i < alertList.length; i++) {
 
                 if (alertList[i].Alert_type_num == 3) {
-                    document.getElementById('User_Alerts').innerHTML += "<div class='alert alert-info'><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong>&nbsp" + alertList[i].Content + " </div> ";
+                    document.getElementById('User_Alerts').innerHTML += "<div class='alert alert-Defective-repair'><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong>&nbsp" + alertList[i].Content + " </div> ";
 
                 }
             }
 
         }
-        
-    //העלאת תמונה
+
+        //העלאת תמונה
         function uploadDefectPhoto() {
             var data = new FormData();
             var files = $("#files").get(0).files;
@@ -173,14 +126,11 @@
             }
 
             document.getElementById("ph").innerHTML = imgStr;
-            document.getElementById('Manger_Alerts').innerHTML += "<div class='alert alert-danger'><strong class='date'> " + Date.now() + " </strong>&nbsp תמונה חדשה הועלתה</div> ";
+            document.getElementById('Manger_Alerts').innerHTML += "<div class='alert alert-Defective-repair'><strong class='date'> " + Date.now() + " </strong>&nbsp תמונה חדשה הועלתה</div> ";
         }
 
         function error(data) {
             console.log(data);
-        }
-        function DefectIsFixed() {
-
         }
     </script>
 </head>
@@ -247,10 +197,7 @@
     <div id="ph">
 
     </div>
-    <!--<div id="btns">
-        <button type="button" id="fixed">ליקוי תוקן</button>
-        <button type="button" id="Notfixed">ליקוי לא תוקן</button>
-    </div>-->
+
 
 </body>
 </html>
