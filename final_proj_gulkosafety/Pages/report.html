@@ -246,7 +246,7 @@
                             render: function (data, type, row, meta) {
                                 let dataproj = "project_data='" + row.Defect_num + "'";
                                 if (userType == 1) {
-                                    editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataproj + "> עריכה </button>";
+                                    editBtn = "<button type='button' class = 'editBtn btn btn-success'value='  " + JSON.stringify(row) +  "' onclick='editDefectBTN(this.value)'> עריכה </button>";
                                     deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='  " + row.Defect_num + "' onclick='deleteAlert(this.value)'> מחיקה </button>";
                                     return editBtn + deleteBtn;
                                 }
@@ -272,6 +272,33 @@
         //function closePic() {
         //    $("#pic").hide()
         //}
+        function editDefectBTN(def) {
+            
+            def = JSON.parse(def)
+            console.log(def.Fix_date)
+            alert(def.Report_num)
+            document.getElementById('id01').style.display = 'block';
+            $("#chooseDefectTypeDIV").hide();
+            $("#chooseDefectDIV").hide();
+            $("#fixDate").val(date)
+             $("#fixTime").val(def.Fix_Time)
+            $("#description").val(def.Description)
+            
+            $("#btn_update_defect").show()
+        }
+        function upDateDefect() {
+            update_defect = {
+                Report_num: report.Report_num,
+                Defect_num: $("#selectdefect").val(),
+                Fix_Date: $("#fixDate").val(),
+                Fix_Time: $("#fixTime").val(),
+                Description: $("#description").val()
+            }
+            
+            console.log(update_defect)
+            api = "../api/defect_in_report";
+            ajaxCall("PUT", api, JSON.stringify(update_defect), postDefectsInReport, getError)
+        }
         function getDefectsAndTypeS() {
             api = "../api/defect"
             ajaxCall("GET", api, "", getDefects, getError)
@@ -288,6 +315,8 @@
             console.log(defects_types)
         }
         function newDefect() {
+            $("#chooseDefectTypeDIV").show();
+            $("#chooseDefectDIV").show();
             alert("in")
             str = "<option>סוגי ליקויים</option>"
             for (var i = 0; i < defects_types.length; i++) {
@@ -601,13 +630,13 @@
                     <br />
                     <br />
                     <div id="section1">
-                        <div>
+                        <div id="chooseDefectTypeDIV">
                             <label for="defect_type">בחר סוג ליקוי:</label>
                             <br />
                             <select id="selectType" onchange="createDefectList(this.value)"></select>
 
                         </div>
-                        <div>
+                        <div id="chooseDefectDIV">
                             <label for="defect_type">בחר ליקוי:</label>
                             <br />
                             <select id="selectdefect" style="max-width:-webkit-fill-available;"></select>
@@ -633,6 +662,7 @@
                     </div>
                     <div>
                         <button id="btn_add_defect" class="btn btn-primary" onclick="addDefectToReport(1)">הוסף ליקוי</button>
+                        <button id="btn_update_defect" class="btn btn-primary" onclick="upDateDefect()"> עדכן ליקוי</button>
                     </div>
                 </div>
             </div>
