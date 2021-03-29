@@ -18,37 +18,168 @@
             color: cadetblue;
             font-weight: bold;
         }
-
         #alert_bar {
             text-align: right;
             display: flex;
             margin-top: 15px;
         }
-
+        #Manger_Alerts {
+            margin: auto;
+            width: 50%;
+            border: 3px solid cadetblue;
+            padding: 10px;
+            height: 100%;
+        }
+        #User_Alerts {
+            margin: auto;
+            width: 50%;
+            border: 3px solid cadetblue;
+            padding: 10px;
+            height: 100%;
+        }
+        #active {
+            color: cadetblue;
+            background-color: #eeeeee;
+            FONT-WEIGHT: bold;
+            border-color: cadetblue;
+        }
+        .alert-success {
+            color: darkkhaki;
+            background-color: beige;
+            border-color: #d6e9c6;
+            direction: rtl;
+            font-size: 20px;
+        }
+        .alert-danger {
+            direction: rtl;
+            font-size: 20px;
+        }
+        .date {
+            font-size: 16px;
+        }
+        .alert-info {
+            color: darkviolet;
+            direction: rtl;
+            font-size: 20px;
+        }
+        #ph{
+            height:50%;
+        }
+        img {
+            height: 5%;
+            width: 10%;
+        }
     </style>
     <script>
+        var user_email = "gulkosafety@gmail.com";// צריך לקחת את היוזר מהלוקאל סטורג - של מי שנמצא בלוג אין
 
         $(document).ready(function () {
             alertList = [];
+            $("#Manger_Alerts").hide();
+            $("#User_Alerts").hide();
             getAlerts();
+            $("#btns").hide();
+            $("#buttonUpload").click(uploadDefectPhoto);
+            $("#fixed").click()
         });
 
-        function getAlerts() {//צריך לקחת את היוזר מהלוקאל סטורג-של מי שנמצא בלוג אין
-            let user_email = "gulkosafety@gmail.com";
-            let api = "../api/alert?user_email=" + user_email;
-            ajaxCall("GET", api, "", getAlertsSuccess, getError)
+        function getAlerts()
+        {
+            let manager_email = "gulkosafety@gmail.com";
+            if (user_email == manager_email) {
+
+                let api = "../api/alert?user_email=" + manager_email;
+                ajaxCall("GET", api, "", getAlertsManagerSuccess, getError)
+            }
+            else {
+                let api = "../api/alert?user_email=" + user_email;
+                ajaxCall("GET", api, "", getAlertsUserSuccess, getError)
+            }
         }
         function getError() {
             alert("err")
         }
-        function getAlertsSuccess(data) {
+        function getAlertsManagerSuccess(data) {
+            $("#Manger_Alerts").show();
             alertList = data;
-            renderAlerts();
+            renderManagerAlerts();
         }
-        function renderAlerts() {
+        function getAlertsUserSuccess(data) {
+            $("#User_Alerts").show();
+            alertList = data;
+            renderUserAlerts();
+        }
+        function renderManagerAlerts() {
             for (i = 0; i < alertList.length; i++) {
-                document.getElementById('alertsInProjects').innerHTML += "<div class='alert alert-success'><strong> " + alertList[i].Date + " </strong> " + alertList[i].Content + " </div> ";
+                if (alertList[i].Alert_type_num == 2) { 
+                document.getElementById('Manger_Alerts').innerHTML += "<div class='alert alert-success'><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong>&nbsp" + alertList[i].Content + " </div> ";
+                }
+                if (alertList[i].Alert_type_num == 3) {
+                    document.getElementById('Manger_Alerts').innerHTML += "<div class='alert alert-info'><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong>&nbsp" + alertList[i].Content + " </div> ";
+
+                }
             }
+
+        }
+        function renderUserAlerts() {
+            for (i = 0; i < alertList.length; i++) {
+
+                if (alertList[i].Alert_type_num == 3) {
+                    document.getElementById('User_Alerts').innerHTML += "<div class='alert alert-info'><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong>&nbsp" + alertList[i].Content + " </div> ";
+
+                }
+            }
+
+        }
+        
+    //העלאת תמונה
+        function uploadDefectPhoto() {
+            var data = new FormData();
+            var files = $("#files").get(0).files;
+
+            if (files.length > 0) {
+                for (f = 0; f < files.length; f++) {
+                    data.append("UploadedImage", files[f]);
+                }
+                data.append("name", "NewDefect");
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "../Api/FileUpload",
+                contentType: false,
+                processData: false,
+                data: data,
+                success: showImages,
+                error: error
+            });
+
+            return false;
+        }
+        function showImages(data) {
+            $("#btns").show()
+            console.log(data);
+
+            var imgStr = "";
+
+            if (Array.isArray(data)) {
+
+                for (var i = 0; i < data.length; i++) {
+                    imgStr += "<img src='../" + data[i] + "'/>";
+                }
+            }
+            else {
+                imgStr = "<img src='../" + data + "'/>";
+            }
+
+            document.getElementById("ph").innerHTML = imgStr;
+            document.getElementById('Manger_Alerts').innerHTML += "<div class='alert alert-danger'><strong class='date'> " + Date.now() + " </strong>&nbsp תמונה חדשה הועלתה</div> ";
+        }
+
+        function error(data) {
+            console.log(data);
+        }
+        function DefectIsFixed() {
 
         }
     </script>
@@ -72,7 +203,7 @@
                     <ul class="nav navbar-nav navbar-right  bts-nav">
                         <li><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="#"></a></li>
                         <li></li>
-                        <li class="nav-item">
+                        <li class="nav-item" id="active">
                             <span class="glyphicon glyphicon-bell" aria-hidden="true"></span><a href="#"></a>
                         </li>
 
@@ -81,7 +212,7 @@
                         <li><a href="#">הזמנות</a></li>
                         <li><a href="#">אישורים</a></li>
                         <li><a href="#">הדרכות</a></li>
-                        <li class="active"><a href="#">פרויקטים<span class="sr-only">(current)</span></a></li>
+                        <li><a href="#">פרויקטים</a></li>
                         <li><a href="#">התחברות</a></li>
                         <li>
                             <span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="#"></a>
@@ -100,11 +231,25 @@
         </div>
     </div>
 
-    <div id="alertsInProjects"></div>
+    <div id="Manger_Alerts"></div>
+    <br />
+    <div id="User_Alerts"></div>
 
-    <!--<div id="otherAlerts">
+    <div method="post" enctype="multipart/form-data" id="formUpload">
+        <div>
+            <label for="files">Images:</label>
+            <input type="file" id="files" name="files" multiple="multiple" />
+        </div>
+        <br />
+        <button type="button" id="buttonUpload">Upload images</button>
 
+    </div>
+    <div id="ph">
 
+    </div>
+    <!--<div id="btns">
+        <button type="button" id="fixed">ליקוי תוקן</button>
+        <button type="button" id="Notfixed">ליקוי לא תוקן</button>
     </div>-->
 
 </body>
