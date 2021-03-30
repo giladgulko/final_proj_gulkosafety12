@@ -805,7 +805,7 @@ namespace final_proj_gulkosafety.Models.DAL
                 int numEffected = cmd.ExecuteNonQuery();
                 return numEffected;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw new Exception("The update of defect in report failed");
             }
@@ -822,7 +822,7 @@ namespace final_proj_gulkosafety.Models.DAL
         private String BuildupdateCommand(defect_in_report defectInReport)
         {
             String command;
-            command = "UPDATE defect_in_report SET fix_date='" + defectInReport.Fix_date + "'fix_time='" + defectInReport.Fix_time + "'picture_link='" + defectInReport.Picture_link + "'fix_status=" + defectInReport.Fix_status + "description='" + defectInReport.Description + "'WHERE defect_num =" + defectInReport.Defect_num+" and report_num="+ defectInReport.Report_num;
+            command = "UPDATE defect_in_report SET fix_date='" + defectInReport.Fix_date.ToString("yyyy-MM-dd") + "', fix_time='" + defectInReport.Fix_time.ToString("HH:ss") + "', picture_link='" + defectInReport.Picture_link + "', fix_status=" + defectInReport.Fix_status + ", description='" + defectInReport.Description + "' WHERE defect_num =" + defectInReport.Defect_num+" and report_num="+ defectInReport.Report_num;
 
             return command;
         }

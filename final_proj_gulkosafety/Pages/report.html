@@ -23,6 +23,7 @@
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
     <link href="styles/reportStyleSheet.css" rel="stylesheet" />
     <link href="styles/nav_bar_style.css" rel="stylesheet" />
+    <script src="../Scripts/safety_lvl_algo.js"></script>
     <title>דוח ביקור</title>
 
     <script>
@@ -214,7 +215,10 @@
 
         function createDt(defectsdata) {
             //not ok need another array
-            currentReportDefects = defectsdata;
+            if (tableID =='#defectTable') {
+                currentReportDefects = defectsdata
+            }
+           
 
             for (i = 0; i < defectsdata.length; i++) {
                 defectsdata[i].Fix_date = defectsdata[i].Fix_date.split("T")[0];
@@ -282,8 +286,8 @@
             defectToEdit = JSON.parse(def);
 
             document.getElementById('id01').style.display = 'block';
-            $("#selectType").append("<option>" + defectToEdit.Defect_type_name + "</option>");
-            $("#selectdefect").append("<option>" + defectToEdit.Defect_name + "</option>");        
+            $("#selectType").append("<option value='" + defectToEdit.Defect_num+"' > " + defectToEdit.Defect_type_name + "</option > ");
+            $("#selectdefect").append("<option value='" + defectToEdit.Defect_num + "' > " + defectToEdit.Defect_name + "</option>");        
             $("#selectType").prop('disabled', true);
             $("#selectdefect").prop('disabled', true);
             $("#fixDate").val(defectToEdit.Fix_date.split("T")[0]);
@@ -304,7 +308,10 @@
             
             console.log(update_defect)
             let api = "../api/defect_in_report";
-            ajaxCall("PUT", api, JSON.stringify(update_defect), postDefectsInReport, getError)
+            ajaxCall("PUT", api, JSON.stringify(update_defect), updateDefectsInReport, getError)
+        }
+        function updateDefectsInReport() {
+           location.reload()
         }
         function getDefectsAndTypeS() {
             api = "../api/defect"
@@ -442,25 +449,29 @@
         }
 
         function calcGrade() {
+            //להוסיף את הליקיים הפתוחים 
             let curentReport = [];
-            for (i = 0; i < currentReportDefects.length; i++) {
-                for (j = 0; j < defects.length; j++) {
-                    if (currentReportDefects[i].Defect_num == defects[j].Defect_num) {
+            for (i = 0; i < defects.length; i++) {
+                for (j = 0; j < currentReportDefects.length; j++) {
+                    if (currentReportDefects[j].Defect_num == defects[i].Defect_num) {
                         let defect = {
-                            Defect_num: currentReportDefects[i].Defect_num,
-                            Defect_type_num: defects[j].Defect_type_num,
-                            Grade: defects[j].Grade
+                            
+                            Defect_num: currentReportDefects[j].Defect_num,
+                            Defect_type_num: defects[i].Defect_type_num,
+                            Grade: defects[i].Grade
                         }
                         curentReport.push(defect);
                     }
                 }
             }
-            localStorage["curentReport"] = JSON.stringify(curentReport);
+
+            gradesArr = JSON.parse(localStorage["gradesArr"])
+            safetyLVL(curentReport, lastReportDefects, gradesArr, ptwList)
         }
 
-        function getPTWSuccess(ptwList) {
-            ptwList = ptwList
-            console.table(ptwList)
+        function getPTWSuccess(ptwList1) {
+            ptwList = ptwList1
+            console.log(ptwList)
         }
 
         function updateDefectStatus() {
@@ -676,7 +687,7 @@
                                 <label for="defect_type"><span class="red-star">★</span>בחר סוג ליקוי:</label>
                                 <select id="selectType" class="form-control" onchange="createDefectList(this.value)" required></select>
                             </div>
-                            </div>
+                        </div>
                         <div class="row">
                             <div class="form-group col-sm-10">
                                 <label for="defect_type"><span class="red-star">★</span>בחר ליקוי:</label>
@@ -710,17 +721,23 @@
                                 <input type="text" class="form-control" id="description">
                             </div>
                         </div>
-                                <div class="row">
-                                    <p>
-                                        <button type="submit" id="btn_add_defect" class="btn btn-primary">הוסף ליקוי</button>
-                                        <button id="btn_update_defect" class="btn btn-primary" onclick="upDateDefect()"> עדכן ליקוי</button>
-                                    </p>
-                                </div>
+                        <div class="row">
+                            <p>
+                                 <button type="submit" id="btn_add_defect" class="btn btn-primary">הוסף ליקוי</button>
+                                
+                            </p>
+                        </div>
                     </form>
+                    <div class="row">
+                        <p>
+                            
+                            <button id="btn_update_defect" class="btn btn-primary" onclick="upDateDefect()"> עדכן ליקוי</button>
+                        </p>
+                    </div>
+                </div>
                 </div>
             </div>
         </div>
-    </div>
 
-</body>
-</html>
+    </body>
+    </html>

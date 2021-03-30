@@ -15,46 +15,59 @@
 function safetyLVL(curentReport, lastREPORTdefects, gradesARR, projTypeWEIGHT) {
     const maxGradeForDefectType = 25
     //מספר הנקודות שיורדות כתוצאה מבדיקת כללים בדוח הנוכחי
-    const point = 5
+    const point = 10
     const max9OR10Grade = 2
     const   maxdefects=10
     total_grade = 0
     numOf9OR10Grade = 0
     pointTOreduce = 0
-
+    counterOfreturnDefects=0
     alert_arr = [];
+    pointsOnDefectGrade10=0
     for (var i = 0; i < projTypeWEIGHT.length; i++) {
         let sum = 0
         
         for (var j = 0; j < curentReport.length; j++) {
-            if (projTypeWEIGHT[i].defect_type_num == curentReport[j].defect_type_num) {
-                sum += curentReport[j].grade;
-                if (curentReport[j].grade>=9) {
+            if (projTypeWEIGHT[i].Defect_type_num == curentReport[j].Defect_type_num) {
+                sum += curentReport[j].Grade;
+                if (curentReport[j].Grade>=9) {
                     numOf9OR10Grade++;
+                    
                 }
-                if (lastREPORTdefects.include(curentReport[j])) {
-                    switch (curentReport[j].grade) {
-                        case 1 - 5:
-                            pointTOreduce = 1;
-                            break;
-                        case 6 - 8:
-                            pointTOreduce = 3;
-                            break;
-                        default:
-                            pointTOreduce = 5;
+                if (curentReport[j].Grade==10) {
+                    pointsOnDefectGrade10 = pointsOnDefectGrade10+5
+                }
+                if (lastREPORTdefects!="") {
+                    for (var f = 0; f < lastREPORTdefects.length; f++) {
+                        
+                        if (lastREPORTdefects[f].Defect_num == curentReport[j].Defect_num) {
+                            counterOfreturnDefects++
+                            switch (curentReport[j].Grade) {
+                                case 1 - 5:
+                                    pointTOreduce = 1;
+                                    break;
+                                case 6 - 8:
+                                    pointTOreduce = 3;
+                                    break;
+                                default:
+                                    pointTOreduce = 5;
+                            }
+                        }
                     }
                 }
+                
+               
             }
            
         }
         if (sum > maxGradeForDefectType) {
             sum = 100
         }
-        total = sum * projTypeWEIGHT[i].weight
+        total = sum * projTypeWEIGHT[i].Weight
         total_grade += total
     }
  
-
+    total_grade = total_grade + pointsOnDefectGrade10
     
     if (numOf9OR10Grade > max9OR10Grade) {
         total_grade += point
@@ -65,6 +78,6 @@ function safetyLVL(curentReport, lastREPORTdefects, gradesARR, projTypeWEIGHT) {
     total_grade = 100 - total_grade;
     //put report-grade
 
-    
-   
+    alert(total_grade)
+    alert(pointTOreduce)
 }
