@@ -31,6 +31,7 @@
         currentReportDefects = [];
         lastReportDefects = [];
         allReports = [];
+        defectToEdit = "";
         ptwList = [];
         tableID = "";
         userType = 1;
@@ -256,14 +257,14 @@
 
                         {
                             render: function (data, type, row, meta) {
-                                let dataproj = "project_data='" + row.Defect_num + "'";
+                                let def = JSON.stringify(row);
                                 if (userType == 1) {
-                                    editBtn = "<button type='button' class = 'editBtn btn btn-success'value='  " + JSON.stringify(row) +  "' onclick='editDefectBTN(this.value)'> עריכה </button>";
-                                    deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='  " + row.Defect_num + "' onclick='deleteAlert(this.value)'> מחיקה </button>";
+                                    editBtn = "<button type='button' class = 'editBtn btn btn-success'value='  " + def +  "' onclick='editDefectBTN(this.value)'> עריכה </button>";
+                                    deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='  " + def + "' onclick='deleteAlert(this.value)'> מחיקה </button>";
                                     return editBtn + deleteBtn;
                                 }
                                 else {
-                                    editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataproj + " onclick='editDefectImg(this.project_data)'> ערוך תמונת ליקוי </button>";
+                                    editBtn = "<button type='button' class = 'editBtn btn btn-success' value='  " + def + "' onclick='editDefectImg(this.value)'> ערוך תמונת ליקוי </button>";
                                     return editBtn;
                                 }
                                 
@@ -283,23 +284,23 @@
         }
 
         function editDefectBTN(def) {
-            def = JSON.parse(def);
+            defectToEdit = JSON.parse(def);
 
             document.getElementById('id01').style.display = 'block';
-            $("#selectType").append("<option>" + def.Defect_type_name + "</option>");
-            $("#selectdefect").append("<option>" + def.Defect_name + "</option>");        
+            $("#selectType").append("<option>" + defectToEdit.Defect_type_name + "</option>");
+            $("#selectdefect").append("<option>" + defectToEdit.Defect_name + "</option>");        
             $("#selectType").prop('disabled', true);
             $("#selectdefect").prop('disabled', true);
-            $("#fixDate").val(def.Fix_date.split("T")[0]);
-            $("#fixTime").val(def.Fix_time);
-            $("#description").val(def.Description);
+            $("#fixDate").val(defectToEdit.Fix_date.split("T")[0]);
+            $("#fixTime").val(defectToEdit.Fix_time);
+            $("#description").val(defectToEdit.Description);
 
             $("#btn_update_defect").show();
             $("#btn_add_defect").hide();
         }
         function upDateDefect() {
             update_defect = {
-                Report_num: report.Report_num,
+                Report_num: defectToEdit.Report_num,
                 Defect_num: $("#selectdefect").val(),
                 Fix_Date: $("#fixDate").val(),
                 Fix_Time: $("#fixTime").val(),
@@ -366,7 +367,8 @@
         function postDefectInReport() {
             location.reload();
         }
-        function deleteAlert(def_num) {
+        function deleteAlert(def) {
+            defectToEdit = JSON.parse(def);
             swal({
                 title: "Are you sure ??",
                 text: "",
@@ -375,15 +377,15 @@
                 dangerMode: true
             })
                 .then(function (willDelete) {
-                    if (willDelete) delete_defect_in_report(def_num);
+                    if (willDelete) delete_defect_in_report(defectToEdit);
                     else swal("Not Deleted!");
                 });
         }
-        function delete_defect_in_report(def_num) {
+        function delete_defect_in_report(def) {
 
             defectToDelete = {
-                Report_num: report.Report_num,
-                Defect_num: def_num
+                Report_num: def.Report_num,
+                Defect_num: def.Defect_num
             }
             ajaxCall("DELETE", "../api/defect_in_report", JSON.stringify(defectToDelete), deleteDefect, getError);
         }
