@@ -80,4 +80,6 @@ function safetyLVL(curentReport, lastREPORTdefects, gradesARR, projTypeWEIGHT) {
 
     alert(total_grade)
     alert(pointTOreduce)
+    //avg,הורדת ציונים בין דוחות וחישוב רמת בטיחות פרויקט
+    //שילוב התראות בכל האלגוריתם
 }
