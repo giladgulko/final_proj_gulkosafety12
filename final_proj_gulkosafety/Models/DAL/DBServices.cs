@@ -780,8 +780,8 @@ namespace final_proj_gulkosafety.Models.DAL
             return command;
         }
 
-        //update defect in report
-        public int UpdateDefectInReport(int defect_num, DateTime fix_date, DateTime fix_time, string pic_link, int fix_status, string desc)
+        //update defect in report- all fields- date, time, fix status, description
+        public int UpdateDefectInReport(defect_in_report defectInReport)
         {
 
             SqlConnection con;
@@ -796,7 +796,7 @@ namespace final_proj_gulkosafety.Models.DAL
                 throw new Exception("The connection to sever is not good");
             }
 
-            String cStr = BuildupdateCommand(defect_num, fix_date, fix_time, pic_link, fix_status, desc);
+            String cStr = BuildupdateCommand(defectInReport);
 
             cmd = CreateCommand(cStr, con);
 
@@ -819,10 +819,10 @@ namespace final_proj_gulkosafety.Models.DAL
             }
 
         }
-        private String BuildupdateCommand(int defect_num, DateTime fix_date, DateTime fix_time, string pic_link, int fix_status, string desc)
+        private String BuildupdateCommand(defect_in_report defectInReport)
         {
             String command;
-            command = "UPDATE defect_in_report SET fix_date='" + fix_date + "'fix_time='" + fix_time + "'picture_link='" + pic_link + "'fix_status=" + fix_status + "description='" + desc + "'WHERE defect_num =" + defect_num;
+            command = "UPDATE defect_in_report SET fix_date='" + defectInReport.Fix_date + "'fix_time='" + defectInReport.Fix_time + "'picture_link='" + defectInReport.Picture_link + "'fix_status=" + defectInReport.Fix_status + "description='" + defectInReport.Description + "'WHERE defect_num =" + defectInReport.Defect_num+" and report_num="+ defectInReport.Report_num;
 
             return command;
         }

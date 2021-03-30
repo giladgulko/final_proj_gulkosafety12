@@ -190,7 +190,8 @@
             //insert pic
         }
 
-        function checkImg(this1) {
+        function checkImg(def) {
+            defectToEdit = JSON.parse(def);
                 $('#uploadImg').hide();
                 $('#mask').addClass('showing');
                 $('html').addClass('hide-scroll');
@@ -235,19 +236,13 @@
                         {
                             render: function (data, type, row, meta) {
                                 if (row.Picture_link != "") {
-                                    let dataproj = "Picture_link='" + row.Picture_link + "'";
-
-                                    editBtn = "<button type='button' class = 'picBtn btn btn-success' " + dataproj + "value='" + row.Picture_link + "' onclick='checkImg(this.value)'> צפה בתמונה </button>";
-
-
+                                    let def = JSON.stringify(row);
+                                    editBtn = "<button type='button' class = 'picBtn btn btn-success' value='" + def + "' onclick='checkImg(this.value)'> צפה בתמונה </button>";
                                     return editBtn;
                                 }
                                 else {
-                                    let dataproj = "Defect_num='" + row.Defect_num + "'";
-
-                                    editBtn = "<button type='button' class = 'picBtn btn btn-success' " + dataproj + " value='" + row.Picture_link + "' disabled> תמונה חסרה </button>";
-
-
+                                    let def = JSON.stringify(row);
+                                    editBtn = "<button type='button' class = 'picBtn btn btn-success' value='" + def + "' disabled> תמונה חסרה </button>";
                                     return editBtn;
                                 }
       
@@ -308,7 +303,7 @@
             }
             
             console.log(update_defect)
-            api = "../api/defect_in_report";
+            let api = "../api/defect_in_report";
             ajaxCall("PUT", api, JSON.stringify(update_defect), postDefectsInReport, getError)
         }
         function getDefectsAndTypeS() {
@@ -328,9 +323,9 @@
         }
         function newDefect() {
             $("#btn_update_defect").hide();
+            $("#btn_add_defect").show();
             $("#selectType").prop('disabled', false);
             $("#selectdefect").prop('disabled', false);
-            alert("in")
             str = "<option>סוגי ליקויים</option>"
             for (var i = 0; i < defects_types.length; i++) {
                 str += "<option value='" + defects_types[i].Defect_type_num + "'>" + defects_types[i].Type_name + "</option>"
@@ -689,17 +684,26 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-sm-6">
-                            <label for="fixDate"><span class="red-star">★</span>תאריך תיקון:</label>
-                            <br />
-                            <input type="date" id="fixDate" class="form-control" required>
+                            <div class="form-group col-sm-4">
+                                <label for="fixDate"><span class="red-star">★</span>תאריך תיקון:</label>
+                                <br />
+                                <input type="date" id="fixDate" class="form-control" required>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label for="fixTime"><span class="red-star">★</span>עד שעה:</label>
+                                <br />
+                                <input type="time" id="fixTime" class="form-control" required>
+                            </div>
+
+                            <div class="form-group col-sm-4">
+                                <label for="status">סטאטוס</label>
+                                <select class="form-control" id="fixStatus">
+                                    <option value="">בחר סטאטוס</option>
+                                    <option value="1"> פתוח </option>
+                                    <option value="0"> סגור </option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="form-group col-sm-6">
-                            <label for="fixTime"><span class="red-star">★</span>עד שעה:</label>
-                            <br />
-                            <input type="time" id="fixTime" class="form-control" required>
-                        </div>
-</div>
                         <div class="row">
                             <div class="form-group col-sm-10">
                                 <label for="description">תיאור:</label>

@@ -38,12 +38,11 @@ namespace final_proj_gulkosafety.Controllers
 
         }
 
-
-        // PUT api/<controller>/5
-        //public void Put([FromBody] defect_in_report defectInReport)
-        //{
-        //    defectInReport.
-        //}
+        //update defect in report without 
+        public void Put([FromBody] defect_in_report defectInReport)
+        {
+            defectInReport.UpdateDefectInReport();
+        }
 
     }
 }

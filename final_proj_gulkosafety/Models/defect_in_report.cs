@@ -56,10 +56,10 @@ namespace final_proj_gulkosafety.Models
             dbs.DeleteDefectInReport(report_num, defect_num);
 
         }
-        public void UpdateDefectInReport(int defect_num, DateTime fix_date, DateTime fix_time, string pic_link, int fix_status, string desc)
+        public void UpdateDefectInReport()
         {
             DBServices dbs = new DBServices();
-            dbs.UpdateDefectInReport(defect_num, fix_date, fix_time, pic_link, fix_status, desc);
+            dbs.UpdateDefectInReport(this);
 
         }
         public void InsertDefectInReport()
