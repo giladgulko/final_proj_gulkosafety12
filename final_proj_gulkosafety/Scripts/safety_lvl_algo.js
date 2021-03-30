@@ -1,4 +1,16 @@
-﻿
+﻿function alertConstractor(arr, content, alert_type_num, user_email,proj_num) {
+    new_alert = {
+       
+        Content: content,
+        Date: Date.now(),
+        Alert_type_num: alert_type_num,
+        User_email: user_email,
+        Status: 0,
+        Proj_num: proj_num
+    }
+    arr.push(new_alert)
+}
+
 
 function safetyLVL(curentReport, lastREPORTdefects, gradesARR, projTypeWEIGHT) {
     const maxGradeForDefectType = 25
@@ -8,7 +20,9 @@ function safetyLVL(curentReport, lastREPORTdefects, gradesARR, projTypeWEIGHT) {
     const   maxdefects=10
     total_grade = 0
     numOf9OR10Grade = 0
-    pointTOreduce=0
+    pointTOreduce = 0
+
+    alert_arr = [];
     for (var i = 0; i < projTypeWEIGHT.length; i++) {
         let sum = 0
         
