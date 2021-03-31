@@ -59,7 +59,7 @@
         //get a list of all contacts for contact section list
         function getContactList() {
             let api = "../api/user";
-            ajaxCall("GET", api, "", getContactListSuccess, getError);
+            ajaxCall("GET", api, "", getContactListSuccess, getContactListError);
         }
 
         //render contacts into lists
@@ -67,6 +67,9 @@
             contactList = data;
             localStorage["contactList"] = JSON.stringify(contactList);
             renderContacts();
+        }
+        function getContactListError() {
+            swal("Failed!", "You failed to read the contacts!", "warning")
         }
 
         function renderContacts() {
@@ -81,7 +84,7 @@
 
         function getProjectTypes() {
             let api = "../api/project_type";
-            ajaxCall("GET", api, "", getProjTypesSuccess, getError);
+            ajaxCall("GET", api, "", getProjTypesSuccess, getProjTypesError);
         }
 
         function getProjTypesSuccess(data) {
@@ -91,6 +94,9 @@
                 projectTypeSelect.innerHTML += "<option value=" + projectTypes[i].Project_type_num + ">" + projectTypes[i].Project_type_name + "</option>";
             }
             localStorage["projectTypes"] = JSON.stringify(projectTypes);
+        }
+        function getProjTypesError() {
+            swal("Failed!", "You failed to read project types!", "warning")
         }
 
         function newProjForm() {
@@ -117,12 +123,18 @@
                 Manager_email: $('#manager').val(),
                 Foreman_email: $('#foreman').val()
             }
-            ajaxCall("POST", "../api/project", JSON.stringify(newProj), createNewProjSuccess, getError);
+            ajaxCall("POST", "../api/project", JSON.stringify(newProj), createNewProjSuccess, createNewProjError);
         }
 
         function createNewProjSuccess(data) {
-            alert("הפרויקט נשמר בהצלחה");
-            location.reload();
+            swal({ title: "Good job!", text: "You created new project successfully!", type: "success",icon:"success" 
+            }).then(function () {
+                location.reload();
+
+            });
+        }
+        function createNewProjError() {
+            swal("Failed!", "You failed to create a new project!", "warning")
         }
 
         function buttonEvents() {
@@ -162,11 +174,19 @@
 
                 Project_num: proj
             }
-            ajaxCall("DELETE", "../api/project", JSON.stringify(projToDelete), deletePROJ, getError)
+            ajaxCall("DELETE", "../api/project", JSON.stringify(projToDelete), deleteProjectSuccess, deleteProjectError)
         }
-        function deletePROJ() {
-            location.reload();
-
+        function deleteProjectSuccess() {
+            swal({
+                title: "Good job", text: "The project was successfully deleted!", type:
+                    "success",icon:"success"
+            }).then(function () {
+                location.reload();
+            }
+            );
+        }
+        function deleteProjectError() {
+            swal("Failed!", "You failed to delete the project!", "warning");
         }
         function getProjData() {
 
@@ -174,7 +194,7 @@
         }
 
         function getError() {
-            alert("err")
+            swal("Failed!", "You failed to read the project!", "warning")
         }
         function createDt(projdata) {
             for (var i = 0; i < projdata.length; i++) {
@@ -323,7 +343,7 @@
                 <div class="w3-container" dir="rtl">
                     <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                     <form id="newProjForm">
-                        </br>
+                        <br />
                         <h2>פרויקט חדש</h2>
                         <table class="display" style="width:100%" dir="rtl">
                             <thead>
@@ -411,7 +431,7 @@
                                         </div>
                                     </th>
                                 </tr>
-                                </br>
+                                <br />
                                 <tr>
                                     <th>
                                         <input type="submit" class="btn btn-primary" value="שמור" />

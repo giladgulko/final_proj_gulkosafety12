@@ -13,9 +13,16 @@ namespace final_proj_gulkosafety.Controllers
         // GET all project types api/<controller>
         public List<project_type> Get()
         {
-            project_type pt = new project_type();
-            List<project_type> ptList = pt.Read();
-            return ptList;
+            try
+            {
+                project_type pt = new project_type();
+                List<project_type> ptList = pt.Read();
+                return ptList;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
         }
 
         // GET api/<controller>/5
@@ -25,9 +32,21 @@ namespace final_proj_gulkosafety.Controllers
         }
 
         // POST new project type api/<controller>
-        public void Post([FromBody] project_type pt)
+        public HttpResponseMessage Post([FromBody] project_type pt)
         {
-            pt.Insert();
+            try
+            {
+                {
+                    pt.Insert();
+
+                }
+
+                return Request.CreateResponse(HttpStatusCode.Created, pt);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
+            }
         }
 
         // PUT api/<controller>/5

@@ -12,25 +12,50 @@ namespace final_proj_gulkosafety.Controllers
     {
         public List<project> Get()
         {
-            project p = new project();
-            List<project> pList = p.Read();
-            return pList;
+            try
+            {
+                project p = new project();
+                List<project> pList = p.Read();
+                return pList;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
         }
 
-        public string Get(int id)
+        public HttpResponseMessage Post([FromBody] project p)
         {
-            return "value";
+            try
+            {
+                {
+                    p.Insert();
+
+                }
+
+                return Request.CreateResponse(HttpStatusCode.Created, p);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
+            }
         }
 
-        public void Post([FromBody] project p)
+        public HttpResponseMessage PutProjectDetails([FromBody] project p)
         {
-            p.Insert();
-        }
+            try
+            {
+                {
+                    p.UpdateProjectDetails();
 
-        //PUT api/<controller>/5
-        public void PutProjectDetails([FromBody] project p)
-        {
-            p.UpdateProjectDetails();
+                }
+
+                return Request.CreateResponse(HttpStatusCode.Created, p);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
+            }
         }
 
         //public void PutProjectStatus([FromBody] project p)
@@ -38,15 +63,37 @@ namespace final_proj_gulkosafety.Controllers
         //    p.UpdateProjectStatus(p.Project_num, p.Status);
         //}
 
-        public void PutProjectUsers(int project_num, [FromBody] project p)
+        public HttpResponseMessage PutProjectUsers(int project_num, [FromBody] project p)
         {
-            p.UpdateProjectUser();
+            try
+            {
+                {
+                    p.UpdateProjectUser();
+                }
+
+                return Request.CreateResponse(HttpStatusCode.Created, p);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
+            }
         }
 
-        // DELETE api/<controller>/5
-        public void DeleteProject([FromBody] project p)
+        public HttpResponseMessage DeleteProject([FromBody] project p)
         {
-            p.DeleteProject(p.Project_num);
+
+            try
+            {
+                {
+                    p.DeleteProject(p.Project_num);
+                }
+
+                return Request.CreateResponse(HttpStatusCode.Created, p);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
+            }
         }
 
     }
