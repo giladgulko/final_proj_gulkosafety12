@@ -1225,7 +1225,7 @@ namespace final_proj_gulkosafety.Models.DAL
             {
                 con = connect("DBConnectionString"); 
 
-                String selectSTR = "SELECT * FROM alert WHERE user_email='" + user_email + "'and status=0";
+                String selectSTR = "SELECT * FROM alert WHERE user_email='" + user_email + "'and status=0 order by [date] desc";
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
                 // get a reader
@@ -1270,7 +1270,7 @@ namespace final_proj_gulkosafety.Models.DAL
             {
                 con = connect("DBConnectionString");
 
-                String selectSTR = "SELECT * FROM alert WHERE proj_num='" + proj_num + "'and status=0";
+                String selectSTR = "SELECT * FROM alert WHERE proj_num='" + proj_num + "'and status=0 order by [date] desc";
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
                 // get a reader
