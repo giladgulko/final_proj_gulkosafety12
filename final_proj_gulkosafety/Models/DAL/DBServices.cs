@@ -1215,7 +1215,7 @@ namespace final_proj_gulkosafety.Models.DAL
 
         }
 
-        //read alerts
+        //read alerts user email
         public List<alert> ReadAlerts(string user_email)
         {
             SqlConnection con = null;
@@ -1225,13 +1225,58 @@ namespace final_proj_gulkosafety.Models.DAL
             {
                 con = connect("DBConnectionString"); 
 
-                String selectSTR = "SELECT * FROM alert WHERE user_email='" + user_email + "'and status=0";
+                String selectSTR = "SELECT * FROM alert WHERE user_email='" + user_email + "'and status=0 order by [date] desc";
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
                 // get a reader
                 SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
                 while (dr.Read())
                 {  
+
+                    alert _alert = new alert();
+                    _alert.Alert_num = Convert.ToInt32(dr["alert_num"]);
+                    _alert.Content = (string)dr["content"];
+                    _alert.Date = Convert.ToDateTime(dr["date"]);
+                    _alert.Alert_type_num = Convert.ToInt32(dr["alert_type_num"]);
+                    _alert.User_email = (string)dr["user_email"];
+                    _alert.Status = Convert.ToInt32(dr["status"]);
+                    _alert.Proj_num = Convert.ToInt32(dr["proj_num"]);
+                    alertsList.Add(_alert);
+                }
+
+                return alertsList;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+        //read alerts by project number
+        public List<alert> ReadAlerts(int proj_num)
+        {
+            SqlConnection con = null;
+            List<alert> alertsList = new List<alert>();
+
+            try
+            {
+                con = connect("DBConnectionString");
+
+                String selectSTR = "SELECT * FROM alert WHERE proj_num='" + proj_num + "'and status=0 order by [date] desc";
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                while (dr.Read())
+                {
 
                     alert _alert = new alert();
                     _alert.Alert_num = Convert.ToInt32(dr["alert_num"]);
@@ -1296,8 +1341,55 @@ namespace final_proj_gulkosafety.Models.DAL
                 {
                     con.Close();
                 }
+
+            }
+        }
+        //update alert
+        public int UpdateAlert(alert a)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception)
+            {
+                throw new Exception("The connection to sever is not good");
             }
 
+            String cStr = BuildUpdateAlertCommand(a);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception)
+            {
+                throw new Exception("The update of status alert failed");
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+
+        private String BuildUpdateAlertCommand(alert a)
+        {
+            String command;
+            command = "UPDATE alert SET alert_num=" + a.Alert_num + ", content='" + a.Content + "', alert_type_num=" + a.Alert_type_num + ", date='" + a.Date.ToString("yyyy-MM-dd") + "', User_email='" + a.User_email + "', status=" + a.Status + ", proj_num=" + a.Proj_num;
+
+            return command;
         }
         private String BuildUpdateReportCommand(int report_num, double grade)
         {

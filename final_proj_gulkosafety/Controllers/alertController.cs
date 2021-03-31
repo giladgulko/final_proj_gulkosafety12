@@ -10,17 +10,17 @@ namespace final_proj_gulkosafety.Controllers
 {
     public class alertController : ApiController
     {
-        // GET api/<controller>
         public List<alert> Get(string user_email)
         {
             alert a = new alert();
             List<alert> aList = a.Read(user_email);
             return aList;
         }
-        // GET api/<controller>/5
-        public string Get(int id)
+        public List<alert> Get(int proj_num)
         {
-            return "value";
+            alert a = new alert();
+            List<alert> alertList = a.Read(proj_num);
+            return alertList;
         }
 
         // POST api/<controller>
@@ -29,8 +29,9 @@ namespace final_proj_gulkosafety.Controllers
         }
 
         // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
+        public void Put([FromBody] alert a)
         {
+            a.UpdateAlert();
         }
 
         // DELETE api/<controller>/5
