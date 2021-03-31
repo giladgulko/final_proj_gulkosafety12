@@ -38,17 +38,19 @@
         userType = 1;
 
         $(document).ready(function () {
+            //build view page
             if (userType != 1)
                 viewOnlyPageBtn();
+
             bringDataFromLocal();
             getDefectsAndTypeS();
+
+            //forms submit event
             $("#reportDetailsForm").submit(saveNewReport);
             $("#defectForm").submit(addDefectToReport);
 
             //get all weight by project type.
             getProjTypeWeights();
-
-
         });
 
 
@@ -172,9 +174,10 @@
 
         function renderProjectDetails() {
             $('#company').val(project.Company);
-            $('#location').val(project.Address)
+            $('#location').val(project.Address);
+            //let projUsers = JSON.parse(localStorage["projContacts"]);
             $('#forman').val(project.Foreman_email);
-            $('#projManeger').val(project.Manager_email)
+            $('#projManeger').val(project.Manager_email);
         }
 
         function editDefectImg(defectNum) {
@@ -220,11 +223,6 @@
 
 
         function createDt(defectsdata, tableID) {
-            //not ok need another array
-            //if (tableID == '#defectTable') {
-            //    currentReportDefects = defectsdata
-            //}
-
 
             for (i = 0; i < defectsdata.length; i++) {
                 defectsdata[i].Fix_date = defectsdata[i].Fix_date.split("T")[0];
@@ -237,8 +235,8 @@
                     pageLength: 8,
                     columns: [
                         { data: "Defect_num" },
-                        { data: "Defect_name" },
                         { data: "Defect_type_name" },
+                        { data: "Defect_name" },
                         { data: "Description" },
                         { data: "Fix_date" },
                         { data: "Fix_time" },
@@ -290,8 +288,9 @@
 
         function editDefectBTN(def) {
             defectToEdit = JSON.parse(def);
-
             document.getElementById('id01').style.display = 'block';
+            $("#selectType").empty();
+            $("#selectdefect").empty();
             $("#selectType").append("<option value='" + defectToEdit.Defect_num + "' > " + defectToEdit.Defect_type_name + "</option > ");
             $("#selectdefect").append("<option value='" + defectToEdit.Defect_num + "' > " + defectToEdit.Defect_name + "</option>");
             $("#selectType").prop('disabled', true);
@@ -338,13 +337,15 @@
         function newDefect() {
             $("#btn_update_defect").hide();
             $("#btn_add_defect").show();
+            $("#selectType").empty();
+            $("#selectdefect").empty();
             $("#selectType").prop('disabled', false);
             $("#selectdefect").prop('disabled', false);
             str = "<option>סוגי ליקויים</option>"
             for (var i = 0; i < defects_types.length; i++) {
                 str += "<option value='" + defects_types[i].Defect_type_num + "'>" + defects_types[i].Type_name + "</option>"
             }
-            $("#selectType").html(str)
+            $("#selectType").html(str);
         }
         function createDefectList(value) {
             str = "<option>ליקויים</option>"
@@ -354,7 +355,7 @@
                 }
 
             }
-            $("#selectdefect").html(str)
+            $("#selectdefect").html(str);
         }
         function addDefectToReport() {
 
