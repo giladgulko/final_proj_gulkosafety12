@@ -822,7 +822,7 @@ namespace final_proj_gulkosafety.Models.DAL
         private String BuildupdateCommand(defect_in_report defectInReport)
         {
             String command;
-            command = "UPDATE defect_in_report SET fix_date='" + defectInReport.Fix_date.ToString("yyyy-MM-dd") + "', fix_time='" + defectInReport.Fix_time.ToString("HH:ss") + "', picture_link='" + defectInReport.Picture_link + "', fix_status=" + defectInReport.Fix_status + ", description='" + defectInReport.Description + "' WHERE defect_num =" + defectInReport.Defect_num+" and report_num="+ defectInReport.Report_num;
+            command = "UPDATE defect_in_report SET fix_date='" + defectInReport.Fix_date.ToString("yyyy-MM-dd") + "', fix_time='" + defectInReport.Fix_time.ToString("HH:ss") + "', fix_status=" + defectInReport.Fix_status + ", description='" + defectInReport.Description + "' WHERE defect_num =" + defectInReport.Defect_num+" and report_num="+ defectInReport.Report_num;
 
             return command;
         }
@@ -1305,6 +1305,45 @@ namespace final_proj_gulkosafety.Models.DAL
 
             }
         }
+
+        public int UpdateReportGrade(int report_num, double grade)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception)
+            {
+                throw new Exception("The connection to sever is not good");
+            }
+
+            String cStr = BuildUpdateReportCommand(report_num,grade);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception)
+            {
+                throw new Exception("The update of report failed");
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
         //update alert
         public int UpdateAlert(alert a)
         {
@@ -1349,6 +1388,13 @@ namespace final_proj_gulkosafety.Models.DAL
         {
             String command;
             command = "UPDATE alert SET content='" + a.Content + "', alert_type_num=" + a.Alert_type_num + ", date='" + a.Date.ToString("yyyy-MM-dd") + "', User_email='" + a.User_email + "', status=" + a.Status + ", proj_num=" + a.Proj_num+ "Where Alert_num="+a.Alert_num;
+
+            return command;
+        }
+        private String BuildUpdateReportCommand(int report_num, double grade)
+        {
+            String command;
+            command = "UPDATE report SET grade=" + grade +  " WHERE report_num =" + report_num;
 
             return command;
         }
