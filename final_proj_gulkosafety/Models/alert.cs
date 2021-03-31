@@ -14,7 +14,7 @@ namespace final_proj_gulkosafety.Models
         int alert_type_num;
         string user_email;
         int status;
-        int proj_num
+        int proj_num;
 
         public alert(int alert_num, string content,DateTime date,int alert_type_num, string user_email,int status,int proj_num)
         {

@@ -805,7 +805,7 @@ namespace final_proj_gulkosafety.Models.DAL
                 int numEffected = cmd.ExecuteNonQuery();
                 return numEffected;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exception("The update of defect in report failed");
             }
@@ -852,7 +852,7 @@ namespace final_proj_gulkosafety.Models.DAL
                 int numEffected = cmd.ExecuteNonQuery();
                 return numEffected;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exception("The update of report failed");
             }
@@ -905,7 +905,7 @@ namespace final_proj_gulkosafety.Models.DAL
                 }
                 return defectTypeList;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exception("Can not read defect type");
             }

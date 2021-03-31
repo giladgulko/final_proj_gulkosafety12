@@ -64,7 +64,20 @@
             renderProjectDetails();
             renderProjContacts();
             renderProjTypes();
+            getAlerts();
         });
+
+        function getAlerts() {
+            let proj_num = project.Project_num;
+            let api = "../api/alerts?proj_num=" + proj_num;
+            ajaxCall("GET", api, "", getAlertsSuccess, getError);
+        }
+        function getAlertsSuccess(data) {
+            alertList = data;
+            for (i = 0; i < alertList.length; i++) {
+                document.getElementById('alerts').innerHTML += "<div class='alert alert-Safety-level'><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong> <i class='fas fa-tachometer-alt' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
+            }
+        }
 
         function saveContactForm() {
             updateProjContacts();
@@ -577,6 +590,9 @@
                         <div class="row">
                             <div class="col">
                                 <h3>התראות</h3>
+                            </div>
+                            <div id="alerts">
+
                             </div>
                         </div>
                     </div>
