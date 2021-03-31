@@ -1321,7 +1321,7 @@ namespace final_proj_gulkosafety.Models.DAL
                 throw new Exception("The connection to sever is not good");
             }
 
-            String cStr = BuildUpdateReportCommand(a);
+            String cStr = BuildUpdateAlertCommand(a);
 
             cmd = CreateCommand(cStr, con);
 
@@ -1345,10 +1345,10 @@ namespace final_proj_gulkosafety.Models.DAL
 
         }
 
-        private String BuildupdateCommand(alert a)
+        private String BuildUpdateAlertCommand(alert a)
         {
             String command;
-            command = "UPDATE alert SET alert_num='" + a.Alert_num + "', content='" + a.Content + "', alert_type_num='" + a.Alert_type_num + "', date='" + a.Date.ToString("yyyy-MM-dd") + "', User_email='" + a.User_email + "', status=" + a.Status + ", proj_num='" + a.Proj_num;
+            command = "UPDATE alert SET alert_num=" + a.Alert_num + ", content='" + a.Content + "', alert_type_num=" + a.Alert_type_num + ", date='" + a.Date.ToString("yyyy-MM-dd") + "', User_email='" + a.User_email + "', status=" + a.Status + ", proj_num=" + a.Proj_num;
 
             return command;
         }
