@@ -44,11 +44,11 @@ namespace final_proj_gulkosafety.Models
             return alertList;
         }
 
-        //public void UpdateAlert()
-        //{
-        //    DBServices dbs = new DBServices();
-        //    dbs.UpdateAlert(this);
-        //}
-        
+        public void UpdateAlert()
+        {
+            DBServices dbs = new DBServices();
+            dbs.UpdateAlert(this);
+        }
+
     }
 }
