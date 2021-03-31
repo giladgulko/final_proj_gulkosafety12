@@ -34,21 +34,23 @@
         allReports = [];
         defectToEdit = "";
         ptwList = [];
-        tableID = "";
+        //tableID = "";
         userType = 1;
 
         $(document).ready(function () {
+            //build view page
             if (userType != 1)
                 viewOnlyPageBtn();
+
             bringDataFromLocal();
             getDefectsAndTypeS();
+
+            //forms submit event
             $("#reportDetailsForm").submit(saveNewReport);
             $("#defectForm").submit(addDefectToReport);
 
             //get all weight by project type.
             getProjTypeWeights();
-
-
         });
 
 
@@ -128,12 +130,14 @@
             }
             else $("#lastReportdefectsTBL").hide();
         }
+
+
         function getNewReportsuccess(report) {
 
             headLine = "<h1>" + report.Report_num + " דוח ביקור " + "</h1>";
             $('#proj_bar').html(headLine);
-
         }
+
         function getLastRDefectSuccess(defects) {
             lastReportDefects = defects;
             if (lastReportDefects != "") {
@@ -143,20 +147,24 @@
                         notFixeDefects.push(lastReportDefects[i]);
                 }
                 if (notFixeDefects.length > 0) {
-                    tableID = "#lastReportTable";
-                    createDt(notFixeDefects);
+                    let tableID = "#lastReportTable";
+                    createDt(notFixeDefects, tableID);
                 }
-                else $("#allDefectsFixed").append("<h3>כל הליקויים משבוע קודם תוקנו</h3>");
+                else $("#lastReportdefectsTBL").hide();
             }
             else $("#lastReportdefectsTBL").hide();
         }
 
 
-        function getReportDefect(reportNum) {
-            $("#defectsTBL").show();
-            tableID = "#defectTable";
+        function getReportDefect(reportNum) {         
             let api = "../api/defect_in_report?report_num=" + reportNum;
-            ajaxCall("GET", api, "", createDt, getError);
+            ajaxCall("GET", api, "", getReportDefSuccess, getError);
+        }
+
+        function getReportDefSuccess(defects) {
+            $("#defectsTBL").show();
+            let tableID = "#defectTable";
+            createDt(defects, tableID);
             checkLastReportDefects();
         }
 
@@ -166,9 +174,10 @@
 
         function renderProjectDetails() {
             $('#company').val(project.Company);
-            $('#location').val(project.Address)
+            $('#location').val(project.Address);
+            //let projUsers = JSON.parse(localStorage["projContacts"]);
             $('#forman').val(project.Foreman_email);
-            $('#projManeger').val(project.Manager_email)
+            $('#projManeger').val(project.Manager_email);
         }
 
         function editDefectImg(defectNum) {
@@ -197,7 +206,7 @@
             $('#mask').addClass('showing');
             $('html').addClass('hide-scroll');
             var id = '#dialog';
-            var fullImagePath = this1;
+            var fullImagePath = defectToEdit.Picture_link;
             $('.image').attr({
                 'src': fullImagePath
             });
@@ -213,12 +222,7 @@
         }
 
 
-        function createDt(defectsdata) {
-            //not ok need another array
-            if (tableID == '#defectTable') {
-                currentReportDefects = defectsdata
-            }
-
+        function createDt(defectsdata, tableID) {
 
             for (i = 0; i < defectsdata.length; i++) {
                 defectsdata[i].Fix_date = defectsdata[i].Fix_date.split("T")[0];
@@ -231,8 +235,8 @@
                     pageLength: 8,
                     columns: [
                         { data: "Defect_num" },
-                        { data: "Defect_name" },
                         { data: "Defect_type_name" },
+                        { data: "Defect_name" },
                         { data: "Description" },
                         { data: "Fix_date" },
                         { data: "Fix_time" },
@@ -284,8 +288,9 @@
 
         function editDefectBTN(def) {
             defectToEdit = JSON.parse(def);
-
             document.getElementById('id01').style.display = 'block';
+            $("#selectType").empty();
+            $("#selectdefect").empty();
             $("#selectType").append("<option value='" + defectToEdit.Defect_num + "' > " + defectToEdit.Defect_type_name + "</option > ");
             $("#selectdefect").append("<option value='" + defectToEdit.Defect_num + "' > " + defectToEdit.Defect_name + "</option>");
             $("#selectType").prop('disabled', true);
@@ -332,13 +337,15 @@
         function newDefect() {
             $("#btn_update_defect").hide();
             $("#btn_add_defect").show();
+            $("#selectType").empty();
+            $("#selectdefect").empty();
             $("#selectType").prop('disabled', false);
             $("#selectdefect").prop('disabled', false);
             str = "<option>סוגי ליקויים</option>"
             for (var i = 0; i < defects_types.length; i++) {
                 str += "<option value='" + defects_types[i].Defect_type_num + "'>" + defects_types[i].Type_name + "</option>"
             }
-            $("#selectType").html(str)
+            $("#selectType").html(str);
         }
         function createDefectList(value) {
             str = "<option>ליקויים</option>"
@@ -348,7 +355,7 @@
                 }
 
             }
-            $("#selectdefect").html(str)
+            $("#selectdefect").html(str);
         }
         function addDefectToReport() {
 
