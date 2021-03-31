@@ -43,5 +43,12 @@ namespace final_proj_gulkosafety.Models
             List<alert> alertList = dbs.ReadAlerts(user_email);
             return alertList;
         }
+
+        //public void UpdateAlert()
+        //{
+        //    DBServices dbs = new DBServices();
+        //    dbs.UpdateAlert(this);
+        //}
+        
     }
 }

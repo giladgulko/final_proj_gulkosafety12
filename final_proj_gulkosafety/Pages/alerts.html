@@ -9,7 +9,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link href="styles/nav_bar_style.css" rel="stylesheet" />
     <link href="styles/alertsStyles.css" rel="stylesheet" />
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
@@ -36,26 +36,33 @@
         function getAlertsuccess(data) {
             alertList = data;
             renderAlerts();
-        }
+        } 
+        //function ChangeStatus() {
+        //    update_status = {
+        //        Status: 1
+        //    }
+        //    let api = "../api/alert";
+        //    ajaxCall("PUT", api, JSON.stringify(update_status), updateDefectsInReport, getError)
+        //}
 
         function renderAlerts() {
             for (i = 0; i < alertList.length; i++) {
                 if (alertList[i].Alert_type_num == 1) {
-                    document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-Safety-level'><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong> <i class='fas fa-tachometer-alt' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
+                    document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-Safety-level alert-dismissible'> <a href='#'onclick='ChangeStatus' ()class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong> <i class='fas fa-tachometer-alt' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
                 }
                 if (alertList[i].Alert_type_num == 2) {
-                    document.getElementById('Alerts_div').innerHTML += "<div  class='alert alert-certificate'><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong> <i class='far fa-calendar-alt' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
+                    document.getElementById('Alerts_div').innerHTML += "<div  class='alert alert-certificate alert-dismissible'> <a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a> <strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong> <i class='far fa-calendar-alt' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
                 }
                 if (alertList[i].Alert_type_num == 3) {
-                    document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-Defective-repair'><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong> <i class='far fa-check-circle' style='font-size:24px'></i >&nbsp&nbsp" + alertList[i].Content + "</div> ";
+                    document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-Defective-repair alert-dismissible'> <a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong> <i class='far fa-check-circle' style='font-size:24px'></i >&nbsp&nbsp" + alertList[i].Content + "</div> ";
 
                 }
                 if (alertList[i].Alert_type_num == 4) {
-                    document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-instruction'><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong> <i class='fas fa-chalkboard-teacher' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
+                    document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-instruction alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong> <i class='fas fa-chalkboard-teacher' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
 
                 }
                 if (alertList[i].Alert_type_num == 5) {
-                    document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-defect'><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong> <i class='fas fa-exclamation-triangle' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
+                    document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-defect alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong> <i class='fas fa-exclamation-triangle' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
 
                 }
             }
@@ -94,7 +101,7 @@
             var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
             var yyyy = today.getFullYear();
 
-            today = yyyy + '-' + mm+ '-' + dd;
+            today = yyyy + '-' + mm + '-' + dd;
             var imgStr = "";
 
             if (Array.isArray(data)) {
@@ -160,7 +167,7 @@
 
     <div id="alert_bar" dir="rtl">
         <div id="headline">
-            <h1 class="alert">התראות</h1>
+            <h1 class="alerts">התראות</h1>
         </div>
     </div>
 
