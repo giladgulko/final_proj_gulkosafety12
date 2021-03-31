@@ -37,13 +37,19 @@
             alertList = data;
             renderAlerts();
         } 
-        //function ChangeStatus() {
-        //    update_status = {
-        //        Status: 1
-        //    }
-        //    let api = "../api/alert";
-        //    ajaxCall("PUT", api, JSON.stringify(update_status), updateDefectsInReport, getError)
-        //}
+        function ChangeStatus() {
+            update_status = {
+                Status: 1
+            }
+            let api = "../api/alert";
+            ajaxCall("PUT", api, JSON.stringify(update_status), UpdateAlertStatus, getError)
+        }
+        function getError(err) {
+            console.table(err)
+        }
+        function UpdateAlertStatus() {
+            console.table(success)
+        }
 
         function renderAlerts() {
             for (i = 0; i < alertList.length; i++) {

@@ -29,10 +29,10 @@ namespace final_proj_gulkosafety.Controllers
         }
 
         // PUT api/<controller>/5
-        //public void Put( [FromBody] alert a)
-        //{
-        //    a.UpdateAlert();
-        //}
+        public void Put([FromBody] alert a)
+        {
+            a.UpdateAlert();
+        }
 
         // DELETE api/<controller>/5
         public void Delete(int id)
