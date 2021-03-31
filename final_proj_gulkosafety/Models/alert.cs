@@ -14,8 +14,9 @@ namespace final_proj_gulkosafety.Models
         int alert_type_num;
         string user_email;
         int status;
+        int proj_num
 
-        public alert(int alert_num, string content,DateTime date,int alert_type_num, string user_email,int status)
+        public alert(int alert_num, string content,DateTime date,int alert_type_num, string user_email,int status,int proj_num)
         {
             Alert_num = alert_num;
             Content = content;
@@ -23,6 +24,7 @@ namespace final_proj_gulkosafety.Models
             Alert_type_num = alert_type_num;
             User_email = user_email;
             Status = status;
+            Proj_num = proj_num;
         }
 
         public alert() { }
@@ -33,6 +35,7 @@ namespace final_proj_gulkosafety.Models
         public int Alert_type_num { get => alert_type_num; set => alert_type_num = value; }
         public string User_email { get => user_email; set => user_email = value; }
         public int Status { get => status; set => status = value; }
+        public int Proj_num { get => proj_num; set => proj_num = value; }
 
         public List<alert> Read(string user_email)
         {

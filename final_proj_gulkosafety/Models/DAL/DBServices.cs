@@ -1076,6 +1076,7 @@ namespace final_proj_gulkosafety.Models.DAL
         {
 
         }
+        //get last report
         public report ReadLastReport(int proj_num)
         {
             SqlConnection con = null;
@@ -1120,6 +1121,7 @@ namespace final_proj_gulkosafety.Models.DAL
             }
         }
 
+        //get all project type weights
         public List<proj_type_weight> ReadProj_type_weight(int proj_type)
         {
             SqlConnection con = null;
@@ -1162,7 +1164,7 @@ namespace final_proj_gulkosafety.Models.DAL
             }
 
         }
-
+        //get all last report defects
         public List<defect_in_report> readLastReportDefects(int proj_num, DateTime date)
         {
             SqlConnection con = null;
@@ -1221,16 +1223,15 @@ namespace final_proj_gulkosafety.Models.DAL
 
             try
             {
-                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+                con = connect("DBConnectionString"); 
 
                 String selectSTR = "SELECT * FROM alert WHERE user_email='" + user_email + "'and status=0";
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
                 // get a reader
-                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
-
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
                 while (dr.Read())
-                {   // Read till the end of the data into a row
+                {  
 
                     alert _alert = new alert();
                     _alert.Alert_num = Convert.ToInt32(dr["alert_num"]);
@@ -1239,6 +1240,7 @@ namespace final_proj_gulkosafety.Models.DAL
                     _alert.Alert_type_num = Convert.ToInt32(dr["alert_type_num"]);
                     _alert.User_email = (string)dr["user_email"];
                     _alert.Status = Convert.ToInt32(dr["status"]);
+                    _alert.Proj_num = Convert.ToInt32(dr["proj_num"]);
                     alertsList.Add(_alert);
                 }
 
