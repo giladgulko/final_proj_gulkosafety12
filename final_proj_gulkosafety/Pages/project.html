@@ -37,13 +37,8 @@
     <link href="styles/nav_bar_style.css" rel="stylesheet" />
     <link href="styles/projectStyleSheet.css" rel="stylesheet" />
     <style>
-        
-        .alertDiv{
-            font-size:16px;
-        }
-        #alerts {
-            overflow: scroll;
-        }
+
+
     </style>
     <script>
 
@@ -396,15 +391,6 @@
         //    Plotly.newPlot('chartContainer', data);
         //}
 
-        //function buildGradesGraph(gradesArr, reportNumArr) {
-        //    TESTER = document.getElementById('chartContainer');
-        //    Plotly.newPlot(TESTER, [{
-        //        x: reportNumArr,
-        //        y: gradesArr
-        //    }], {
-        //            margin: { t: 0 }
-        //        });
-        //}
     </script>
 </head>
 <body>
@@ -607,35 +593,34 @@
                 </div>
             </div>
         </div>
-        <div>
+                 <div id="reports" class="card">
+                     <div id="section1">
+                         <div id="report_header">
+                             <h3>דוחות ביקור</h3>
+                         </div>
+                         <div id="report_BTN">
+                             <button class='btn btn-primary' id="newBTN">דוח ביקור חדש</button>
+                         </div>
+                     </div>
+                     <form id="pForm">
+                         <table id="reportsTable" class="display" style="width:100%" dir="rtl">
+                             <thead>
+                                 <tr>
+                                     <th>מספר דוח</th>
+                                     <th>תאריך</th>
+                                     <th>שעה</th>
+                                     <th>כתובת</th>
+                                     <th>ציון דוח</th>
+                                     <th></th>
+                                 </tr>
+                             </thead>
+                         </table>
+                     </form>
+                 </div>
 
-             <div class="card">
-                <div class="card-body section2">
-                   <div>
-                       <div>
-                          <h3>דוחות ביקור</h3>
-                       </div>
-                       <div>
-                          <button class='btn btn-primary' id="newBTN">דוח ביקור חדש</button>
-                       </div>
-                   </div>
-                   <table id="reportsTable" class="display" style="width:100%" dir="rtl">
-                      <thead>
-                          <tr>
-                              <th>מס' דוח</th>
-                              <th>תאריך</th>
-                              <th>שעה</th>
-                              <th>ציון דוח</th>
-                              <th></th>
-                          </tr>
-                      </thead>
-                   </table>
-                </div>
 
-             </div>
-        </div>
-        <!--<div class="col-md-4 mb-3">-->
-        <!--<div class="card">
+        <!--<div class="col-md-4 mb-3">
+        <div class="card">
             <div class="card-body section2">
                 <div class="row">
                     <div class="col">
@@ -645,7 +630,8 @@
                 <div id="chartContainer">
                 </div>
             </div>
-        </div>-->
-    </div>
+        </div>
+            </div>
+    </div>-->
 </body>
 </html>
