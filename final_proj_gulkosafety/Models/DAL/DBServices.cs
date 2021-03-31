@@ -1305,5 +1305,52 @@ namespace final_proj_gulkosafety.Models.DAL
 
             }
         }
+        //update alert
+        public int UpdateAlert(alert a)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception)
+            {
+                throw new Exception("The connection to sever is not good");
+            }
+
+            String cStr = BuildUpdateReportCommand(a);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception)
+            {
+                throw new Exception("The update of status alert failed");
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+
+        private String BuildupdateCommand(alert a)
+        {
+            String command;
+            command = "UPDATE alert SET alert_num='" + a.Alert_num + "', content='" + a.Content + "', alert_type_num='" + a.Alert_type_num + "', date='" + a.Date.ToString("yyyy-MM-dd") + "', User_email='" + a.User_email + "', status=" + a.Status + ", proj_num='" + a.Proj_num;
+
+            return command;
+        }
     }
 }
