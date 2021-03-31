@@ -203,9 +203,9 @@ namespace final_proj_gulkosafety.Models.DAL
             {
                 con = connect("DBConnectionString");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception("The connection to sever is not good");
+                throw (ex);
             }
 
             String cStr = BuildupdateContactsCommand(p);
@@ -217,9 +217,9 @@ namespace final_proj_gulkosafety.Models.DAL
                 int numEffected = cmd.ExecuteNonQuery();
                 return numEffected;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception("The update project user failed");
+                throw (ex);
             }
 
             finally
@@ -253,9 +253,9 @@ namespace final_proj_gulkosafety.Models.DAL
             {
                 con = connect("DBConnectionString");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception("The connection to sever is not good");
+                throw (ex);
             }
 
             String cStr = BuildupdateCommand(p);
@@ -267,10 +267,11 @@ namespace final_proj_gulkosafety.Models.DAL
                 int numEffected = cmd.ExecuteNonQuery();
                 return numEffected;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception("The update of project details failed");
+                throw (ex);
             }
+
 
             finally
             {
@@ -300,10 +301,11 @@ namespace final_proj_gulkosafety.Models.DAL
             {
                 con = connect("DBConnectionString");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception("The connection to sever is not good");
+                throw (ex);
             }
+
 
             String cStr = BuildupdateCommand(proj_num, status);
 
@@ -314,10 +316,11 @@ namespace final_proj_gulkosafety.Models.DAL
                 int numEffected = cmd.ExecuteNonQuery();
                 return numEffected;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception("The update of project status failed");
+                throw (ex);
             }
+
 
             finally
             {
@@ -380,11 +383,11 @@ namespace final_proj_gulkosafety.Models.DAL
 
                 return projectList;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // write to log
-                throw new Exception("Can not read projects");
+                throw (ex);
             }
+
             finally
             {
                 if (con != null)
@@ -427,11 +430,11 @@ namespace final_proj_gulkosafety.Models.DAL
 
                 return userList;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // write to log
-                throw new Exception("Can not read user");
+                throw (ex);
             }
+
             finally
             {
                 if (con != null)
@@ -475,9 +478,9 @@ namespace final_proj_gulkosafety.Models.DAL
             }
             catch (Exception ex)
             {
-                // write to log
                 throw (ex);
             }
+
             finally
             {
                 if (con != null)
@@ -498,10 +501,11 @@ namespace final_proj_gulkosafety.Models.DAL
             {
                 con = connect("DBConnectionString");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception("The connection to sever is not good");
+                throw (ex);
             }
+
 
             String cStr = BuildDeleteCommand(proj_num);
 
@@ -512,10 +516,11 @@ namespace final_proj_gulkosafety.Models.DAL
                 int numEffected = cmd.ExecuteNonQuery();
                 return numEffected;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception("The project was not deleted");
+                throw (ex);
             }
+
 
             finally
             {
@@ -544,10 +549,11 @@ namespace final_proj_gulkosafety.Models.DAL
             {
                 con = connect("DBConnectionString");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception("The connection to sever is not good");
+                throw (ex);
             }
+
 
             String cStr = BuildDeleteReportCommand(report_num);
 
@@ -558,10 +564,11 @@ namespace final_proj_gulkosafety.Models.DAL
                 int numEffected = cmd.ExecuteNonQuery();
                 return numEffected;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception("The report was not deleted");
+                throw (ex);
             }
+
 
             finally
             {
@@ -720,9 +727,9 @@ namespace final_proj_gulkosafety.Models.DAL
             }
             catch (Exception ex)
             {
-                // write to log
                 throw (ex);
             }
+
             finally
             {
                 if (con != null)
@@ -744,10 +751,11 @@ namespace final_proj_gulkosafety.Models.DAL
             {
                 con = connect("DBConnectionString");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception("The connection to sever is not good");
+                throw (ex);
             }
+
 
             String cStr = BuildDeleteCommand(report_num, defect_num);
 
@@ -758,10 +766,11 @@ namespace final_proj_gulkosafety.Models.DAL
                 int numEffected = cmd.ExecuteNonQuery();
                 return numEffected;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception("The defect was not deleted");
+                throw (ex);
             }
+
 
             finally
             {
@@ -791,10 +800,11 @@ namespace final_proj_gulkosafety.Models.DAL
             {
                 con = connect("DBConnectionString");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception("The connection to sever is not good");
+                throw (ex);
             }
+
 
             String cStr = BuildupdateCommand(defectInReport);
 
@@ -805,10 +815,11 @@ namespace final_proj_gulkosafety.Models.DAL
                 int numEffected = cmd.ExecuteNonQuery();
                 return numEffected;
             }
-            catch (Exception )
+            catch (Exception ex)
             {
-                throw new Exception("The update of defect in report failed");
+                throw (ex);
             }
+
 
             finally
             {
@@ -838,9 +849,9 @@ namespace final_proj_gulkosafety.Models.DAL
             {
                 con = connect("DBConnectionString");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception("The connection to sever is not good");
+                throw (ex);
             }
 
             String cStr = BuildUpdateReportCommand(r);
@@ -852,10 +863,11 @@ namespace final_proj_gulkosafety.Models.DAL
                 int numEffected = cmd.ExecuteNonQuery();
                 return numEffected;
             }
-            catch (Exception )
+            catch (Exception ex)
             {
-                throw new Exception("The update of report failed");
+                throw (ex);
             }
+
 
             finally
             {
@@ -905,9 +917,9 @@ namespace final_proj_gulkosafety.Models.DAL
                 }
                 return defectTypeList;
             }
-            catch (Exception )
+            catch (Exception ex)
             {
-                throw new Exception("Can not read defect type");
+                throw (ex);
             }
             finally
             {
@@ -948,7 +960,6 @@ namespace final_proj_gulkosafety.Models.DAL
             }
             catch (Exception ex)
             {
-                // write to log
                 throw (ex);
             }
             finally
@@ -996,7 +1007,6 @@ namespace final_proj_gulkosafety.Models.DAL
             }
             catch (Exception ex)
             {
-                // write to log
                 throw (ex);
             }
             finally
@@ -1330,9 +1340,9 @@ namespace final_proj_gulkosafety.Models.DAL
                 int numEffected = cmd.ExecuteNonQuery();
                 return numEffected;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception("The update of report failed");
+                throw (ex);
             }
 
             finally
@@ -1355,9 +1365,9 @@ namespace final_proj_gulkosafety.Models.DAL
             {
                 con = connect("DBConnectionString");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception("The connection to sever is not good");
+                throw (ex);
             }
 
             String cStr = BuildUpdateAlertCommand(a);
