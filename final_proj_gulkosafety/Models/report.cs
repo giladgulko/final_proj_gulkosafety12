@@ -70,6 +70,11 @@ namespace final_proj_gulkosafety.Models
             DBServices dbs = new DBServices();
             dbs.UpdateReport(this);
         }
+        public void UpdateReportGrade(int report_num, double grade)
+        {
+            DBServices dbs = new DBServices();
+            dbs.UpdateReportGrade(report_num,grade);
+        }
 
 
     }

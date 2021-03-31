@@ -1,4 +1,6 @@
-﻿function alertConstractor(arr, content, alert_type_num, user_email,proj_num) {
+﻿ 
+
+function alertConstractor(arr, content, alert_type_num, user_email, proj_num) {
     new_alert = {
        
         Content: content,
@@ -12,7 +14,7 @@
 }
 
 
-function safetyLVL(curentReport, lastREPORTdefects, gradesARR, projTypeWEIGHT) {
+function safetyLVL(curentReport, lastREPORTdefects, gradesARR, projTypeWEIGHT,report_num) {
     const maxGradeForDefectType = 25
     //מספר הנקודות שיורדות כתוצאה מבדיקת כללים בדוח הנוכחי
     const point = 10
@@ -76,10 +78,11 @@ function safetyLVL(curentReport, lastREPORTdefects, gradesARR, projTypeWEIGHT) {
         total_grade += point
     }
     total_grade = 100 - total_grade;
-    //put report-grade
-
-    alert(total_grade)
+    
+   // ajaxCall("PUT", "../api/report", JSON.stringify(reportToSave), updateReportSuccess, getError);
+    alert(total_grade+"to"+report_num)
     alert(pointTOreduce)
     //avg,הורדת ציונים בין דוחות וחישוב רמת בטיחות פרויקט
-    //שילוב התראות בכל האלגוריתם
+
+   //שילוב התראות בכל האלגוריתם
 }

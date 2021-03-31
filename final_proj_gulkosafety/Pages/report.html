@@ -23,7 +23,7 @@
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
     <link href="styles/reportStyleSheet.css" rel="stylesheet" />
     <link href="styles/nav_bar_style.css" rel="stylesheet" />
-    <script src="../Scripts/safety_lvl_algo.js"></script>
+    <script src="../Scripts/safetyLVL.js"></script>
     <title>דוח ביקור</title>
 
     <script>
@@ -50,7 +50,7 @@
 
 
         });
-        
+
 
         function getProjTypeWeights() {
             let api = "../api/proj_type_weight?proj_type=" + project.Project_type_num;
@@ -121,7 +121,7 @@
             });
         }
 
-        function checkLastReportDefects(){
+        function checkLastReportDefects() {
             if (localStorage["allReports"] != "") {
                 let api = "../api/defect_in_report?proj_num=" + project.Project_num + "&reportDate=" + report.Date.split('T');
                 ajaxCall("GET", api, "", getLastRDefectSuccess, getError);
@@ -150,7 +150,7 @@
             }
             else $("#lastReportdefectsTBL").hide();
         }
-                
+
 
         function getReportDefect(reportNum) {
             $("#defectsTBL").show();
@@ -171,7 +171,7 @@
             $('#projManeger').val(project.Manager_email)
         }
 
-        function editDefectImg(defectNum){
+        function editDefectImg(defectNum) {
             $('#showImg').hide();
             $('.image').hide();
             $("#uploadImg").show();
@@ -193,32 +193,32 @@
 
         function checkImg(def) {
             defectToEdit = JSON.parse(def);
-                $('#uploadImg').hide();
-                $('#mask').addClass('showing');
-                $('html').addClass('hide-scroll');
-                var id = '#dialog';
-                var fullImagePath = this1;
-                $('.image').attr({
-                    'src': fullImagePath
-                });
+            $('#uploadImg').hide();
+            $('#mask').addClass('showing');
+            $('html').addClass('hide-scroll');
+            var id = '#dialog';
+            var fullImagePath = this1;
+            $('.image').attr({
+                'src': fullImagePath
+            });
 
-                //if close button is clicked
-                $('.window .close').click(function (e) {
-                    ////Cancel the link behavior
-                    e.preventDefault();
+            //if close button is clicked
+            $('.window .close').click(function (e) {
+                ////Cancel the link behavior
+                e.preventDefault();
 
-                    $('#mask').removeClass('showing');
-                    $('html').removeClass('hide-scroll');
-                });
+                $('#mask').removeClass('showing');
+                $('html').removeClass('hide-scroll');
+            });
         }
 
 
         function createDt(defectsdata) {
             //not ok need another array
-            if (tableID =='#defectTable') {
+            if (tableID == '#defectTable') {
                 currentReportDefects = defectsdata
             }
-           
+
 
             for (i = 0; i < defectsdata.length; i++) {
                 defectsdata[i].Fix_date = defectsdata[i].Fix_date.split("T")[0];
@@ -234,8 +234,8 @@
                         { data: "Defect_name" },
                         { data: "Defect_type_name" },
                         { data: "Description" },
-                        { data: "Fix_date"},
-                        { data: "Fix_time"},
+                        { data: "Fix_date" },
+                        { data: "Fix_time" },
                         { data: "Fix_status" },
                         {
                             render: function (data, type, row, meta) {
@@ -249,7 +249,7 @@
                                     editBtn = "<button type='button' class = 'picBtn btn btn-success' value='" + def + "' disabled> תמונה חסרה </button>";
                                     return editBtn;
                                 }
-      
+
 
                             }
                         },
@@ -258,7 +258,7 @@
                             render: function (data, type, row, meta) {
                                 let def = JSON.stringify(row);
                                 if (userType == 1) {
-                                    editBtn = "<button type='button' class = 'editBtn btn btn-success'value='  " + def +  "' onclick='editDefectBTN(this.value)'> עריכה </button>";
+                                    editBtn = "<button type='button' class = 'editBtn btn btn-success'value='  " + def + "' onclick='editDefectBTN(this.value)'> עריכה </button>";
                                     deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='  " + def + "' onclick='deleteAlert(this.value)'> מחיקה </button>";
                                     return editBtn + deleteBtn;
                                 }
@@ -266,7 +266,7 @@
                                     editBtn = "<button type='button' class = 'editBtn btn btn-success' value='  " + def + "' onclick='editDefectImg(this.value)'> ערוך תמונת ליקוי </button>";
                                     return editBtn;
                                 }
-                                
+
 
                             }
                         },
@@ -279,21 +279,21 @@
             catch (err) {
                 alert(err);
             }
-            
+
         }
 
         function editDefectBTN(def) {
             defectToEdit = JSON.parse(def);
 
             document.getElementById('id01').style.display = 'block';
-            $("#selectType").append("<option value='" + defectToEdit.Defect_num+"' > " + defectToEdit.Defect_type_name + "</option > ");
-            $("#selectdefect").append("<option value='" + defectToEdit.Defect_num + "' > " + defectToEdit.Defect_name + "</option>");        
+            $("#selectType").append("<option value='" + defectToEdit.Defect_num + "' > " + defectToEdit.Defect_type_name + "</option > ");
+            $("#selectdefect").append("<option value='" + defectToEdit.Defect_num + "' > " + defectToEdit.Defect_name + "</option>");
             $("#selectType").prop('disabled', true);
             $("#selectdefect").prop('disabled', true);
             $("#fixDate").val(defectToEdit.Fix_date.split("T")[0]);
             $("#fixTime").val(defectToEdit.Fix_time);
             $("#description").val(defectToEdit.Description);
-
+            $("#fixStatus").val(defectToEdit.Fix_status),
             $("#btn_update_defect").show();
             $("#btn_add_defect").hide();
         }
@@ -303,15 +303,16 @@
                 Defect_num: $("#selectdefect").val(),
                 Fix_Date: $("#fixDate").val(),
                 Fix_Time: $("#fixTime").val(),
+                Fix_status: $("#fixStatus").val(),
                 Description: $("#description").val()
             }
-            
+
             console.log(update_defect)
             let api = "../api/defect_in_report";
             ajaxCall("PUT", api, JSON.stringify(update_defect), updateDefectsInReport, getError)
         }
         function updateDefectsInReport() {
-           location.reload()
+            location.reload()
         }
         function getDefectsAndTypeS() {
             api = "../api/defect"
@@ -350,7 +351,7 @@
             $("#selectdefect").html(str)
         }
         function addDefectToReport() {
-    
+
             New_defect = {
                 Report_num: report.Report_num,
                 Defect_num: $("#selectdefect").val(),
@@ -439,8 +440,8 @@
 
         function insertReportSuccess() {
             alert("הדוח נשמר בהצלחה! הוסף ליקויים לדוח");
-            let api = "../api/report/" + project.Project_num +"/lastReport";
-            ajaxCall("GET", api,"", getLastReportSuccess, getError);
+            let api = "../api/report/" + project.Project_num + "/lastReport";
+            ajaxCall("GET", api, "", getLastReportSuccess, getError);
         }
 
         function getLastReportSuccess(lastReport) {
@@ -449,15 +450,17 @@
         }
 
         function calcGrade() {
-            //להוסיף את הליקיים הפתוחים 
+            //להוסיף את הליקיים הפתוחים
             let curentReport = [];
             for (i = 0; i < defects.length; i++) {
                 for (j = 0; j < currentReportDefects.length; j++) {
                     if (currentReportDefects[j].Defect_num == defects[i].Defect_num) {
                         let defect = {
-                            
+
                             Defect_num: currentReportDefects[j].Defect_num,
+                            Defect_name: defects[i].Name,
                             Defect_type_num: defects[i].Defect_type_num,
+                            Defect_type_name: currentReportDefects[j].Defect_type_name,
                             Grade: defects[i].Grade
                         }
                         curentReport.push(defect);
@@ -466,7 +469,8 @@
             }
 
             gradesArr = JSON.parse(localStorage["gradesArr"])
-            safetyLVL(curentReport, lastReportDefects, gradesArr, ptwList)
+            safetyLVL(curentReport, lastReportDefects, gradesArr, ptwList, report.Report_num)
+            
         }
 
         function getPTWSuccess(ptwList1) {
@@ -710,8 +714,8 @@
                                 <label for="status">סטאטוס</label>
                                 <select class="form-control" id="fixStatus">
                                     <option value="">בחר סטאטוס</option>
-                                    <option value="1"> פתוח </option>
-                                    <option value="0"> סגור </option>
+                                    <option value="1"> תוקן </option>
+                                    <option value="0"> לא תוקן </option>
                                 </select>
                             </div>
                         </div>
@@ -738,6 +742,6 @@
                 </div>
             </div>
         </div>
-
+    <div id="safetyAlert"></div>
     </body>
     </html>

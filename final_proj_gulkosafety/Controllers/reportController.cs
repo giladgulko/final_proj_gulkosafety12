@@ -43,5 +43,11 @@ namespace final_proj_gulkosafety.Controllers
         {
             r.UpdateReport();
         }
+
+        public void PUTReportGrage(int report_num,double grade)
+        {
+            report r = new report();
+            r.UpdateReportGrade(report_num, grade);
+        }
     }
 }

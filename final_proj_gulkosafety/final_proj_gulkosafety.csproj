@@ -239,6 +239,7 @@
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\safetyLVL.js" />
     <Content Include="Scripts\safety_lvl_algo.js" />
     <Content Include="SQLQuery1.sql" />
     <Content Include="uploadedFiles\תעודת שחרור.jpg" />
