@@ -34,7 +34,7 @@
         allReports = [];
         defectToEdit = "";
         ptwList = [];
-        tableID = "";
+        //tableID = "";
         userType = 1;
 
         $(document).ready(function () {
@@ -128,12 +128,14 @@
             }
             else $("#lastReportdefectsTBL").hide();
         }
+
+
         function getNewReportsuccess(report) {
 
             headLine = "<h1>" + report.Report_num + " דוח ביקור " + "</h1>";
             $('#proj_bar').html(headLine);
-
         }
+
         function getLastRDefectSuccess(defects) {
             lastReportDefects = defects;
             if (lastReportDefects != "") {
@@ -143,20 +145,24 @@
                         notFixeDefects.push(lastReportDefects[i]);
                 }
                 if (notFixeDefects.length > 0) {
-                    tableID = "#lastReportTable";
-                    createDt(notFixeDefects);
+                    let tableID = "#lastReportTable";
+                    createDt(notFixeDefects, tableID);
                 }
-                else $("#allDefectsFixed").append("<h3>כל הליקויים משבוע קודם תוקנו</h3>");
+                else $("#lastReportdefectsTBL").hide();
             }
             else $("#lastReportdefectsTBL").hide();
         }
 
 
-        function getReportDefect(reportNum) {
-            $("#defectsTBL").show();
-            tableID = "#defectTable";
+        function getReportDefect(reportNum) {         
             let api = "../api/defect_in_report?report_num=" + reportNum;
-            ajaxCall("GET", api, "", createDt, getError);
+            ajaxCall("GET", api, "", getReportDefSuccess, getError);
+        }
+
+        function getReportDefSuccess(defects) {
+            $("#defectsTBL").show();
+            let tableID = "#defectTable";
+            createDt(defects, tableID);
             checkLastReportDefects();
         }
 
@@ -197,7 +203,7 @@
             $('#mask').addClass('showing');
             $('html').addClass('hide-scroll');
             var id = '#dialog';
-            var fullImagePath = this1;
+            var fullImagePath = defectToEdit.Picture_link;
             $('.image').attr({
                 'src': fullImagePath
             });
@@ -213,11 +219,11 @@
         }
 
 
-        function createDt(defectsdata) {
+        function createDt(defectsdata, tableID) {
             //not ok need another array
-            if (tableID == '#defectTable') {
-                currentReportDefects = defectsdata
-            }
+            //if (tableID == '#defectTable') {
+            //    currentReportDefects = defectsdata
+            //}
 
 
             for (i = 0; i < defectsdata.length; i++) {
