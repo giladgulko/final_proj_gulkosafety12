@@ -36,7 +36,15 @@
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
     <link href="styles/nav_bar_style.css" rel="stylesheet" />
     <link href="styles/projectStyleSheet.css" rel="stylesheet" />
-
+    <style>
+        
+        .alertDiv{
+            font-size:16px;
+        }
+        #alerts {
+            overflow: scroll;
+        }
+    </style>
     <script>
 
 
@@ -69,13 +77,13 @@
 
         function getAlerts() {
             let proj_num = project.Project_num;
-            let api = "../api/alerts?proj_num=" + proj_num;
+            let api = "../api/alert?proj_num=" + proj_num;
             ajaxCall("GET", api, "", getAlertsSuccess, getError);
         }
         function getAlertsSuccess(data) {
             alertList = data;
             for (i = 0; i < alertList.length; i++) {
-                document.getElementById('alerts').innerHTML += "<div class='alert alert-Safety-level'><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong> <i class='fas fa-tachometer-alt' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
+                document.getElementById('alerts').innerHTML += "<div class='alertDiv'><strong class='date'> "+ alertList[i].Date.split("T")[0] + " </strong > "  + alertList[i].Content + " </div> ";
             }
         }
 
@@ -368,7 +376,7 @@
                 alert(err);
             }
             localStorage["gradesArr"] = JSON.stringify(gradesArr);
-            buildGradesGraph(gradesArr, reportNumArr);
+            //buildGradesGraph(gradesArr, reportNumArr);
             if (reports != "") {
                 localStorage["allReports"] = JSON.stringify(reports);
             }
@@ -376,17 +384,17 @@
 
         }
 
-        function buildGradesGraph(gradesArr, reportNumArr) {
-            var trace1 = {
-                x: reportNumArr,
-                y: gradesArr,
-                type: 'scatter'
-            };
+        //function buildGradesGraph(gradesArr, reportNumArr) {
+        //    var trace1 = {
+        //        x: reportNumArr,
+        //        y: gradesArr,
+        //        type: 'scatter'
+        //    };
 
-            var data = [trace1];
+        //    var data = [trace1];
 
-            Plotly.newPlot('chartContainer', data);
-        }
+        //    Plotly.newPlot('chartContainer', data);
+        //}
 
         //function buildGradesGraph(gradesArr, reportNumArr) {
         //    TESTER = document.getElementById('chartContainer');
@@ -591,57 +599,53 @@
                             <div class="col">
                                 <h3>התראות</h3>
                             </div>
-                            <div id="alerts">
+                        </div>
+                        <div id="alerts">
 
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-8 mb-3">
-                <div class="card">
-                    <div class="card-body section2">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <h3>דוחות ביקור</h3>
-                            </div>
-                            <div class="col-sm-6">
-                                <button class='btn btn-primary' id="newBTN">דוח ביקור חדש</button>
-                            </div>
-                        </div>
-                        <table id="reportsTable" class="display" style="width:100%" dir="rtl">
-                            <thead>
-                                <tr>
-                                    <th>מס' דוח</th>
-                                    <th>תאריך</th>
-                                    <th>שעה</th>
-                                    <th>ציון דוח</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
+        <div>
+
+             <div class="card">
+                <div class="card-body section2">
+                   <div>
+                       <div>
+                          <h3>דוחות ביקור</h3>
+                       </div>
+                       <div>
+                          <button class='btn btn-primary' id="newBTN">דוח ביקור חדש</button>
+                       </div>
+                   </div>
+                   <table id="reportsTable" class="display" style="width:100%" dir="rtl">
+                      <thead>
+                          <tr>
+                              <th>מס' דוח</th>
+                              <th>תאריך</th>
+                              <th>שעה</th>
+                              <th>ציון דוח</th>
+                              <th></th>
+                          </tr>
+                      </thead>
+                   </table>
                 </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <div class="card">
-                    <div class="card-body section2">
-                        <div class="row">
-                            <div class="col">
-                                <h3>ציוני דוחות</h3>
-                            </div>
-                        </div>
-                        <div id="chartContainer">
-                            <!--<div class="col">
-                                <div id="chartContainer"></div>
-                            </div>-->
-                        </div>
-                    </div>
-                </div>
-            </div>
+
+             </div>
         </div>
+        <!--<div class="col-md-4 mb-3">-->
+        <!--<div class="card">
+            <div class="card-body section2">
+                <div class="row">
+                    <div class="col">
+                        <h3>ציוני דוחות</h3>
+                    </div>
+                </div>
+                <div id="chartContainer">
+                </div>
+            </div>
+        </div>-->
     </div>
 </body>
 </html>
