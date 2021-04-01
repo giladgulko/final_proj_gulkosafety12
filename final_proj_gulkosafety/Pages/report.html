@@ -199,6 +199,13 @@
             $('html').addClass('hide-scroll');
             var id = '#dialog';
 
+            //if save pic button is clicked
+            $('#savePicToDefBTN').click(function () {
+                ////upload img link
+
+
+            });
+
             //if close button is clicked
             $('.window .close').click(function (e) {
                 ////Cancel the link behavior
@@ -208,7 +215,6 @@
                 $('html').removeClass('hide-scroll');
             });
 
-            //insert pic
         }
 
         function checkImg(def) {
@@ -658,6 +664,10 @@
                         <br />
                         <div class="col-12">
                             <input type="file" id="img" />
+                            <input type="file" id="img" />
+                        </div>
+                        <div class="col-12">
+                            <button id="savePicToDefBTN" class="btn btn-primary">שמור</button>
                         </div>
                     </div>
                     <div id="showImg">

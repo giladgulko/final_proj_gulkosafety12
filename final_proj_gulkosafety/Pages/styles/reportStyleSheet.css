@@ -61,7 +61,7 @@ h3 {
 /*#selectdefect {
     max-width: -webkit-fill-available;
 }*/
-#btn_add_defect, #saveReport, #calcGrade, #addDefectToRBtn, #btn_update_defect {
+#btn_add_defect, #saveReport, #calcGrade, #addDefectToRBtn, #btn_update_defect, #savePicToDefBTN {
     float: left;
     color: #fff;
     background-color: cadetblue;
