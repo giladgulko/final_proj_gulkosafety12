@@ -16,18 +16,11 @@
 #Alerts_div {
     margin: auto;
     width: 70%;
-    padding: 10px;
     height: 100%;
     background-color: white;
 }
 
-#Alert_Archiv_div {
-    margin: auto;
-    width: 70%;
-    padding: 10px;
-    height: 100%;
-    background-color: white;
-}
+
 #active {
     color: cadetblue;
     background-color: #eeeeee;
@@ -38,6 +31,7 @@
     color: black;
     direction: rtl;
     font-size: 20px;
+    padding:10px;
 }
 .alert-certificate {
     color: #a94442;
@@ -67,6 +61,7 @@
     border-color: #bce8f1;
     direction: rtl;
     font-size: 20px;
+    padding:10px;
 }
 
 .alert-defect {
@@ -87,6 +82,10 @@
         padding-right: 5px;
         font-size: 30px;
     }
+.separate {
+
+    background-color: #eeeeee;
+}
 .date {
     font-size: 16px;
     float: left;

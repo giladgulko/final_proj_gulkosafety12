@@ -27,6 +27,46 @@
             AlertDivByType = 0;
         });
 
+        function check_if_date_pass() {
+            var today = new Date();
+            var dd_today = String(today.getDate()).padStart(2, '0');
+            var mm_today = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy_today = today.getFullYear();
+
+            today = yyyy_today + '-' + mm_today + '-' + dd_today;
+
+            for (var i = 0; i < alertList.length; i++) {
+                var data = alertList[i].Date.split("T")[0];
+                var arr = data.split('-');
+                var dd = arr[2];
+                var mm = String(Number(arr[1]) + 1);
+                var yyyy = arr[0];
+                var InAMonth = yyyy + '-0' + mm + '-' + dd;
+
+                if (today >= InAMonth) {
+                    update_status = {
+                        Alert_num: Number(alertList[i].Alert_num),
+                        Content: alertList[i].Content,
+                        Date: alertList[i].Date,
+                        Alert_type_num: alertList[i].Alert_type_num,
+                        User_email: alertList[i].User_email,
+                        Status: 1,
+                        Proj_num: alertList[i].Proj_num
+
+                    }
+                    let api = "../api/alert";
+                    ajaxCall("PUT", api, JSON.stringify(update_status), UpdateAlertStatusSuccess2, UpdateAlertStatusError)
+                }
+            }
+            renderAlerts();
+        }
+
+        function UpdateAlertStatusSuccess2() {
+            swal("Good job!", "Alert status update successfully!", "success")
+            renderAlerts();
+        }
+
+        
         function getAlerts() {
 
             let api = "../api/alert?user_email=" + user_email;
@@ -45,34 +85,48 @@
 
         function renderAlertsArchiv() {
             document.getElementById('Alerts_div').innerHTML = "";
-
+            document.getElementById('Alerts_div').setAttribute('style', 'padding:0px;')
             for (i = 0; i < alertArchivList.length; i++) {
-                if (alertArchivList[i].Alert_type_num == 1) {
-                    document.getElementById('Alerts_div').innerHTML += "<div  class='archiv'> <p id='" + alertArchivList[i].Alert_num + "'><i class='fas fa-tachometer-alt' style='font-size:24px'></i> " + alertArchivList[i].Content + "<strong class='date'> " + alertArchivList[i].Date.split("T")[0] + " " + alertArchivList[i].Date.split("T")[1] + " </strong></p></div> ";
+                if (i != 0) {
+                    var data = alertArchivList[i].Date.split("T")[0];
+                    var data1 = alertArchivList[i - 1].Date.split("T")[0];
+                    var arr1 = data1.split('-');
+                    var arr = data.split('-');
+                    var month = arr[1];
+                    var month1 = arr1[1];
+                    if (month != month1) {
+                        document.getElementById('Alerts_div').innerHTML += "<div  class='separate'> </br></br></br></div> ";
+                    }
                 }
-                if (alertArchivList[i].Alert_type_num == 2) {
-                    document.getElementById('Alerts_div').innerHTML += "<div  class='archiv'> <p id='" + alertArchivList[i].Alert_num + "'><i class='far fa-calendar-alt' style='font-size:24px'></i>" + alertArchivList[i].Content + "<strong class='date'> " + alertArchivList[i].Date.split("T")[0] + " " + alertArchivList[i].Date.split("T")[1] + " </strong></p></div> ";
-                }
-                if (alertArchivList[i].Alert_type_num == 3) {
-                    document.getElementById('Alerts_div').innerHTML += "<div class='archiv'> <p id='" + alertArchivList[i].Alert_num + "'><i class='far fa-check-circle' style='font-size:24px'></i >" + alertArchivList[i].Content + "<strong class='date'> " + alertArchivList[i].Date.split("T")[0] + " " + alertArchivList[i].Date.split("T")[1] + " </strong></p></div> ";
+                    if (alertArchivList[i].Alert_type_num == 1) {
+                        document.getElementById('Alerts_div').innerHTML += "<div  class='archiv'> <p id='" + alertArchivList[i].Alert_num + month + "'><i class='fas fa-tachometer-alt' style='font-size:24px'></i> " + alertArchivList[i].Content + "<strong class='date'> " + alertArchivList[i].Date.split("T")[0] + " " + alertArchivList[i].Date.split("T")[1] + " </strong></p></div> ";
+                    }
+                    if (alertArchivList[i].Alert_type_num == 2) {
+                        document.getElementById('Alerts_div').innerHTML += "<div  class='archiv'> <p id='" + alertArchivList[i].Alert_num + "'><i class='far fa-calendar-alt' style='font-size:24px'></i>" + alertArchivList[i].Content + "<strong class='date'> " + alertArchivList[i].Date.split("T")[0] + " " + alertArchivList[i].Date.split("T")[1] + " </strong></p></div> ";
+                    }
+                    if (alertArchivList[i].Alert_type_num == 3) {
+                        document.getElementById('Alerts_div').innerHTML += "<div class='archiv'> <p id='" + alertArchivList[i].Alert_num + "'><i class='far fa-check-circle' style='font-size:24px'></i >" + alertArchivList[i].Content + "<strong class='date'> " + alertArchivList[i].Date.split("T")[0] + " " + alertArchivList[i].Date.split("T")[1] + " </strong></p></div> ";
 
-                }
-                if (alertArchivList[i].Alert_type_num == 4) {
-                    document.getElementById('Alerts_div').innerHTML += "<div class='archiv'><p id='" + alertArchivList[i].Alert_num + "'><i class='fas fa-chalkboard-teacher' style='font-size:24px'></i>" + alertArchivList[i].Content + "<strong class='date'> " + alertArchivList[i].Date.split("T")[0] + " " + alertArchivList[i].Date.split("T")[1] + " </strong></p></div> ";
+                    }
+                    if (alertArchivList[i].Alert_type_num == 4) {
+                        document.getElementById('Alerts_div').innerHTML += "<div class='archiv'><p id='" + alertArchivList[i].Alert_num + "'><i class='fas fa-chalkboard-teacher' style='font-size:24px'></i>" + alertArchivList[i].Content + "<strong class='date'> " + alertArchivList[i].Date.split("T")[0] + " " + alertArchivList[i].Date.split("T")[1] + " </strong></p></div> ";
 
-                }
-                if (alertArchivList[i].Alert_type_num == 5) {
-                    document.getElementById('Alerts_div').innerHTML += "<div class='archiv'><p id='" + alertArchivList[i].Alert_num + "'><i class='fas fa-exclamation-triangle' style='font-size:24px'></i>" + alertArchivList[i].Content + "<strong class='date'> " + alertArchivList[i].Date.split("T")[0] + " " + alertArchivList[i].Date.split("T")[1] + " </strong></p></div> ";
+                    }
+                    if (alertArchivList[i].Alert_type_num == 5) {
+                        document.getElementById('Alerts_div').innerHTML += "<div class='archiv'><p id='" + alertArchivList[i].Alert_num + "'><i class='fas fa-exclamation-triangle' style='font-size:24px'></i>" + alertArchivList[i].Content + "<strong class='date'> " + alertArchivList[i].Date.split("T")[0] + " " + alertArchivList[i].Date.split("T")[1] + " </strong></p></div> ";
 
+                    }
                 }
             }
-        }
+        
         function getError() {
             swal("Failed!", "You failed to read the alerts!", "warning")
         }
         function getAlertsuccess(data) {
             alertList = data;
-            renderAlerts();
+            check_if_date_pass();
+
+ 
         } 
         function ChangeStatus(id) {
             for (var i = 0; i < alertList.length; i++) {
@@ -103,6 +157,8 @@
 
         function renderAlerts() {
             document.getElementById('Alerts_div').innerHTML = "";
+            document.getElementById('Alerts_div').setAttribute('style','padding:10px;')
+        
             for (i = 0; i < alertList.length; i++) {
                 if (alertList[i].Alert_type_num == 1) {
                     document.getElementById('Alerts_div').innerHTML += "<div  class='alert alert-Safety-level alert-dismissible'> <a id='" + alertList[i].Alert_num +"' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1]+ " </strong> <i class='fas fa-tachometer-alt' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
