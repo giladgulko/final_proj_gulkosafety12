@@ -1408,5 +1408,51 @@ namespace final_proj_gulkosafety.Models.DAL
 
             return command;
         }
+        //read Alert Archive by user_email
+        public List<alert> ReadAlertArchive(string user_email)
+        {
+            SqlConnection con = null;
+            List<alert> alertsArchiveList = new List<alert>();
+
+            try
+            {
+                con = connect("DBConnectionString");
+
+                String selectSTR = "SELECT * FROM alert WHERE user_email='" + user_email + "'and status=1 order by [date] desc";
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                while (dr.Read())
+                {
+
+                    alert _alert = new alert();
+                    _alert.Alert_num = Convert.ToInt32(dr["alert_num"]);
+                    _alert.Content = (string)dr["content"];
+                    _alert.Date = Convert.ToDateTime(dr["date"]);
+                    _alert.Alert_type_num = Convert.ToInt32(dr["alert_type_num"]);
+                    _alert.User_email = (string)dr["user_email"];
+                    _alert.Status = Convert.ToInt32(dr["status"]);
+                    _alert.Proj_num = Convert.ToInt32(dr["proj_num"]);
+                    alertsArchiveList.Add(_alert);
+                }
+
+                return alertsArchiveList;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+
     }
 }

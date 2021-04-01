@@ -37,6 +37,15 @@ namespace final_proj_gulkosafety.Controllers
             }
 
         }
+        //  GET Alert Archive
+        [Route("api/alert/{user_email}/AlertArchive")]
+        public List<alert> GetAlertArchive(string user_email)
+        {
+            alert a = new alert();
+            List<alert> alertArchiveList = a.ReadAlertArchive(user_email);
+            return alertArchiveList;
+
+        }
 
         // POST api/<controller>
         public void Post([FromBody]string value)
