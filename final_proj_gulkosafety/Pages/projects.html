@@ -69,7 +69,7 @@
             renderContacts();
         }
         function getContactListError() {
-            swal("Failed!", "You failed to read the contacts!", "warning")
+            swal("Failed!", "Failed to read the contacts!", "warning")
         }
 
         function renderContacts() {
@@ -96,7 +96,7 @@
             localStorage["projectTypes"] = JSON.stringify(projectTypes);
         }
         function getProjTypesError() {
-            swal("Failed!", "You failed to read project types!", "warning")
+            swal("Failed!", "Failed to read project types!", "warning")
         }
 
         function newProjForm() {
@@ -186,7 +186,7 @@
             );
         }
         function deleteProjectError() {
-            swal("Failed!", "You failed to delete the project!", "warning");
+            swal("Failed!", "Failed to delete the project!", "warning");
         }
         function getProjData() {
 
@@ -194,7 +194,7 @@
         }
 
         function getError() {
-            swal("Failed!", "You failed to read the project!", "warning")
+            swal("Failed!", "Failed to read the project!", "warning")
         }
         function createDt(projdata) {
             for (var i = 0; i < projdata.length; i++) {
@@ -431,7 +431,6 @@
                                         </div>
                                     </th>
                                 </tr>
-                                <br />
                                 <tr>
                                     <th>
                                         <input type="submit" class="btn btn-primary" value="שמור" />

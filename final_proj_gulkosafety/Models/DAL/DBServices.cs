@@ -286,10 +286,59 @@ namespace final_proj_gulkosafety.Models.DAL
         private String BuildupdateCommand(project p)
         {
             String command;
-            command = "UPDATE project SET name='" + p.Name + "', company='" + p.Company + "', address='" + p.Address + "', start_date='" + p.Start_date.ToString("yyyy-MM-dd") + "', end_date='" + p.End_date.ToString("yyyy-MM-dd") + "', status=" + p.Status + ", description='" + p.Description + "', safety_lvl=" + p.Safety_lvl + ", project_type_num=" + p.Project_type_num + ", manager_email='" + p.Manager_email + "', foreman_email='" + p.Foreman_email + "' WHERE project_num =" + p.Project_num;
+            command = "UPDATE project SET name='" + p.Name + "', company='" + p.Company + "', address='" + p.Address + "', start_date='" + p.Start_date.ToString("yyyy-MM-dd") + "', end_date='" + p.End_date.ToString("yyyy-MM-dd") + "', status=" + p.Status + ", description='" + p.Description + "', project_type_num=" + p.Project_type_num + ", manager_email='" + p.Manager_email + "', foreman_email='" + p.Foreman_email + "' WHERE project_num =" + p.Project_num;
 
             return command;
         }
+
+        //update project safety level
+        public int UpdateProjectSafetyLvl(int project_num, double safety_lvl)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            String cStr = BuildupdateSafetyLvlCommand(project_num, safety_lvl);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+
+        private String BuildupdateSafetyLvlCommand(int project_num, double safety_lvl)
+        {
+            String command;
+            command = "UPDATE project SET safety_lvl=" + safety_lvl + " WHERE project_num =" + project_num;
+            return command;
+        }
+
         //update project status
         public int UpdateProjectStatus(int proj_num, int status)
         {
@@ -1397,10 +1446,64 @@ namespace final_proj_gulkosafety.Models.DAL
         private String BuildUpdateAlertCommand(alert a)
         {
             String command;
-            command = "UPDATE alert SET content='" + a.Content + "', alert_type_num=" + a.Alert_type_num + ", date='" + a.Date.ToString("yyyy-MM-dd") + "', User_email='" + a.User_email + "', status=" + a.Status + ", proj_num=" + a.Proj_num+ "Where Alert_num="+a.Alert_num;
+            command = "UPDATE alert SET content='" + a.Content + "', alert_type_num=" + a.Alert_type_num + ", date='" + a.Date.ToString("yyyy-MM-dd HH:mm") + "', User_email='" + a.User_email + "', status=" + a.Status + ", proj_num=" + a.Proj_num+ " Where alert_num="+a.Alert_num;
 
             return command;
         }
+
+
+        public int InsertAlert(alert a)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            String cStr = BuildInsertAlertCommand(a);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("The update of status alert failed");
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+
+        private String BuildInsertAlertCommand(alert a)
+        {
+            String command;
+
+            StringBuilder sb = new StringBuilder();
+            // use a string builder to create the dynamic string
+            sb.AppendFormat("Values('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')", a.Content, a.Alert_type_num, a.User_email, a.Status, a.Date.ToString("yyyy-MM-dd HH:mm"), a.Proj_num);
+            String prefix = "INSERT INTO alert " + "(content, alert_type_num,user_email,status,date,proj_num) ";
+            command = prefix + sb.ToString();
+
+            return command;
+        }
+
         private String BuildUpdateReportCommand(int report_num, double grade)
         {
             String command;

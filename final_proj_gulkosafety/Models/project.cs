@@ -78,6 +78,12 @@ namespace final_proj_gulkosafety.Models
 
         }
 
+        public void UpdateProjectSafetyLevel(int project_num, double safety_lvl)
+        {
+            DBServices dbs = new DBServices();
+            dbs.UpdateProjectSafetyLvl(project_num, safety_lvl);
+        }
+
         public void UpdateProjectStatus(int proj_num, int status)
         {
             DBServices dbs = new DBServices();

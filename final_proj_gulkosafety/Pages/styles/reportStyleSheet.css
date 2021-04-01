@@ -61,7 +61,7 @@ h3 {
 /*#selectdefect {
     max-width: -webkit-fill-available;
 }*/
-#btn_add_defect, #saveReport, #calcGrade, #addDefectToRBtn, #btn_update_defect {
+#btn_add_defect, #saveReport, #calcGrade, #addDefectToRBtn, #btn_update_defect, #savePicToDefBTN {
     float: left;
     color: #fff;
     background-color: cadetblue;
@@ -192,4 +192,9 @@ span.glyphicon.glyphicon-floppy-disk, span.glyphicon.glyphicon-pencil {
 
 p {
     text-align: left;
+}
+#ReportGradeP {
+    text-align: right;
+    margin-right: 15px;
+    font-size: 18px;
 }
