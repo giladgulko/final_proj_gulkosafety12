@@ -18,10 +18,13 @@
         var user_email = "gulkosafety@gmail.com";// צריך לקחת את היוזר מהלוקאל סטורג - של מי שנמצא בלוג אין
 
         $(document).ready(function () {
+            alertArchivList = [];
             alertList = [];
             getAlerts();
             $("#btns").hide();
             $("#buttonUpload").click(uploadDefectPhoto);
+            getAlertArchive();
+            AlertDivByType = 0;
         });
 
         function getAlerts() {
@@ -29,7 +32,41 @@
             let api = "../api/alert?user_email=" + user_email;
             ajaxCall("GET", api, "", getAlertsuccess, getError);
         }
+        function getAlertArchive() {
 
+            let api = "../api/alert/" + user_email + "/AlertArchive";
+            ajaxCall("GET", api, "", getAlertgetAlertArchivSuccess, getError);
+        }
+
+        function getAlertgetAlertArchivSuccess(data) {
+            alertArchivList = data;
+            
+        } 
+
+        function renderAlertsArchiv() {
+            document.getElementById('Alerts_div').innerHTML = "";
+
+            for (i = 0; i < alertArchivList.length; i++) {
+                if (alertArchivList[i].Alert_type_num == 1) {
+                    document.getElementById('Alerts_div').innerHTML += "<div  class='archiv'> <p id='" + alertArchivList[i].Alert_num + "'><i class='fas fa-tachometer-alt' style='font-size:24px'></i> " + alertArchivList[i].Content + "<strong class='date'> " + alertArchivList[i].Date.split("T")[0] + " " + alertArchivList[i].Date.split("T")[1] + " </strong></p></div> ";
+                }
+                if (alertArchivList[i].Alert_type_num == 2) {
+                    document.getElementById('Alerts_div').innerHTML += "<div  class='archiv'> <p id='" + alertArchivList[i].Alert_num + "'><i class='far fa-calendar-alt' style='font-size:24px'></i>" + alertArchivList[i].Content + "<strong class='date'> " + alertArchivList[i].Date.split("T")[0] + " " + alertArchivList[i].Date.split("T")[1] + " </strong></p></div> ";
+                }
+                if (alertArchivList[i].Alert_type_num == 3) {
+                    document.getElementById('Alerts_div').innerHTML += "<div class='archiv'> <p id='" + alertArchivList[i].Alert_num + "'><i class='far fa-check-circle' style='font-size:24px'></i >" + alertArchivList[i].Content + "<strong class='date'> " + alertArchivList[i].Date.split("T")[0] + " " + alertArchivList[i].Date.split("T")[1] + " </strong></p></div> ";
+
+                }
+                if (alertArchivList[i].Alert_type_num == 4) {
+                    document.getElementById('Alerts_div').innerHTML += "<div class='archiv'><p id='" + alertArchivList[i].Alert_num + "'><i class='fas fa-chalkboard-teacher' style='font-size:24px'></i>" + alertArchivList[i].Content + "<strong class='date'> " + alertArchivList[i].Date.split("T")[0] + " " + alertArchivList[i].Date.split("T")[1] + " </strong></p></div> ";
+
+                }
+                if (alertArchivList[i].Alert_type_num == 5) {
+                    document.getElementById('Alerts_div').innerHTML += "<div class='archiv'><p id='" + alertArchivList[i].Alert_num + "'><i class='fas fa-exclamation-triangle' style='font-size:24px'></i>" + alertArchivList[i].Content + "<strong class='date'> " + alertArchivList[i].Date.split("T")[0] + " " + alertArchivList[i].Date.split("T")[1] + " </strong></p></div> ";
+
+                }
+            }
+        }
         function getError() {
             swal("Failed!", "You failed to read the alerts!", "warning")
         }
@@ -65,6 +102,7 @@
 
 
         function renderAlerts() {
+            document.getElementById('Alerts_div').innerHTML = "";
             for (i = 0; i < alertList.length; i++) {
                 if (alertList[i].Alert_type_num == 1) {
                     document.getElementById('Alerts_div').innerHTML += "<div  class='alert alert-Safety-level alert-dismissible'> <a id='" + alertList[i].Alert_num +"' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1]+ " </strong> <i class='fas fa-tachometer-alt' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
@@ -88,6 +126,22 @@
 
         }
 
+        function RenderAlertDivByType() {
+
+            if (AlertDivByType == 0 ) {
+                $("#archiv_alert_btn").text("התראות חדשות");
+                AlertDivByType = 1;
+                renderAlertsArchiv();
+            }
+            else {
+                $("#archiv_alert_btn").text("ארכיון התראות");
+                AlertDivByType = 0;
+                renderAlerts();
+            }
+
+
+
+        }
         //העלאת תמונה
         function uploadDefectPhoto() {
             var data = new FormData();
@@ -189,9 +243,9 @@
             <h1 class="alerts">התראות</h1>
         </div>
     </div>
-
+    <button id="archiv_alert_btn" type="button" class="btn btn-primary" onclick="RenderAlertDivByType()">ארכיון התראות</button>
     <div id="Alerts_div"></div>
-
+    <div id="Alert_Archiv_div"></div>
     <div method="post" enctype="multipart/form-data" id="formUpload">
         <div>
             <label for="files">Images:</label>

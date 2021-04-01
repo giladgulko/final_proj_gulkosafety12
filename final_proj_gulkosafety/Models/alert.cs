@@ -56,5 +56,11 @@ namespace final_proj_gulkosafety.Models
             dbs.UpdateAlert(this);
         }
 
+        public List<alert> ReadAlertArchive(string user_email)
+        {
+            DBServices dbs = new DBServices();
+            List<alert> alertArchiveList = dbs.ReadAlertArchive(user_email);
+            return alertArchiveList;
+        }
     }
 }
