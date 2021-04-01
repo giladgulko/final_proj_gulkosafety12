@@ -13,14 +13,33 @@ namespace final_proj_gulkosafety.Controllers
 
         public List<defect> Get()
         {
-            defect _defect = new defect();
-            return _defect.ReadDefect();
+            try
+            {
+                defect _defect = new defect();
+                return _defect.ReadDefect();
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
         }
 
         // POST api/<controller>
-        public void Post([FromBody] defect _defect)
+        public HttpResponseMessage Post([FromBody] defect _defect)
         {
-            _defect.InsertDefect();
+            try
+            {
+                {
+                    _defect.InsertDefect();
+
+                }
+
+                return Request.CreateResponse(HttpStatusCode.Created, _defect);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
+            }
         }
 
         // PUT api/<controller>/5

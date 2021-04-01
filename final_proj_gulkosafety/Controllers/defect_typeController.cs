@@ -12,9 +12,16 @@ namespace final_proj_gulkosafety.Controllers
     {
         public List<defect_type> Get()
         {
-            defect_type _defect_type = new defect_type();
-            List<defect_type> defectTypeList = _defect_type.ReadDefectType();
-            return defectTypeList;
+            try
+            {
+                defect_type _defect_type = new defect_type();
+                List<defect_type> defectTypeList = _defect_type.ReadDefectType();
+                return defectTypeList;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
         }
 
         // POST api/<controller>
