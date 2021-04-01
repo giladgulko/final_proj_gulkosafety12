@@ -13,20 +13,47 @@ namespace final_proj_gulkosafety.Controllers
         // GET all users api/<controller>
         public List<user> Get()
         {
-            user u = new user();
-            List<user> uList = u.Read();
-            return uList;
+            try
+            {
+                user u = new user();
+                List<user> uList = u.Read();
+                return uList;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
         }
 
         public List<user> Get(string manager_email, string foreman_email)
         {
-            user p = new user();
-            return p.Read_user_in_project(manager_email, foreman_email);
+            try
+            {
+                user p = new user();
+                return p.Read_user_in_project(manager_email, foreman_email);
+
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
         }
 
-        public void Post([FromBody] user u)
+        public HttpResponseMessage Post([FromBody] user u)
         {
-            u.InsertUser();
+            try
+            {
+                {
+                    u.InsertUser();
+
+                }
+
+                return Request.CreateResponse(HttpStatusCode.Created, u);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
+            }
         }
 
         // PUT api/<controller>/5

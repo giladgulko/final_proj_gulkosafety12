@@ -13,21 +13,34 @@ namespace final_proj_gulkosafety.Controllers
         // GET all types api/<controller>
         public List<user_type> Get()
         {
-            user_type ut = new user_type();
-            List<user_type> utList = ut.Read();
-            return utList;
-        }
-
-        // GET api/<controller>/5
-        public string Get(int id)
-        {
-            return "value";
+            try
+            {
+                user_type ut = new user_type();
+                List<user_type> utList = ut.Read();
+                return utList;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
         }
 
         // POST new type api/<controller>
-        public void Post([FromBody] user_type ut)
+        public HttpResponseMessage Post([FromBody] user_type ut)
         {
-            ut.Insert();
+            try
+            {
+                {
+                    ut.Insert();
+
+                }
+
+                return Request.CreateResponse(HttpStatusCode.Created, ut);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
+            }
         }
 
         // PUT api/<controller>/5
