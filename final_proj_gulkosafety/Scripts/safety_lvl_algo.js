@@ -14,7 +14,7 @@ function alertConstractor(arr, content, alert_type_num, user_email, proj_num) {
 }
 
 
-function safetyLVL(curentReport, lastREPORTdefects, gradesARR, projTypeWEIGHT,report_num) {
+function safetyLVL123(curentReport, lastREPORTdefects, gradesARR, projTypeWEIGHT,report_num) {
     const maxGradeForDefectType = 25
     //מספר הנקודות שיורדות כתוצאה מבדיקת כללים בדוח הנוכחי
     const point = 10

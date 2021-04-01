@@ -272,12 +272,12 @@
 
             for (i = 0; i < contactList.length; i++) {
                 if (project.Manager_email == contactList[i].Email) {
-                    projContacts.push({ manager: contactList[i] });
+                    projContacts.push(contactList[i]);
                     managerSelect.innerHTML += "<option value=" + contactList[i].Email + ">" + contactList[i].Name + ", " + contactList[i].Phone + "</option > ";
                 }
                 if (project.Foreman_email == contactList[i].Email) {
                     foremanSelect.innerHTML += "<option value=" + contactList[i].Email + ">" + contactList[i].Name + ", " + contactList[i].Phone + " </option>";
-                    projContacts.push({ foreman: contactList[i] });
+                    projContacts.push(contactList[i]);
                 }
             }
 
@@ -314,8 +314,8 @@
             $('#endDate').val(project.End_date.split("T")[0]);
             $('#company').val(project.Company);
             $('#address').val(project.Address);
-            $('#safetyLevel').val(project.Safety_lvl);
             $('#description').val(project.Description);
+            $('#safetyLvlGraph').append("<p>" + project.Safety_lvl + "</p>");
         }
 
         function getError(err) {
@@ -535,6 +535,15 @@
             <div class="col-md-4 mb-3">
                 <div class="card">
                     <div class="card-body section1">
+                        <div class="row">
+                            <div class="form-group col-sm-6">
+                                <h3>רמת בטיחות פרויקט</h3>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="safetyLvlGraph" class="form-group col-sm-6">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

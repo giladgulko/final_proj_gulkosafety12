@@ -23,7 +23,7 @@
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
     <link href="styles/reportStyleSheet.css" rel="stylesheet" />
     <link href="styles/nav_bar_style.css" rel="stylesheet" />
-    <script src="../Scripts/safetyLVL.js"></script>
+    <script src="../Scripts/safetyLVL.js"></script>>
     <title>דוח ביקור</title>
 
     <script>
@@ -34,8 +34,7 @@
         allReports = [];
         defectToEdit = "";
         ptwList = [];
-        //tableID = "";
-        userType = 1;
+        userType = 0;
 
         $(document).ready(function () {
             //build view page
@@ -101,6 +100,7 @@
             $('#time').val(time[1]);
             $('#comments').val(report.Comment);
             $('#proj_bar').html(headLine);
+            $("#ReportGradeP").html(report.Grade);
         }
 
         function editReportPageBtnEvents() {
@@ -156,12 +156,13 @@
         }
 
 
-        function getReportDefect(reportNum) {         
+        function getReportDefect(reportNum) {
             let api = "../api/defect_in_report?report_num=" + reportNum;
             ajaxCall("GET", api, "", getReportDefSuccess, getError);
         }
 
         function getReportDefSuccess(defects) {
+            currentReportDefects = defects;
             $("#defectsTBL").show();
             let tableID = "#defectTable";
             createDt(defects, tableID);
@@ -175,12 +176,14 @@
         function renderProjectDetails() {
             $('#company').val(project.Company);
             $('#location').val(project.Address);
-            //let projUsers = JSON.parse(localStorage["projContacts"]);
-            $('#forman').val(project.Foreman_email);
-            $('#projManeger').val(project.Manager_email);
+            let projUsers = JSON.parse(localStorage["projContacts"]);
+            //$('#forman').val(project.Foreman_email);
+            //$('#projManeger').val(project.Manager_email);
+            $('#forman').val(projUsers[0].Name);
+            $('#projManeger').val(projUsers[1].Name);
         }
 
-        function editDefectImg(defectNum) {
+        function editDefectImg(defect) {
             $('#showImg').hide();
             $('.image').hide();
             $("#uploadImg").show();
@@ -299,7 +302,7 @@
             $("#fixTime").val(defectToEdit.Fix_time);
             $("#description").val(defectToEdit.Description);
             $("#fixStatus").val(defectToEdit.Fix_status),
-            $("#btn_update_defect").show();
+                $("#btn_update_defect").show();
             $("#btn_add_defect").hide();
         }
         function upDateDefect() {
@@ -461,7 +464,7 @@
             let curentReport = [];
             for (i = 0; i < defects.length; i++) {
                 for (j = 0; j < currentReportDefects.length; j++) {
-                    if (currentReportDefects[j].Defect_num == defects[i].Defect_num) {
+                    if (currentReportDefects[j].Defect_num == defects[i].Defect_num && i<181) {
                         let defect = {
 
                             Defect_num: currentReportDefects[j].Defect_num,
@@ -475,9 +478,9 @@
                 }
             }
 
-            gradesArr = JSON.parse(localStorage["gradesArr"])
-            safetyLVL(curentReport, lastReportDefects, gradesArr, ptwList, report.Report_num)
-            
+            gradesArr = JSON.parse(localStorage["gradesArr"]);
+            safetyLVL(curentReport, lastReportDefects, gradesArr, ptwList, report.Report_num);
+            document.getElementById('id02').style.display = 'block';
         }
 
         function getPTWSuccess(ptwList1) {
@@ -680,10 +683,18 @@
             </table>
 
         </div>
-        <div class="row">
-            <button id="calcGrade" class="btn btn-primary" onclick="calcGrade()">חשב ציון דוח</button>
-        </div>
     </div>
+    <div id="calcAndSend" class="mainCards">
+        <div class="row">
+            <div class="col-sm-6">
+                <button id="calcGrade" class="btn btn-primary" onclick="calcGrade()">חשב ציון דוח</button>
+            </div>
+            <div class="col-sm-6">
+                <h3>ציון דוח:</h3>
+                <p id="ReportGradeP"></p>
+            </div>
+            </div>
+        </div>
     <!--כל החלק מתחת הוא החלון שנפתח ברגע שלוחצים על הוסף ליקוי חדש לדוח-->
     <div class="w3-container">
         <div id="id01" class="w3-modal">
@@ -734,21 +745,30 @@
                         </div>
                         <div class="row">
                             <p>
-                                 <button type="submit" id="btn_add_defect" class="btn btn-primary">הוסף ליקוי</button>
-                                
+                                <button type="submit" id="btn_add_defect" class="btn btn-primary">הוסף ליקוי</button>
+
                             </p>
                         </div>
                     </form>
                     <div class="row">
                         <p>
-                            
+
                             <button id="btn_update_defect" class="btn btn-primary" onclick="upDateDefect()"> עדכן ליקוי</button>
                         </p>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="w3-container">
+        <div id="id02" class="w3-modal">
+            <div class="w3-modal-content">
+                <div class="w3-container">
+                    <span onclick="document.getElementById('id02').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                    <div id="safetyAlert"></div>
                 </div>
             </div>
         </div>
-    <div id="safetyAlert"></div>
-    </body>
+    </div>
+</body>
     </html>
