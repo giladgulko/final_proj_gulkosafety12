@@ -1,20 +1,5 @@
 ﻿
-
-function alertConstractor(content, alert_type_num, user_email, proj_num) {
-    new_alert = {
-
-        Content: content,
-        Alert_type_num: alert_type_num,
-        User_email: user_email,
-        Status: 0,
-        Date: Date.now(),
-        Proj_num: proj_num
-    }
-    ajaxCall("POST", "../api/alert", JSON.stringify(new_alert), updateReportSuccess(), getError);
-}
-
-
-function safetyLVL(curentReport, lastREPORTdefects, gradesARR, projTypeWEIGHT, report_num) {
+function safetyLeveL(curentReport, lastREPORTdefects, gradesARR, projTypeWEIGHT, report_num) {
     gradesARR.pop()
     const maxGradeForDefectType = 25
     //מספר הנקודות שיורדות כתוצאה מבדיקת כללים בדוח הנוכחי
@@ -118,7 +103,7 @@ function safetyLVL(curentReport, lastREPORTdefects, gradesARR, projTypeWEIGHT, r
     updateProjectSafetyLevel(safetyLvLGrade);
 
     let str = "";
-    let alretHtml = "<div id='safetyLevelAlert'><h2>סיכום עדכון רמת בטיחות פרויקט " + project.Project_num + "</h2>";
+    let alretHtml = "<h2>סיכום עדכון רמת בטיחות פרויקט " + project.Project_num + "</h2>";
     alretHtml += "<h3>ציון דוח ביקור מספר " + report_num + ": "+ report_Grade + "</h3>";
     alretHtml += "<h3>ציון רמת בטיחות פרויקט: " + safetyLvLGrade + "</h3><br />";
     alretHtml += "<h3>פירוט ממצאים דוח ביקור:</h3>";
@@ -180,4 +165,20 @@ function updateProjectSafetySuccess() {
 
 function getError(err) {
 alert(err)
+}
+
+function alertConstractor(content, alert_type_num, user_email, proj_num) {
+    new_alert = {
+        Content: content,
+        Date: Date.now(),
+        Alert_type_num: alert_type_num,
+        User_email: user_email,
+        Status: 0,
+        Proj_num : proj_num
+    }
+    ajaxCall("POST", "../api/alert", JSON.stringify(new_alert), insertAlertSuccess, getError);
+}
+
+function insertAlertSuccess() {
+    alert("התראה הועלתה");
 }

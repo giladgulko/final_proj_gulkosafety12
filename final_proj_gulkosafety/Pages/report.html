@@ -23,7 +23,8 @@
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
     <link href="styles/reportStyleSheet.css" rel="stylesheet" />
     <link href="styles/nav_bar_style.css" rel="stylesheet" />
-    <script src="../Scripts/safetyLVL.js"></script>>
+    <script src="../Scripts/safetyLVL.js"></script>
+
     <title>דוח ביקור</title>
 
     <script>
@@ -34,7 +35,7 @@
         allReports = [];
         defectToEdit = "";
         ptwList = [];
-        userType = 0;
+        userType = 1;
 
         $(document).ready(function () {
             //build view page
@@ -164,9 +165,9 @@
             $('#proj_bar').html(headLine);
         }
 
-        function getReportDefect(reportNum) {         
+        function getReportDefect(reportNum) {
             let api = "../api/defect_in_report?report_num=" + reportNum;
-            ajaxCall("GET", api, "", getReportDefSuccess,getReportDefError);
+            ajaxCall("GET", api, "", getReportDefSuccess, getReportDefError);
         }
 
         function getReportDefSuccess(defects) {
@@ -411,7 +412,7 @@
             }).then(function () {
                 location.reload();
             }
-            );
+                );
         }
         function postDefectInReportError() {
             swal("Failed!", "Failed to insert the defect in report!", "warning");
@@ -500,7 +501,7 @@
         function insertReportSuccess() {
             swal("Good job!", "The report was saved successfully! defects were added to report", "success")
             let api = "../api/report/" + project.Project_num + "/lastReport";
-            ajaxCall("GET", api, "", getLastReportSuccess,getLastReportError);
+            ajaxCall("GET", api, "", getLastReportSuccess, getLastReportError);
         }
 
         function getLastReportSuccess(lastReport) {
@@ -510,7 +511,7 @@
             }).then(function () {
                 location.reload();
 
-           });
+            });
         }
         function getLastReportError() {
             swal("Failed!", "Failed to resd the last report!", "warning");
@@ -522,7 +523,7 @@
             let curentReport = [];
             for (i = 0; i < defects.length; i++) {
                 for (j = 0; j < currentReportDefects.length; j++) {
-                    if (currentReportDefects[j].Defect_num == defects[i].Defect_num && i<181) {
+                    if (currentReportDefects[j].Defect_num == defects[i].Defect_num && i < 181) {
                         let defect = {
 
                             Defect_num: currentReportDefects[j].Defect_num,
@@ -537,7 +538,7 @@
             }
 
             gradesArr = JSON.parse(localStorage["gradesArr"]);
-            safetyLVL(curentReport, lastReportDefects, gradesArr, ptwList, report.Report_num);
+            safetyLeveL(curentReport, lastReportDefects, gradesArr, ptwList, report.Report_num);
             document.getElementById('id02').style.display = 'block';
         }
 
@@ -549,7 +550,9 @@
         function updateDefectStatus() {
 
         }
+
     </script>
+
 </head>
 <body>
     <div id="logo">
