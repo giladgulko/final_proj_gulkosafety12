@@ -73,13 +73,16 @@
         function getAlerts() {
             let proj_num = project.Project_num;
             let api = "../api/alert?proj_num=" + proj_num;
-            ajaxCall("GET", api, "", getAlertsSuccess, getError);
+            ajaxCall("GET", api, "", getAlertsSuccess, getAlertError);
         }
         function getAlertsSuccess(data) {
             alertList = data;
             for (i = 0; i < alertList.length; i++) {
                 document.getElementById('alerts').innerHTML += "<div class='alertDiv'><strong class='date'> "+ alertList[i].Date.split("T")[0] + " </strong > "  + alertList[i].Content + " </div> ";
             }
+        }
+        function getAlertError() {
+            swal("Failed!", "Failed to read alerts!Please try again", "warning")
         }
 
         function saveContactForm() {
@@ -107,7 +110,7 @@
 
 
             let api = "../api/project?project_num=" + project_num;
-            ajaxCall("PUT", api, JSON.stringify(proj), updateProjContactsSuccess, getError);
+            ajaxCall("PUT", api, JSON.stringify(proj), updateProjContactsSuccess, updateProjContactsError);
         }
 
         function updateProjContactsSuccess(data) {
@@ -119,8 +122,8 @@
             //update local storage
             localStorage["projContacts"] = JSON.stringify(projContactsTest);
         }
-        function getError(data) {
-            alert("פרטי אנשי הקשר לא נשמרו! נסה שוב");
+        function updateProjContactsError(data) {
+            swal("Failed!", "Failed to update contacts! Please try again", "warning")
         }
 
         function saveProjForm() {
@@ -228,14 +231,14 @@
                 markSelected(this);
                 var report_num = this.getAttribute('data-reportId');
                 swal({ // this will open a dialouge
-                    title: "האם אתה בטוח שברצונך למחוק את הדוח?",
+                    title: "Are you sure you want to delete the report?",
                     text: "",
                     icon: "warning",
                     buttons: true,
                     dangerMode: true
                 }).then(function (willDelete) {
                     if (willDelete) DeleteReport(report_num);
-                    else swal("המחיקה בוטלה!");
+                    else swal("The deletion was canceled!");
                 });
             });
 
@@ -286,14 +289,22 @@
         // Delete a report from the server
         function DeleteReport(report_num) {
             let api = "../api/report?report_num=" + report_num;
-            ajaxCall("DELETE", api, "", deleteReportSuccess, getError);
+            ajaxCall("DELETE", api, "", deleteReportSuccess, deleteReportError);
         }
 
 
         // success callback function after delete report
         function deleteReportSuccess(data) {
-            swal("הדוח נמחק בהצלחה!", "Great Job", "success");
-            location.reload();
+            swal({
+                title: "Good job", text: "The report was successfully deleted!", type:
+                    "success", icon: "success"
+            }).then(function () {
+                location.reload();
+            }
+            );
+        }
+        function deleteReportError() {
+            swal("Failed!", "Failed to delete the report!", "warning");
         }
 
         // mark the selected row
@@ -317,16 +328,15 @@
             $('#safetyLevel').val(project.Safety_lvl);
             $('#description').val(project.Description);
         }
-
-        function getError(err) {
-            alert("error");
-        }
-
         function getReports() {
             let proj_num = project.Project_num;
             let api = "../api/report?proj_num=" + proj_num;
-            ajaxCall("GET", api, "", getReportsSuccess, getError);
+            ajaxCall("GET", api, "", getReportsSuccess, getReportError);
         }
+        function getReportError() {
+            swal("Failed!", "Failed to read the reports!", "warning");
+        }
+
 
         function getReportsSuccess(data) {
             reports = data;
@@ -371,7 +381,7 @@
                 alert(err);
             }
             localStorage["gradesArr"] = JSON.stringify(gradesArr);
-            //buildGradesGraph(gradesArr, reportNumArr);
+            buildGradesGraph(gradesArr, reportNumArr);
             if (reports != "") {
                 localStorage["allReports"] = JSON.stringify(reports);
             }
@@ -379,17 +389,17 @@
 
         }
 
-        //function buildGradesGraph(gradesArr, reportNumArr) {
-        //    var trace1 = {
-        //        x: reportNumArr,
-        //        y: gradesArr,
-        //        type: 'scatter'
-        //    };
+        function buildGradesGraph(gradesArr, reportNumArr) {
+            var trace1 = {
+                x: reportNumArr,
+                y: gradesArr,
+                type: 'scatter'
+            };
 
-        //    var data = [trace1];
+            var data = [trace1];
 
-        //    Plotly.newPlot('chartContainer', data);
-        //}
+            Plotly.newPlot('chartContainer', data);
+        }
 
     </script>
 </head>
@@ -618,7 +628,7 @@
         </div>
     </div>
 
-        <!--<div class="col-md-4 mb-3">
+        <div class="col-md-4 mb-3">
         <div class="card">
             <div class="card-body section2">
                 <div class="row">
@@ -631,6 +641,6 @@
             </div>
         </div>
             </div>
-    </div>-->
+   
 </body>
 </html>
