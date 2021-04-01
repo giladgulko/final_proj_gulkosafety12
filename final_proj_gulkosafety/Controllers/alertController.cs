@@ -12,15 +12,30 @@ namespace final_proj_gulkosafety.Controllers
     {
         public List<alert> Get(string user_email)
         {
-            alert a = new alert();
-            List<alert> aList = a.Read(user_email);
-            return aList;
+            try
+            {
+                alert a = new alert();
+                List<alert> aList = a.Read(user_email);
+                return aList;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
         }
         public List<alert> Get(int proj_num)
         {
-            alert a = new alert();
-            List<alert> alertList = a.Read(proj_num);
-            return alertList;
+            try
+            {
+                alert a = new alert();
+                List<alert> alertList = a.Read(proj_num);
+                return alertList;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
         }
 
         // POST api/<controller>
@@ -29,9 +44,20 @@ namespace final_proj_gulkosafety.Controllers
         }
 
         // PUT api/<controller>/5
-        public void Put([FromBody] alert a)
+        public HttpResponseMessage Put([FromBody] alert a)
         {
-            a.UpdateAlert();
+            try
+            {
+                {
+                    a.UpdateAlert();
+
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, a);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotAcceptable, ex.Message);
+            }
         }
 
         // DELETE api/<controller>/5

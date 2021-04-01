@@ -31,7 +31,7 @@
         }
 
         function getError() {
-            alert("err")
+            swal("Failed!", "You failed to read the alerts!", "warning")
         }
         function getAlertsuccess(data) {
             alertList = data;
@@ -54,14 +54,15 @@
             }
            
             let api = "../api/alert";
-            ajaxCall("PUT", api, JSON.stringify(update_status), UpdateAlertStatus, getError)
+            ajaxCall("PUT", api, JSON.stringify(update_status), UpdateAlertStatusSuccess, UpdateAlertStatusError)
         }
-        function getError(err) {
-            console.table(err)
+        function UpdateAlertStatusSuccess() {
+            swal("Good job!", "Alert status update successfully!", "success")
         }
-        function UpdateAlertStatus() {
-            console.table(success)
+        function UpdateAlertStatusError() {
+            swal("Failed!", "Failed to update the alerts!", "warning")
         }
+
 
         function renderAlerts() {
             for (i = 0; i < alertList.length; i++) {
