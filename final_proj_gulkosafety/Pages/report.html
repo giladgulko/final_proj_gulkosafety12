@@ -186,10 +186,8 @@
             $('#company').val(project.Company);
             $('#location').val(project.Address);
             let projUsers = JSON.parse(localStorage["projContacts"]);
-            //$('#forman').val(project.Foreman_email);
-            //$('#projManeger').val(project.Manager_email);
-            $('#forman').val(projUsers[0].Name);
-            $('#projManeger').val(projUsers[1].Name);
+            $('#forman').val(projUsers[0].Name + ", " +projUsers[0].Phone);
+            $('#projManeger').val(projUsers[1].Name + ", " + projUsers[1].Phone);
         }
 
         function editDefectImg(defect) {
@@ -345,7 +343,7 @@
             let api = "../api/defect_in_report";
             ajaxCall("PUT", api, JSON.stringify(update_defect), updateDefectsInReportSuccess, updateDefectsInReportError)
         }
-        function updateDefectsInReport() {
+        function updateDefectsInReportSuccess() {
             swal({
                 title: "Good job!", text: "You created new project successfully!", type: "success", icon: "success"
             }).then(function () {

@@ -84,7 +84,7 @@ function safetyLeveL(curentReport, lastREPORTdefects, gradesARR, projTypeWEIGHT,
     }
     report_Grade = 100 - report_Grade;//calc final report grade
  
-    updateReportGrade(report_num, report_Grade);  //PUT report grade on DB
+    updateReportGrade(report_num, report_Grade.toFixed(2));  //PUT report grade on DB
 
 
     //start calc safety level
@@ -100,7 +100,7 @@ function safetyLeveL(curentReport, lastREPORTdefects, gradesARR, projTypeWEIGHT,
         safetyLvLGrade = safetyLvLGrade + 5;
     }
 
-    updateProjectSafetyLevel(safetyLvLGrade);
+    updateProjectSafetyLevel(safetyLvLGrade.toFixed(2));
 
     let str = "";
     let alretHtml = "<h2>סיכום עדכון רמת בטיחות פרויקט " + project.Project_num + "</h2>";
