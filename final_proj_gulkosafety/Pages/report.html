@@ -24,7 +24,7 @@
     <link href="styles/reportStyleSheet.css" rel="stylesheet" />
     <link href="styles/nav_bar_style.css" rel="stylesheet" />
     <script src="../Scripts/safetyLVL.js"></script>
-
+    
     <title>דוח ביקור</title>
 
     <script>
@@ -258,7 +258,18 @@
                         { data: "Description" },
                         { data: "Fix_date" },
                         { data: "Fix_time" },
-                        { data: "Fix_status" },
+                        {
+                            render: function (data, type, row, meta) {
+                                if (row.Fix_status == 1) {
+                                    let sta = "<p style='color: green'>תוקן<p>"
+                                    return sta
+                                }
+                                else {
+                                    let sta = "<p style='color: red'>לא תוקן<p>"
+                                    return sta
+                                }
+                            }
+                        },
                         {
                             render: function (data, type, row, meta) {
                                 if (row.Picture_link != "") {
@@ -412,7 +423,7 @@
             }).then(function () {
                 location.reload();
             }
-                );
+            );
         }
         function postDefectInReportError() {
             swal("Failed!", "Failed to insert the defect in report!", "warning");
@@ -548,7 +559,19 @@
         }
 
         function updateDefectStatus() {
+            $('#mask').removeClass('showing');
+            $('html').removeClass('hide-scroll');
 
+            defectToEdit.Fix_status = 1
+            console.log(defectToEdit)
+            let api = "../api/defect_in_report";
+            ajaxCall("PUT", api, JSON.stringify(defectToEdit), updateDefectImgSuccess, updateDefectsInReportError)
+        
+
+        }
+        function updateDefectImgSuccess() {
+            location.reload();
+            //-יצירת התראה-להשלים
         }
 
     </script>
