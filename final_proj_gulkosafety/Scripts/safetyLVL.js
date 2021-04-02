@@ -164,13 +164,14 @@ function updateProjectSafetySuccess() {
 }
 
 function getError(err) {
-alert(err)
+    console.log(err)
 }
 
 function alertConstractor(content, alert_type_num, user_email, proj_num) {
+    var now = new Date().toISOString();
     new_alert = {
         Content: content,
-        Date: Date.now(),
+        Date: now,
         Alert_type_num: alert_type_num,
         User_email: user_email,
         Status: 0,
@@ -180,5 +181,5 @@ function alertConstractor(content, alert_type_num, user_email, proj_num) {
 }
 
 function insertAlertSuccess() {
-    alert("התראה הועלתה");
+    console.log("התראה הועלתה");
 }
