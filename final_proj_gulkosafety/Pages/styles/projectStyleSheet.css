@@ -55,11 +55,15 @@ body {
 
 
 .section1 {
-    min-height: 320px;
+    min-height: 360px;
 }
 
 .section2 {
-    min-height: 200px;
+    height: 200px;
+}
+
+.section3 {
+    min-height: 300px;
 }
 
 .newBTN {
@@ -149,23 +153,30 @@ nav.navbar.navbar-inverse {
     overflow: scroll;
 }
 
-#reports {
-    background-color: white;
-    display: flex;
-    width: 64.5%;
-}
-
 #pForm {
     margin-left: 10%;
     margin-right: 10%;
 }
-div#report_header {
-    padding-right: 1%;
-    padding-top: 2%;
-}
 
 div#report_BTN {
-    float: left;
-    margin-left: 10%;
+    text-align: left;
 }
 
+.box {
+    width: 100%;
+    margin-top: 25px;
+}
+
+.gauge {
+    width: 100%;
+    height: 240px;
+}
+
+.flexbox {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+    .flexbox > div {
+        flex: 1 0 300px;
+    }

@@ -330,12 +330,12 @@
                 value: project.Safety_lvl,
                 min: 0,
                 max: 100,
+                //symbol: 'mph',
                 pointer: true,
                 gaugeWidthScale: 0.6,
                 counter: true,
                 relativeGaugeSize: true,
-                levelColorsGradient: false,
-                customSectors: { range: [{ color: "red", lo: 0, hi: 50 }, { color: "yellow", lo: 51, hi: 69.9 }, { color: "green", lo: 70, hi: 94.9 }, { color: "darkgreen", lo: 95, hi: 100 }] }
+                levelColors: ["#ff0000", "#f9c802", "#a9d70b"]
             });
         }
         function getReports() {
@@ -565,10 +565,6 @@
                                 <div id="g1" class="gauge"></div>
                             </div>
                         </div>
-                        <!--<div class="row">
-                        <div id="safetyLvlGraph" class="form-group col-sm-6">
-                        </div>
-                    </div>-->
                     </div>
                 </div>
             </div>
@@ -630,15 +626,14 @@
         <div class="row">
             <div class="col-md-8 mb-3">
                 <div class="card">
-                    <div class="card-body section3">
-                        <div class="row">
-                            <div id="report_header" class="form-group col-sm-6">
-                                <h3>דוחות ביקור</h3>
-                            </div>
-                            <div id="report_BTN" class="form-group col-sm-6">
-                                <button class='btn btn-primary' id="newBTN">דוח ביקור חדש</button>
-                            </div>
+                    <div class="card-body section2">
+                        <div id="report_header">
+                            <h3>דוחות ביקור</h3>
                         </div>
+                        <div id="report_BTN">
+                            <button class='btn btn-primary' id="newBTN">דוח ביקור חדש</button>
+                        </div>
+
                         <form id="pForm">
                             <table id="reportsTable" class="display" style="width:100%" dir="rtl">
                                 <thead>
@@ -655,19 +650,21 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 mb-3">
-                <div class="card">
-                    <div class="card-body section3">
-                        <div class="row">
-                            <div class="col">
-                                <h3>ציוני דוחות</h3>
-                            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body section2">
+                    <div class="row">
+                        <div class="col">
+                            <h3>ציוני דוחות</h3>
                         </div>
-                        <div id="chartContainer">
-                        </div>
+                    </div>
+                    <div id="chartContainer">
                     </div>
                 </div>
             </div>
         </div>
+
 </body>
 </html>

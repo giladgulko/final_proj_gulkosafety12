@@ -1497,7 +1497,7 @@ namespace final_proj_gulkosafety.Models.DAL
 
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
-            sb.AppendFormat("Values('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')", a.Content, a.Alert_type_num, a.User_email, a.Status, a.Date.ToString("yyyy-MM-dd HH:mm"), a.Proj_num);
+            sb.AppendFormat("Values('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')", a.Content, a.Alert_type_num, a.User_email, a.Status, a.Date.ToString("yyyy-MM-dd HH:mm:ss"), a.Proj_num);
             String prefix = "INSERT INTO alert " + "(content, alert_type_num,user_email,status,date,proj_num) ";
             command = prefix + sb.ToString();
 

@@ -327,8 +327,8 @@
             $("#fixDate").val(defectToEdit.Fix_date.split("T")[0]);
             $("#fixTime").val(defectToEdit.Fix_time);
             $("#description").val(defectToEdit.Description);
-            $("#fixStatus").val(defectToEdit.Fix_status),
-                $("#btn_update_defect").show();
+            $("#fixStatus").val(defectToEdit.Fix_status);
+            $("#btn_update_defect").show();
             $("#btn_add_defect").hide();
         }
         function upDateDefect() {
@@ -411,7 +411,6 @@
                 Description: $("#description").val()
             }
             console.log(New_defect)
-            //currentReportDefects.push(New_defect);
             api = "../api/defect_in_report";
             ajaxCall("POST", api, JSON.stringify(New_defect), postDefectInReportSuccess, postDefectInReportError)
 

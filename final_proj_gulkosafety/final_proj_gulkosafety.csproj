@@ -198,9 +198,11 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Pages\alerts.html" />
+    <Content Include="Pages\gaugeTest.html" />
     <Content Include="Pages\pdfTEST.html" />
     <Content Include="Pages\photos\logo.jpeg" />
     <Content Include="Pages\project.html" />
+    <Content Include="Pages\projtest.html" />
     <Content Include="Pages\styles\alertsStyles.css" />
     <Content Include="Pages\styles\projectsStyles.css" />
     <Content Include="Pages\projects.html" />
