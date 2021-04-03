@@ -39,6 +39,8 @@
     <link href="styles/nav_bar_style.css" rel="stylesheet" />
     <link href="styles/projectStyleSheet.css" rel="stylesheet" />
 
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
     <script>
 
         $(document).ready(function () {
@@ -76,8 +78,26 @@
         function getAlertsSuccess(data) {
             alertList = data;
             for (i = 0; i < alertList.length; i++) {
-                document.getElementById('alerts').innerHTML += "<div class='alertDiv'><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong > " + alertList[i].Content + " </div> ";
+                if (alertList[i].Alert_type_num == 1) {
+                    document.getElementById('alerts').innerHTML += "<div  class='alerts'> <p id='" + alertList[i].Alert_num + "' href='#' </p><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='fas fa-tachometer-alt' style='font-size:24px'></i>&nbsp&nbsp<a id='" + alertList[i].Alert_num + "' href='#' onclick='renderSafetyAlert(this.id)'>סיכום עדכון רמת בטיחות פרויקט " + alertList[i].Proj_num + "</a></div> ";
+                    //document.getElementById('alerts').innerHTML += "<div class='alertDiv'><strong class='date'> " + alertList[i].Date.split("T")[0] + " </strong > " + alertList[i].Content + " </div> ";
+                }
+                else {
+                    document.getElementById('alerts').innerHTML += "<div  class='alerts'> <p id='" + alertList[i].Alert_num + "' href='#' </p><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='far fa-calendar-alt' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
+                }
             }
+        }
+        function renderSafetyAlert(id) {
+            document.getElementById('alert_paragraph').innerHTML = ""
+            document.getElementById('id04').style.display = 'block';
+            for (var i = 0; i < alertList.length; i++) {
+                if (alertList[i].Alert_num == id) {
+
+                    $("#alert_paragraph").html(alertList[i].Content);
+                }
+
+            }
+
         }
         function getAlertError() {
             swal("Failed!", "Failed to read alerts!Please try again", "warning")
@@ -299,7 +319,7 @@
             }).then(function () {
                 location.reload();
             }
-                );
+            );
         }
         function deleteReportError() {
             swal("Failed!", "Failed to delete the report!", "warning");
@@ -665,6 +685,16 @@
                         </div>
                         <div id="chartContainer">
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="w3-container">
+            <div id="id04" class="w3-modal">
+                <div class="w3-modal-content">
+                    <div class="w3-container">
+                        <span onclick="document.getElementById('id04').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                        <div id="alert_paragraph"></div>
                     </div>
                 </div>
             </div>

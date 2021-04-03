@@ -201,6 +201,7 @@
                     Content: alertArchiveList[i].Content,
                     Date: alertArchiveList[i].Date.split('T')[0],
                     Time: alertArchiveList[i].Date.split('T')[1],
+              
                 }
                 alertsToShow.push(a);
             }
@@ -212,7 +213,16 @@
 
                         { data: "Alert_num" },
                         { data: "Alert_type_num" },
-                        { data: "Content" },
+                        {
+                             render: function(data, type, row, meta) {
+                                 if (row.Alert_type_num == 1) {
+                                     return "סיכום עדכון רמת בטיחות פרויקט"
+                                 }
+                                 else {
+                                     return row.Content
+                                 }
+                            }},
+                        //{ data: "Content" },
                         { data: "Date" },
                         { data: "Time" },
 

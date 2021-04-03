@@ -35,7 +35,7 @@
         allReports = [];
         defectToEdit = "";
         ptwList = [];
-        userType = 0;
+        userType = 1;
 
         $(document).ready(function () {
             //build view page
@@ -116,14 +116,14 @@
             $('#editReportBTN').show();
             $('.cancelUpdateReportBtns').hide();
 
-            //edit project details
+            //edit report details
             $("#editReportBTN").on("click", function () {
                 $('#editReportBTN').hide();
                 $(".groupDetails").prop('disabled', false);
                 $('.cancelUpdateReportBtns').show();
             });
 
-            //cancel edit project details
+            //cancel edit report details
             $(".cancelUpdateReportBtns").on("click", function () {
                 $(".cancelUpdateReportBtns").hide();
                 $(".groupDetails").prop('disabled', true);
@@ -260,13 +260,15 @@
             $('.window .close').click(function (e) {
                 ////Cancel the link behavior
                 e.preventDefault();
-
+                no();
                 $('#mask').removeClass('showing');
                 $('html').removeClass('hide-scroll');
             });
         }
 
-
+        function no() {
+            alert("in")
+        }
         function createDt(defectsdata, tableID) {
 
             for (i = 0; i < defectsdata.length; i++) {
@@ -526,10 +528,15 @@
         }
 
         function updateReportSuccess() {
-            alert("הדוח עודכן בהצלחה");
-            $(".groupDetails").prop('disabled', true);
-            $('#editReportBTN').show();
-            $('.cancelUpdateReportBtns').hide();
+            swal({
+                title: "מצוין!", text: "הדוח עודכן בהצלחה", type: "success", icon: "success"
+            }).then(function () {
+                $(".groupDetails").prop('disabled', true);
+                $('#editReportBTN').show();
+                $('.cancelUpdateReportBtns').hide();
+
+            });
+
         }
         function updateReportError() {
             swal("Failed!", "Failed to update the report!", "warning");
@@ -592,12 +599,13 @@
             console.log(defectToEdit)
             let api = "../api/defect_in_report";
             ajaxCall("PUT", api, JSON.stringify(defectToEdit), updateDefectImgSuccess, updateDefectsInReportError)
+
+          
         
 
         }
-        function updateDefectImgSuccess(data) {
-            alert("success")
-            //location.reload();
+        function updateDefectImgSuccess() {
+            location.reload();
             //-יצירת התראה-להשלים
         }
 
@@ -690,7 +698,7 @@
                         <button type="button" id="editReportBTN" class="btn btn-default btn-sm">
                             <span class="glyphicon glyphicon-pencil"></span>
                         </button>
-                        <button type="submit" id="updateReportBTN" class="btn btn-default btn-sm cancelUpdateReportBtns">
+                        <button type="button" id="updateReportBTN" class="btn btn-default btn-sm cancelUpdateReportBtns" onclick="saveNewReport()">
                             <span class="glyphicon glyphicon-floppy-disk"></span>
                         </button>
                         <button type="button" id="cancelEditBTN" class="btn btn-default btn-sm cancelUpdateReportBtns">
@@ -725,7 +733,7 @@
                     </div>
                     <div id="showImg">
                         <div id="popupfoot"> <img src="#" class="image" alt="Loading..." /> </div>
-                        <button class="btn btn-danger fixBTNs">ליקוי לא תוקן</button>
+                        <button class="btn btn-danger fixBTNs" onclick="defectNotApprove()">ליקוי לא תוקן</button>
                         <button class="btn btn-success fixBTNs" onclick="updateDefectStatus()">אשר תקינות ליקוי</button>
                     </div>
 
