@@ -114,4 +114,4 @@ INSERT INTO [defect](grade,defect_type_num,name)
 VALUES  (6,8,'הצבת חפצים להגבהה על רצפת הפיגום ועבודה מהם')
 
 
-SELECT * FROM defect_in_report
+SELECT * FROM alert 

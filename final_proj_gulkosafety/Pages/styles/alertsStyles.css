@@ -56,17 +56,16 @@
     font-size: 20px;
 }
 .alert-Safety-level {
-    color: #ca7521;
-    background-color: #ffb366;
-    border-color: #bce8f1;
+    color: #777;
+    background-color: #ddd;
+    border-color: #d8d0d0;
     direction: rtl;
     font-size: 20px;
-    padding:10px;
 }
 
 .alert-defect {
     color: #b7a124;
-    background-color: #ffff80;
+    background-color: #ffffbc;
     border-color: #ffff1a;
     direction: rtl;
     font-size: 20px;
@@ -104,4 +103,21 @@
 img {
     height: 5%;
     width: 10%;
+}
+#pForm {
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 5%;
+    text-align: right;
+    max-width: 80%;
+    margin-bottom: 5px;
+}
+th.sorting {
+    text-align: center;
+}
+th.sorting_asc {
+    text-align: center;
+}
+th {
+    text-align: right;
 }

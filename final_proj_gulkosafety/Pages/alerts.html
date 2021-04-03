@@ -9,16 +9,30 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link href="styles/nav_bar_style.css" rel="stylesheet" />
     <link href="styles/alertsStyles.css" rel="stylesheet" />
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
 
     <script>
         var user_email = "gulkosafety@gmail.com";// צריך לקחת את היוזר מהלוקאל סטורג - של מי שנמצא בלוג אין
 
         $(document).ready(function () {
-            alertArchivList = [];
+            $("#pForm").hide();
+            alertArchiveList = [];
             alertList = [];
             getAlerts();
             $("#btns").hide();
@@ -66,7 +80,7 @@
             renderAlerts();
         }
 
-        
+
         function getAlerts() {
 
             let api = "../api/alert?user_email=" + user_email;
@@ -75,75 +89,37 @@
         function getAlertArchive() {
 
             let api = "../api/alert/" + user_email + "/AlertArchive";
-            ajaxCall("GET", api, "", getAlertgetAlertArchivSuccess, getError);
+            ajaxCall("GET", api, "", getAlertArchivSuccess, getError);
         }
 
-        function getAlertgetAlertArchivSuccess(data) {
-            alertArchivList = data;
-            
-        } 
+        function getAlertArchivSuccess(data) {
+            alertArchiveList = data;
 
-        function renderAlertsArchiv() {
-            document.getElementById('Alerts_div').innerHTML = "";
-            document.getElementById('Alerts_div').setAttribute('style', 'padding:0px;')
-            for (i = 0; i < alertArchivList.length; i++) {
-                if (i != 0) {
-                    var data = alertArchivList[i].Date.split("T")[0];
-                    var data1 = alertArchivList[i - 1].Date.split("T")[0];
-                    var arr1 = data1.split('-');
-                    var arr = data.split('-');
-                    var month = arr[1];
-                    var month1 = arr1[1];
-                    if (month != month1) {
-                        document.getElementById('Alerts_div').innerHTML += "<div  class='separate'> </br></br></br></div> ";
-                    }
-                }
-                    if (alertArchivList[i].Alert_type_num == 1) {
-                        document.getElementById('Alerts_div').innerHTML += "<div  class='archiv'> <p id='" + alertArchivList[i].Alert_num + month + "'><i class='fas fa-tachometer-alt' style='font-size:24px'></i> " + alertArchivList[i].Content + "<strong class='date'> " + alertArchivList[i].Date.split("T")[0] + " " + alertArchivList[i].Date.split("T")[1] + " </strong></p></div> ";
-                    }
-                    if (alertArchivList[i].Alert_type_num == 2) {
-                        document.getElementById('Alerts_div').innerHTML += "<div  class='archiv'> <p id='" + alertArchivList[i].Alert_num + "'><i class='far fa-calendar-alt' style='font-size:24px'></i>" + alertArchivList[i].Content + "<strong class='date'> " + alertArchivList[i].Date.split("T")[0] + " " + alertArchivList[i].Date.split("T")[1] + " </strong></p></div> ";
-                    }
-                    if (alertArchivList[i].Alert_type_num == 3) {
-                        document.getElementById('Alerts_div').innerHTML += "<div class='archiv'> <p id='" + alertArchivList[i].Alert_num + "'><i class='far fa-check-circle' style='font-size:24px'></i >" + alertArchivList[i].Content + "<strong class='date'> " + alertArchivList[i].Date.split("T")[0] + " " + alertArchivList[i].Date.split("T")[1] + " </strong></p></div> ";
+        }
 
-                    }
-                    if (alertArchivList[i].Alert_type_num == 4) {
-                        document.getElementById('Alerts_div').innerHTML += "<div class='archiv'><p id='" + alertArchivList[i].Alert_num + "'><i class='fas fa-chalkboard-teacher' style='font-size:24px'></i>" + alertArchivList[i].Content + "<strong class='date'> " + alertArchivList[i].Date.split("T")[0] + " " + alertArchivList[i].Date.split("T")[1] + " </strong></p></div> ";
-
-                    }
-                    if (alertArchivList[i].Alert_type_num == 5) {
-                        document.getElementById('Alerts_div').innerHTML += "<div class='archiv'><p id='" + alertArchivList[i].Alert_num + "'><i class='fas fa-exclamation-triangle' style='font-size:24px'></i>" + alertArchivList[i].Content + "<strong class='date'> " + alertArchivList[i].Date.split("T")[0] + " " + alertArchivList[i].Date.split("T")[1] + " </strong></p></div> ";
-
-                    }
-                }
-            }
-        
         function getError() {
             swal("Failed!", "You failed to read the alerts!", "warning")
         }
         function getAlertsuccess(data) {
             alertList = data;
             check_if_date_pass();
-
- 
-        } 
+        }
         function ChangeStatus(id) {
             for (var i = 0; i < alertList.length; i++) {
                 if (alertList[i].Alert_num == id) {
                     update_status = {
-                        Alert_num : Number(id),
-                        Content : alertList[i].Content,
-                        Date : alertList[i].Date,
-                        Alert_type_num : alertList[i].Alert_type_num,
-                        User_email : alertList[i].User_email,
-                        Status : 1,
-                        Proj_num : alertList[i].Proj_num
+                        Alert_num: Number(id),
+                        Content: alertList[i].Content,
+                        Date: alertList[i].Date,
+                        Alert_type_num: alertList[i].Alert_type_num,
+                        User_email: alertList[i].User_email,
+                        Status: 1,
+                        Proj_num: alertList[i].Proj_num
 
                     }
                 }
             }
-           
+
             let api = "../api/alert";
             ajaxCall("PUT", api, JSON.stringify(update_status), UpdateAlertStatusSuccess, UpdateAlertStatusError)
         }
@@ -157,14 +133,14 @@
 
         function renderAlerts() {
             document.getElementById('Alerts_div').innerHTML = "";
-            document.getElementById('Alerts_div').setAttribute('style','padding:10px;')
-        
+            document.getElementById('Alerts_div').setAttribute('style', 'padding:10px;')
+
             for (i = 0; i < alertList.length; i++) {
                 if (alertList[i].Alert_type_num == 1) {
-                    document.getElementById('Alerts_div').innerHTML += "<div  class='alert alert-Safety-level alert-dismissible'> <a id='" + alertList[i].Alert_num +"' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1]+ " </strong> <i class='fas fa-tachometer-alt' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
+                    document.getElementById('Alerts_div').innerHTML += "<div  class='alert alert-Safety-level alert-dismissible'> <a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='fas fa-tachometer-alt' style='font-size:24px'></i>&nbsp&nbsp<a id='" + alertList[i].Alert_num + "' href='#' onclick='renderSafetyAlert(this.id)'>סיכום עדכון רמת בטיחות פרויקט " + alertList[i].Proj_num + "</a></div> ";
                 }
                 if (alertList[i].Alert_type_num == 2) {
-                    document.getElementById('Alerts_div').innerHTML += "<div  class='alert alert-certificate alert-dismissible'> <a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] +" </strong> <i class='far fa-calendar-alt' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
+                    document.getElementById('Alerts_div').innerHTML += "<div  class='alert alert-certificate alert-dismissible'> <a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='far fa-calendar-alt' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
                 }
                 if (alertList[i].Alert_type_num == 3) {
                     document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-Defective-repair alert-dismissible'> <a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='far fa-check-circle' style='font-size:24px'></i >&nbsp&nbsp" + alertList[i].Content + "</div> ";
@@ -175,29 +151,106 @@
 
                 }
                 if (alertList[i].Alert_type_num == 5) {
-                    document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-defect alert-dismissible'><a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1]+  " </strong> <i class='fas fa-exclamation-triangle' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
+                    document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-defect alert-dismissible'><a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='fas fa-exclamation-triangle' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
 
                 }
             }
 
         }
+        function renderSafetyAlert(id) {
+            document.getElementById('alert_paragraph').innerHTML = ""
+            document.getElementById('id04').style.display = 'block';
+            for (var i = 0; i < alertList.length; i++) {
+                if (alertList[i].Alert_num == id) {
+
+                    $("#alert_paragraph").html(alertList[i].Content);
+                }
+
+            }
+
+        }
+
 
         function RenderAlertDivByType() {
 
-            if (AlertDivByType == 0 ) {
+            if (AlertDivByType == 0) {
                 $("#archiv_alert_btn").text("התראות חדשות");
                 AlertDivByType = 1;
-                renderAlertsArchiv();
+                renderAlertsArchive();
             }
             else {
                 $("#archiv_alert_btn").text("ארכיון התראות");
                 AlertDivByType = 0;
+                $("AlertArchiveTable").show();
                 renderAlerts();
             }
 
 
 
         }
+        function renderAlertsArchive() {
+            $("#pForm").show();
+            $("#ph").hide();
+            $("#formUpload").hide();
+            $("#Alerts_div").hide();
+            let alertsToShow = [];
+            for (i = 0; i < alertArchiveList.length; i++) {
+                let a = {
+                    Alert_num: alertArchiveList[i].Alert_num,
+                    Alert_type_num: alertArchiveList[i].Alert_type_num,
+                    Content: alertArchiveList[i].Content,
+                    Date: alertArchiveList[i].Date.split('T')[0],
+                    Time: alertArchiveList[i].Date.split('T')[1],
+                }
+                alertsToShow.push(a);
+            }
+            try {
+                tbl = $('#AlertArchiveTable').DataTable({
+                    data: alertsToShow,
+                    pageLength: 5,
+                    columns: [
+
+                        { data: "Alert_num" },
+                        { data: "Alert_type_num" },
+                        { data: "Content" },
+                        { data: "Date" },
+                        { data: "Time" },
+
+                        {
+
+                            render: function (data, type, row, meta) {
+                                let datalert = "alert_data='" + row.Alert_num + "'";
+                                if (row.Alert_type_num == 1) {
+                                    editBtn = "<button type='button' id='" + row.Alert_num + "' class = 'editBtn btn btn-success' onclick='renderSafetyAlertInArchive(this.id)'"+ datalert + "> צפה בתוכן </button>";
+                                    return editBtn;
+                                }
+                                else
+                                    return "";
+                            }
+                        },
+
+                    ],
+                });
+
+            }
+
+            catch (err) {
+                alert(err);
+            }
+        }
+        function renderSafetyAlertInArchive(id) {
+            document.getElementById('alert_paragraph').innerHTML = ""
+            document.getElementById('id04').style.display = 'block';
+            for (var i = 0; i < alertArchiveList.length; i++) {
+                if (alertArchiveList[i].Alert_num == id) {
+
+                    $("#alert_paragraph").html(alertArchiveList[i].Content);
+                }
+
+            }
+
+        }
+
         //העלאת תמונה
         function uploadDefectPhoto() {
             var data = new FormData();
@@ -273,7 +326,7 @@
                         <li><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="#"></a></li>
                         <li></li>
                         <li class="nav-item" id="active">
-                            <span class="glyphicon glyphicon-bell" aria-hidden="true"></span><a href="#"></a>
+                            <span class="glyphicon glyphicon-bell" aria-hidden="true"></span><a href="alerts.html"></a>
                         </li>
 
                         <li><a href="#">סטטיסטיקות</a></li>
@@ -301,7 +354,21 @@
     </div>
     <button id="archiv_alert_btn" type="button" class="btn btn-primary" onclick="RenderAlertDivByType()">ארכיון התראות</button>
     <div id="Alerts_div"></div>
-    <div id="Alert_Archiv_div"></div>
+    <form id="pForm">
+        <table id="AlertArchiveTable" class="display" style="width:100%" dir="rtl">
+            <thead>
+                <tr>
+                    <th>מספר התראה</th>
+                    <th>סוג התראה</th>
+                    <th>תוכן</th>
+                    <th>תאריך</th>
+                    <th>שעה</th>
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
+    </form>
+    <!--<div id="Alert_Archiv_div"></div>-->
     <div method="post" enctype="multipart/form-data" id="formUpload">
         <div>
             <label for="files">Images:</label>
@@ -314,7 +381,15 @@
     <div id="ph">
 
     </div>
-
-
+    <div class="w3-container">
+        <div id="id04" class="w3-modal">
+            <div class="w3-modal-content">
+                <div class="w3-container">
+                    <span onclick="document.getElementById('id04').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                    <div id="alert_paragraph"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
