@@ -882,7 +882,56 @@ namespace final_proj_gulkosafety.Models.DAL
         private String BuildupdateCommand(defect_in_report defectInReport)
         {
             String command;
-            command = "UPDATE defect_in_report SET fix_date='" + defectInReport.Fix_date.ToString("yyyy-MM-dd") + "', fix_time='" + defectInReport.Fix_time.ToString("HH:ss") + "', fix_status=" + defectInReport.Fix_status + ", description='" + defectInReport.Description + "' WHERE defect_num =" + defectInReport.Defect_num+" and report_num="+ defectInReport.Report_num;
+            command = "UPDATE defect_in_report SET fix_date='" + defectInReport.Fix_date.ToString("yyyy-MM-dd") + "', fix_time='" + defectInReport.Fix_time.ToString("HH:ss") + "', fix_status=" + defectInReport.Fix_status + "' + WHERE defect_num =" + defectInReport.Defect_num+" and report_num="+ defectInReport.Report_num;
+
+            return command;
+        }
+
+        //update defect in report- only image link
+        public int UpdateDefectInReportImg(string img_link, int defect_num, int report_num)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            String cStr = BuildupdateImgCommand(img_link, defect_num, report_num);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+        private String BuildupdateImgCommand(string img_link, int defect_num, int report_num)
+        {
+            String command;
+            command = "UPDATE defect_in_report SET picture_link='" + img_link + "' WHERE defect_num =" + defect_num + " and report_num=" + report_num;
 
             return command;
         }

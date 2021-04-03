@@ -36,7 +36,7 @@
         defectToEdit = "";
         ptwList = [];
         userType = 1;
-        Users = JSON.parse(localStorage["projContacts"])
+
         $(document).ready(function () {
             //build view page
             if (userType != 1)
@@ -200,11 +200,40 @@
 
             //if save pic button is clicked
             $('#savePicToDefBTN').click(function () {
-                ////upload img link
+                //upload img link
+                var data = new FormData();
+                var files = $("#img").get(0).files;
 
+                if (files.length > 0) {
+                    for (f = 0; f < files.length; f++) {
+                        data.append("UploadedImage", files[f]);
+                    }
+                    data.append("name", "NewImgDefect");
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: "../Api/FileUpload",
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: showImages,
+                    error: error
+                });
+
+                return false;
 
             });
+            function showImages(data) {
+                alert("in");
+                img_link = data;
+                let api = "../api/defect_in_report?img_link=" + img_link + "&defect_num=" + defect.Defect_num + "&report_num=" + report.Report_num;
+                ajaxCall("PUT", api, "", updateDefectImgSuccess, updateDefectsInReportError)
 
+            }
+            function error(err) {
+                Console.log(err);
+            }
             //if close button is clicked
             $('.window .close').click(function (e) {
                 ////Cancel the link behavior
@@ -576,50 +605,8 @@
 
         }
         function updateDefectImgSuccess() {
-            
-            for (var i = 0; i < Users.length; i++) {
-                var now = new Date().toISOString();
-                newAlertOnAprroveIMG = {
-                    Content: "תמונת תיקון ליקוי פיגום אושרה ",
-                    Date: now,
-                    Alert_type_num: 3,
-                    User_email: Users[i].Email,
-                    Status: 0,
-                    Proj_num: project.Project_num
-
-                }
-                let api = "../api/alert";
-                ajaxCall("POST", api, JSON.stringify(newAlertOnAprroveIMG), PostAlertSuccess, PostAlertError)
-
-            }
-            
-           
-        }
-        function PostAlertSuccess() {
             location.reload();
-           
-        }
-       
-        function PostAlertError(err) {
-            console.log(err)
-        }
-
-        function defectNotApprove() {
-            var now = new Date().toISOString();
-            for (var i = 0; i < Users.length; i++) {
-                newAlertOnAprroveIMG = {
-                    Content: "תמונת תיקון ליקוי פיגום לא אושרה ",
-                    Date: now,
-                    Alert_type_num: 3,
-                    User_email: Users[i].Email,
-                    Status: 0,
-                    Proj_num: project.Project_num
-
-                }
-                let api = "../api/alert";
-                ajaxCall("POST", api, JSON.stringify(newAlertOnAprroveIMG), PostAlertSuccess, PostAlertError)
-            }
-            
+            //-יצירת התראה-להשלים
         }
 
     </script>
