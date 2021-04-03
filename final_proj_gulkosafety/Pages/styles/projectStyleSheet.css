@@ -189,13 +189,12 @@ div#report_BTN {
     padding: 2%;
 
 }
-#alert_paragraph > p {
+.alerts > p {
     text-align: right;
+    font-size: 14px;
+    padding-right:2%
 }
 .w3-container, .w3-panel {
     border: 5px solid black;
 
-}
-.alertDiv {
-    font-size: 14px;
 }

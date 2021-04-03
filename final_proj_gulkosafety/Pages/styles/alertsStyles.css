@@ -121,3 +121,27 @@ th.sorting_asc {
 th {
     text-align: right;
 }
+.w3-container, .w3-panel {
+    padding-right: 4%;
+    direction: rtl;
+    /*border: 2px solid cadetblue;*/
+}
+
+#alert_paragraph {
+    padding: 2%;
+}
+
+    #alert_paragraph > p {
+        text-align: right;
+    }
+
+.w3-container, .w3-panel {
+    /*border: 5px solid black;*/
+}
+h3 {
+    font-size: 20px;
+    font-weight: bold;
+    color: cadetblue;
+    text-align: right;
+    margin-top: 0px;
+}
