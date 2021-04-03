@@ -210,7 +210,6 @@
     <Content Include="Pages\report.html" />
     <Content Include="Pages\styles\reportStyleSheet.css" />
     <Content Include="Pages\styles\nav_bar_style.css" />
-    <Content Include="Pages\test.html" />
     <Content Include="Scripts\ajaxCalls.js" />
     <Content Include="Scripts\ajaxCallsWithKey.js" />
     <Content Include="Scripts\bootstrap.js" />

@@ -35,7 +35,7 @@
         allReports = [];
         defectToEdit = "";
         ptwList = [];
-        userType = 1;
+        userType = 0;
 
         $(document).ready(function () {
             //build view page
@@ -200,11 +200,40 @@
 
             //if save pic button is clicked
             $('#savePicToDefBTN').click(function () {
-                ////upload img link
+                //upload img link
+                var data = new FormData();
+                var files = $("#img").get(0).files;
 
+                if (files.length > 0) {
+                    for (f = 0; f < files.length; f++) {
+                        data.append("UploadedImage", files[f]);
+                    }
+                    data.append("name", "NewImgDefect");
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: "../Api/FileUpload",
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: showImages,
+                    error: error
+                });
+
+                return false;
 
             });
+            function showImages(data) {
+                alert("in");
+                img_link = data;
+                let api = "../api/defect_in_report?img_link=" + img_link + "&defect_num=" + defect.Defect_num + "&report_num=" + report.Report_num;
+                ajaxCall("PUT", api, "", updateDefectImgSuccess, updateDefectsInReportError)
 
+            }
+            function error(err) {
+                Console.log(err);
+            }
             //if close button is clicked
             $('.window .close').click(function (e) {
                 ////Cancel the link behavior
@@ -566,8 +595,9 @@
         
 
         }
-        function updateDefectImgSuccess() {
-            location.reload();
+        function updateDefectImgSuccess(data) {
+            alert("success")
+            //location.reload();
             //-יצירת התראה-להשלים
         }
 
