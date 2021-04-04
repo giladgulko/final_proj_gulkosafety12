@@ -35,7 +35,7 @@
         allReports = [];
         defectToEdit = "";
         ptwList = [];
-        userType = 1;
+        userType = 0;
         Users = JSON.parse(localStorage["projContacts"])
         $(document).ready(function () {
             //build view page
@@ -73,6 +73,11 @@
             $("#calcGrade").hide();
             $('.fixBTNs').hide();
             $('.editReportDetailsBtns').hide();
+            //if save pic button is clicked
+            $('#savePicToDefBTN').click(function () {
+                uploadImg();
+
+            });
         }
 
         function bringDataFromLocal() {
@@ -199,45 +204,6 @@
             $('html').addClass('hide-scroll');
             var id = '#dialog';
 
-            //if save pic button is clicked
-            $('#savePicToDefBTN').click(function () {
-                //upload img link
-                var data = new FormData();
-                var files = $("#img").get(0).files;
-
-                if (files.length > 0) {
-                    for (f = 0; f < files.length; f++) {
-                        data.append("UploadedImage", files[f]);
-                    }
-                    data.append("name", "NewImgDefect");
-                }
-
-                $.ajax({
-                    type: "POST",
-                    url: "../Api/FileUpload",
-                    contentType: false,
-                    processData: false,
-                    data: data,
-                    success: updateImage,
-                    error: error
-                });
-
-                return false;
-
-            });
-            function updateImage(data) {
-                let picture_link = data[0];
-                defectToEdit.Picture_link = picture_link;
-                let api = "../api/defect_in_report?picture_link=" + picture_link;
-                ajaxCall("PUT", api, defectToEdit, updateImgSuccess, updateImgError);
-
-            }
-            function updateImgSuccess() {
-                location.reload();
-            }
-            function updateImgError(err) {
-                Console.log(err);
-            }
             //if close button is clicked
             $('.window .close').click(function (e) {
                 ////Cancel the link behavior
@@ -247,6 +213,51 @@
                 $('html').removeClass('hide-scroll');
             });
 
+        }
+
+        function uploadImg() {
+            //upload img link
+            alert("upload img");
+            var data = new FormData();
+            var files = document.getElementById('img').files;
+
+            if (files.length > 0) {
+                for (f = 0; f < files.length; f++) {
+                    data.append("UploadedImage", files[f]);
+                }
+                data.append("name", "NewImgDefect");
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "../Api/FileUpload",
+                contentType: false,
+                processData: false,
+                data: data,
+                success: updateImage,
+                error: updateImgError
+            });
+        }
+
+        function updateImage(data) {
+            alert("update img");
+            let picture_link = data[0];
+            defectToEdit.Picture_link = picture_link;
+            let api = "../api/defect_in_report?picture_link=" + picture_link;
+            ajaxCall("PUT", api, defectToEdit, updateImgSuccess, updateImgError);
+        }
+
+        function updateImgSuccess(data) {
+            swal({
+                title: "מצוין!", text: "התמונה הועלתה בהצלחה", type:
+                    "success", icon: "success"
+            }).then(function () {
+                $("#img").val('');
+                location.reload();
+            });
+        }
+        function updateImgError(err) {
+            console.log(err);
         }
 
         function checkImg(def) {
@@ -264,15 +275,11 @@
             $('.window .close').click(function (e) {
                 ////Cancel the link behavior
                 e.preventDefault();
-                no();
                 $('#mask').removeClass('showing');
                 $('html').removeClass('hide-scroll');
             });
         }
 
-        function no() {
-            alert("in")
-        }
         function createDt(defectsdata, tableID) {
 
             for (i = 0; i < defectsdata.length; i++) {

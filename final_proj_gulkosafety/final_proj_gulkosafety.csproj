@@ -243,8 +243,15 @@
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\safetyLVL.js" />
     <Content Include="SQLQuery1.sql" />
+    <Content Include="uploadedFiles\Chrysanthemum.jpg" />
     <Content Include="uploadedFiles\G4634286.JPG" />
     <Content Include="uploadedFiles\G4654297.JPG" />
+    <Content Include="uploadedFiles\Hydrangeas.jpg" />
+    <Content Include="uploadedFiles\Jellyfish.jpg" />
+    <Content Include="uploadedFiles\Koala.jpg" />
+    <Content Include="uploadedFiles\Lighthouse.jpg" />
+    <Content Include="uploadedFiles\Penguins.jpg" />
+    <Content Include="uploadedFiles\Tulips.jpg" />
     <Content Include="uploadedFiles\תעודת שחרור.jpg" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
