@@ -763,7 +763,7 @@ namespace final_proj_gulkosafety.Models.DAL
                     _defectInReport.Report_num = Convert.ToInt32(dr["report_num"]);
                     _defectInReport.Defect_num = Convert.ToInt32(dr["defect_num"]);
                     _defectInReport.Fix_date = Convert.ToDateTime(dr["fix_date"]);
-                    _defectInReport.Fix_time = Convert.ToDateTime("12:30");
+                    _defectInReport.Fix_time = Convert.ToDateTime(dr["fix_time"]);
                     _defectInReport.Picture_link = (string)dr["picture_link"];
                     _defectInReport.Fix_status = Convert.ToInt32(dr["fix_status"]);
                     _defectInReport.Description = (string)dr["description"];
@@ -1296,7 +1296,7 @@ namespace final_proj_gulkosafety.Models.DAL
                     _defectInReport.Report_num = Convert.ToInt32(dr["report_num"]);
                     _defectInReport.Defect_num = Convert.ToInt32(dr["defect_num"]);
                     _defectInReport.Fix_date = Convert.ToDateTime(dr["fix_date"]);
-                    _defectInReport.Fix_time = Convert.ToDateTime("12:30");
+                    _defectInReport.Fix_time = Convert.ToDateTime(dr["fix_time"]);
                     _defectInReport.Picture_link = (string)dr["picture_link"];
                     _defectInReport.Fix_status = Convert.ToInt32(dr["fix_status"]);
                     _defectInReport.Description = (string)dr["description"];
