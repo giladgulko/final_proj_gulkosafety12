@@ -56,6 +56,7 @@
 
             $("#projectDetailsForm").submit(saveProjForm);
             $("#contactsDetailsForm").submit(saveContactForm);
+             
             localStorage["userType"]=1
             //get info from local storage
             project = JSON.parse(localStorage["project"]);
@@ -253,14 +254,14 @@
                 markSelected(this);
                 var report_num = this.getAttribute('data-reportId');
                 swal({ // this will open a dialouge
-                    title: "Are you sure you want to delete the report?",
+                    title: "האם אתה בטוח שברצונך למחוק את הדוח??",
                     text: "",
                     icon: "warning",
                     buttons: true,
                     dangerMode: true
                 }).then(function (willDelete) {
                     if (willDelete) DeleteReport(report_num);
-                    else swal("The deletion was canceled!");
+                    else swal("המחיקה בוטלה!");
                 });
             });
 
@@ -318,7 +319,7 @@
         // success callback function after delete report
         function deleteReportSuccess(data) {
             swal({
-                title: "Good job", text: "The report was successfully deleted!", type:
+                title: "מצוין!", text: "הדוח נמחק בהצלחה!", type:
                     "success", icon: "success"
             }).then(function () {
                 location.reload();
@@ -348,7 +349,7 @@
             $('#company').val(project.Company);
             $('#address').val(project.Address);
             $('#description').val(project.Description);
-
+            $('#g1').empty();
             var g1 = new JustGage({
                 id: 'g1',
                 value: project.Safety_lvl,
