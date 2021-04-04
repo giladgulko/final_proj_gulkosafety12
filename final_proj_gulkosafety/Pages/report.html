@@ -248,7 +248,19 @@
             swal({
                 title: "מצוין!", text: "התמונה הועלתה בהצלחה", type: "success", icon: "success"
             }).then(function () {
-                location.reload();
+                var now = new Date().toISOString();
+                newAlertOnAprroveIMG = {
+                    Content: "הועלתה תמונה חדשה לליקוי בדוח-  " + report.Report_num + " בפרויקט - " + project.Project_num,
+                    Date: now,
+                    Alert_type_num: 3,
+                    User_email: "gulkosafety@gmail.com",
+                    Status: 0,
+                    Proj_num: project.Project_num
+
+                }
+                let api = "../api/alert";
+                ajaxCall("POST", api, JSON.stringify(newAlertOnAprroveIMG), PostAlertSuccess, PostAlertError)
+               
 
             });
           
@@ -686,6 +698,7 @@
 
             }
             location.reload()
+            
         }
 
     </script>
