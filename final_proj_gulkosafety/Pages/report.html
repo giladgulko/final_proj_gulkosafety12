@@ -35,7 +35,7 @@
         allReports = [];
         defectToEdit = "";
         ptwList = [];
-        userType = 1;
+        userType = 0;
         Users = JSON.parse(localStorage["projContacts"])
         $(document).ready(function () {
             //build view page
@@ -227,15 +227,15 @@
             });
             function updateImage(data) {
                 let picture_link = data[0];
-                //defectToEdit.Picture_link = data[0];
+                defectToEdit.Picture_link = data[0];
                 let api = "../api/defect_in_report?picture_link=" + picture_link;
-                ajaxCall("PUT", api, JSON.stringify(defectToEdit), updateDefectImgSuccess, updateDefectsInReportError)
+                ajaxCall("PUT", api, defectToEdit, updateImgSuccess, updateImgError)
 
             }
             function updateImgSuccess() {
                 location.reload();
             }
-            function error(err) {
+            function updateImgError(err) {
                 Console.log(err);
             }
             //if close button is clicked

@@ -95,7 +95,7 @@ namespace final_proj_gulkosafety.Controllers
             try
             {
                 {
-                    defectInReport.UpdateDefectInReportImg();
+                    defectInReport.UpdateDefectInReportImg(picture_link);
 
                 }
 
