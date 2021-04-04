@@ -200,6 +200,7 @@
     <Content Include="Pages\alerts.html" />
     <Content Include="Pages\gaugeTest.html" />
     <Content Include="Pages\pdfTEST.html" />
+    <Content Include="Pages\pdftest2.html" />
     <Content Include="Pages\photos\logo.jpeg" />
     <Content Include="Pages\project.html" />
     <Content Include="Pages\projtest.html" />

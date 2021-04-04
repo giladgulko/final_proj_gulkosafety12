@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.8.1/html2pdf.bundle.min.js" integrity="sha512-vDKWohFHe2vkVWXHp3tKvIxxXg0pJxeid5eo+UjdjME3DBFBn2F8yWOE0XmiFcFbXxrEOR1JriWEno5Ckpn15A==" crossorigin="anonymous"></script>
+    <title></title>
+    <script>
+        function topdf() {
+            var element = document.getElementById('element-to-print');
+            var result = html2pdf(element);
+            console.log(result)
+        }
+    
+    </script>
+</head>
+<body>
+    <p id="ignorePDF">don't print this to pdf</p>
+    <div id="element-to-print">
+        <p><font size="3" color="red">print this to pdf</font></p>
+    </div>
+    <button onclick="topdf()">hii</button>
+</body>
+</html>
