@@ -182,8 +182,12 @@ span.glyphicon.glyphicon-floppy-disk, span.glyphicon.glyphicon-pencil {
     top: 3px;
 }
 
-.editReportDetailsBtns {
+.editBtns{
     text-align:left;
+}
+
+.editReportDetailsBtns {
+    position: relative;
     margin: 0;
     padding: 5px;
     left: 0px;
