@@ -888,7 +888,7 @@ namespace final_proj_gulkosafety.Models.DAL
         }
 
         //update defect in report- only image link
-        public int UpdateDefectInReportImg(string img_link, int defect_num, int report_num)
+        public int UpdateDefectInReportImg(defect_in_report defectInReport)
         {
 
             SqlConnection con;
@@ -904,7 +904,7 @@ namespace final_proj_gulkosafety.Models.DAL
             }
 
 
-            String cStr = BuildupdateImgCommand(img_link, defect_num, report_num);
+            String cStr = BuildupdateImgCommand(defectInReport);
 
             cmd = CreateCommand(cStr, con);
 
@@ -928,10 +928,10 @@ namespace final_proj_gulkosafety.Models.DAL
             }
 
         }
-        private String BuildupdateImgCommand(string img_link, int defect_num, int report_num)
+        private String BuildupdateImgCommand(defect_in_report defectInReport)
         {
             String command;
-            command = "UPDATE defect_in_report SET picture_link='" + img_link + "' WHERE defect_num =" + defect_num + " and report_num=" + report_num;
+            command = "UPDATE defect_in_report SET picture_link='" + defectInReport.Picture_link + "' WHERE defect_num =" + defectInReport.Defect_num + " and report_num=" + defectInReport.Report_num;
 
             return command;
         }

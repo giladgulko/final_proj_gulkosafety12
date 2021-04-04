@@ -76,10 +76,10 @@ namespace final_proj_gulkosafety.Models
 
 
         }
-        public void UpdateDefectInReportImg(string img_link,int defect_num, int report_num)
+        public void UpdateDefectInReportImg()
         {
             DBServices dbs = new DBServices();
-            dbs.UpdateDefectInReportImg(img_link, defect_num, report_num);
+            dbs.UpdateDefectInReportImg(this);
 
         }
     }

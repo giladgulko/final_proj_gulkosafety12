@@ -225,8 +225,10 @@
                 return false;
 
             });
-            function updateImage() {
-                let api = "../api/defect_in_report";
+            function updateImage(data) {
+                let picture_link = data[0];
+                //defectToEdit.Picture_link = data[0];
+                let api = "../api/defect_in_report?picture_link=" + picture_link;
                 ajaxCall("PUT", api, JSON.stringify(defectToEdit), updateDefectImgSuccess, updateDefectsInReportError)
 
             }
