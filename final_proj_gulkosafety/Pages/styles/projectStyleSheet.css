@@ -190,6 +190,7 @@ div#report_BTN {
 
 }
 .alerts > p {
+    direction:rtl;
     text-align: right;
     font-size: 14px;
     padding-right:2%
@@ -198,3 +199,8 @@ div#report_BTN {
     border: 5px solid black;
 
 }*/
+
+p {
+    text-align: right;
+    /* direction: rtl; */
+}
