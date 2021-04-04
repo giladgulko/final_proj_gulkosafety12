@@ -56,6 +56,7 @@
 
             $("#projectDetailsForm").submit(saveProjForm);
             $("#contactsDetailsForm").submit(saveContactForm);
+             
             localStorage["userType"]=1
             //get info from local storage
             project = JSON.parse(localStorage["project"]);
@@ -348,7 +349,7 @@
             $('#company').val(project.Company);
             $('#address').val(project.Address);
             $('#description').val(project.Description);
-
+            $('#g1').empty();
             var g1 = new JustGage({
                 id: 'g1',
                 value: project.Safety_lvl,
