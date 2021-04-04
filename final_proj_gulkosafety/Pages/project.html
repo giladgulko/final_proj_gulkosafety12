@@ -323,7 +323,7 @@
             }).then(function () {
                 location.reload();
             }
-            );
+                );
         }
         function deleteReportError() {
             swal("Failed!", "Failed to delete the report!", "warning");
@@ -356,10 +356,11 @@
                 max: 100,
                 pointer: true,
                 gaugeWidthScale: 0.6,
-                counter: true,
                 relativeGaugeSize: true,
-                levelColorsGradient: false,
-                customSectors: { range: [{ color: "red", lo: 0, hi: 50 }, { color: "yellow", lo: 51, hi: 69.9 }, { color: "green", lo: 70, hi: 94.9 }, { color: "darkgreen", lo: 95, hi: 100 }] }
+                levelColors: ['#CE1B21', '#D0532A', '#FFC414', '#85A137'],
+                counter: true
+                //customSectors: { range: [{ color: "red", lo: 0, hi: 50 }, { color: "yellow", lo: 51, hi: 69.9 }, { color: "green", lo: 70, hi: 94.9 }, { color: "darkgreen", lo: 95, hi: 100 }] },
+
             });
         }
         function getReports() {
@@ -424,15 +425,17 @@
         }
 
         function buildGradesGraph(gradesArr, reportNumArr) {
-            var trace1 = {
-                x: reportNumArr,
-                y: gradesArr,
-                type: 'scatter'
-            };
+            if (reportNumArr.length > 0) {
+                var trace1 = {
+                    x: reportNumArr,
+                    y: gradesArr,
+                    type: 'scatter'
+                };
 
-            var data = [trace1];
+                var data = [trace1];
 
-            Plotly.newPlot('chartContainer', data);
+                Plotly.newPlot('chartContainer', data);
+            }
         }
 
     </script>
@@ -580,7 +583,7 @@
                 <div class="card">
                     <div class="card-body section1">
                         <div class="row">
-                            <div class="form-group col-sm-6">
+                            <div class="form-group col-sm-12">
                                 <h3>רמת בטיחות פרויקט</h3>
                             </div>
                         </div>
@@ -589,10 +592,6 @@
                                 <div id="g1" class="gauge"></div>
                             </div>
                         </div>
-                        <!--<div class="row">
-                        <div id="safetyLvlGraph" class="form-group col-sm-6">
-                        </div>
-                    </div>-->
                     </div>
                 </div>
             </div>
