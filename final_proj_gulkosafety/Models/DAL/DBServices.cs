@@ -979,7 +979,7 @@ namespace final_proj_gulkosafety.Models.DAL
         private String BuildUpdateReportCommand(report r)
         {
             String command;
-            command = "UPDATE report SET date='" + r.Date.ToString("yyyy-MM-dd") + "', time='" + r.Time.ToString("HH:ss") + "', comment='" + r.Comment + "' WHERE report_num =" + r.Report_num;
+            command = "UPDATE report SET date='" + r.Date.ToString("yyyy-MM-dd") + "', time='" + r.Time.ToShortTimeString() + "', comment='" + r.Comment + "' WHERE report_num =" + r.Report_num;
 
             return command;
         }

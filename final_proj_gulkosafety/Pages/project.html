@@ -172,7 +172,7 @@
                 Foreman_email: project.Foreman_email
             }
             localStorage["project"] = JSON.stringify(projToEdit);
-            ajaxCall("PUT", "../api/project", JSON.stringify(projToEdit), updateProjectSuccess, getError);
+            ajaxCall("PUT", "../api/project", JSON.stringify(projToEdit), updateProjectSuccess, updateProjectError);
         }
 
         function updateProjectSuccess(data) {
@@ -181,6 +181,10 @@
             $("#editDetailsBTN").show();
             $("#saveDetailsBTN").hide();
             $("#cancelEditDetailsBTN").hide();
+        }
+
+        function updateProjectError() {
+            swal("כישלון!", "עדכון פרטי הפרויקט נכשל!", "warning");
         }
 
         function editProjBtnEvents() {

@@ -35,7 +35,7 @@
         allReports = [];
         defectToEdit = "";
         ptwList = [];
-        userType = 0;
+        userType = 1;
         Users = JSON.parse(localStorage["projContacts"])
         $(document).ready(function () {
             //build view page
@@ -62,8 +62,8 @@
         function getPTWSuccess(ptwList1) {
             ptwList = ptwList1
         }
-        function getPTWError() {
-            swal("Failed!", "Failed to read the project type weights!", "warning");
+        function getPTWError(err) {
+            swal("משיכת משקלים לפי סוג פרויקט נכשלה!",err, "warning");
         }
 
 
@@ -124,7 +124,7 @@
             });
 
             //cancel edit report details
-            $(".cancelUpdateReportBtns").on("click", function () {
+            $("#cancelEditBTN").on("click", function () {
                 $(".cancelUpdateReportBtns").hide();
                 $(".groupDetails").prop('disabled', true);
                 $("#editReportBTN").show();
@@ -155,8 +155,8 @@
             }
             else $("#lastReportdefectsTBL").hide();
         }
-        function getLastRDefectError() {
-            swal("Failed!", "Failed to read last defects!", "warning");
+        function getLastRDefectError(err) {
+            swal("משיכת ליקויים מהדוח האחרון נכשלה!",err, "warning");
         }
 
         function getNewReportsuccess(report) {
@@ -178,8 +178,8 @@
             checkLastReportDefects();
         }
 
-        function getReportDefError() {
-            swal("Failed!", "Failed to read the report defects!", "warning");
+        function getReportDefError(err) {
+            swal("משיכת ליקויי הדוח הנוכחי נכשלה!", err, "warning");
         }
 
         function renderProjectDetails() {
@@ -380,35 +380,36 @@
         }
         function updateDefectsInReportSuccess() {
             swal({
-                title: "Good job!", text: "You created new project successfully!", type: "success", icon: "success"
+                title: "מצוין!", text: "ליקוי עודכן בהצלחה", type: "success", icon: "success"
             }).then(function () {
                 location.reload();
 
             });
         }
-        function updateDefectsInReportError() {
-            swal("Failed!", "Failed to update defects in report !Please try again", "warning")
+        function updateDefectsInReportError(err) {
+            swal("הליקוי לא עודכן! נסה שוב מאוחר יותר", err, "warning")
         }
         function getDefectsAndTypeS() {
             api = "../api/defect"
-            ajaxCall("GET", api, "", getDefects, getError)
+            ajaxCall("GET", api, "", getDefectsSuccess, getDefectsError)
 
             api1 = "../api/defect_type"
-            ajaxCall("GET", api1, "", getDefectsType, getError)
+            ajaxCall("GET", api1, "", getDefectsTypeSuccess, getDefectsTypeError)
         }
-        function getDefects(data) {
+        function getDefectsSuccess(data) {
             defects = data;
             console.log(defects)
         }
-        function getDefectsType(data) {
+        function getDefectsTypeSuccess(data) {
             defects_types = data;
             console.log(defects_types)
         }
-        function getError() {
-            swal("Failed!", "Failed to read defects !Please try again", "warning")
-
+        function getDefectsError(err) {
+            swal("משיכת ליקויים נכשלה!", err, "warning");
         }
-
+        function getDefectsTypeError(err) {
+            swal("משיכת סוגי ליקויים נכשלה!", err, "warning");
+        }
         function newDefect() {
             $("#btn_update_defect").hide();
             $("#btn_add_defect").show();
@@ -450,21 +451,21 @@
         }
         function postDefectInReportSuccess() {
             swal({
-                title: "Good job", text: "The defect was successfully inserted!", type:
+                title: "מצוין!", text: "הליקוי נוסף בהצלחה לדוח", type:
                     "success", icon: "success"
             }).then(function () {
                 location.reload();
             }
             );
         }
-        function postDefectInReportError() {
-            swal("Failed!", "Failed to insert the defect in report!", "warning");
+        function postDefectInReportError(err) {
+            swal("הליקוי לא נוסף לדוח!", err, "warning");
 
         }
         function deleteAlert(def) {
             defectToEdit = JSON.parse(def);
             swal({
-                title: "Are you sure you want to delete the report?",
+                title: "האם אתה בטוח שברצונך למחוק את הדוח?",
                 text: "",
                 icon: "warning",
                 buttons: true,
@@ -472,7 +473,7 @@
             })
                 .then(function (willDelete) {
                     if (willDelete) delete_defect_in_report(defectToEdit);
-                    else swal("The deletion was canceled!");
+                    else swal("הדוח לא נמחק!");
                 });
         }
         function delete_defect_in_report(def) {
@@ -485,15 +486,15 @@
         }
         function deleteDefectSuccess() {
             swal({
-                title: "Good job!", text: "You delete the defect successfully!", type: "success", icon: "success"
+                title: "מצוין!", text: "הליקוי נמחק בהצלחה", type: "success", icon: "success"
             }).then(function () {
                 location.reload();
 
             });
         }
 
-        function deleteDefectError() {
-            swal("Failed!", "Failed to delete the report defects!", "warning");
+        function deleteDefectError(err) {
+            swal("הליקוי לא נמחק!", err, "warning");
         }
 
         function saveNewReport() {
@@ -505,11 +506,17 @@
             else {
                 //case update details
                 if (localStorage["report"] != "") {
+                    //update local storage with new info
+                    report.Date = $('#Date').val();
+                    report.Time = "T"+$('#time').val();
+                    report.Comment = $('#comments').val();
+                    localStorage["report"] = JSON.stringify(report);
+                    //save to db
                     let reportToSave = {
                         Report_num: report.Report_num,
-                        Date: $('#Date').val(),
-                        Time: $('#time').val(),
-                        Comment: $('#comments').val()
+                        Date: report.Date,
+                        Time: report.Time,
+                        Comment: report.Comment
                     }
                     ajaxCall("PUT", "../api/report", JSON.stringify(reportToSave), updateReportSuccess, updateReportError);
                 }
@@ -542,28 +549,23 @@
             });
 
         }
-        function updateReportError() {
-            swal("Failed!", "Failed to update the report!", "warning");
+        function updateReportError(err) {
+            swal("עדכון הדוח נכשל!", err, "warning");
         }
 
         function insertReportSuccess() {
-            swal("Good job!", "The report was saved successfully! defects were added to report", "success")
+            swal("מצוין!", "הדוח נוסף בהצלחה! הוסף ליקויים", "success")
             let api = "../api/report/" + project.Project_num + "/lastReport";
             ajaxCall("GET", api, "", getLastReportSuccess, getLastReportError);
         }
 
         function getLastReportSuccess(lastReport) {
             localStorage["report"] = JSON.stringify(lastReport);
-            swal({
-                title: "Good job!", text: "You read the last report successfully!", type: "success", icon: "success"
-            }).then(function () {
-                location.reload();
-
-            });
+            location.reload();
         }
-        function getLastReportError() {
-            swal("Failed!", "Failed to resd the last report!", "warning");
 
+        function getLastReportError(err) {
+            swal("הבאת פרטי הדוח נכשלה!", err, "warning");
         }
 
         function calcGrade() {
@@ -599,14 +601,10 @@
             $('#mask').removeClass('showing');
             $('html').removeClass('hide-scroll');
 
-            defectToEdit.Fix_status = 1
-            console.log(defectToEdit)
+            defectToEdit.Fix_status = 1;
+            console.log(defectToEdit);
             let api = "../api/defect_in_report";
-            ajaxCall("PUT", api, JSON.stringify(defectToEdit), postAlertOnImg, updateDefectsInReportError)
-
-          
-        
-
+            ajaxCall("PUT", api, JSON.stringify(defectToEdit), postAlertOnImg, updateDefectsInReportError);
         }
         function updateDefectImgSuccess() {
             location.reload();
@@ -634,8 +632,6 @@
         }
         function PostAlertSuccess() {
             location.reload();
-            
-
         }
         function PostAlertError(err) {
             console.log(err)
@@ -705,7 +701,7 @@
     </div>
     <!--פרטי דוח-->
     <div id="reportDetails" class="mainCards">
-        <form id="reportDetailsForm">
+        <form id="reportDetailsForm" onsubmit="return false">
             <div class="row">
                 <div class="form-group col-sm-4">
                     <label for="company">שם חברה</label>
