@@ -183,7 +183,7 @@ span.glyphicon.glyphicon-floppy-disk, span.glyphicon.glyphicon-pencil {
 }
 
 .editReportDetailsBtns {
-    position: relative;
+    text-align:left;
     margin: 0;
     padding: 5px;
     left: 0px;
@@ -191,7 +191,7 @@ span.glyphicon.glyphicon-floppy-disk, span.glyphicon.glyphicon-pencil {
 }
 
 p {
-    text-align: left;
+    text-align: right;
 }
 #ReportGradeP {
     text-align: right;
