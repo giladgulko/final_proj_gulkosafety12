@@ -198,12 +198,13 @@
         }
         function createDt(projdata) {
             for (var i = 0; i < projdata.length; i++) {
+                projdata[i].Start_date = projdata[i].Start_date.split("T")[0];
+                projdata[i].End_date = projdata[i].End_date.split("T")[0];
                 if (projdata[i].Status == 1) {
-                    statues1proj.push(projdata[i])
+                    statues1proj.push(projdata[i]);
                 }
                 else
-                    status0proj.push(projdata[i])
-                status0proj
+                    status0proj.push(projdata[i]);
             }
 
             if (status == 1) {
