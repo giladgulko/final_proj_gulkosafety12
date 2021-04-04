@@ -285,31 +285,7 @@
 
             return false;
         }
-        function showImages(data) {
-            $("#btns").show()
-            console.log(data);
-            var today = new Date();
-            var dd = String(today.getDate()).padStart(2, '0');
-            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-            var yyyy = today.getFullYear();
-
-            today = yyyy + '-' + mm + '-' + dd;
-            var imgStr = "";
-
-            if (Array.isArray(data)) {
-
-                for (var i = 0; i < data.length; i++) {
-                    imgStr += "<img src='../" + data[i] + "'/>";
-                }
-            }
-            else {
-                imgStr = "<img src='../" + data + "'/>";
-            }
-            if (user_email == "gulkosafety@gmail.com") {
-                document.getElementById("ph").innerHTML = imgStr;
-                document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-Defective-repair alert-dismissible'><a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + today + " </strong> <i class='far fa-images' style='font-size:24px'></i>&nbsp&nbsp תמונה חדשה הועלתה</div> ";
-            }
-        }
+        
 
         function error(data) {
             console.log(data);
@@ -378,16 +354,8 @@
             </thead>
         </table>
     </form>
-    <!--<div id="Alert_Archiv_div"></div>-->
-    <div method="post" enctype="multipart/form-data" id="formUpload">
-        <div>
-            <label for="files">Images:</label>
-            <input type="file" id="files" name="files" multiple="multiple" />
-        </div>
-        <br />
-        <button type="button" id="buttonUpload">Upload images</button>
-
-    </div>
+   
+   
     <div id="ph">
 
     </div>
