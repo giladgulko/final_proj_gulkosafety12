@@ -218,7 +218,7 @@
 
         function uploadImg() {
             //upload img link
-            alert("upload img");
+         
             var data = new FormData();
             var files = document.getElementById('img').files;
 
@@ -241,36 +241,31 @@
         }
 
         function updateImage(data) {
-            alert("update img");
-            let picture_link = data[0];
-            defectToEdit.Picture_link = picture_link;
-            let api = "../api/defect_in_report?picture_link=" + picture_link;
-            ajaxCall("PUT", api, defectToEdit, updateImgSuccess, updateImgError);
-            swal({
-                title: "מצוין!", text: "התמונה הועלתה בהצלחה", type: "success", icon: "success"
-            }).then(function () {
-                var now = new Date().toISOString();
-                newAlertOnAprroveIMG = {
-                    Content: "הועלתה תמונה חדשה לליקוי בדוח-  " + report.Report_num + " בפרויקט - " + project.Project_num,
-                    Date: now,
-                    Alert_type_num: 3,
-                    User_email: "gulkosafety@gmail.com",
-                    Status: 0,
-                    Proj_num: project.Project_num
-
-                }
-                let api = "../api/alert";
-                ajaxCall("POST", api, JSON.stringify(newAlertOnAprroveIMG), PostAlertSuccess, PostAlertError)
-               
-
-            });
           
+            let picture_link = "../" + data[0];
+            let temp = JSON.parse(defectToEdit)
+            temp.Picture_link = picture_link;
+            console.log(temp.Picture_link)
+            let api = "../api/defect_in_report?picture_link="+picture_link;
+            ajaxCall("PUT", api,JSON.stringify(temp), updateImgSuccess, updateImgError);
+            alert("הצליח!")
+
+            var now = new Date().toISOString();
+            newAlertOnAprroveIMG = {
+                Content: "הועלתה תמונה חדשה לליקוי בדוח-  " + report.Report_num + " בפרויקט - " + project.Project_num,
+                Date: now,
+                Alert_type_num: 3,
+                User_email: "gulkosafety@gmail.com",
+                Status: 0,
+                Proj_num: project.Project_num
+
+            }
+            let api1 = "../api/alert";
+            ajaxCall("POST", api1, JSON.stringify(newAlertOnAprroveIMG), PostAlertSuccess, PostAlertError)
         }
 
         function updateImgSuccess() {
-          
-
-           
+         
         }
         function updateImgError(err) {
             console.log(err);
