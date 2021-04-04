@@ -35,7 +35,7 @@
         allReports = [];
         defectToEdit = "";
         ptwList = [];
-        userType = 0;
+        userType = JSON.parse(localStorage["userType"]) ;
         Users = JSON.parse(localStorage["projContacts"])
         $(document).ready(function () {
             //build view page
@@ -245,16 +245,19 @@
             defectToEdit.Picture_link = picture_link;
             let api = "../api/defect_in_report?picture_link=" + picture_link;
             ajaxCall("PUT", api, defectToEdit, updateImgSuccess, updateImgError);
+            swal({
+                title: "מצוין!", text: "התמונה הועלתה בהצלחה", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
+          
         }
 
-        function updateImgSuccess(data) {
-            swal({
-                title: "מצוין!", text: "התמונה הועלתה בהצלחה", type:
-                    "success", icon: "success"
-            }).then(function () {
-                $("#img").val('');
-                location.reload();
-            });
+        function updateImgSuccess() {
+          
+
+           
         }
         function updateImgError(err) {
             console.log(err);
@@ -674,6 +677,16 @@
           
             console.log(result)
         }
+        function changeUser() {
+            if (userType == 1) {
+                localStorage["userType"] = 2
+            }
+            else {
+                localStorage["userType"] = 1
+
+            }
+            location.reload()
+        }
 
     </script>
 
@@ -961,5 +974,6 @@
         </div>
     </div>
     <button onclick="topdf()">הפוך לPDF</button>
+    <button onclick="changeUser()">הפוך מסך </button>
 </body>
     </html>

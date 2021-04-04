@@ -56,7 +56,7 @@
 
             $("#projectDetailsForm").submit(saveProjForm);
             $("#contactsDetailsForm").submit(saveContactForm);
-
+            localStorage["userType"]=1
             //get info from local storage
             project = JSON.parse(localStorage["project"]);
             contactList = JSON.parse(localStorage["contactList"]);
