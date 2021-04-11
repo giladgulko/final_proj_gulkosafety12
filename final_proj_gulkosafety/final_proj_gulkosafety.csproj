@@ -157,12 +157,16 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\alertController.cs" />
     <Compile Include="Controllers\alert_typeController.cs" />
+    <Compile Include="Controllers\contactController.cs" />
     <Compile Include="Controllers\defectController.cs" />
     <Compile Include="Controllers\defect_in_reportController.cs" />
     <Compile Include="Controllers\defect_typeController.cs" />
     <Compile Include="Controllers\FileUploadController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\instructionController.cs" />
+    <Compile Include="Controllers\itemController.cs" />
+    <Compile Include="Controllers\items_in_orderController.cs" />
+    <Compile Include="Controllers\orderController.cs" />
     <Compile Include="Controllers\projectController.cs" />
     <Compile Include="Controllers\project_typeController.cs" />
     <Compile Include="Controllers\proj_type_weightController.cs" />
@@ -175,11 +179,15 @@
     </Compile>
     <Compile Include="Models\alert.cs" />
     <Compile Include="Models\alert_type.cs" />
+    <Compile Include="Models\contact.cs" />
     <Compile Include="Models\DAL\DBServices.cs" />
     <Compile Include="Models\defect.cs" />
     <Compile Include="Models\defect_in_report.cs" />
     <Compile Include="Models\defect_type.cs" />
     <Compile Include="Models\instruction.cs" />
+    <Compile Include="Models\item.cs" />
+    <Compile Include="Models\items_in_order.cs" />
+    <Compile Include="Models\order.cs" />
     <Compile Include="Models\project.cs" />
     <Compile Include="Models\project_type.cs" />
     <Compile Include="Models\proj_type_weight.cs" />
