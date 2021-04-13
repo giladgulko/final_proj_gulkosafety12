@@ -1,0 +1,223 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Suez+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@1,700&family=Suez+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <link href="styles/nav_bar_style.css" rel="stylesheet" />
+    <link href="styles/certificatesStyleSheet.css" rel="stylesheet" />
+
+    <script src="../Scripts/ajaxCallsWithKey.js"></script>
+    <title>אישורים</title>
+    <script>
+
+        $(document).ready(function () {
+            getCertificateTypeList();
+        });
+
+        //get a list of all the certificate type for section list
+        function getCertificateTypeList() {
+            let api = "../api/certificate_type";
+            ajaxCall("GET", api, "", getCertificateTypeListSuccess, getCertificateTypeListError);
+        }
+        function getCertificateTypeListSuccess(data) {
+            certificateTypeList = data;
+            renderCertificateType();
+        }
+        function getCertificateTypeListError() {
+            swal("Failed!", "Failed to read the Certificate Type!", "warning")
+        }
+
+
+    </script>
+</head>
+<body>
+    <div id="logo">
+        <img class="logo" src="photos/logo.jpeg" height="50" />
+    </div>
+    <div class="body-wrap">
+        <nav class="navbar navbar-inverse">
+            <div class="container1">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarMenu" aria-expanded="false">
+                        <span id="navigation" class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="navbarMenu">
+                    <ul class="nav navbar-nav navbar-right  bts-nav">
+                        <li><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="#"></a></li>
+                        <li></li>
+                        <li class="nav-item">
+                            <span class="glyphicon glyphicon-bell" aria-hidden="true"></span><a href="alerts.html"></a>
+                        </li>
+
+                        <li><a href="#">סטטיסטיקות</a></li>
+                        <li><a href="#">משתמשים</a></li>
+                        <li><a href="#">הזמנות</a></li>
+                        <li class="active"><a href="certificates.html">אישורים<span class="sr-only">(current)</span></a></li>
+                        <li><a href="#">הדרכות</a></li>
+                        <li><a href="projects.html">פרויקטים</a></li>
+                        <li><a href="#">התחברות</a></li>
+                        <li>
+                            <span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="#"></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!--NavBar-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <div id="proj_bar" dir="rtl">
+        <div id="headline">
+            <h1 class="proj">אישורים</h1>
+        </div>
+        <br />
+        <div id="buttons">
+            <button id="myBtn" style="margin-left:10px" class="btn btn-primary" onclick="document.getElementById('id01').style.display='block'">הוסף אישור חדש</button>
+            <button id="old_proj_btn" type="button" class="btn btn-primary" onclick="renderOldPROJ()">ארכיון אישורים</button>
+        </div>
+    </div>
+    <form id="pForm">
+        <table id="projTable" class="display" style="width:100%" dir="rtl">
+            <thead>
+                <tr>
+                    <th>מספר אישור</th>
+                    <th>שם סוג</th>
+                    <th>חברה</th>
+                    <th>תאריך בדיקה</th>
+                    <th>כתובת</th>
+                    <th>סטטוס בדיקה</th>
+                    <th>סטטוס תשלום</th>
+                    <th>מחיר</th>
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
+    </form>
+    <!--<div class="w3-container">
+        <div id="id01" class="w3-modal">
+            <div class="w3-modal-content">
+                <div class="w3-container" dir="rtl">
+                    <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                    <form id="newProjForm">
+                        <br />
+                        <h2>אישור חדש</h2>
+                        <table class="display" style="width:100%" dir="rtl">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="projectName"><span class="red-star">★ </span>שם הפרויקט</label>
+                                            <input type="text" class="form-control groupDetails" id="projectName"
+                                                   oninvalid="this.setCustomValidity('הכנס שם פרויקט')"
+                                                   oninput="this.setCustomValidity('')" required>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="projectType"><span class="red-star">★ </span>סוג הפרויקט</label>
+                                            <select class="form-control groupDetails" id="projectType" required>
+                                                <option value="">בחר סוג פרויקט</option>
+                                            </select>
+                                        </div>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="status"><span class="red-star">★ </span>סטאטוס</label>
+                                            <select class="form-control groupDetails" id="status" required>
+                                                <option value="">בחר סטאטוס</option>
+                                                <option value="1"> פתוח </option>
+                                                <option value="0"> סגור </option>
+                                            </select>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="startDate"><span class="red-star">★ </span>תאריך התחלה</label>
+                                            <br />
+                                            <input type="date" class="groupDetails" id="startDate" required>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="endDate"><span class="red-star">★ </span>תאריך סיום</label>
+                                            <br />
+                                            <input type="date" class="groupDetails" id="endDate" required>
+                                        </div>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="company"><span class="red-star">★ </span>חברה</label>
+                                            <input type="text" class="form-control groupDetails" id="company" required>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="address"><span class="red-star">★ </span>כתובת</label>
+                                            <input type="text" class="form-control groupDetails" id="address" required>
+                                        </div>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="description">תיאור</label>
+                                            <textarea rows="4" class="form-control groupDetails" id="description" placeholder="הזן תיאור פרויקט"></textarea>
+                                        </div>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="manager"><span class="red-star">★ </span>מנהל פרויקט</label>
+                                            <select class="form-control groupContacts" id="manager" required>
+                                                <option value="">בחר מנהל פרויקט</option>
+                                            </select>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="foreman"><span class="red-star">★ </span>מנהל עבודה</label>
+                                            <select class="form-control groupContacts" id="foreman" required>
+                                                <option value="">בחר מנהל עבודה</option>
+                                            </select>
+                                        </div>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <input type="submit" class="btn btn-primary" value="שמור" />
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>-->
+</body>
+</html>
