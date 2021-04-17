@@ -39,11 +39,18 @@
         }
         function getCertificateTypeListSuccess(data) {
             certificateTypeList = data;
-            //renderCertificateType();
+            renderCertificateType();
         }
         function getCertificateTypeListError() {
             swal("Failed!", "Failed to read the Certificate Type!", "warning")
         }
+        function renderCertificateType() {
+            certTypeSelect = document.getElementById('certificateType');
+            for (i = 0; i < certificateTypeList.length; i++) {
+                certTypeSelect.innerHTML += "<option value=" + certificateTypeList[i].Type_name + ">" + certificateTypeList[i].Type_name + "</option>";
+            }
+        }
+
         function getCertData() {
 
             ajaxCall("GET", "../api/certificate", "", createDt, getError)
@@ -51,6 +58,15 @@
 
         function getError() {
             swal("Failed!", "Failed to read the certificates!", "warning")
+        }
+        function newProjForm() {
+            $("#dateError").hide();
+            var checkDate = document.getElementById('checkDate').value;
+            if (checkDate < NOW()) {
+                $('#checkDate').after('<p id="dateError">תאריך הבדיקה קטן מהתאריך של היום</p>');
+            }
+            else createNewCert();
+            return false;
         }
         function createDt(certificatedata) {
             let certificatesToShow = [];
@@ -71,7 +87,6 @@
 
                     }
                 }
-               
                 certificatesToShow.push(c);
             }
             try {
@@ -92,7 +107,7 @@
                             render: function (data, type, row, meta) {
                                 let datacert = "cert_data='" + row.Certificate_num + "'";
 
-                                editBtn = "<button type='button' class = 'editBtn btn btn-success' " + datacert + "> עריכה </button>";
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + datacert + "' onclick='editDefectBTN(this.value)'> עריכה </button>";
 
                                 deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' " + datacert + "> מחיקה </button>";
                                 return editBtn + deleteBtn;
@@ -109,34 +124,51 @@
             catch (err) {
                 alert(err);
             }
-            function createNewCert() {
-                let newCert = {
-                    Name: $('#projectName').val(),
-                    Company: $('#company').val(),
-                    Address: $('#address').val(),
-                    Start_date: $('#startDate').val().split("T")[0],
-                    End_date: $('#endDate').val().split("T")[0],
-                    Status: $('#status').val(),
-                    Description: $('#description').val(),
-                    Safety_lvl: 100,
-                    Project_type_num: document.getElementById("projectType").value,
-                    Manager_email: $('#manager').val(),
-                    Foreman_email: $('#foreman').val()
-                }
-                ajaxCall("POST", "../api/project", JSON.stringify(newProj), createNewProjSuccess, createNewProjError);
+
+            function editDefectBTN(datacert) {
+                certToEdit = JSON.parse(datacert);
+                document.getElementById('id03').style.display = 'block';
+                $("#certificateType").empty();
+                //$("#selectdefect").empty();
+                //$("#selectType").append("<option value='" + defectToEdit.Defect_num + "' > " + defectToEdit.Defect_type_name + "</option > ");
+                //$("#selectdefect").append("<option value='" + defectToEdit.Defect_num + "' > " + defectToEdit.Defect_name + "</option>");
+                //$("#selectType").prop('disabled', true);
+                //$("#selectdefect").prop('disabled', true);
+                //$("#fixDate").val(defectToEdit.Fix_date.split("T")[0]);
+                //$("#fixTime").val(defectToEdit.Fix_time);
+                //$("#description").val(defectToEdit.Description);
+                //$("#fixStatus").val(defectToEdit.Fix_status);
+                //$("#btn_update_defect").show();
+                //$("#btn_add_defect").hide();
             }
 
-            function createNewProjSuccess(data) {
+            function createNewCert() {
+                let newCert = {
+                    //Name: $('#projectName').val(),
+                    Certificate_status: $('#checkStatus').val(),
+                    Pay_status: $('#payStatus').val(),
+                    Company: $('#company').val(),
+                    Address: $('#address').val(),
+                    Date: $('#checkDate').val().split("T")[0],
+                    Description: $('#description').val(),
+                    Price: $('#price').val(),
+
+                }
+                ajaxCall("POST", "../api/certificate", JSON.stringify(newCert), createNewCertSuccess, createNewCertError);
+            }
+
+            function createNewCertSuccess(data) {
                 swal({
-                    title: "Good job!", text: "You created new project successfully!", type: "success", icon: "success"
+                    title: "Good job!", text: "You created new certificate successfully!", type: "success", icon: "success"
                 }).then(function () {
                     location.reload();
 
                 });
             }
-            function createNewProjError() {
-                swal("Failed!", "You failed to create a new project!", "warning")
+            function createNewCertError() {
+                swal("Failed!", "You failed to create a new certificate!", "warning")
             }
+
         }
     </script>
 </head>
@@ -186,7 +218,7 @@
         </div>
         <br />
         <div id="buttons">
-            <button id="myBtn" style="margin-left:10px" class="btn btn-primary" onclick="document.getElementById('id01').style.display='block'">הוסף אישור חדש</button>
+            <button id="myBtn" style="margin-left:10px" class="btn btn-primary" onclick="document.getElementById('id03').style.display='block'">הוסף אישור חדש</button>
             <button id="old_proj_btn" type="button" class="btn btn-primary" onclick="renderOldPROJ()">ארכיון אישורים</button>
         </div>
     </div>
@@ -208,10 +240,10 @@
         </table>
     </form>
     <div class="w3-container">
-        <div id="id01" class="w3-modal">
+        <div id="id03" class="w3-modal">
             <div class="w3-modal-content">
                 <div class="w3-container" dir="rtl">
-                    <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                    <span onclick="document.getElementById('id03').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                     <form id="newProjForm">
                         <br />
                         <h2>אישור חדש</h2>
@@ -221,82 +253,62 @@
                                     <th>
                                         <div class="form-group">
                                             <label for="certificateType"><span class="red-star">★ </span>סוג אישור</label>
-                                            <select class="form-control groupDetails" id="projectType" required>
+                                            <select class="form-control groupDetails" id="certificateType" required>
                                                 <option value="">בחר סוג אישור</option>
                                             </select>
                                         </div>
                                     </th>
                                     <th>
                                         <div class="form-group">
-                                            <label for="projectType"><span class="red-star">★ </span>סטאטוס בדיקה</label>
-                                            <input type="checkbox" class="form-control groupDetails" id="checkStatue" required>
+                                            <label for="checkStatus"><span class="red-star">★ </span>סטאטוס בדיקה</label>
+                                            <input type="checkbox" class="form-control groupDetails" id="checkStatus" required>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="payStatus"><span class="red-star">★ </span>סטאטוס תשלום</label>
+                                            <input type="checkbox" class="form-control groupDetails" id="payStatus" required>
                                         </div>
                                     </th>
                                 </tr>
                                 <tr>
                                     <th>
                                         <div class="form-group">
-                                            <label for="status"><span class="red-star">★ </span>סטאטוס</label>
-                                            <select class="form-control groupDetails" id="status" required>
-                                                <option value="">בחר סטאטוס</option>
-                                                <option value="1"> פתוח </option>
-                                                <option value="0"> סגור </option>
-                                            </select>
+                                            <label for="company">שם המוסד/חברה</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="company" placeholder="הזן שם מוסד/חברה"></textarea>
                                         </div>
                                     </th>
                                     <th>
                                         <div class="form-group">
-                                            <label for="startDate"><span class="red-star">★ </span>תאריך התחלה</label>
+                                            <label for="address">כתובת</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="address" placeholder="הזן כתובת"></textarea>
+                                        </div>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="checkDate"><span class="red-star">★ </span>תאריך בדיקה</label>
                                             <br />
-                                            <input type="date" class="groupDetails" id="startDate" required>
+                                            <input type="date" class="groupDetails" id="checkDate" required>
                                         </div>
                                     </th>
                                     <th>
                                         <div class="form-group">
-                                            <label for="endDate"><span class="red-star">★ </span>תאריך סיום</label>
-                                            <br />
-                                            <input type="date" class="groupDetails" id="endDate" required>
-                                        </div>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <div class="form-group">
-                                            <label for="company"><span class="red-star">★ </span>חברה</label>
-                                            <input type="text" class="form-control groupDetails" id="company" required>
-                                        </div>
-                                    </th>
-                                    <th>
-                                        <div class="form-group">
-                                            <label for="address"><span class="red-star">★ </span>כתובת</label>
-                                            <input type="text" class="form-control groupDetails" id="address" required>
+                                            <label for="description">תיאור בדיקה</label>
+                                            <textarea rows="4" class="form-control groupDetails" id="description" placeholder="הזן תיאור בדיקה"></textarea>
                                         </div>
                                     </th>
                                 </tr>
                                 <tr>
                                     <th>
                                         <div class="form-group">
-                                            <label for="description">תיאור</label>
-                                            <textarea rows="4" class="form-control groupDetails" id="description" placeholder="הזן תיאור פרויקט"></textarea>
-                                        </div>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <div class="form-group">
-                                            <label for="manager"><span class="red-star">★ </span>מנהל פרויקט</label>
-                                            <select class="form-control groupContacts" id="manager" required>
-                                                <option value="">בחר מנהל פרויקט</option>
-                                            </select>
+                                            <label for="price">מחיר</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="price" placeholder="מחיר"></textarea>
                                         </div>
                                     </th>
                                     <th>
-                                        <div class="form-group">
-                                            <label for="foreman"><span class="red-star">★ </span>מנהל עבודה</label>
-                                            <select class="form-control groupContacts" id="foreman" required>
-                                                <option value="">בחר מנהל עבודה</option>
-                                            </select>
-                                        </div>
+                                        <input type="submit" class="btn btn-primary" value="אישר קשר חדש" />
                                     </th>
                                 </tr>
                                 <tr>
