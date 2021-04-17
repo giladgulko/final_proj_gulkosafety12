@@ -25,9 +25,11 @@
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
     <title>אישורים</title>
     <script>
+        certificateTypeList = [];
 
         $(document).ready(function () {
             getCertificateTypeList();
+            getCertData();
         });
 
         //get a list of all the certificate type for section list
@@ -37,13 +39,105 @@
         }
         function getCertificateTypeListSuccess(data) {
             certificateTypeList = data;
-            renderCertificateType();
+            //renderCertificateType();
         }
         function getCertificateTypeListError() {
             swal("Failed!", "Failed to read the Certificate Type!", "warning")
         }
+        function getCertData() {
+
+            ajaxCall("GET", "../api/certificate", "", createDt, getError)
+        }
+
+        function getError() {
+            swal("Failed!", "Failed to read the certificates!", "warning")
+        }
+        function createDt(certificatedata) {
+            let certificatesToShow = [];
+            for (var i = 0; i < certificatedata.length; i++) {
+                certificatedata[i].Date = certificatedata[i].Date.split("T")[0];
+                for (var j = 0; j < certificateTypeList.length; j++) {
+
+                    c = {
+
+                        Certificate_num: certificatedata[i].Certificate_num,
+                        Type_name: certificateTypeList[j].Type_name,
+                        Company: certificatedata[i].Company,
+                        Check_date: certificatedata[i].Date,
+                        Address: certificatedata[i].Address,
+                        Certificate_status: certificatedata[i].Certificate_status,
+                        Pay_status: certificatedata[i].Pay_status,
+                        Price: certificateTypeList[j].Price,
+
+                    }
+                }
+               
+                certificatesToShow.push(c);
+            }
+            try {
+                tbl = $('#certTable').DataTable({
+                    data: certificatesToShow,
+                    pageLength: 10,
+                    columns: [
+
+                        { data: "Certificate_num" },
+                        { data: "Type_name" },
+                        { data: "Company"},
+                        { data: "Check_date" },
+                        { data: "Address" },
+                        { data: "Certificate_status" },
+                        { data: "Pay_status" },
+                        { data: "Price" },
+                        {
+                            render: function (data, type, row, meta) {
+                                let datacert = "cert_data='" + row.Certificate_num + "'";
+
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' " + datacert + "> עריכה </button>";
+
+                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' " + datacert + "> מחיקה </button>";
+                                return editBtn + deleteBtn;
 
 
+                            }
+                        },
+
+                    ],
+                });
+
+            }
+
+            catch (err) {
+                alert(err);
+            }
+            function createNewCert() {
+                let newCert = {
+                    Name: $('#projectName').val(),
+                    Company: $('#company').val(),
+                    Address: $('#address').val(),
+                    Start_date: $('#startDate').val().split("T")[0],
+                    End_date: $('#endDate').val().split("T")[0],
+                    Status: $('#status').val(),
+                    Description: $('#description').val(),
+                    Safety_lvl: 100,
+                    Project_type_num: document.getElementById("projectType").value,
+                    Manager_email: $('#manager').val(),
+                    Foreman_email: $('#foreman').val()
+                }
+                ajaxCall("POST", "../api/project", JSON.stringify(newProj), createNewProjSuccess, createNewProjError);
+            }
+
+            function createNewProjSuccess(data) {
+                swal({
+                    title: "Good job!", text: "You created new project successfully!", type: "success", icon: "success"
+                }).then(function () {
+                    location.reload();
+
+                });
+            }
+            function createNewProjError() {
+                swal("Failed!", "You failed to create a new project!", "warning")
+            }
+        }
     </script>
 </head>
 <body>
@@ -86,9 +180,9 @@
     </div>
     <!--NavBar-->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <div id="proj_bar" dir="rtl">
+    <div id="cert_bar" dir="rtl">
         <div id="headline">
-            <h1 class="proj">אישורים</h1>
+            <h1 class="cert">אישורים</h1>
         </div>
         <br />
         <div id="buttons">
@@ -97,7 +191,7 @@
         </div>
     </div>
     <form id="pForm">
-        <table id="projTable" class="display" style="width:100%" dir="rtl">
+        <table id="certTable" class="display" style="width:100%" dir="rtl">
             <thead>
                 <tr>
                     <th>מספר אישור</th>
@@ -113,7 +207,7 @@
             </thead>
         </table>
     </form>
-    <!--<div class="w3-container">
+    <div class="w3-container">
         <div id="id01" class="w3-modal">
             <div class="w3-modal-content">
                 <div class="w3-container" dir="rtl">
@@ -126,18 +220,16 @@
                                 <tr>
                                     <th>
                                         <div class="form-group">
-                                            <label for="projectName"><span class="red-star">★ </span>שם הפרויקט</label>
-                                            <input type="text" class="form-control groupDetails" id="projectName"
-                                                   oninvalid="this.setCustomValidity('הכנס שם פרויקט')"
-                                                   oninput="this.setCustomValidity('')" required>
+                                            <label for="certificateType"><span class="red-star">★ </span>סוג אישור</label>
+                                            <select class="form-control groupDetails" id="projectType" required>
+                                                <option value="">בחר סוג אישור</option>
+                                            </select>
                                         </div>
                                     </th>
                                     <th>
                                         <div class="form-group">
-                                            <label for="projectType"><span class="red-star">★ </span>סוג הפרויקט</label>
-                                            <select class="form-control groupDetails" id="projectType" required>
-                                                <option value="">בחר סוג פרויקט</option>
-                                            </select>
+                                            <label for="projectType"><span class="red-star">★ </span>סטאטוס בדיקה</label>
+                                            <input type="checkbox" class="form-control groupDetails" id="checkStatue" required>
                                         </div>
                                     </th>
                                 </tr>
@@ -218,6 +310,6 @@
                 </div>
             </div>
         </div>
-    </div>-->
+    </div>
 </body>
 </html>

@@ -76,11 +76,6 @@ namespace final_proj_gulkosafety.Controllers
             }
         }
 
-        //public void PutProjectStatus([FromBody] project p)
-        //{
-        //    p.UpdateProjectStatus(p.Project_num, p.Status);
-        //}
-
         public HttpResponseMessage PutProjectUsers(int project_num, [FromBody] project p)
         {
             try

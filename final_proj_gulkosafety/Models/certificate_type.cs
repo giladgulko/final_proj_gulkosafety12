@@ -1,4 +1,5 @@
-﻿using System;
+﻿using final_proj_gulkosafety.Models.DAL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -25,5 +26,11 @@ namespace final_proj_gulkosafety.Models
         public string Type_name { get => type_name; set => type_name = value; }
         public double Price { get => price; set => price = value; }
         public int Expiration { get => expiration; set => expiration = value; }
+
+        public List<certificate_type> ReadCertificate_type()
+        {
+            DBServices dbs = new DBServices();
+            return dbs.ReadCertificate_type();
+        }
     }
 }

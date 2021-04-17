@@ -788,7 +788,7 @@ namespace final_proj_gulkosafety.Models.DAL
 
             }
         }
-       
+
         // delete defect in report
         public int DeleteDefectInReport(int report_num, int defect_num)
         {
@@ -882,7 +882,7 @@ namespace final_proj_gulkosafety.Models.DAL
         private String BuildupdateCommand(defect_in_report defectInReport)
         {
             String command;
-            command = "UPDATE defect_in_report SET fix_date='" + defectInReport.Fix_date.ToString("yyyy-MM-dd") + "', fix_time='" + defectInReport.Fix_time.ToString("HH:ss") + "', fix_status=" + defectInReport.Fix_status + " , description='"+ defectInReport.Description+ "' WHERE defect_num =" + defectInReport.Defect_num+" and report_num="+ defectInReport.Report_num;
+            command = "UPDATE defect_in_report SET fix_date='" + defectInReport.Fix_date.ToString("yyyy-MM-dd") + "', fix_time='" + defectInReport.Fix_time.ToString("HH:ss") + "', fix_status=" + defectInReport.Fix_status + " , description='" + defectInReport.Description + "' WHERE defect_num =" + defectInReport.Defect_num + " and report_num=" + defectInReport.Report_num;
 
             return command;
         }
@@ -1038,13 +1038,13 @@ namespace final_proj_gulkosafety.Models.DAL
 
             try
             {
-                con = connect("DBConnectionString"); 
+                con = connect("DBConnectionString");
 
                 String selectSTR = "SELECT * FROM [project_type]";
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
 
-                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); 
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
 
                 while (dr.Read())
                 {
@@ -1074,7 +1074,7 @@ namespace final_proj_gulkosafety.Models.DAL
         {
 
         }
-       
+
         public List<user> ReadUsers()
         {
             SqlConnection con = null;
@@ -1082,13 +1082,13 @@ namespace final_proj_gulkosafety.Models.DAL
 
             try
             {
-                con = connect("DBConnectionString"); 
+                con = connect("DBConnectionString");
 
                 String selectSTR = "SELECT * FROM [user]";
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
 
-                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); 
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
 
                 while (dr.Read())
                 {
@@ -1127,20 +1127,20 @@ namespace final_proj_gulkosafety.Models.DAL
 
             try
             {
-                con = connect("DBConnectionString"); 
+                con = connect("DBConnectionString");
             }
             catch (Exception ex)
             {
                 throw (ex);
             }
 
-            String cStr = BuildInsertCommand(_defect_in_report); 
+            String cStr = BuildInsertCommand(_defect_in_report);
 
             cmd = CreateCommand(cStr, con);
 
             try
             {
-                int numEffected = cmd.ExecuteNonQuery(); 
+                int numEffected = cmd.ExecuteNonQuery();
                 return numEffected;
             }
             catch (Exception ex)
@@ -1194,7 +1194,7 @@ namespace final_proj_gulkosafety.Models.DAL
             {
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
 
-                String selectSTR = "select top 1* from report where project_num="+ proj_num + " order by report_num desc" ;
+                String selectSTR = "select top 1* from report where project_num=" + proj_num + " order by report_num desc";
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
                 // get a reader
@@ -1239,7 +1239,7 @@ namespace final_proj_gulkosafety.Models.DAL
             {
                 con = connect("DBConnectionString");
 
-                String selectSTR = "select* from weight_type_defects where project_type_num="+ proj_type;
+                String selectSTR = "select* from weight_type_defects where project_type_num=" + proj_type;
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
 
@@ -1251,7 +1251,7 @@ namespace final_proj_gulkosafety.Models.DAL
                     ptw.Project_type_num = Convert.ToInt32(dr["project_type_num"]);
                     ptw.Defect_type_num = Convert.ToInt32(dr["defect_type_num"]);
                     ptw.Weight = Convert.ToDouble(dr["weight"]);
-                    
+
                     ptwList.Add(ptw);
                 }
 
@@ -1282,7 +1282,7 @@ namespace final_proj_gulkosafety.Models.DAL
             {
                 con = connect("DBConnectionString");
 
-                String selectSTR = "select di.*,d.name,dt.type_name,dt.defect_type_num from defect_in_report di inner join defect d on di.defect_num=d.defect_num inner join defect_type dt on d.defect_type_num=dt.defect_type_num where di.report_num=(select top 1 report_num from report where project_num=" + proj_num + " and date <'"+date.ToString("yyyy-MM-dd") + "' order by report_num desc)";
+                String selectSTR = "select di.*,d.name,dt.type_name,dt.defect_type_num from defect_in_report di inner join defect d on di.defect_num=d.defect_num inner join defect_type dt on d.defect_type_num=dt.defect_type_num where di.report_num=(select top 1 report_num from report where project_num=" + proj_num + " and date <'" + date.ToString("yyyy-MM-dd") + "' order by report_num desc)";
 
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
@@ -1331,7 +1331,7 @@ namespace final_proj_gulkosafety.Models.DAL
 
             try
             {
-                con = connect("DBConnectionString"); 
+                con = connect("DBConnectionString");
 
                 String selectSTR = "SELECT * FROM alert WHERE user_email='" + user_email + "'and status=0 order by [date] desc";
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
@@ -1339,7 +1339,7 @@ namespace final_proj_gulkosafety.Models.DAL
                 // get a reader
                 SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
                 while (dr.Read())
-                {  
+                {
 
                     alert _alert = new alert();
                     _alert.Alert_num = Convert.ToInt32(dr["alert_num"]);
@@ -1429,7 +1429,7 @@ namespace final_proj_gulkosafety.Models.DAL
                 throw new Exception("The connection to sever is not good");
             }
 
-            String cStr = BuildUpdateReportCommand(report_num,grade);
+            String cStr = BuildUpdateReportCommand(report_num, grade);
 
             cmd = CreateCommand(cStr, con);
 
@@ -1495,7 +1495,7 @@ namespace final_proj_gulkosafety.Models.DAL
         private String BuildUpdateAlertCommand(alert a)
         {
             String command;
-            command = "UPDATE alert SET content='" + a.Content + "', alert_type_num=" + a.Alert_type_num + ", date='" + a.Date.ToString("yyyy-MM-dd HH:mm") + "', User_email='" + a.User_email + "', status=" + a.Status + ", proj_num=" + a.Proj_num+ " Where alert_num="+a.Alert_num;
+            command = "UPDATE alert SET content='" + a.Content + "', alert_type_num=" + a.Alert_type_num + ", date='" + a.Date.ToString("yyyy-MM-dd HH:mm") + "', User_email='" + a.User_email + "', status=" + a.Status + ", proj_num=" + a.Proj_num + " Where alert_num=" + a.Alert_num;
 
             return command;
         }
@@ -1556,7 +1556,7 @@ namespace final_proj_gulkosafety.Models.DAL
         private String BuildUpdateReportCommand(int report_num, double grade)
         {
             String command;
-            command = "UPDATE report SET grade=" + grade +  " WHERE report_num =" + report_num;
+            command = "UPDATE report SET grade=" + grade + " WHERE report_num =" + report_num;
 
             return command;
         }
@@ -1605,6 +1605,115 @@ namespace final_proj_gulkosafety.Models.DAL
 
             }
         }
+        //return all certificates
+        public List<certificate> ReadCertificate()
+        {
+            SqlConnection con = null;
+            List<certificate> certificateList = new List<certificate>();
 
+            try
+            {
+                con = connect("DBConnectionString");
+                String selectSTR = "";
+
+                selectSTR = "select * from certificate";
+
+
+
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {
+                    certificate c = new certificate();
+
+                    c.Certificate_num = Convert.ToInt32(dr["certificate_num"]);
+                    c.Company = (string)dr["company"];
+                    c.Date = Convert.ToDateTime(dr["date"]);
+                    c.Address = (string)dr["address"];
+                    c.Description = (string)dr["description"];
+                    c.Certificate_status = Convert.ToInt32(dr["certificate_status"]);
+                    c.Pay_status = Convert.ToInt32(dr["pay_status"]);
+                    c.Bill_num = (string)dr["bill_num"];
+                    c.Certificate_type_num = Convert.ToInt32(dr["certificate_type_num"]);
+                    c.User_email = (string)dr["user_email"];
+                    c.Contact_id = (string)dr["contact_id"];
+
+                    certificateList.Add(c);
+
+
+                }
+
+                return certificateList;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
+        //return all certificate_types
+        public List<certificate_type> ReadCertificate_type()
+        {
+            SqlConnection con = null;
+            List<certificate_type> certificateTypeList = new List<certificate_type>();
+
+            try
+            {
+                con = connect("DBConnectionString");
+                String selectSTR = "";
+
+                selectSTR = "select * from certificate_type";
+
+
+
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {
+                    certificate_type c = new certificate_type();
+
+                    c.Certificate_type_num = Convert.ToInt32(dr["certificate_type_num"]);
+                    c.Type_name = (string)dr["type_name"];
+                    c.Price = Convert.ToDouble(dr["price"]);
+                    c.Expiration = Convert.ToInt32(dr["expiration"]);
+
+
+                    certificateTypeList.Add(c);
+
+
+                }
+
+                return certificateTypeList;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
     }
 }

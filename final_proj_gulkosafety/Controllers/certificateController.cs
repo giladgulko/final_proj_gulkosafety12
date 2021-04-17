@@ -1,4 +1,5 @@
-﻿using System;
+﻿using final_proj_gulkosafety.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -9,16 +10,19 @@ namespace final_proj_gulkosafety.Controllers
 {
     public class certificateController : ApiController
     {
-        // GET api/<controller>
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
 
-        // GET api/<controller>/5
-        public string Get(int id)
+        public List<certificate> Get()
         {
-            return "value";
+            try
+            {
+                certificate c = new certificate();
+                List<certificate> cList = c.ReadCertificate();
+                return cList;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
         }
 
         // POST api/<controller>
