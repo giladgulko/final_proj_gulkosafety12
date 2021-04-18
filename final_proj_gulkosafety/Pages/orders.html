@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Suez+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@1,700&family=Suez+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <link href="styles/nav_bar_style.css" rel="stylesheet" />
+    <link href="styles/ordersStyleSheet.css" rel="stylesheet" />
+
+    <script src="../Scripts/ajaxCallsWithKey.js"></script>
+    <title>הזמנות</title>
+    <script>
+
+
+        $(document).ready(function () {
+            getOrderData();
+        });
+
+        function getOrderData() {
+            ajaxCall("GET", "../api/order", "", createDt, getError)
+        }
+        function getError() {
+            swal("Failed!", "Failed to read the orders!", "warning")
+        }
+        function createDt(orderdata) {
+            let ordersToShow = [];
+            for (var i = 0; i < orderdata.length; i++) {
+                orderdata[i].Date = orderdata[i].Date.split("T")[0];
+                if (ordersToShow.includes(orderdata[i].Order_num) == false) {
+                    order = {
+
+                        Order_num: orderdata[i].Order_num,
+                        Bill_num: orderdata[i].Bill_num,
+                        Date: orderdata[i].Date,
+                        Quantity: orderdata[i].Quantity,
+                        Total_price: orderdata[i].Total_price,
+
+                    }
+                    ordersToShow.push(order);
+                }
+            }
+            try {
+                tbl = $('#orderTable').DataTable({
+                    data: ordersToShow,
+                    pageLength: 10,
+                    columns: [
+
+                        { data: "Order_num" },
+                        { data: "Bill_num" },
+                        { data: "Date" },
+                        { data: "Quantity" },
+                        { data: "Total_price" },
+
+                        {
+                            render: function (data, type, row, meta) {
+                                let dataorder = "order_data='" + row.Order_num + "'";
+
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + dataorder + "' onclick='editDefectBTN(this.value)'> עריכה </button>";
+
+                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' " + dataorder + "> מחיקה </button>";
+                                return editBtn + deleteBtn;
+
+
+                            }
+                        },
+
+                    ],
+                });
+
+            }
+
+            catch (err) {
+                alert(err);
+            }
+        }
+
+
+    </script>
+</head>
+<body>
+    <div id="logo">
+        <img class="logo" src="photos/logo.jpeg" height="50" />
+    </div>
+    <div class="body-wrap">
+        <nav class="navbar navbar-inverse">
+            <div class="container1">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarMenu" aria-expanded="false">
+                        <span id="navigation" class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="navbarMenu">
+                    <ul class="nav navbar-nav navbar-right  bts-nav">
+                        <li><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="#"></a></li>
+                        <li></li>
+                        <li class="nav-item">
+                            <span class="glyphicon glyphicon-bell" aria-hidden="true"></span><a href="alerts.html"></a>
+                        </li>
+
+                        <li><a href="#">סטטיסטיקות</a></li>
+                        <li><a href="#">משתמשים</a></li>
+                        <li class="active"><a href="certificates.html">הזמנות<span class="sr-only">(current)</span></a></li>
+                        <li><a href="certificates.html">אישורים</a></li>
+                        <li><a href="#">הדרכות</a></li>
+                        <li><a href="projects.html">פרויקטים</a></li>
+                        <li><a href="#">התחברות</a></li>
+                        <li>
+                            <span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="#"></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!--NavBar-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <div id="order_bar" dir="rtl">
+        <div id="headline">
+            <h1 class="orders">הזמנות</h1>
+        </div>
+        <br />
+        <div id="buttons">
+            <button id="myBtn" style="margin-left:10px" class="btn btn-primary" onclick="document.getElementById('id03').style.display='block'">הוסף הזמנה חדשה</button>
+            <button id="old_proj_btn" type="button" class="btn btn-primary" onclick="renderOldPROJ()">ארכיון הזמנות</button>
+        </div>
+    </div>
+    <form id="pForm">
+        <table id="orderTable" class="display" style="width:100%" dir="rtl">
+            <thead>
+                <tr>
+                    <th>מספר הזמנה</th>
+                    <th>מספר חשבונית</th>
+                    <th>תאריך רכישה</th>
+                    <th>כמות פריטים</th>
+                    <th>סכום הזמנה</th>
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
+    </form>
+
+</body>
+</html>

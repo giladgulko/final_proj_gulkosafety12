@@ -19,8 +19,11 @@ namespace final_proj_gulkosafety.Models
         int certificate_type_num;
         string user_email;
         string contact_id;
+        string type_name;
+        double price;
+        int expiration;
 
-        public certificate(int certificate_num, string company, DateTime date, string address, string description, int certificate_status, int pay_status, string bill_num, int certificate_type_num, string user_email, string contact_id)
+        public certificate(int certificate_num, string company, DateTime date, string address, string description, int certificate_status, int pay_status, string bill_num, int certificate_type_num, string user_email, string contact_id, string type_name, double price, int expiration)
         {
             Certificate_num = certificate_num;
             Company = company;
@@ -33,6 +36,9 @@ namespace final_proj_gulkosafety.Models
             Certificate_type_num = certificate_type_num;
             User_email = user_email;
             Contact_id = contact_id;
+            Type_name = type_name;
+            Price = price;
+            Expiration = expiration;
         }
         public certificate() { }
 
@@ -47,6 +53,9 @@ namespace final_proj_gulkosafety.Models
         public int Certificate_type_num { get => certificate_type_num; set => certificate_type_num = value; }
         public string User_email { get => user_email; set => user_email = value; }
         public string Contact_id { get => contact_id; set => contact_id = value; }
+        public string Type_name { get => type_name; set => type_name = value; }
+        public double Price { get => price; set => price = value; }
+        public int Expiration { get => expiration; set => expiration = value; }
 
         public List<certificate> ReadCertificate()
         {

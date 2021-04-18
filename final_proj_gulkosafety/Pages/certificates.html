@@ -72,21 +72,18 @@
             let certificatesToShow = [];
             for (var i = 0; i < certificatedata.length; i++) {
                 certificatedata[i].Date = certificatedata[i].Date.split("T")[0];
-                for (var j = 0; j < certificateTypeList.length; j++) {
-
                     c = {
 
                         Certificate_num: certificatedata[i].Certificate_num,
-                        Type_name: certificateTypeList[j].Type_name,
+                        Type_name: certificatedata[i].Type_name,
                         Company: certificatedata[i].Company,
                         Check_date: certificatedata[i].Date,
                         Address: certificatedata[i].Address,
                         Certificate_status: certificatedata[i].Certificate_status,
                         Pay_status: certificatedata[i].Pay_status,
-                        Price: certificateTypeList[j].Price,
+                        Price: certificatedata[i].Price,
 
                     }
-                }
                 certificatesToShow.push(c);
             }
             try {
@@ -304,7 +301,7 @@
                                     <th>
                                         <div class="form-group">
                                             <label for="price">מחיר</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="price" placeholder="מחיר"></textarea>
+                                            <textarea rows="1" class="form-control groupDetails" id="price" placeholder="הזו מחיר"></textarea>
                                         </div>
                                     </th>
                                     <th>

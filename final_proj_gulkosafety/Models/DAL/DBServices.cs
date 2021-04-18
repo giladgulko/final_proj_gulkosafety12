@@ -1616,7 +1616,7 @@ namespace final_proj_gulkosafety.Models.DAL
                 con = connect("DBConnectionString");
                 String selectSTR = "";
 
-                selectSTR = "select * from certificate";
+                selectSTR = "SELECT * FROM certificate c inner join certificate_type ct on c.certificate_type_num = ct.certificate_type_num";
 
 
 
@@ -1640,6 +1640,9 @@ namespace final_proj_gulkosafety.Models.DAL
                     c.Certificate_type_num = Convert.ToInt32(dr["certificate_type_num"]);
                     c.User_email = (string)dr["user_email"];
                     c.Contact_id = (string)dr["contact_id"];
+                    c.Type_name = (string)dr["type_name"];
+                    c.Price = Convert.ToDouble(dr["price"]);
+                    c.Expiration = Convert.ToInt32(dr["expiration"]);
 
                     certificateList.Add(c);
 
@@ -1699,6 +1702,58 @@ namespace final_proj_gulkosafety.Models.DAL
                 }
 
                 return certificateTypeList;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
+        public List<order> ReadOrder()
+        {
+            SqlConnection con = null;
+            List<order> ordersList = new List<order>();
+
+            try
+            {
+                con = connect("DBConnectionString");
+                String selectSTR = "";
+
+                selectSTR = "select * from [order] o inner join items_in_order oi on o.order_num=oi.order_num ";
+
+
+
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {
+                    order o = new order();
+
+                    o.Order_num = Convert.ToInt32(dr["order_num"]);
+                    o.Bill_num = (string)dr["bill_num"];
+                    o.Date = Convert.ToDateTime(dr["date"]);
+                    o.Contact_id = (string)dr["contact_id"];
+                    o.Item_num = Convert.ToInt32(dr["item_num"]);
+                    o.Quantity = Convert.ToInt32(dr["quantity"]);
+                    o.Total_price = Convert.ToDouble(dr["total_price"]);
+
+                    ordersList.Add(o);
+
+                }
+
+                return ordersList;
             }
             catch (Exception ex)
             {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using final_proj_gulkosafety.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -9,16 +10,18 @@ namespace final_proj_gulkosafety.Controllers
 {
     public class orderController : ApiController
     {
-        // GET api/<controller>
-        public IEnumerable<string> Get()
+        public List<order> Get()
         {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<controller>/5
-        public string Get(int id)
-        {
-            return "value";
+            try
+            {
+                order o = new order();
+                List<order> oList = o.ReadOrder();
+                return oList;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
         }
 
         // POST api/<controller>
