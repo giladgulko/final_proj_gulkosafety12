@@ -113,5 +113,16 @@ VALUES (2,1,5)
 INSERT INTO [defect](grade,defect_type_num,name)
 VALUES  (6,8,'הצבת חפצים להגבהה על רצפת הפיגום ועבודה מהם')
 
+select * from certificate
+select * from instruction_type
 
-SELECT * FROM certificate_type
+select o.order_num, o.bill_num,o.contact_id,o.total_price ,oi.item_num,oi.quantity
+from [order] o left join items_in_order oi on o.order_num=oi.order_num 
+group by o.order_num, o.bill_num,o.contact_id,o.total_price ,oi.item_num,oi.quantity
+
+SELECT i.*, it.type_name,it.expiration
+FROM instruction i left join instruction_type it on i.instruction_num = it.instruction_type_num 
+
+
+
+sp_rename 'order.price', 'total_price', 'COLUMN';

@@ -24,11 +24,22 @@ namespace final_proj_gulkosafety.Controllers
             }
         }
 
-        // POST api/<controller>
-        public void Post([FromBody]string value)
+        public HttpResponseMessage Post([FromBody] order o)
         {
-        }
+            try
+            {
+                {
+                    o.Insert();
 
+                }
+
+                return Request.CreateResponse(HttpStatusCode.Created, o);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
+            }
+        }
         // PUT api/<controller>/5
         public void Put(int id, [FromBody]string value)
         {

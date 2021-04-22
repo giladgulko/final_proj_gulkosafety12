@@ -62,6 +62,11 @@ namespace final_proj_gulkosafety.Models
             DBServices dbs = new DBServices();
             return dbs.ReadCertificate();
         }
+        public void Insert()
+        {
+            DBServices dbs = new DBServices();
+            dbs.InsertCertificate(this);
+        }
     }
 
 }

@@ -43,5 +43,11 @@ namespace final_proj_gulkosafety.Models
             DBServices dbs = new DBServices();
             return dbs.ReadOrder();
         }
+        public void Insert()
+        {
+            DBServices dbs = new DBServices();
+            dbs.InsertOrder(this);
+        }
     }
+
 }

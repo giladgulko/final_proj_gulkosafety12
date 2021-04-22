@@ -59,7 +59,7 @@
         function getError() {
             swal("Failed!", "Failed to read the certificates!", "warning")
         }
-        function newProjForm() {
+        function newCertForm() {
             $("#dateError").hide();
             var checkDate = document.getElementById('checkDate').value;
             if (checkDate < NOW()) {
@@ -194,7 +194,7 @@
 
                         <li><a href="#">סטטיסטיקות</a></li>
                         <li><a href="#">משתמשים</a></li>
-                        <li><a href="#">הזמנות</a></li>
+                        <li><a href="orders.html">הזמנות</a></li>
                         <li class="active"><a href="certificates.html">אישורים<span class="sr-only">(current)</span></a></li>
                         <li><a href="#">הדרכות</a></li>
                         <li><a href="projects.html">פרויקטים</a></li>
@@ -241,7 +241,7 @@
             <div class="w3-modal-content">
                 <div class="w3-container" dir="rtl">
                     <span onclick="document.getElementById('id03').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-                    <form id="newProjForm">
+                    <form id="newCertForm">
                         <br />
                         <h2>אישור חדש</h2>
                         <table class="display" style="width:100%" dir="rtl">

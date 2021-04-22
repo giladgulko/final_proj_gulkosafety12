@@ -1718,6 +1718,7 @@ namespace final_proj_gulkosafety.Models.DAL
             }
 
         }
+        //read all orders
         public List<order> ReadOrder()
         {
             SqlConnection con = null;
@@ -1770,5 +1771,172 @@ namespace final_proj_gulkosafety.Models.DAL
             }
 
         }
+        //insert a new order
+        public int InsertOrder(order _order)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            String cStr = BuildInsertCommand(_order);      // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
+        private String BuildInsertCommand(order _order)
+        {
+            String command;
+
+            StringBuilder sb = new StringBuilder();
+            // use a string builder to create the dynamic string
+            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}')", _order.Bill_num, _order.Date.ToString("yyyy-MM-dd"), _order.Total_price,_order.Contact_id);
+            String prefix = "INSERT INTO project " + "(bill_num,date,total_price,contact_id)";
+            command = prefix + sb.ToString();
+
+            return command;
+
+        }
+        //insert a new certificate
+        public int InsertCertificate(certificate _certificate)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            String cStr = BuildInsertCommand(_certificate);      // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
+        private String BuildInsertCommand(certificate _certificate)
+        {
+            String command;
+
+            StringBuilder sb = new StringBuilder();
+            // use a string builder to create the dynamic string
+            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}','{4}','{5}')", _certificate.Certificate_status, _certificate.Pay_status, _certificate.Company, _certificate.Address,_certificate.Date.ToString("yyyy-MM-dd"),_certificate.Description);
+            String prefix = "INSERT INTO project " + "(bill_num,date,total_price,contact_id)";
+            command = prefix + sb.ToString();
+
+            return command;
+
+        }
+        //return all instructions 
+        public List<instruction> ReadInstruction()
+        {
+            SqlConnection con = null;
+            List<instruction> instructionList = new List<instruction>();
+
+            try
+            {
+                con = connect("DBConnectionString");
+                String selectSTR = "";
+
+                selectSTR = "SELECT i.*, it.type_name,it.expiration FROM instruction i left join instruction_type it on i.instruction_num = it.instruction_type_num ";
+
+
+
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {
+                    instruction i = new instruction();
+
+                    i.Instruction_num = Convert.ToInt32(dr["instruction_num"]);
+                    i.Company = (string)dr["company"];
+                    i.Date = Convert.ToDateTime(dr["date"]);
+                    //i.Time = Convert.ToDateTime(dr["time"]);
+                    i.Address = (string)dr["address"];
+                    i.Participants_num = Convert.ToInt32(dr["participants_num"]);
+                    i.Pay_status = Convert.ToInt32(dr["pay_status"]);
+                    i.Total_price = Convert.ToInt32(dr["total_price"]);
+                    i.Bill_num = Convert.ToInt32(dr["bill_num"]);
+                    i.Instructor_email = (string)dr["instructor_email"];
+                    i.Instruction_type_num = Convert.ToInt32(dr["instruction_type_num"]);
+                    i.Type_name = (string)dr["type_name"];
+                    i.Expiration = Convert.ToInt32(dr["expiration"]);
+
+
+                    instructionList.Add(i);
+
+
+                }
+
+                return instructionList;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
+
     }
+   
 }

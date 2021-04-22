@@ -37,11 +37,43 @@
         function getError() {
             swal("Failed!", "Failed to read the orders!", "warning")
         }
+        function newOrderForm() {
+            $("#dateError").hide();
+            var checkDate = document.getElementById('orderDate').value;
+            if (checkDate < NOW()) {
+                $('#orderDate').after('<p id="dateError">תאריך הבדיקה קטן מהתאריך של היום</p>');
+            }
+            else createNewOrder();
+            return false;
+        }
+        function createNewOrder() {
+            let newOrder = {
+
+                Bill_num: $('#billnum').val(),
+                Date: $('#orderDate').val().split("T")[0],
+                Quantity: $('#quantity').val(),
+                Total_price: $('#total_order').val(),
+
+            }
+            ajaxCall("POST", "../api/order", JSON.stringify(newOrders), createNewOrderSuccess, createNewOrderError);
+        }
+        function createNewOrderSuccess(data) {
+            swal({
+                title: "Good job!", text: "You created new order successfully!", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
+        }
+        function createNewOrderError() {
+            swal("Failed!", "You failed to create a new order!", "warning")
+        }
+
         function createDt(orderdata) {
             let ordersToShow = [];
             for (var i = 0; i < orderdata.length; i++) {
                 orderdata[i].Date = orderdata[i].Date.split("T")[0];
-                if (ordersToShow.includes(orderdata[i].Order_num) == false) {
+                if (ordersToShow.contain(orderdata[i].Order_num) == true) {
                     order = {
 
                         Order_num: orderdata[i].Order_num,
@@ -87,6 +119,7 @@
             catch (err) {
                 alert(err);
             }
+
         }
 
 
@@ -117,7 +150,7 @@
 
                         <li><a href="#">סטטיסטיקות</a></li>
                         <li><a href="#">משתמשים</a></li>
-                        <li class="active"><a href="certificates.html">הזמנות<span class="sr-only">(current)</span></a></li>
+                        <li class="active"><a href="orders.html">הזמנות<span class="sr-only">(current)</span></a></li>
                         <li><a href="certificates.html">אישורים</a></li>
                         <li><a href="#">הדרכות</a></li>
                         <li><a href="projects.html">פרויקטים</a></li>
@@ -156,6 +189,64 @@
             </thead>
         </table>
     </form>
-
+    <div class="w3-container">
+        <div id="id03" class="w3-modal">
+            <div class="w3-modal-content">
+                <div class="w3-container" dir="rtl">
+                    <span onclick="document.getElementById('id03').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                    <form id="newOrderForm">
+                        <br />
+                        <h2>הזמנה חדשה</h2>
+                        <table class="display" style="width:100%" dir="rtl">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="billnum">מספר חשבונית</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="billnum" placeholder="הזן מספר חשבונית"></textarea>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="orderDate"><span class="red-star">★ </span>תאריך הזמנה</label>
+                                            <br />
+                                            <input type="date" class="groupDetails" id="orderDate" required>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="quantity">כמות פריטים</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="quantity" placeholder="הזן כמות פריטים"></textarea>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="total_order">סכום הזמנה</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="total_order" placeholder="הזן סכום הזמנה"></textarea>
+                                        </div>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <input type="submit" class="btn btn-primary" value="פריט חדש" />
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <input type="submit" class="btn btn-primary" value="איש קשר חדש" />
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <input type="submit" class="btn btn-primary" value="שמור" />
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
