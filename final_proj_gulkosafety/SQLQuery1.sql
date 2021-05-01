@@ -116,13 +116,17 @@ VALUES  (6,8,'הצבת חפצים להגבהה על רצפת הפיגום ועב
 select * from certificate
 select * from instruction_type
 
-select o.order_num, o.bill_num,o.contact_id,o.total_price ,oi.item_num,oi.quantity
+select * from items_in_order
+
+select distinct o.order_num, o.bill_num,o.contact_id,o.total_price,oi.quantity
 from [order] o left join items_in_order oi on o.order_num=oi.order_num 
 group by o.order_num, o.bill_num,o.contact_id,o.total_price ,oi.item_num,oi.quantity
 
 SELECT i.*, it.type_name,it.expiration
 FROM instruction i left join instruction_type it on i.instruction_num = it.instruction_type_num 
 
-
+select a.*, at.type_name
+from alert a inner join alert_type at on a.alert_type_num= at.alert_type_num
+where 
 
 sp_rename 'order.price', 'total_price', 'COLUMN';

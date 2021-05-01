@@ -73,7 +73,6 @@
             let ordersToShow = [];
             for (var i = 0; i < orderdata.length; i++) {
                 orderdata[i].Date = orderdata[i].Date.split("T")[0];
-                if (ordersToShow.contain(orderdata[i].Order_num) == true) {
                     order = {
 
                         Order_num: orderdata[i].Order_num,
@@ -84,7 +83,6 @@
 
                     }
                     ordersToShow.push(order);
-                }
             }
             try {
                 tbl = $('#orderTable').DataTable({
@@ -152,7 +150,7 @@
                         <li><a href="#">משתמשים</a></li>
                         <li class="active"><a href="orders.html">הזמנות<span class="sr-only">(current)</span></a></li>
                         <li><a href="certificates.html">אישורים</a></li>
-                        <li><a href="#">הדרכות</a></li>
+                        <li><a href="instructions.html">הדרכות</a></li>
                         <li><a href="projects.html">פרויקטים</a></li>
                         <li><a href="#">התחברות</a></li>
                         <li>

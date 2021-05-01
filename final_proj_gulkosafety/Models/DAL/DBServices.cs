@@ -1570,7 +1570,7 @@ namespace final_proj_gulkosafety.Models.DAL
             {
                 con = connect("DBConnectionString");
 
-                String selectSTR = "SELECT * FROM alert WHERE user_email='" + user_email + "'and status=1 order by [date] desc";
+                String selectSTR = "SELECT a.*, at.type_name From alert a inner join alert_type at on a.alert_type_num = at.alert_type_num WHERE user_email='" + user_email + "'and status=1 order by [date] desc";
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
                 // get a reader
@@ -1586,6 +1586,7 @@ namespace final_proj_gulkosafety.Models.DAL
                     _alert.User_email = (string)dr["user_email"];
                     _alert.Status = Convert.ToInt32(dr["status"]);
                     _alert.Proj_num = Convert.ToInt32(dr["proj_num"]);
+                    _alert.Type_name = (string)dr["type_name"];
                     alertsArchiveList.Add(_alert);
                 }
 

@@ -169,5 +169,107 @@
             </thead>
         </table>
     </form>
+    <div class="w3-container">
+        <div id="id03" class="w3-modal">
+            <div class="w3-modal-content">
+                <div class="w3-container" dir="rtl">
+                    <span onclick="document.getElementById('id03').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                    <form id="newCertForm">
+                        <br />
+                        <h2>הדרכה חדשה</h2>
+                        <table class="display" style="width:100%" dir="rtl">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="instructionType"><span class="red-star">★ </span>סוג הדרכה</label>
+                                            <select class="form-control groupDetails" id="instructionType" required>
+                                                <option value="">בחר סוג הדרכה</option>
+                                            </select>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="checkpayStatus"><span class="red-star">★ </span>סטאטוס תשלום</label>
+                                            <input type="checkbox" class="form-control groupDetails" id="checkpayStatus" required>
+                                        </div>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="company">שם החברה</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="company" placeholder="הזן שם החברה"></textarea>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="address">כתובת</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="address" placeholder="הזן כתובת"></textarea>
+                                        </div>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="checkDate"><span class="red-star">★ </span>תאריך הדרכה</label>
+                                            <br />
+                                            <input type="date" class="groupDetails" id="checkDate" required>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="time">שעת הדרכה</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="time" placeholder="שעת הדרכה"></textarea>
+                                        </div>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="price">מחיר כולל</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="price" placeholder=" הזן מחיר כולל"></textarea>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="price">מספר משתתפים</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="price" placeholder=" הזן מספר משתתפים"></textarea>
+                                        </div>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <input type="submit" class="btn btn-primary" value="הוספת משתתף חדש" />
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <form id="pForm">
+                                        <table id="participantsTable" class="display" style="width:100%" dir="rtl">
+                                            <thead>
+                                                <tr>
+                                                    <th>תעודת זהות</th>
+                                                    <th>שם מלא</th>
+                                                    <th>טלפון</th>
+                                                    <th>כתובת מייל </th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </form>
+                                </tr>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <input type="submit" class="btn btn-primary" value="שמור" />
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

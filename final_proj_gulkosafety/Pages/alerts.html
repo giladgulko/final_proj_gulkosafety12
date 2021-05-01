@@ -197,6 +197,7 @@
             for (i = 0; i < alertArchiveList.length; i++) {
                 let a = {
                     Alert_num: alertArchiveList[i].Alert_num,
+                    Type_name: alertArchiveList[i].Type_name,
                     Alert_type_num: alertArchiveList[i].Alert_type_num,
                     Content: alertArchiveList[i].Content,
                     Date: alertArchiveList[i].Date.split('T')[0],
@@ -212,17 +213,18 @@
                     columns: [
 
                         { data: "Alert_num" },
+                        { data: "Type_name" },
                         { data: "Alert_type_num" },
                         {
-                             render: function(data, type, row, meta) {
-                                 if (row.Alert_type_num == 1) {
-                                     return "סיכום עדכון רמת בטיחות פרויקט"
-                                 }
-                                 else {
-                                     return row.Content
-                                 }
-                            }},
-                        //{ data: "Content" },
+                            render: function (data, type, row, meta) {
+                                if (row.Alert_type_num == 1) {
+                                    return "סיכום עדכון רמת בטיחות פרויקט"
+                                }
+                                else {
+                                    return row.Content
+                                }
+                            }
+                        },
                         { data: "Date" },
                         { data: "Time" },
 
@@ -317,9 +319,9 @@
 
                         <li><a href="#">סטטיסטיקות</a></li>
                         <li><a href="#">משתמשים</a></li>
-                        <li><a href="#">הזמנות</a></li>
-                        <li><a href="#">אישורים</a></li>
-                        <li><a href="#">הדרכות</a></li>
+                        <li><a href="orders.html">הזמנות</a></li>
+                        <li><a href="certificates.html">אישורים</a></li>
+                        <li><a href="instructions.html">הדרכות</a></li>
                         <li><a href="projects.html">פרויקטים</a></li>
                         <li><a href="#">התחברות</a></li>
                         <li>
@@ -345,6 +347,7 @@
             <thead>
                 <tr>
                     <th>מספר התראה</th>
+                    <th>שם סוג התראה</th>
                     <th>סוג התראה</th>
                     <th>תוכן</th>
                     <th>תאריך</th>
