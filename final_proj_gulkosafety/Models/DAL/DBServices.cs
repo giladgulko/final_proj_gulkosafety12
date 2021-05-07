@@ -1826,57 +1826,57 @@ namespace final_proj_gulkosafety.Models.DAL
 
         }
         //insert a new certificate
-        public int InsertCertificate(certificate _certificate)
-        {
+        //public int InsertCertificate(certificate _certificate)
+        //{
 
-            SqlConnection con;
-            SqlCommand cmd;
+        //    SqlConnection con;
+        //    SqlCommand cmd;
 
-            try
-            {
-                con = connect("DBConnectionString"); // create the connection
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
+        //    try
+        //    {
+        //        con = connect("DBConnectionString"); // create the connection
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw (ex);
+        //    }
 
-            String cStr = BuildInsertCommand(_certificate);      // helper method to build the insert string
+        //    String cStr = BuildInsertCommand(_certificate);      // helper method to build the insert string
 
-            cmd = CreateCommand(cStr, con);             // create the command
+        //    cmd = CreateCommand(cStr, con);             // create the command
 
-            try
-            {
-                int numEffected = cmd.ExecuteNonQuery(); // execute the command
-                return numEffected;
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
+        //    try
+        //    {
+        //        int numEffected = cmd.ExecuteNonQuery(); // execute the command
+        //        return numEffected;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw (ex);
+        //    }
 
-            finally
-            {
-                if (con != null)
-                {
-                    // close the db connection
-                    con.Close();
-                }
-            }
-        }
-        private String BuildInsertCommand(certificate _certificate)
-        {
-            String command;
+        //    finally
+        //    {
+        //        if (con != null)
+        //        {
+        //            // close the db connection
+        //            con.Close();
+        //        }
+        //    }
+        //}
+        //private String BuildInsertCommand(certificate _certificate)
+        //{
+        //    String command;
 
-            StringBuilder sb = new StringBuilder();
-            // use a string builder to create the dynamic string
-            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}','{4}','{5}')", _certificate.Certificate_status, _certificate.Pay_status, _certificate.Company, _certificate.Address,_certificate.Date.ToString("yyyy-MM-dd"),_certificate.Description);
-            String prefix = "INSERT INTO project " + "(bill_num,date,total_price,contact_id)";
-            command = prefix + sb.ToString();
+        //    StringBuilder sb = new StringBuilder();
+        //    // use a string builder to create the dynamic string
+        //    sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}','{4}','{5}')", _certificate.Certificate_status, _certificate.Pay_status, _certificate.Company, _certificate.Address,_certificate.Date.ToString("yyyy-MM-dd"),_certificate.Description);
+        //    String prefix = "INSERT INTO certificate " + "(certificate_status,pay_status,company,address,date,description)";
+        //    command = prefix + sb.ToString();
 
-            return command;
+        //    return command;
 
-        }
+        //}
         //return all instructions 
         public List<instruction> ReadInstruction()
         {
@@ -1938,7 +1938,54 @@ namespace final_proj_gulkosafety.Models.DAL
             }
 
         }
-        // change delete status
+        // change delete status of certificate
+        public int DeleteCertificate(int certificate_num, int delete_status)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            String cStr = BuildDeleteCertificateCommand(certificate_num, delete_status);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+        private String BuildDeleteCertificateCommand(int certificate_num, int delete_status)
+        {
+            String command;
+            command = "UPDATE certificate SET delete_status = " + delete_status + " WHERE certificate_num = " + certificate_num;
+            return command;
+        }
+        //update certificate detail
         public int UpdateCertificate(certificate c)
         {
 
@@ -1954,7 +2001,7 @@ namespace final_proj_gulkosafety.Models.DAL
                 throw (ex);
             }
 
-            String cStr = BuildUpdateAlertCommand(c);
+            String cStr = BuildupdateCommand(c);
 
             cmd = CreateCommand(cStr, con);
 
@@ -1963,10 +2010,11 @@ namespace final_proj_gulkosafety.Models.DAL
                 int numEffected = cmd.ExecuteNonQuery();
                 return numEffected;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception("The update of status certificate failed");
+                throw (ex);
             }
+
 
             finally
             {
@@ -1978,15 +2026,66 @@ namespace final_proj_gulkosafety.Models.DAL
 
         }
 
-        private String BuildUpdateAlertCommand(certificate c)
+        private String BuildupdateCommand(certificate c)
         {
             String command;
-            command = "UPDATE certificate SET delete_status=" + c.Delete_status +" Where alert_num=" + c.Certificate_num;
+            command = "UPDATE certificate SET certificate_status=" + c.Certificate_status + ", pay_status=" + c.Pay_status + ", address='" + c.Address + "', date='" + c.Date.ToString("yyyy-MM-dd") +  "', company='" + c.Company + "', description='" + c.Description + "' WHERE certificate_num =" + c.Certificate_num;
 
             return command;
         }
 
+        //return all instruction_types
+        public List<instruction_type> ReadInstruction_type()
+        {
+            SqlConnection con = null;
+            List<instruction_type> instructionTypeList = new List<instruction_type>();
 
+            try
+            {
+                con = connect("DBConnectionString");
+                String selectSTR = "";
+
+                selectSTR = "select * from instruction_type";
+
+
+
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {
+                    instruction_type i = new instruction_type();
+
+                    i.Instruction_type_num = Convert.ToInt32(dr["instruction_type_num"]);
+                    i.Type_name = (string)dr["type_name"];
+                    i.Price = Convert.ToDouble(dr["price"]);
+                    i.Expiration = Convert.ToInt32(dr["expiration"]);
+
+
+                    instructionTypeList.Add(i);
+
+
+                }
+
+                return instructionTypeList;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
     }
 
 }

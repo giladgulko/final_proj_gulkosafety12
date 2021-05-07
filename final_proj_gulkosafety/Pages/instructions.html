@@ -27,9 +27,11 @@
     <title>הדרכות</title>
 
     <script>
+        instructionTypeList = [];
 
         $(document).ready(function () {
             getInstructionData();
+            getCertificateTypeList();
         });
 
         function getInstructionData() {
@@ -37,6 +39,24 @@
         }
         function getError() {
             swal("Failed!", "Failed to read the instructions!", "warning")
+        }
+        //get a list of all the instruction type for section list
+        function getCertificateTypeList() {
+            let api = "../api/instruction_type";
+            ajaxCall("GET", api, "", getInstructionTypeListSuccess, getInstructionTypeListError);
+        }
+        function getInstructionTypeListSuccess(data) {
+            instructionTypeList = data;
+            renderInstructionsType();
+        }
+        function getInstructionTypeListError() {
+            swal("Failed!", "Failed to read the instruction Type!", "warning")
+        }
+        function renderInstructionsType() {
+            InstrTypeSelect = document.getElementById('instructionType');
+            for (i = 0; i < instructionTypeList.length; i++) {
+                InstrTypeSelect.innerHTML += "<option value=" + instructionTypeList[i].Type_name + ">" + instructionTypeList[i].Type_name + "</option>";
+            }
         }
         function createDt(instructiondata) {
             let instructionToShow = [];
@@ -50,7 +70,7 @@
                     Type_name: instructiondata[i].Type_name,
                     Company: instructiondata[i].Company,
                     Date: instructiondata[i].Date,
-                    //Time: instructiondata[i].Time,
+                    Time: instructiondata[i].Time,
                     Address: instructiondata[i].Address,
                     Participants_num: instructiondata[i].Participants_num,
                     Pay_status: instructiondata[i].Pay_status,
@@ -69,10 +89,21 @@
                         { data: "Type_name" },
                         { data: "Company" },
                         { data: "Date" },
-                        //{ data: "Time" },
+                        { data: "Time" },
                         { data: "Address" },
                         { data: "Participants_num" },
-                        { data: "Pay_status" },
+                        {
+                            render: function (data, type, row, meta) {
+                                if (row.Pay_status == 1) {
+                                    let status_pay = "<p style='color: green'>שולם</p>"
+                                    return status_pay
+                                }
+                                else {
+                                    let status = "<p style='color: red'>לא שולם</p>"
+                                    return status
+                                }
+                            }
+                        },
                         { data: "Total_price" },
 
                         {
@@ -148,7 +179,6 @@
         <br />
         <div id="buttons">
             <button id="myBtn" style="margin-left:10px" class="btn btn-primary" onclick="document.getElementById('id03').style.display='block'">הוסף הדרכה חדשה</button>
-            <button id="old_proj_btn" type="button" class="btn btn-primary" onclick="renderOldInstruction()">ארכיון הדרכות</button>
         </div>
     </div>
     <form id="pForm">
@@ -191,7 +221,11 @@
                                     <th>
                                         <div class="form-group">
                                             <label for="checkpayStatus"><span class="red-star">★ </span>סטאטוס תשלום</label>
-                                            <input type="checkbox" class="form-control groupDetails" id="checkpayStatus" required>
+                                            <select class="form-control groupDetails" id="checkpayStatus" required>
+                                                <option value="">בחר סטאטוס תשלום</option>
+                                                <option value="1">שולם</option>
+                                                <option value="2">לא שולם</option>
+                                            </select>
                                         </div>
                                     </th>
                                 </tr>

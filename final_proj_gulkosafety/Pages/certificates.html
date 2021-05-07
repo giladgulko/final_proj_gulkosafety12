@@ -26,10 +26,12 @@
     <title>אישורים</title>
     <script>
         certificateTypeList = [];
+        certToEdit = [];
 
         $(document).ready(function () {
             getCertificateTypeList();
             getCertData();
+
         });
 
         //get a list of all the certificate type for section list
@@ -72,19 +74,22 @@
             let certificatesToShow = [];
             for (var i = 0; i < certificatedata.length; i++) {
                 certificatedata[i].Date = certificatedata[i].Date.split("T")[0];
-                c = {
+                if (certificatedata[i].Delete_status == 0) {
+                    c = {
 
-                    Certificate_num: certificatedata[i].Certificate_num,
-                    Type_name: certificatedata[i].Type_name,
-                    Company: certificatedata[i].Company,
-                    Check_date: certificatedata[i].Date,
-                    Address: certificatedata[i].Address,
-                    Certificate_status: certificatedata[i].Certificate_status,
-                    Pay_status: certificatedata[i].Pay_status,
-                    Price: certificatedata[i].Price,
+                        Certificate_num: certificatedata[i].Certificate_num,
+                        Type_name: certificatedata[i].Type_name,
+                        Company: certificatedata[i].Company,
+                        Check_date: certificatedata[i].Date,
+                        Description: certificatedata[i].Description,
+                        Address: certificatedata[i].Address,
+                        Certificate_status: certificatedata[i].Certificate_status,
+                        Pay_status: certificatedata[i].Pay_status,
+                        Price: certificatedata[i].Price,
 
+                    }
+                    certificatesToShow.push(c);
                 }
-                certificatesToShow.push(c);
             }
             try {
                 tbl = $('#certTable').DataTable({
@@ -96,6 +101,7 @@
                         { data: "Type_name" },
                         { data: "Company" },
                         { data: "Check_date" },
+                        { data: "Description"},
                         { data: "Address" },
                         {
                             render: function (data, type, row, meta) {
@@ -144,8 +150,7 @@
                 alert(err);
             }
         }
-            function deleteCertificate(def) {
-                alert("in");
+        function deleteCertificate(def) {
                 certificateToEdit = JSON.parse(def);
                 swal({
                     title: "האם אתה בטוח שברצונך למחוק את האישור?",
@@ -156,73 +161,74 @@
                 })
                     .then(function (willDelete) {
                         if (willDelete) delete_certificate(certificateToEdit);
-                        else swal("הדוח לא נמחק!");
+                        else swal("האישור לא נמחק!");
                     });
-            }
-
-            function delete_certificate(def) {
-                alert("in1");
-                certificateToDelete = {
-                    Delete_status: 1,
+        }
+        //מחיקה לוגית ולא מחיקה מהדאטה בייס
+        function delete_certificate(def) {
+                let deleteStatus = {
                     Certificate_num: def.Certificate_num,
+                    Delete_status: 1,
                 }
-                ajaxCall("PUT", "../api/certificate", JSON.stringify(certificateToDelete), deleteCertSuccess, deleteCertError);
-            }
-            function deleteCertSuccess() {
+                ajaxCall("DELETE", "../api/certificate", JSON.stringify(deleteStatus), deleteCertSuccess, deleteCertError);
+        }
+        function deleteCertSuccess() {
                 swal({
                     title: "מצוין!", text: "האישור נמחק בהצלחה", type: "success", icon: "success"
                 }).then(function () {
                     location.reload();
 
                 });
-            }
+        }
 
-            function deleteCertError(err) {
+        function deleteCertError(err) {
                 swal("האישור לא נמחק!", err, "warning");
-            }
-            function editDefectBTN(datacert) {
+        }
+        function editDefectBTN(datacert) {
                 certToEdit = JSON.parse(datacert);
                 document.getElementById('id03').style.display = 'block';
-                $("#certificateType").empty();
-                //$("#selectdefect").empty();
-                //$("#selectType").append("<option value='" + defectToEdit.Defect_num + "' > " + defectToEdit.Defect_type_name + "</option > ");
-                //$("#selectdefect").append("<option value='" + defectToEdit.Defect_num + "' > " + defectToEdit.Defect_name + "</option>");
-                //$("#selectType").prop('disabled', true);
-                //$("#selectdefect").prop('disabled', true);
-                //$("#fixDate").val(defectToEdit.Fix_date.split("T")[0]);
-                //$("#fixTime").val(defectToEdit.Fix_time);
-                //$("#description").val(defectToEdit.Description);
-                //$("#fixStatus").val(defectToEdit.Fix_status);
-                //$("#btn_update_defect").show();
-                //$("#btn_add_defect").hide();
+                $("#certificateType").val(certToEdit.Type_name);
+                $("#payStatus").val(certToEdit.Pay_status);
+                $("#checkStatus").val(certToEdit.Certificate_status);
+                $("#checkDate").val(certToEdit.Check_date.split("T")[0]);
+                $("#company").val(certToEdit.Company);
+                $("#address").val(certToEdit.Address);
+                $("#description").val(certToEdit.Description);
+                $("#price").val(certToEdit.Price);
+                $("#updateCert").show();
+                $("#saveBTN").hide();
+                $("#new_cert").hide();
+
+        }
+
+        function updateCert() {
+            let newCert = {
+
+                Certificate_num: certToEdit.Certificate_num,
+                Certificate_status: $('#checkStatus').val(),
+                Pay_status: $('#payStatus').val(),
+                Company: $('#company').val(),
+                Address: $('#address').val(),
+                Date: $('#checkDate').val().split("T")[0],
+                Description: $('#description').val(),
+                //Price: $('#price').val(),
+
             }
+            let api = "../api/certificate";
+                ajaxCall("PUT", api, JSON.stringify(newCert), createNewCertSuccess, createNewCertError);
+        }
 
-            function createNewCert() {
-                let newCert = {
-                    //Name: $('#projectName').val(),
-                    Certificate_status: $('#checkStatus').val(),
-                    Pay_status: $('#payStatus').val(),
-                    Company: $('#company').val(),
-                    Address: $('#address').val(),
-                    Date: $('#checkDate').val().split("T")[0],
-                    Description: $('#description').val(),
-                    Price: $('#price').val(),
-
-                }
-                ajaxCall("POST", "../api/certificate", JSON.stringify(newCert), createNewCertSuccess, createNewCertError);
-            }
-
-            function createNewCertSuccess(data) {
+        function createNewCertSuccess(data) {
                 swal({
                     title: "Good job!", text: "You created new certificate successfully!", type: "success", icon: "success"
                 }).then(function () {
                     location.reload();
 
                 });
-            }
-            function createNewCertError() {
+        }
+        function createNewCertError() {
                 swal("Failed!", "You failed to create a new certificate!", "warning")
-            }
+        }
 
     </script>
 </head>
@@ -257,7 +263,7 @@
                         <li><a href="projects.html">פרויקטים</a></li>
                         <li><a href="#">התחברות</a></li>
                         <li>
-                            <span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="#"></a>
+                            <span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="home.html"></a>
                         </li>
                     </ul>
                 </div>
@@ -283,6 +289,7 @@
                     <th>שם סוג</th>
                     <th>חברה</th>
                     <th>תאריך בדיקה</th>
+                    <th>תיאור בדיקה</th>
                     <th>כתובת</th>
                     <th>סטטוס בדיקה</th>
                     <th>סטטוס תשלום</th>
@@ -299,7 +306,7 @@
                     <span onclick="document.getElementById('id03').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                     <form id="newCertForm">
                         <br />
-                        <h2>אישור חדש</h2>
+                        <h2 id="new_cert">אישור חדש</h2>
                         <table class="display" style="width:100%" dir="rtl">
                             <thead>
                                 <tr>
@@ -314,13 +321,21 @@
                                     <th>
                                         <div class="form-group">
                                             <label for="checkStatus"><span class="red-star">★ </span>סטאטוס בדיקה</label>
-                                            <input type="checkbox" class="form-control groupDetails" id="checkStatus" required>
+                                            <select class="form-control groupDetails" id="checkStatus" required>
+                                                <option value="0">בחר סטאטוס בדיקה</option>
+                                                <option value="1">עבר</option>
+                                                <option value="2">לא עבר</option>
+                                            </select>
                                         </div>
                                     </th>
                                     <th>
                                         <div class="form-group">
                                             <label for="payStatus"><span class="red-star">★ </span>סטאטוס תשלום</label>
-                                            <input type="checkbox" class="form-control groupDetails" id="payStatus" required>
+                                            <select class="form-control groupDetails" id="payStatus" required>
+                                                <option value="">בחר סטאטוס תשלום</option>
+                                                <option value="1">שולם</option>
+                                                <option value="2">לא שולם</option>
+                                            </select>
                                         </div>
                                     </th>
                                 </tr>
@@ -368,16 +383,24 @@
                                 </tr>
                                 <tr>
                                     <th>
-                                        <input type="submit" class="btn btn-primary" value="שמור" />
+                                        <input type="submit" onclick="new_cert()" id="saveBTN" class="btn btn-primary" value=" שמור אישור" />
+                                    </th>
+                                    <th>
+                                        <p>
+
+                                            <button id="btn_update_cert" class="btn btn-primary" onclick="updateCert()"> עדכן אישור</button>
+                                        </p>
                                     </th>
                                 </tr>
                                 <br />
                             </thead>
                         </table>
                     </form>
+
                 </div>
             </div>
         </div>
     </div>
+
 </body>
 </html>
