@@ -72,18 +72,18 @@
             let certificatesToShow = [];
             for (var i = 0; i < certificatedata.length; i++) {
                 certificatedata[i].Date = certificatedata[i].Date.split("T")[0];
-                    c = {
+                c = {
 
-                        Certificate_num: certificatedata[i].Certificate_num,
-                        Type_name: certificatedata[i].Type_name,
-                        Company: certificatedata[i].Company,
-                        Check_date: certificatedata[i].Date,
-                        Address: certificatedata[i].Address,
-                        Certificate_status: certificatedata[i].Certificate_status,
-                        Pay_status: certificatedata[i].Pay_status,
-                        Price: certificatedata[i].Price,
+                    Certificate_num: certificatedata[i].Certificate_num,
+                    Type_name: certificatedata[i].Type_name,
+                    Company: certificatedata[i].Company,
+                    Check_date: certificatedata[i].Date,
+                    Address: certificatedata[i].Address,
+                    Certificate_status: certificatedata[i].Certificate_status,
+                    Pay_status: certificatedata[i].Pay_status,
+                    Price: certificatedata[i].Price,
 
-                    }
+                }
                 certificatesToShow.push(c);
             }
             try {
@@ -94,7 +94,7 @@
 
                         { data: "Certificate_num" },
                         { data: "Type_name" },
-                        { data: "Company"},
+                        { data: "Company" },
                         { data: "Check_date" },
                         { data: "Address" },
                         {
@@ -143,6 +143,7 @@
             catch (err) {
                 alert(err);
             }
+        }
             function deleteCertificate(def) {
                 alert("in");
                 certificateToEdit = JSON.parse(def);
@@ -223,7 +224,6 @@
                 swal("Failed!", "You failed to create a new certificate!", "warning")
             }
 
-        }
     </script>
 </head>
 <body>
