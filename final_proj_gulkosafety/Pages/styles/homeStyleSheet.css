@@ -1,5 +1,6 @@
 ﻿body {
     background-color: #eeeeee;
+    direction:rtl;
 }
 
 #instruction_bar {
