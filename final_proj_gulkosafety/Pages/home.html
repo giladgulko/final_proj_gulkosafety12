@@ -40,11 +40,20 @@
         }
         function getAlertsSuccess(data) {
             alertList = data;
+
             for (i = 0; i < alertList.length; i++) {
-                {
-                    document.getElementById('alerts').innerHTML += "<div  class='alerts'> <p id='" + alertList[i].Alert_num + "' href='#' </p><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='far fa-calendar-alt' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
+                if (alertList[i].Alert_type_num != 1) {
+
+                    if (alertList[i].Alert_type_num == 3) {
+                        document.getElementById('fixed_defects_photos_alerts').innerHTML += "<div  class='alerts'> <p id='" + alertList[i].Alert_num + "' href='#' </p><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='far fa-calendar-alt' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
+                    }
+                    if (alertList[i].Alert_type_num == 2) {
+                        document.getElementById('certificates_expire_alerts').innerHTML += "<div  class='alerts'> <p id='" + alertList[i].Alert_num + "' href='#' </p><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='far fa-calendar-alt' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
+                    }
+
                 }
             }
+
         }
         //function renderSafetyAlert(id) {
         //    document.getElementById('alert_paragraph').innerHTML = ""
@@ -122,18 +131,52 @@
             </div>
         </div>
         <div class="col-lg-6 mb-3">
-            <div class="card">
-                <div class="card-body section1">
-                    <div class="row">
-                        <h3>תזכורות:</h3>
-                    </div>
-                <div id="alerts">
+            <div class="card-body section1">
+
+                <div class="row">
+                    <h3>תזכורות אישיות:</h3>
+                </div>
+                <div id="personal_alerts"><!--//אבדוק אם יש אופציה למשוך מלוח שנה עצמו-->
+                    <p>פגישה עם רואה חשבון</p>
+                    <p>קביעת רענון אצל משרד הבטיחות והגאות</p>
+                    <p>הכנת מצגת חדשה להדרכה בגובה</p>
+                </div>
+
+            </div>
+            <div class="card-body section1">
+
+                <div class="row">
+                    <h3>תמונות ליקויים שתוקנו:</h3>
+                </div>
+                <div id="fixed_defects_photos_alerts">
 
                 </div>
+
+            </div>
+            <div class="card-body section1">
+
+                <div class="row">
+                    <h3>אישורים פגי תוקף:</h3>
+                </div>
+                <div id="certificates_expire_alerts">
+
+                </div>
+
+            </div>
+        
+        <div class="card-body section1">
+
+            <div class="row">
+                <h3>דוחות ביקור אחרונים</h3>
+            </div>
+            <div id="recent_visit reports_alerts">
+
             </div>
             </div>
         </div>
+
     </div>
+   
 
 </body>
 </html >
