@@ -97,16 +97,38 @@
                         { data: "Company"},
                         { data: "Check_date" },
                         { data: "Address" },
-                        { data: "Certificate_status" },
-                        { data: "Pay_status" },
+                        {
+                            render: function (data, type, row, meta) {
+                                if (row.Certificate_status == 1) {
+                                    let status = "<p style='color: green'>עבר</p>"
+                                    return status
+                                }
+                                else {
+                                    let status = "<p style='color: red'>לא עבר</p>"
+                                    return status
+                                }
+                            }
+                        },
+                        {
+                            render: function (data, type, row, meta) {
+                                if (row.Pay_status == 1) {
+                                    let status_pay = "<p style='color: green'>שולם</p>"
+                                    return status_pay
+                                }
+                                else {
+                                    let status = "<p style='color: red'>לא שולם</p>"
+                                    return status
+                                }
+                            }
+                        },
                         { data: "Price" },
                         {
                             render: function (data, type, row, meta) {
-                                let datacert = "cert_data='" + row.Certificate_num + "'";
+                                let def = JSON.stringify(row);
 
-                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + datacert + "' onclick='editDefectBTN(this.value)'> עריכה </button>";
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editDefectBTN(this.value)'> עריכה </button>";
 
-                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' " + datacert + "> מחיקה </button>";
+                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteCertificate(this.value)'> מחיקה </button>";
                                 return editBtn + deleteBtn;
 
 
@@ -121,7 +143,42 @@
             catch (err) {
                 alert(err);
             }
+            function deleteCertificate(def) {
+                alert("in");
+                certificateToEdit = JSON.parse(def);
+                swal({
+                    title: "האם אתה בטוח שברצונך למחוק את האישור?",
+                    text: "",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true
+                })
+                    .then(function (willDelete) {
+                        if (willDelete) delete_certificate(certificateToEdit);
+                        else swal("הדוח לא נמחק!");
+                    });
+            }
 
+            function delete_certificate(def) {
+                alert("in1");
+                certificateToDelete = {
+                    Delete_status: 1,
+                    Certificate_num: def.Certificate_num,
+                }
+                ajaxCall("PUT", "../api/certificate", JSON.stringify(certificateToDelete), deleteCertSuccess, deleteCertError);
+            }
+            function deleteCertSuccess() {
+                swal({
+                    title: "מצוין!", text: "האישור נמחק בהצלחה", type: "success", icon: "success"
+                }).then(function () {
+                    location.reload();
+
+                });
+            }
+
+            function deleteCertError(err) {
+                swal("האישור לא נמחק!", err, "warning");
+            }
             function editDefectBTN(datacert) {
                 certToEdit = JSON.parse(datacert);
                 document.getElementById('id03').style.display = 'block';
@@ -216,7 +273,6 @@
         <br />
         <div id="buttons">
             <button id="myBtn" style="margin-left:10px" class="btn btn-primary" onclick="document.getElementById('id03').style.display='block'">הוסף אישור חדש</button>
-            <button id="old_proj_btn" type="button" class="btn btn-primary" onclick="renderOldPROJ()">ארכיון אישורים</button>
         </div>
     </div>
     <form id="pForm">

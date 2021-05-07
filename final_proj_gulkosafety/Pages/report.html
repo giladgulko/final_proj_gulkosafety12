@@ -342,7 +342,7 @@
                             render: function (data, type, row, meta) {
                                 let def = JSON.stringify(row);
                                 if (userType == 1) {
-                                    editBtn = "<button type='button' class = 'editBtn btn btn-success'value='  " + def + "' onclick='editDefectBTN(this.value)'> עריכה </button>";
+                                    editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editDefectBTN(this.value)'> עריכה </button>";
                                     deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='  " + def + "' onclick='deleteAlert(this.value)'> מחיקה </button>";
                                     return editBtn + deleteBtn;
                                 }

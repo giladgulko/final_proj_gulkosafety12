@@ -42,9 +42,22 @@ namespace final_proj_gulkosafety.Controllers
             }
         }
         // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
+        public HttpResponseMessage Put([FromBody] certificate c)
         {
+            try
+            {
+                {
+                    c.UpdateCertificate();
+
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, c);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotAcceptable, ex.Message);
+            }
         }
+
 
 
         // DELETE api/<controller>/5

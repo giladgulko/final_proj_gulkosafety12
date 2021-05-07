@@ -1644,6 +1644,7 @@ namespace final_proj_gulkosafety.Models.DAL
                     c.Type_name = (string)dr["type_name"];
                     c.Price = Convert.ToDouble(dr["price"]);
                     c.Expiration = Convert.ToInt32(dr["expiration"]);
+                    c.Delete_status = Convert.ToInt32(dr["delete_status"]);
 
                     certificateList.Add(c);
 
@@ -1937,7 +1938,55 @@ namespace final_proj_gulkosafety.Models.DAL
             }
 
         }
+        // change delete status
+        public int UpdateCertificate(certificate c)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            String cStr = BuildUpdateAlertCommand(c);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception)
+            {
+                throw new Exception("The update of status certificate failed");
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+
+        private String BuildUpdateAlertCommand(certificate c)
+        {
+            String command;
+            command = "UPDATE certificate SET delete_status=" + c.Delete_status +" Where alert_num=" + c.Certificate_num;
+
+            return command;
+        }
+
 
     }
-   
+
 }

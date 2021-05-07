@@ -22,8 +22,9 @@ namespace final_proj_gulkosafety.Models
         string type_name;
         double price;
         int expiration;
+        int delete_status;
 
-        public certificate(int certificate_num, string company, DateTime date, string address, string description, int certificate_status, int pay_status, string bill_num, int certificate_type_num, string user_email, string contact_id, string type_name, double price, int expiration)
+        public certificate(int certificate_num, string company, DateTime date, string address, string description, int certificate_status, int pay_status, string bill_num, int certificate_type_num, string user_email, string contact_id, string type_name, double price, int expiration, int delete_status)
         {
             Certificate_num = certificate_num;
             Company = company;
@@ -39,6 +40,7 @@ namespace final_proj_gulkosafety.Models
             Type_name = type_name;
             Price = price;
             Expiration = expiration;
+            Delete_status = delete_status;
         }
         public certificate() { }
 
@@ -56,6 +58,8 @@ namespace final_proj_gulkosafety.Models
         public string Type_name { get => type_name; set => type_name = value; }
         public double Price { get => price; set => price = value; }
         public int Expiration { get => expiration; set => expiration = value; }
+        public int Delete_status { get => delete_status; set => delete_status = value; }
+
 
         public List<certificate> ReadCertificate()
         {
@@ -66,6 +70,11 @@ namespace final_proj_gulkosafety.Models
         {
             DBServices dbs = new DBServices();
             dbs.InsertCertificate(this);
+        }
+        public void UpdateCertificate()
+        {
+            DBServices dbs = new DBServices();
+            dbs.UpdateCertificate(this);
         }
     }
 
