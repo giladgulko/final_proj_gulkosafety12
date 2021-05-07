@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Suez+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@1,700&family=Suez+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+
+    <link href="styles/nav_bar_style.css" rel="stylesheet" />
+
+    <link href="styles/homeStyleSheet.css" rel="stylesheet" />
+
+    <script src="../Scripts/ajaxCallsWithKey.js"></script>
+    <title>בית</title>
+    <script>
+        var user_email = "gulkosafety@gmail.com";// צריך לקחת את היוזר מהלוקאל סטורג - של מי שנמצא בלוג אין
+        $(document).ready(function () {
+            alertList = [];
+            getAlerts();
+  
+        });
+
+        function getAlerts() {
+            let api = "../api/alert?user_email=" + user_email;
+            ajaxCall("GET", api, "", getAlertsuccess, getError);
+        }
+        function getAlertsSuccess(data) {
+            alertList = data;
+            for (i = 0; i < alertList.length; i++) {
+                {
+                    document.getElementById('alerts').innerHTML += "<div  class='alerts'> <p id='" + alertList[i].Alert_num + "' href='#' </p><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='far fa-calendar-alt' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
+                }
+            }
+        }
+        function renderSafetyAlert(id) {
+            document.getElementById('alert_paragraph').innerHTML = ""
+            document.getElementById('id04').style.display = 'block';
+            for (var i = 0; i < alertList.length; i++) {
+                if (alertList[i].Alert_num == id) {
+
+                    $("#alert_paragraph").html(alertList[i].Content);
+                }
+
+            }
+
+        }
+        function getError() {
+            swal("Failed!", "Failed to read alerts!Please try again", "warning")
+        }
+    </script>
+</head>
+<body>
+    <div id="logo">
+        <img class="logo" src="photos/logo.jpeg" height="50" />
+    </div>
+    <div class="body-wrap">
+        <nav class="navbar navbar-inverse">
+            <div class="container1">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarMenu" aria-expanded="false">
+                        <span id="navigation" class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="navbarMenu">
+                    <ul class="nav navbar-nav navbar-right  bts-nav">
+                        <li><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="#"></a></li>
+                        <li></li>
+                        <li class="nav-item">
+                            <span class="glyphicon glyphicon-bell" aria-hidden="true"></span><a href="alerts.html"></a>
+                        </li>
+
+                        <li><a href="#">סטטיסטיקות</a></li>
+                        <li><a href="#">משתמשים</a></li>
+                        <li><a href="orders.html">הזמנות</a></li>
+                        <li><a href="certificates.html">אישורים</a></li>
+                        <li class="active"><a href="instructions.html">הדרכות<span class="sr-only">(current)</span></a></li>
+                        <li><a href="projects.html">פרויקטים</a></li>
+                        <li><a href="#">התחברות</a></li>
+                        <li>
+                            <span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="#"></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!--NavBar-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <div id="instruction_bar" dir="rtl">
+        <div id="headline">
+            <h1 class="instructions">ברוך הבא !</h1>
+        </div>
+        <br />
+    </div>
+    <div class="main">
+        <div class="col-lg-6 mb-3">
+            <div class="card">
+                <div class="card-body section1">
+                    <div class="row">
+                        <div class="form-group col-sm-12">
+                        </div>
+                    </div>
+                    <iframe src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=1&amp;bgcolor=%235f9ea0&amp;ctz=Asia%2FJerusalem&amp;src=Z3Vsa29zYWZldHl1c2VyQGdtYWlsLmNvbQ&amp;src=aXcuamV3aXNoI2hvbGlkYXlAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&amp;color=%23039BE5&amp;color=%230B8043&amp;showNav=1&amp;showCalendars=0&amp;showTitle=0&amp;showDate=1&amp;showTz=0&amp;showTabs=1" style="border:10px solid cadetblue" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-3">
+            <div class="card">
+                <div class="card-body section1">
+                    <div class="row">
+                        <h3>תזכורות:</h3>
+                    </div>
+                <div id="alerts">
+
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html >
