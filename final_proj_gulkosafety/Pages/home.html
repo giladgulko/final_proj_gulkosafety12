@@ -18,14 +18,13 @@
     <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
+    <script src="../Scripts/ajaxCallsWithKey.js"></script>
 
 
     <link href="styles/nav_bar_style.css" rel="stylesheet" />
 
     <link href="styles/homeStyleSheet.css" rel="stylesheet" />
 
-    <script src="../Scripts/ajaxCallsWithKey.js"></script>
     <title>בית</title>
     <script>
         var user_email = "gulkosafety@gmail.com";// צריך לקחת את היוזר מהלוקאל סטורג - של מי שנמצא בלוג אין
@@ -47,18 +46,18 @@
                 }
             }
         }
-        function renderSafetyAlert(id) {
-            document.getElementById('alert_paragraph').innerHTML = ""
-            document.getElementById('id04').style.display = 'block';
-            for (var i = 0; i < alertList.length; i++) {
-                if (alertList[i].Alert_num == id) {
+        //function renderSafetyAlert(id) {
+        //    document.getElementById('alert_paragraph').innerHTML = ""
+        //    document.getElementById('id04').style.display = 'block';
+        //    for (var i = 0; i < alertList.length; i++) {
+        //        if (alertList[i].Alert_num == id) {
 
-                    $("#alert_paragraph").html(alertList[i].Content);
-                }
+        //            $("#alert_paragraph").html(alertList[i].Content);
+        //        }
 
-            }
+        //    }
 
-        }
+        //}
         function getError() {
             swal("Failed!", "Failed to read alerts!Please try again", "warning")
         }
