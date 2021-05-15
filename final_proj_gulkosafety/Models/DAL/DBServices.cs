@@ -2184,6 +2184,98 @@ namespace final_proj_gulkosafety.Models.DAL
 
             return command;
         }
+
+        //read report from home page
+        public List<report> ReadReportFromHome()
+        {
+            SqlConnection con = null;
+            List<report> reportList = new List<report>();
+
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+                String selectSTR = "SELECT * FROM report WHERE date>= DATEADD(day,-7, GETDATE())";
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    report _report = new report();
+                    _report.Report_num = Convert.ToInt32(dr["report_num"]);
+                    _report.Date = Convert.ToDateTime(dr["date"]);
+                    _report.Time = Convert.ToDateTime(dr["time"]);
+                    _report.Comment = (string)dr["comment"];
+                    _report.Grade = Convert.ToDouble(dr["grade"]);
+                    _report.Project_num = Convert.ToInt32(dr["project_num"]);
+                    _report.User_mail = (string)dr["user_email"];
+                    reportList.Add(_report);
+                }
+
+                return reportList;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+
+        //read alert from home page
+        public List<alert> ReadAlertFromHome(string user_email, int Alert_type_num)
+        {
+            SqlConnection con = null;
+            List<alert> alertsList = new List<alert>();
+
+            try
+            {
+                con = connect("DBConnectionString");
+
+                String selectSTR = "SELECT * FROM alert WHERE user_email='" + user_email + "'and Alert_type_num=" + Alert_type_num + "and date>= DATEADD(day,-2, GETDATE())";
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                while (dr.Read())
+                {
+
+                    alert _alert = new alert();
+                    _alert.Alert_num = Convert.ToInt32(dr["alert_num"]);
+                    _alert.Content = (string)dr["content"];
+                    _alert.Date = Convert.ToDateTime(dr["date"]);
+                    _alert.Alert_type_num = Convert.ToInt32(dr["alert_type_num"]);
+                    _alert.User_email = (string)dr["user_email"];
+                    _alert.Status = Convert.ToInt32(dr["status"]);
+                    _alert.Proj_num = Convert.ToInt32(dr["proj_num"]);
+                    alertsList.Add(_alert);
+                }
+
+                return alertsList;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
     }
 
 }
