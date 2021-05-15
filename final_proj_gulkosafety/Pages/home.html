@@ -30,12 +30,21 @@
         var user_email = "gulkosafety@gmail.com";// צריך לקחת את היוזר מהלוקאל סטורג - של מי שנמצא בלוג אין
         $(document).ready(function () {
             alertList = [];
+            reportList = [];
             getAlerts();
+            getReports();
   
         });
 
+        function getReports() {
+
+            let api = "../api/report";
+            ajaxCall("GET", api, "", getReportsuccess, getError);
+        }
+
         function getAlerts() {
-            let api = "../api/alert?user_email=" + user_email;
+            let Alert_type_num = 3;
+            let api = "../api/alert?Alert_type_num=" + Alert_type_num+"&user_email=" + user_email;
             ajaxCall("GET", api, "", getAlertsSuccess, getError);
         }
         function getAlertsSuccess(data) {
@@ -55,18 +64,10 @@
             }
 
         }
-        //function renderSafetyAlert(id) {
-        //    document.getElementById('alert_paragraph').innerHTML = ""
-        //    document.getElementById('id04').style.display = 'block';
-        //    for (var i = 0; i < alertList.length; i++) {
-        //        if (alertList[i].Alert_num == id) {
-
-        //            $("#alert_paragraph").html(alertList[i].Content);
-        //        }
-
-        //    }
-
-        //}
+        function getReportsuccess(data) {
+            reportList = data;
+        }
+        
         function getError() {
             swal("Failed!", "Failed to read alerts!Please try again", "warning")
         }

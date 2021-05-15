@@ -10,6 +10,19 @@ namespace final_proj_gulkosafety.Controllers
 {
     public class reportController : ApiController
     {
+        public List<report> Get()
+        {
+            try
+            {
+                report r = new report();
+                List<report> reprotList = r.ReadReportFromHome();
+                return reprotList;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
         public List<report> Get(int proj_num)
         {
             try
