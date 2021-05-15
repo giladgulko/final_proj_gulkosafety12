@@ -31,7 +31,9 @@
         $(document).ready(function () {
             getCertificateTypeList();
             getCertData();
-
+            $("#btn_update_cert").hide();
+            $("#contantsTable").hide();
+            $("#new_contact").hide();
         });
 
         //get a list of all the certificate type for section list
@@ -132,7 +134,7 @@
                             render: function (data, type, row, meta) {
                                 let def = JSON.stringify(row);
 
-                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editDefectBTN(this.value)'> עריכה </button>";
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editcertBTN(this.value)'> עריכה </button>";
 
                                 deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteCertificate(this.value)'> מחיקה </button>";
                                 return editBtn + deleteBtn;
@@ -184,7 +186,7 @@
         function deleteCertError(err) {
                 swal("האישור לא נמחק!", err, "warning");
         }
-        function editDefectBTN(datacert) {
+        function editcertBTN(datacert) {
                 certToEdit = JSON.parse(datacert);
                 document.getElementById('id03').style.display = 'block';
                 $("#certificateType").val(certToEdit.Type_name);
@@ -195,7 +197,7 @@
                 $("#address").val(certToEdit.Address);
                 $("#description").val(certToEdit.Description);
                 $("#price").val(certToEdit.Price);
-                $("#updateCert").show();
+                $("#btn_update_cert").show();
                 $("#saveBTN").hide();
                 $("#new_cert").hide();
 
@@ -228,6 +230,15 @@
         }
         function createNewCertError() {
                 swal("Failed!", "You failed to create a new certificate!", "warning")
+        }
+
+        function Newcontact() {
+            $("#new_contact").show();
+            document.getElementById('id03').style.display = 'none';
+        }
+
+        function SaveNewcontact() {
+            $("#contantsTable").show();
         }
 
     </script>
@@ -378,21 +389,59 @@
                                 </tr>
                                 <tr>
                                     <th>
-                                        <input type="submit" class="btn btn-primary" value="איש קשר חדש" />
+                                        <input type="submit" onclick="()" class="btn btn-primary" value="איש קשר חדש" />
+                                    </th>
+                                </tr>
+                                <tr id="new_contact">
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="contact_name">שם מלא</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="contact_name" placeholder=" הזן שם מלא "></textarea>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="contact_phone">טלפון</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="contact_phone" placeholder=" הזן טלפון "></textarea>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="form-group">
+                                            <label for="contact_mail">מייל</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="contact_mail" placeholder=" הזן מייל "></textarea>
+                                        </div>
+                                    </th>
+                                    <th>
+
+                                        <button id="btnSave_new_contact" class="btn btn-primary" onclick="SaveNewcontact()"> שמור משתתף </button>
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th>
-                                        <input type="submit" onclick="new_cert()" id="saveBTN" class="btn btn-primary" value=" שמור אישור" />
-                                    </th>
-                                    <th>
-                                        <p>
-
-                                            <button id="btn_update_cert" class="btn btn-primary" onclick="updateCert()"> עדכן אישור</button>
-                                        </p>
-                                    </th>
+                                <form id="pForm">
+                                    <table id="contantsTable" class="display" style="width:100%" dir="rtl">
+                                        <thead>
+                                            <tr>
+                                                <th>שם מלא</th>
+                                                <th>טלפון</th>
+                                                <th>מייל</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </form>
                                 </tr>
-                                <br />
+                            <tr>
+                                <th>
+                                    <input type="submit" onclick="new_cert()" id="saveBTN" class="btn btn-primary" value=" שמור אישור" />
+                                </th>
+                                <th>
+                                    <p>
+
+                                        <button id="btn_update_cert" class="btn btn-primary" onclick="updateCert()"> עדכן אישור</button>
+                                    </p>
+                                </th>
+                            </tr>
+                            <br />
                             </thead>
                         </table>
                     </form>

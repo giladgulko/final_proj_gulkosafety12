@@ -28,10 +28,13 @@
 
     <script>
         instructionTypeList = [];
-
+        instToEdit = [];
         $(document).ready(function () {
             getInstructionData();
             getCertificateTypeList();
+            $("#btn_update_inst").hide();
+            $("#new_participant").hide();
+            $('#participantsTable').hide();
         });
 
         function getInstructionData() {
@@ -55,30 +58,67 @@
         function renderInstructionsType() {
             InstrTypeSelect = document.getElementById('instructionType');
             for (i = 0; i < instructionTypeList.length; i++) {
-                InstrTypeSelect.innerHTML += "<option value=" + instructionTypeList[i].Type_name + ">" + instructionTypeList[i].Type_name + "</option>";
+                InstrTypeSelect.innerHTML += "<option value=" + instructionTypeList[i].Instruction_type_num+ ">" + instructionTypeList[i].Type_name + "</option>";
             }
+        }
+        function deleteInstruction(def) {
+            instructionToEdit = JSON.parse(def);
+            swal({
+                title: "האם אתה בטוח שברצונך למחוק את ההדרכה?",
+                text: "",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true
+            })
+                .then(function (willDelete) {
+                    if (willDelete) delete_instruction(instructionToEdit);
+                    else swal("ההדרכה לא נמחקה!");
+                });
+        }
+        //מחיקה לוגית ולא מחיקה מהדאטה בייס
+        function delete_instruction(def) {
+            alert("in");
+            let deleteStatus = {
+                Instruction_num: def.Instruction_num,
+                Delete_status: 1,
+            }
+            ajaxCall("DELETE", "../api/instruction", JSON.stringify(deleteStatus), deleteInstSuccess, deleteInstError);
+        }
+        function deleteInstSuccess() {
+            swal({
+                title: "מצוין!", text: "ההדרכה נמחקה בהצלחה", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
+        }
+
+        function deleteInstError(err) {
+            swal("ההדרכה לא נמחקה!", err, "warning");
         }
         function createDt(instructiondata) {
             let instructionToShow = [];
+
             for (var i = 0; i < instructiondata.length; i++) {
-                instructiondata[i].Date = instructiondata[i].Date.split("T")[0];
-                instructiondata[i].Time = instructiondata[i].Time.split("T")[1];
+                    instructiondata[i].Date = instructiondata[i].Date.split("T")[0];
+                    instructiondata[i].Time = instructiondata[i].Time.split("T")[1];
+                    if (instructiondata[i].Delete_status == 0) {
+                        instruction = {
 
-                instruction = {
-
-                    Instruction_num: instructiondata[i].Instruction_num,
-                    Type_name: instructiondata[i].Type_name,
-                    Company: instructiondata[i].Company,
-                    Date: instructiondata[i].Date,
-                    Time: instructiondata[i].Time,
-                    Address: instructiondata[i].Address,
-                    Participants_num: instructiondata[i].Participants_num,
-                    Pay_status: instructiondata[i].Pay_status,
-                    Total_price: instructiondata[i].Total_price,
-                }
-                instructionToShow.push(instruction);
-                
+                            Instruction_num: instructiondata[i].Instruction_num,
+                            Type_name: instructiondata[i].Type_name,
+                            Company: instructiondata[i].Company,
+                            Date: instructiondata[i].Date,
+                            Time: instructiondata[i].Time,
+                            Address: instructiondata[i].Address,
+                            Participants_num: instructiondata[i].Participants_num,
+                            Pay_status: instructiondata[i].Pay_status,
+                            Total_price: instructiondata[i].Total_price,
+                        }
+                        instructionToShow.push(instruction);
+                    }
             }
+
             try {
                 tbl = $('#instructionTable').DataTable({
                     data: instructionToShow,
@@ -108,11 +148,11 @@
 
                         {
                             render: function (data, type, row, meta) {
-                                let datainstruction = "instruction_data='" + row.Instruction_num + "'";
+                                let def = JSON.stringify(row);
 
-                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + datainstruction + "' onclick='editDefectBTN(this.value)'> עריכה </button>";
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editinstrucBTN(this.value)'> עריכה </button>";
 
-                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' " + datainstruction + "> מחיקה </button>";
+                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteInstruction(this.value)'> מחיקה </button>";
                                 return editBtn + deleteBtn;
 
 
@@ -129,7 +169,126 @@
             }
 
         }
+        function editinstrucBTN(datainst) {
+            instToEdit = JSON.parse(datainst);
+            document.getElementById('id03').style.display = 'block';
+            str = "<option>סוג הדרכה</option>"
+            for (var i = 0; i < instructionTypeList.length; i++) {
+                str += "<option value='" + instructionTypeList[i].Instruction_type_num + "'>" + instructionTypeList[i].Type_name + "</option>"
+            }
+            $("#instructionType").html(str);
+            $("#checkpayStatus").val(instToEdit.Pay_status);
+            $("#company").val(instToEdit.Company);
+            $("#checkDate").val(instToEdit.Date.split("T")[0]);
+            $("#address").val(instToEdit.Address);
+            $("#time").val(instToEdit.Time.split("T")[1]);
+            $("#price").val(instToEdit.Total_price);
+            $("#participants_num").val(instToEdit.Participants_num);
+            $("#btn_update_inst").show();
+            $("#saveBTN").hide();
+            $("#new_inst").hide();
+        }
+        function clearPopuP() {
+            str = "<option>סוג הדרכה</option>"
+            for (var i = 0; i < instructionTypeList.length; i++) {
+                str += "<option value='" + instructionTypeList[i].Instruction_type_num + "'>" + instructionTypeList[i].Type_name + "</option>"
+            }
+            $("#instructionType").html(str);
+            $("#checkpayStatus").val("");
+            $("#company").val("");
+            $("#checkDate").val("");
+            $("#address").val("");
+            $("#time").val("");
+            $("#price").val("");
+            $("#participants_num").val("");
+            $("#btn_update_inst").show();
+            $("#saveBTN").hide();
+            $("#new_inst").hide();
+        }
+        function newParticipant() {
+            $("#new_participant").show();
+            $('#participantsTable').hide();
+        }
+        function SaveNewParticipant() {
+            $("#new_participant").hide();
+            // $("#btn_new_participant").hide();
+            //document.getElementById('id03').style.display = 'none';
+            $('#participantsTable').show();
+            let participantToShow = [];
+            participant = {
+                Participant_id: $("#participant_id").val(),
+                Participant_name: $("#participant_name").val(),
+                Participant_phone: $("#participant_phone").val(),
+                participant_mail: $("#participant_mail").val(),
 
+            }
+            participantToShow.push(participant);
+
+            try {
+                tbl = $('#participantsTable').DataTable({
+                    data: participantToShow,
+                    pageLength: 10,
+                    columns: [
+
+                        { data: "Participant_id" },
+                        { data: "Participant_name" },
+                        { data: "Participant_phone" },
+                        { data: "participant_mail" },
+
+                        {
+                            render: function (data, type, row, meta) {
+                                let def = JSON.stringify(row);
+
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editpartiBTN(this.value)'> עריכה </button>";
+
+                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deletepaticipant(this.value)'> מחיקה </button>";
+                                return editBtn + deleteBtn;
+
+
+                            }
+                        },
+
+                    ],
+                });
+
+            }
+
+            catch (err) {
+                alert(err);
+            }
+
+        }
+        function updateInst() {
+            document.getElementById('id03').style.display = 'none';
+
+            let newInst = {
+
+                Instruction_num: instToEdit.Instruction_num,
+                Instruction_type_num: $("#instructionType").val(),
+                Pay_status: $("#checkpayStatus").val(),
+                Company: $("#company").val(),
+                Date: $("#checkDate").val(),
+                Address: $("#address").val(),
+                Time: $("#time").val(),
+                Total_price: $("#price").val(),
+                Participants_num: $("#participants_num").val(),
+            }
+
+            let api = "../api/instruction";
+            ajaxCall("PUT", api, JSON.stringify(newInst), createNewInstSuccess, createNewInstError);
+        }
+
+        function createNewInstSuccess(data) {
+            swal({
+                title: "מצוין!", text: "עדכון הדרכה בוצע בהצלחה!", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
+        }
+        function createNewInstError() {
+            swal("נשכל!", "עדכון הדרכה נכשל!", "warning")
+        }
     </script>
 </head>
 <body>
@@ -178,7 +337,7 @@
         </div>
         <br />
         <div id="buttons">
-            <button id="myBtn" style="margin-left:10px" class="btn btn-primary" onclick="document.getElementById('id03').style.display='block'">הוסף הדרכה חדשה</button>
+            <button id="myBtn" style="margin-left:10px" class="btn btn-primary" onclick="document.getElementById('id03').style.display='block', clearPopuP()">הוסף הדרכה חדשה</button>
         </div>
     </div>
     <form id="pForm">
@@ -206,14 +365,14 @@
                     <span onclick="document.getElementById('id03').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                     <form id="newCertForm">
                         <br />
-                        <h2>הדרכה חדשה</h2>
+                        <h2 id="new_inst">הדרכה חדשה</h2>
                         <table class="display" style="width:100%" dir="rtl">
                             <thead>
                                 <tr>
                                     <th>
                                         <div class="form-group">
                                             <label for="instructionType"><span class="red-star">★ </span>סוג הדרכה</label>
-                                            <select class="form-control groupDetails" id="instructionType" required>
+                                            <select id="instructionType" class="form-control groupDetails" required>
                                                 <option value="">בחר סוג הדרכה</option>
                                             </select>
                                         </div>
@@ -253,8 +412,9 @@
                                     </th>
                                     <th>
                                         <div class="form-group">
-                                            <label for="time">שעת הדרכה</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="time" placeholder="שעת הדרכה"></textarea>
+                                            <label for="time"><span class="red-star">★</span>שעת הדרכה</label>
+                                            <br />
+                                            <input type="time" id="time" class="form-control groupDetails" required>
                                         </div>
                                     </th>
                                 </tr>
@@ -267,43 +427,70 @@
                                     </th>
                                     <th>
                                         <div class="form-group">
-                                            <label for="price">מספר משתתפים</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="price" placeholder=" הזן מספר משתתפים"></textarea>
+                                            <label for="participants_num">מספר משתתפים</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="participants_num" placeholder=" הזן מספר משתתפים"></textarea>
                                         </div>
                                     </th>
                                 </tr>
+                                <br />
                                 <tr>
                                     <th>
-                                        <input type="submit" class="btn btn-primary" value="הוספת משתתף חדש" />
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <form id="pForm">
-                                        <table id="participantsTable" class="display" style="width:100%" dir="rtl">
-                                            <thead>
-                                                <tr>
-                                                    <th>תעודת זהות</th>
-                                                    <th>שם מלא</th>
-                                                    <th>טלפון</th>
-                                                    <th>כתובת מייל </th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </form>
-                                </tr>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <input type="submit" class="btn btn-primary" value="שמור" />
+
+                                        <button id="saveBTN" value="saveInst" class="btn btn-primary" onclick="updateInst()"> שמור </button>
                                     </th>
                                 </tr>
                             </thead>
                         </table>
                     </form>
+                    <button id="btn_new_participant" class="btn btn-primary" onclick="newParticipant()"> הוספת משתתף חדש</button>
+                    <table id="new_participant">
+                        <tr>
+                            <th>
+                                <div class="form-group">
+                                    <label for="participant_id">תעודת זהות</label>
+                                    <textarea rows="1" class="form-control groupDetails" id="participant_id" placeholder=" הזן ת.ז "></textarea>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="form-group">
+                                    <label for="participant_name">שם מלא</label>
+                                    <textarea rows="1" class="form-control groupDetails" id="participant_name" placeholder=" הזן שם מלא "></textarea>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="form-group">
+                                    <label for="participant_phone">טלפון</label>
+                                    <textarea rows="1" class="form-control groupDetails" id="participant_phone" placeholder=" הזן טלפון "></textarea>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="form-group">
+                                    <label for="participant_mail">מייל</label>
+                                    <textarea rows="1" class="form-control groupDetails" id="participant_mail" placeholder=" הזן מייל "></textarea>
+                                </div>
+                            </th>
+                            <th>
+
+                                <button id="btnSave_new_participant" class="btn btn-primary" onclick="SaveNewParticipant()"> שמור משתתף </button>
+                            </th>
+                        </tr>
+                    </table>
+                    <form id="pForm">
+                        <table id="participantsTable" class="display" style="width:100%" dir="rtl">
+                            <thead>
+                                <tr>
+                                    <th>ת.ז</th>
+                                    <th>שם מלא</th>
+                                    <th>טלפון</th>
+                                    <th>מייל</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </form>
+                    <button id="btn_update_inst" class="btn btn-primary" onclick="updateInst()"> עדכן הדרכה</button>
                 </div>
-            </div>
-        </div>
+          </div>
     </div>
 </body>
 </html>

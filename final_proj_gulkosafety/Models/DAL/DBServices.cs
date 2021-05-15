@@ -1904,7 +1904,7 @@ namespace final_proj_gulkosafety.Models.DAL
                     i.Instruction_num = Convert.ToInt32(dr["instruction_num"]);
                     i.Company = (string)dr["company"];
                     i.Date = Convert.ToDateTime(dr["date"]);
-                    //i.Time = Convert.ToDateTime(dr["time"]);
+                   // i.Time = Convert.ToDateTime(dr["time"]);
                     i.Address = (string)dr["address"];
                     i.Participants_num = Convert.ToInt32(dr["participants_num"]);
                     i.Pay_status = Convert.ToInt32(dr["pay_status"]);
@@ -1914,6 +1914,7 @@ namespace final_proj_gulkosafety.Models.DAL
                     i.Instruction_type_num = Convert.ToInt32(dr["instruction_type_num"]);
                     i.Type_name = (string)dr["type_name"];
                     i.Expiration = Convert.ToInt32(dr["expiration"]);
+                    i.Delete_status = Convert.ToInt32(dr["delete_status"]);
 
 
                     instructionList.Add(i);
@@ -1985,6 +1986,7 @@ namespace final_proj_gulkosafety.Models.DAL
             command = "UPDATE certificate SET delete_status = " + delete_status + " WHERE certificate_num = " + certificate_num;
             return command;
         }
+
         //update certificate detail
         public int UpdateCertificate(certificate c)
         {
@@ -2085,6 +2087,102 @@ namespace final_proj_gulkosafety.Models.DAL
 
             }
 
+        }
+        // change delete status of instruction
+        public int DeleteInstruction(int instruction_num, int delete_status)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            String cStr = BuildDeleteInstructionCommand(instruction_num, delete_status);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+        private String BuildDeleteInstructionCommand(int instruction_num, int delete_status)
+        {
+            String command;
+            command = "UPDATE instruction SET delete_status = " + delete_status + " WHERE instruction_num = " + instruction_num;
+            return command;
+        }
+
+        //update instruction detail
+        public int UpdateInstruction(instruction i)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            String cStr = BuildupdateCommand(i);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+
+        private String BuildupdateCommand(instruction i)
+        {
+            String command;
+            command = "UPDATE instruction SET pay_status=" + i.Pay_status + ",instruction_type_num = " + i.Instruction_type_num + ",total_price =" + i.Total_price + ",participants_num=" + i.Participants_num + ",address='" + i.Address + "', date='" + i.Date.ToString("yyyy-MM-dd") + "', company='" + i.Company + "', time='" + i.Time.ToString("HH:mm") + "' WHERE instruction_num =" + i.Instruction_num;
+
+            return command;
         }
     }
 
