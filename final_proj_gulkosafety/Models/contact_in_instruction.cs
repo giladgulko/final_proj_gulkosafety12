@@ -1,4 +1,5 @@
-﻿using System;
+﻿using final_proj_gulkosafety.Models.DAL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -20,5 +21,11 @@ namespace final_proj_gulkosafety.Models
 
         public string Contact_id { get => contact_id; set => contact_id = value; }
         public int Instruction_num { get => instruction_num; set => instruction_num = value; }
+
+        public void InsertContactInInstruction()
+        {
+            DBServices dbs = new DBServices();
+            dbs.InsertContactInInstruction(this);
+        }
     }
 }

@@ -29,12 +29,16 @@
     <script>
         instructionTypeList = [];
         instToEdit = [];
+        var user_mail = "gulkosafety@gmail.com";
+
         $(document).ready(function () {
             getInstructionData();
             getCertificateTypeList();
             $("#btn_update_inst").hide();
             $("#new_participant").hide();
             $('#participantsTable').hide();
+            $("#btn_save_inst").hide();
+            $("#btn_update_inst").hide();
         });
 
         function getInstructionData() {
@@ -114,6 +118,7 @@
                             Participants_num: instructiondata[i].Participants_num,
                             Pay_status: instructiondata[i].Pay_status,
                             Total_price: instructiondata[i].Total_price,
+                            Invoice_num: instructiondata[i].Invoice_num,
                         }
                         instructionToShow.push(instruction);
                     }
@@ -144,6 +149,7 @@
                                 }
                             }
                         },
+                        { data: "Invoice_num"},
                         { data: "Total_price" },
 
                         {
@@ -153,8 +159,9 @@
                                 editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editinstrucBTN(this.value)'> עריכה </button>";
 
                                 deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteInstruction(this.value)'> מחיקה </button>";
-                                return editBtn + deleteBtn;
 
+                                showBtn = "<button type='button' class = 'showBtn btn btn-show' value='" + def + "' onclick='showPariticiTable(this.value)'>  הצג משתתפים </button>";
+                                return editBtn + deleteBtn + showBtn ;
 
                             }
                         },
@@ -184,11 +191,14 @@
             $("#time").val(instToEdit.Time.split("T")[1]);
             $("#price").val(instToEdit.Total_price);
             $("#participants_num").val(instToEdit.Participants_num);
+            $("#invoice_num").val(instToEdit.Invoice_num);
             $("#btn_update_inst").show();
-            $("#saveBTN").hide();
+            $("#btn_save_inst").hide();
             $("#new_inst").hide();
         }
         function clearPopuP() {
+            $("#btn_save_inst").show()
+            $("#btn_update_inst").hide();
             str = "<option>סוג הדרכה</option>"
             for (var i = 0; i < instructionTypeList.length; i++) {
                 str += "<option value='" + instructionTypeList[i].Instruction_type_num + "'>" + instructionTypeList[i].Type_name + "</option>"
@@ -201,9 +211,8 @@
             $("#time").val("");
             $("#price").val("");
             $("#participants_num").val("");
-            $("#btn_update_inst").show();
-            $("#saveBTN").hide();
-            $("#new_inst").hide();
+            $("#invoice_num").val("");
+
         }
         function newParticipant() {
             $("#new_participant").show();
@@ -211,18 +220,19 @@
         }
         function SaveNewParticipant() {
             $("#new_participant").hide();
-            // $("#btn_new_participant").hide();
-            //document.getElementById('id03').style.display = 'none';
             $('#participantsTable').show();
             let participantToShow = [];
             participant = {
-                Participant_id: $("#participant_id").val(),
-                Participant_name: $("#participant_name").val(),
-                Participant_phone: $("#participant_phone").val(),
-                participant_mail: $("#participant_mail").val(),
+                Id: $("#participant_id").val(),
+                Full_name: $("#participant_name").val(),
+                Phone: $("#participant_phone").val(),
+                Mail: $("#participant_mail").val(),
 
             }
             participantToShow.push(participant);
+
+            let api = "../api/contact";
+            ajaxCall("POST", api, JSON.stringify(participant), createNewpartiSuccess, createNewpartiError);
 
             try {
                 tbl = $('#participantsTable').DataTable({
@@ -230,10 +240,10 @@
                     pageLength: 10,
                     columns: [
 
-                        { data: "Participant_id" },
-                        { data: "Participant_name" },
-                        { data: "Participant_phone" },
-                        { data: "participant_mail" },
+                        { data: "Id" },
+                        { data: "Full_name" },
+                        { data: "Phone" },
+                        { data: "Mail" },
 
                         {
                             render: function (data, type, row, meta) {
@@ -241,7 +251,7 @@
 
                                 editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editpartiBTN(this.value)'> עריכה </button>";
 
-                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deletepaticipant(this.value)'> מחיקה </button>";
+                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='showPariticiTable(this.value)'> מחיקה </button>";
                                 return editBtn + deleteBtn;
 
 
@@ -258,9 +268,49 @@
             }
 
         }
+        function showPariticiTable() {
+            
+        }
+        function createNewpartiSuccess(data) {
+            swal({
+                title: "מצוין!", text: "הוספת משתתף בהדרכה בוצע בהצלחה!", type: "success", icon: "success"
+            }).then(function () {
+
+                participant = {
+                    Contact_id: data[i].Contact_id,
+                    Instruction_num: data[i].Instruction_num,
+                }
+                parti = JSON.stringify(participant)
+                insertNewPart(parti);
+            });
+
+
+        }
+        function createNewpartiError() {
+            swal("נשכל!", "הוספת משתתף בהדרכה נכשל!", "warning")
+        }
+        function insertNewPart(parti) {
+            alert("parti")
+            let api = "../api/contact_in_instruction";
+            ajaxCall("POST", api, JSON.stringify(parti), createNewparticiSuccess, createNewparticiError);
+        }
+        function createNewparticiSuccess(data) {
+            swal({
+                title: "מצוין!", text: "הוספת משתתף בהדרכה בוצע בהצלחה!", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
+
+        }
+        function createNewparticiError() {
+            swal("נשכל!", "הוספת משתתף בהדרכה נכשל!", "warning")
+        }
+
         function updateInst() {
             document.getElementById('id03').style.display = 'none';
-
+            $("#btn_update_inst").show();
+            $("#btn_save_inst").hide()
             let newInst = {
 
                 Instruction_num: instToEdit.Instruction_num,
@@ -272,13 +322,14 @@
                 Time: $("#time").val(),
                 Total_price: $("#price").val(),
                 Participants_num: $("#participants_num").val(),
+                Invoice_num: $("#invoice_num").val(),
             }
 
             let api = "../api/instruction";
-            ajaxCall("PUT", api, JSON.stringify(newInst), createNewInstSuccess, createNewInstError);
+            ajaxCall("PUT", api, JSON.stringify(newInst), UpdateSuccess, UpdateError);
         }
 
-        function createNewInstSuccess(data) {
+        function UpdateSuccess(data) {
             swal({
                 title: "מצוין!", text: "עדכון הדרכה בוצע בהצלחה!", type: "success", icon: "success"
             }).then(function () {
@@ -286,8 +337,39 @@
 
             });
         }
-        function createNewInstError() {
+        function UpdateError() {
             swal("נשכל!", "עדכון הדרכה נכשל!", "warning")
+        }
+        function insertNewInst() {
+            document.getElementById('id03').style.display = 'none';
+            let newInst = {
+
+                Instruction_type_num: $("#instructionType").val(),
+                Pay_status: $("#checkpayStatus").val(),
+                Company: $("#company").val(),
+                Date: $("#checkDate").val(),
+                Address: $("#address").val(),
+                Time: $("#time").val(),
+                Total_price: $("#price").val(),
+                Participants_num: $("#participants_num").val(),
+                Delete_status: 0,
+                Instructor_email: user_mail,
+                Invoice_num: $("#invoice_num").val(),
+            }
+
+            let api = "../api/instruction";
+            ajaxCall("POST", api, JSON.stringify(newInst), createNewInstSuccess, createNewInstError);
+        }
+        function createNewInstSuccess(data) {
+            swal({
+                title: "מצוין!", text: "הדרכה חדשה נוצרה בהצלחה!", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
+        }
+        function createNewInstError() {
+            swal("נשכל!", " יצירת הדרכה חדשה נכשלה!", "warning")
         }
     </script>
 </head>
@@ -352,6 +434,7 @@
                     <th>כתובת</th>
                     <th>משתתפים</th>
                     <th>סטטוס תשלום</th>
+                    <th>מספר חשבונית</th>
                     <th>מחיר כולל</th>
                     <th></th>
                 </tr>
@@ -432,13 +515,15 @@
                                         </div>
                                     </th>
                                 </tr>
-                                <br />
                                 <tr>
                                     <th>
-
-                                        <button id="saveBTN" value="saveInst" class="btn btn-primary" onclick="updateInst()"> שמור </button>
+                                        <div class="form-group">
+                                            <label for="invoice_num">מספר חשבונית</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="invoice_num" placeholder=" הזן מספר חשבונית"></textarea>
+                                        </div>
                                     </th>
                                 </tr>
+                                <br />
                             </thead>
                         </table>
                     </form>
@@ -488,9 +573,12 @@
                             </thead>
                         </table>
                     </form>
+                    <button id="btn_save_inst" class="btn btn-primary" onclick="insertNewInst()"> שמור הדרכה</button>
                     <button id="btn_update_inst" class="btn btn-primary" onclick="updateInst()"> עדכן הדרכה</button>
                 </div>
+                <br />
           </div>
+       </div> 
     </div>
 </body>
 </html>

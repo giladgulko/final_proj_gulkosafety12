@@ -1888,7 +1888,7 @@ namespace final_proj_gulkosafety.Models.DAL
                 con = connect("DBConnectionString");
                 String selectSTR = "";
 
-                selectSTR = "SELECT i.*, it.type_name,it.expiration FROM instruction i left join instruction_type it on i.instruction_num = it.instruction_type_num ";
+                selectSTR = "SELECT i.*, it.type_name,it.expiration FROM instruction i left join instruction_type it on i.instruction_type_num = it.instruction_type_num ";
 
 
 
@@ -1904,12 +1904,12 @@ namespace final_proj_gulkosafety.Models.DAL
                     i.Instruction_num = Convert.ToInt32(dr["instruction_num"]);
                     i.Company = (string)dr["company"];
                     i.Date = Convert.ToDateTime(dr["date"]);
-                   // i.Time = Convert.ToDateTime(dr["time"]);
+                    //i.Time = Convert.ToDateTime(dr["time"]);
                     i.Address = (string)dr["address"];
                     i.Participants_num = Convert.ToInt32(dr["participants_num"]);
                     i.Pay_status = Convert.ToInt32(dr["pay_status"]);
                     i.Total_price = Convert.ToInt32(dr["total_price"]);
-                    i.Bill_num = Convert.ToInt32(dr["bill_num"]);
+                    i.Invoice_num = Convert.ToInt32(dr["invoice_num"]);
                     i.Instructor_email = (string)dr["instructor_email"];
                     i.Instruction_type_num = Convert.ToInt32(dr["instruction_type_num"]);
                     i.Type_name = (string)dr["type_name"];
@@ -2275,6 +2275,163 @@ namespace final_proj_gulkosafety.Models.DAL
                 }
 
             }
+        }
+        //insert a new instruction
+        public int InsertInstruction(instruction _instruction)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            String cStr = BuildInsertCommand(_instruction);      // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
+        private String BuildInsertCommand(instruction _instruction)
+        {
+            String command;
+
+            StringBuilder sb = new StringBuilder();
+            // use a string builder to create the dynamic string
+            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}')", _instruction.Instructor_email, _instruction.Invoice_num, _instruction.Total_price, _instruction.Pay_status, _instruction.Participants_num, _instruction.Company, _instruction.Date.ToString("yyyy-MM-dd"), _instruction.Address, _instruction.Delete_status, _instruction.Instruction_type_num, _instruction.Time.ToString("HH:mm"));
+            String prefix = "INSERT INTO instruction " + "(instructor_email,invoice_num,total_price,pay_status,participants_num,company,date,address,delete_status,instruction_type_num,time)";
+            command = prefix + sb.ToString();
+
+            return command;
+
+        }
+        //insert a new contact
+        public int InsertContact(contact _contact)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            String cStr = BuildInsertCommand(_contact);      // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
+        private String BuildInsertCommand(contact _contact)
+        {
+            String command;
+
+            StringBuilder sb = new StringBuilder();
+            // use a string builder to create the dynamic string
+            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}')", _contact.Id, _contact.Mail, _contact.Full_name, _contact.Phone );
+            String prefix = "INSERT INTO contact " + "(id,mail,full_name,phone)";
+            command = prefix + sb.ToString();
+
+            return command;
+
+        }
+
+        //insert a new contact in instruction
+        public int InsertContactInInstruction(contact_in_instruction _contact_in_instruction)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            String cStr = BuildInsertCommand(_contact_in_instruction);      // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
+        private String BuildInsertCommand(contact_in_instruction _contact_in_instruction)
+        {
+            String command;
+
+            StringBuilder sb = new StringBuilder();
+            // use a string builder to create the dynamic string
+            sb.AppendFormat("Values('{0}', '{1}')", _contact_in_instruction.Contact_id, _contact_in_instruction.Instruction_num);
+            String prefix = "INSERT INTO contact " + "(contact_id,instruction_num)";
+            command = prefix + sb.ToString();
+
+            return command;
+
         }
     }
 

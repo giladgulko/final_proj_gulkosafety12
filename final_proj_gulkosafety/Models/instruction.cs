@@ -16,14 +16,14 @@ namespace final_proj_gulkosafety.Models
         int participants_num;
         int pay_status;
         int total_price;
-        int bill_num;
+        int invoice_num;
         string instructor_email;
         int instruction_type_num;
         string type_name;
         int expiration;
         int delete_status;
 
-        public instruction(int instruction_num, string company, DateTime date, DateTime time, string address, int participants_num, int pay_status, int total_price, int bill_num, string instructor_email, int instruction_type_num, string type_name, int expiration, int delete_status)
+        public instruction(int instruction_num, string company, DateTime date, DateTime time, string address, int participants_num, int pay_status, int total_price, int invoice_num, string instructor_email, int instruction_type_num, string type_name, int expiration, int delete_status)
         {
             Instruction_num = instruction_num;
             Company = company;
@@ -33,7 +33,7 @@ namespace final_proj_gulkosafety.Models
             Participants_num = participants_num;
             Pay_status = pay_status;
             Total_price = total_price;
-            Bill_num = bill_num;
+            Invoice_num = invoice_num;
             Instructor_email = instructor_email;
             Instruction_type_num = instruction_type_num;
             Type_name = type_name;
@@ -50,7 +50,7 @@ namespace final_proj_gulkosafety.Models
         public int Participants_num { get => participants_num; set => participants_num = value; }
         public int Pay_status { get => pay_status; set => pay_status = value; }
         public int Total_price { get => total_price; set => total_price = value; }
-        public int Bill_num { get => bill_num; set => bill_num = value; }
+        public int Invoice_num { get => invoice_num; set => invoice_num = value; }
         public string Instructor_email { get => instructor_email; set => instructor_email = value; }
         public int Instruction_type_num { get => instruction_type_num; set => instruction_type_num = value; }
         public string Type_name { get => type_name; set => type_name = value; }
@@ -73,6 +73,11 @@ namespace final_proj_gulkosafety.Models
             DBServices dbs = new DBServices();
             dbs.UpdateInstruction(this);
 
+        }
+        public void InsertInstruction()
+        {
+            DBServices dbs = new DBServices();
+            dbs.InsertInstruction(this);
         }
     }
 }
