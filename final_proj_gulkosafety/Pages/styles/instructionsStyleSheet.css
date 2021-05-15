@@ -45,12 +45,24 @@
     background-color: cadetblue;
     border-color: cadetblue;
 }
-
-h1, h2, h1.proj {
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-    color: cadetblue;
-    font-weight: bold;
+#saveBTN, #btn_update_inst {
+    float: left;
+    color: #fff;
+    background-color: cadetblue;
+    border-color: cadetblue;
 }
+/*#btn_new_participant {
+    float: right;
+    color: #fff;
+    background-color: cadetblue;
+    border-color: cadetblue;
+}*/
+
+    h1, h2, h1.proj {
+        font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+        color: cadetblue;
+        font-weight: bold;
+    }
 
 body {
     background-color: #eeeeee;
@@ -96,3 +108,4 @@ th.sorting {
 th {
     text-align: right;
 }
+

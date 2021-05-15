@@ -21,8 +21,9 @@ namespace final_proj_gulkosafety.Models
         int instruction_type_num;
         string type_name;
         int expiration;
+        int delete_status;
 
-        public instruction(int instruction_num, string company, DateTime date, DateTime time, string address, int participants_num, int pay_status, int total_price, int bill_num, string instructor_email, int instruction_type_num, string type_name, int expiration)
+        public instruction(int instruction_num, string company, DateTime date, DateTime time, string address, int participants_num, int pay_status, int total_price, int bill_num, string instructor_email, int instruction_type_num, string type_name, int expiration, int delete_status)
         {
             Instruction_num = instruction_num;
             Company = company;
@@ -37,6 +38,7 @@ namespace final_proj_gulkosafety.Models
             Instruction_type_num = instruction_type_num;
             Type_name = type_name;
             Expiration= expiration;
+            Delete_status = delete_status;
         }
         public instruction() { }
 
@@ -53,11 +55,24 @@ namespace final_proj_gulkosafety.Models
         public int Instruction_type_num { get => instruction_type_num; set => instruction_type_num = value; }
         public string Type_name { get => type_name; set => type_name = value; }
         public int Expiration { get => expiration; set => expiration = value; }
+        public int Delete_status { get => delete_status; set => delete_status = value; }
 
         public List<instruction> ReadInstruction()
         {
             DBServices dbs = new DBServices();
             return dbs.ReadInstruction();
+        }
+        public void DeleteInstruction(int instruction_num , int delete_status)
+        {
+            DBServices dbs = new DBServices();
+            dbs.DeleteInstruction(instruction_num, delete_status);
+
+        }
+        public void UpdateInstruction()
+        {
+            DBServices dbs = new DBServices();
+            dbs.UpdateInstruction(this);
+
         }
     }
 }
