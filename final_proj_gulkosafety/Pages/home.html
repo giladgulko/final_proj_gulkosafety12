@@ -58,7 +58,7 @@
         function getReportsuccess(data) {
             reportList = data;
             for (i = 0; i < alertList.length; i++) {
-                document.getElementById('recent_visit reports_alerts').innerHTML += "<div class='reports'><p id='" + reportList[i].Report_num + "' href='#' </p> <strong>" +reportList[i].Date.split("T")[0] + "</strong > דוח מספר " + reportList[i].Report_num + " בפרויקט מספר " + reportList[i].Project_num +" "+ "<a id='" + reportList[i].Report_num + "' href='#' onclick='renderSafetyAlert(this.id)'>לצפייה בפרטי הדוח לחץ כאן </a></div> ";
+                document.getElementById('recent_visit reports_alerts').innerHTML += "<div class='reports'><p id='" + reportList[i].Report_num + "' href='#' </p> <strong>" + reportList[i].Date.split("T")[0] + "</strong > דוח מספר " + reportList[i].Report_num + " בפרויקט " + reportList[i].Proj_name +" "+ "<a id='" + reportList[i].Report_num + "' href='#' onclick='renderSafetyAlert(this.id)'>לצפייה בפרטי הדוח לחץ כאן </a></div> ";
             }
         
         }
@@ -71,7 +71,7 @@
             document.getElementById('id04').style.display = 'block';
             for (var i = 0; i < reportList.length; i++) {
              
-                document.getElementById('report_paragraph').innerHTML += "<div class='reportPopUp'><h3>דוח מספר:  " + reportList[i].Report_num + "</h3><h3> פרויקט מספר: " + reportList[i].Project_num + "</h3><h3> בוצע בתאריך: " + reportList[i].Date.split("T")[0] + "</h3><h3> ציון הדוח הינו: " + reportList[i].Grade+"</h3></div>";
+                document.getElementById('report_paragraph').innerHTML += "<div class='reportPopUp'><h3>דוח מספר:  " + reportList[i].Report_num + "</h3><h3> פרויקט: " + reportList[i].Proj_name + "</h3><h3> בוצע בתאריך: " + reportList[i].Date.split("T")[0] + "</h3><h3> ציון הדוח הינו: " + reportList[i].Grade+"</h3></div>";
                   
                 }
 
@@ -128,18 +128,18 @@
     </div>
     <div class="main">
         <div class="col-lg-6 mb-3">
-            <div class="card">
+            <div class="card" id="calendar">
                 <div class="card-body section1">
                     <div class="row">
                         <div class="form-group col-sm-12">
                         </div>
                     </div>
-                    <iframe src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=1&amp;bgcolor=%235f9ea0&amp;ctz=Asia%2FJerusalem&amp;src=Z3Vsa29zYWZldHl1c2VyQGdtYWlsLmNvbQ&amp;src=aXcuamV3aXNoI2hvbGlkYXlAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&amp;color=%23039BE5&amp;color=%230B8043&amp;showNav=1&amp;showCalendars=0&amp;showTitle=0&amp;showDate=1&amp;showTz=0&amp;showTabs=1" style="border:10px solid cadetblue" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+                    <iframe src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=1&amp;bgcolor=%235f9ea0&amp;ctz=Asia%2FJerusalem&amp;src=Z3Vsa29zYWZldHl1c2VyQGdtYWlsLmNvbQ&amp;src=aXcuamV3aXNoI2hvbGlkYXlAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&amp;color=%23039BE5&amp;color=%230B8043&amp;showNav=1&amp;showCalendars=0&amp;showTitle=0&amp;showDate=1&amp;showTz=0&amp;showTabs=1" style="border:10px solid cadetblue" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>
                 </div>
             </div>
         </div>
         <div class="col-lg-6 mb-3">
-            <div class="card-body section1">
+            <div class="card-body section2">
 
                 <div class="row">
                     <h3>תזכורות אישיות:</h3>
@@ -151,7 +151,7 @@
                 </div>
 
             </div>
-            <div class="card-body section1">
+            <div class="card-body section2">
 
                 <div class="row">
                     <h3>תמונות ליקויים שתוקנו:</h3>
@@ -161,7 +161,7 @@
                 </div>
 
             </div>
-            <div class="card-body section1">
+            <div class="card-body section2">
 
                 <div class="row">
                     <h3>אישורים פגי תוקף:</h3>
@@ -172,7 +172,7 @@
 
             </div>
         
-            <div class="card-body section1">
+            <div class="card-body section2">
 
                 <div class="row">
                     <h3>דוחות ביקור אחרונים</h3>
