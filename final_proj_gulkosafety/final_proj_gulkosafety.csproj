@@ -216,6 +216,7 @@
     <Content Include="Pages\alerts.html" />
     <Content Include="Pages\certificates.html" />
     <Content Include="Pages\instructions.html" />
+    <Content Include="Pages\loginPage.html" />
     <Content Include="Pages\orders.html" />
     <Content Include="Pages\photos\logo.jpeg" />
     <Content Include="Pages\project.html" />
