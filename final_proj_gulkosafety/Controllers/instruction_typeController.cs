@@ -1,4 +1,5 @@
-﻿using System;
+﻿using final_proj_gulkosafety.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -9,12 +10,19 @@ namespace final_proj_gulkosafety.Controllers
 {
     public class instruction_typeController : ApiController
     {
-        // GET api/<controller>
-        public IEnumerable<string> Get()
+        public List<instruction_type> Get()
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                instruction_type i = new instruction_type();
+                List<instruction_type> iList = i.ReadInstruction_type();
+                return iList;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
         }
-
         // GET api/<controller>/5
         public string Get(int id)
         {

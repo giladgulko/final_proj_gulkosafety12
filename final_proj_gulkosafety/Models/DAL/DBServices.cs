@@ -1644,6 +1644,7 @@ namespace final_proj_gulkosafety.Models.DAL
                     c.Type_name = (string)dr["type_name"];
                     c.Price = Convert.ToDouble(dr["price"]);
                     c.Expiration = Convert.ToInt32(dr["expiration"]);
+                    c.Delete_status = Convert.ToInt32(dr["delete_status"]);
 
                     certificateList.Add(c);
 
@@ -1825,57 +1826,57 @@ namespace final_proj_gulkosafety.Models.DAL
 
         }
         //insert a new certificate
-        public int InsertCertificate(certificate _certificate)
-        {
+        //public int InsertCertificate(certificate _certificate)
+        //{
 
-            SqlConnection con;
-            SqlCommand cmd;
+        //    SqlConnection con;
+        //    SqlCommand cmd;
 
-            try
-            {
-                con = connect("DBConnectionString"); // create the connection
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
+        //    try
+        //    {
+        //        con = connect("DBConnectionString"); // create the connection
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw (ex);
+        //    }
 
-            String cStr = BuildInsertCommand(_certificate);      // helper method to build the insert string
+        //    String cStr = BuildInsertCommand(_certificate);      // helper method to build the insert string
 
-            cmd = CreateCommand(cStr, con);             // create the command
+        //    cmd = CreateCommand(cStr, con);             // create the command
 
-            try
-            {
-                int numEffected = cmd.ExecuteNonQuery(); // execute the command
-                return numEffected;
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
+        //    try
+        //    {
+        //        int numEffected = cmd.ExecuteNonQuery(); // execute the command
+        //        return numEffected;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw (ex);
+        //    }
 
-            finally
-            {
-                if (con != null)
-                {
-                    // close the db connection
-                    con.Close();
-                }
-            }
-        }
-        private String BuildInsertCommand(certificate _certificate)
-        {
-            String command;
+        //    finally
+        //    {
+        //        if (con != null)
+        //        {
+        //            // close the db connection
+        //            con.Close();
+        //        }
+        //    }
+        //}
+        //private String BuildInsertCommand(certificate _certificate)
+        //{
+        //    String command;
 
-            StringBuilder sb = new StringBuilder();
-            // use a string builder to create the dynamic string
-            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}','{4}','{5}')", _certificate.Certificate_status, _certificate.Pay_status, _certificate.Company, _certificate.Address,_certificate.Date.ToString("yyyy-MM-dd"),_certificate.Description);
-            String prefix = "INSERT INTO project " + "(bill_num,date,total_price,contact_id)";
-            command = prefix + sb.ToString();
+        //    StringBuilder sb = new StringBuilder();
+        //    // use a string builder to create the dynamic string
+        //    sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}','{4}','{5}')", _certificate.Certificate_status, _certificate.Pay_status, _certificate.Company, _certificate.Address,_certificate.Date.ToString("yyyy-MM-dd"),_certificate.Description);
+        //    String prefix = "INSERT INTO certificate " + "(certificate_status,pay_status,company,address,date,description)";
+        //    command = prefix + sb.ToString();
 
-            return command;
+        //    return command;
 
-        }
+        //}
         //return all instructions 
         public List<instruction> ReadInstruction()
         {
@@ -1887,7 +1888,7 @@ namespace final_proj_gulkosafety.Models.DAL
                 con = connect("DBConnectionString");
                 String selectSTR = "";
 
-                selectSTR = "SELECT i.*, it.type_name,it.expiration FROM instruction i left join instruction_type it on i.instruction_num = it.instruction_type_num ";
+                selectSTR = "SELECT i.*, it.type_name,it.expiration FROM instruction i left join instruction_type it on i.instruction_type_num = it.instruction_type_num ";
 
 
 
@@ -1908,11 +1909,12 @@ namespace final_proj_gulkosafety.Models.DAL
                     i.Participants_num = Convert.ToInt32(dr["participants_num"]);
                     i.Pay_status = Convert.ToInt32(dr["pay_status"]);
                     i.Total_price = Convert.ToInt32(dr["total_price"]);
-                    i.Bill_num = Convert.ToInt32(dr["bill_num"]);
+                    i.Invoice_num = Convert.ToInt32(dr["invoice_num"]);
                     i.Instructor_email = (string)dr["instructor_email"];
                     i.Instruction_type_num = Convert.ToInt32(dr["instruction_type_num"]);
                     i.Type_name = (string)dr["type_name"];
                     i.Expiration = Convert.ToInt32(dr["expiration"]);
+                    i.Delete_status = Convert.ToInt32(dr["delete_status"]);
 
 
                     instructionList.Add(i);
@@ -1937,7 +1939,500 @@ namespace final_proj_gulkosafety.Models.DAL
             }
 
         }
+        // change delete status of certificate
+        public int DeleteCertificate(int certificate_num, int delete_status)
+        {
 
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            String cStr = BuildDeleteCertificateCommand(certificate_num, delete_status);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+        private String BuildDeleteCertificateCommand(int certificate_num, int delete_status)
+        {
+            String command;
+            command = "UPDATE certificate SET delete_status = " + delete_status + " WHERE certificate_num = " + certificate_num;
+            return command;
+        }
+
+        //update certificate detail
+        public int UpdateCertificate(certificate c)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            String cStr = BuildupdateCommand(c);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+
+        private String BuildupdateCommand(certificate c)
+        {
+            String command;
+            command = "UPDATE certificate SET certificate_status=" + c.Certificate_status + ", pay_status=" + c.Pay_status + ", address='" + c.Address + "', date='" + c.Date.ToString("yyyy-MM-dd") +  "', company='" + c.Company + "', description='" + c.Description + "' WHERE certificate_num =" + c.Certificate_num;
+
+            return command;
+        }
+
+        //return all instruction_types
+        public List<instruction_type> ReadInstruction_type()
+        {
+            SqlConnection con = null;
+            List<instruction_type> instructionTypeList = new List<instruction_type>();
+
+            try
+            {
+                con = connect("DBConnectionString");
+                String selectSTR = "";
+
+                selectSTR = "select * from instruction_type";
+
+
+
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {
+                    instruction_type i = new instruction_type();
+
+                    i.Instruction_type_num = Convert.ToInt32(dr["instruction_type_num"]);
+                    i.Type_name = (string)dr["type_name"];
+                    i.Price = Convert.ToDouble(dr["price"]);
+                    i.Expiration = Convert.ToInt32(dr["expiration"]);
+
+
+                    instructionTypeList.Add(i);
+
+
+                }
+
+                return instructionTypeList;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
+        // change delete status of instruction
+        public int DeleteInstruction(int instruction_num, int delete_status)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            String cStr = BuildDeleteInstructionCommand(instruction_num, delete_status);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+        private String BuildDeleteInstructionCommand(int instruction_num, int delete_status)
+        {
+            String command;
+            command = "UPDATE instruction SET delete_status = " + delete_status + " WHERE instruction_num = " + instruction_num;
+            return command;
+        }
+
+        //update instruction detail
+        public int UpdateInstruction(instruction i)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            String cStr = BuildupdateCommand(i);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+
+        private String BuildupdateCommand(instruction i)
+        {
+            String command;
+            command = "UPDATE instruction SET pay_status=" + i.Pay_status + ",instruction_type_num = " + i.Instruction_type_num + ",total_price =" + i.Total_price + ",participants_num=" + i.Participants_num + ",address='" + i.Address + "', date='" + i.Date.ToString("yyyy-MM-dd") + "', company='" + i.Company + "', time='" + i.Time.ToString("HH:mm") + "' WHERE instruction_num =" + i.Instruction_num;
+
+            return command;
+        }
+
+        //read report from home page
+        public List<report> ReadReportFromHome()
+        {
+            SqlConnection con = null;
+            List<report> reportList = new List<report>();
+
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+                String selectSTR = "SELECT * FROM report WHERE date>= DATEADD(day,-7, GETDATE())";
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    report _report = new report();
+                    _report.Report_num = Convert.ToInt32(dr["report_num"]);
+                    _report.Date = Convert.ToDateTime(dr["date"]);
+                    _report.Time = Convert.ToDateTime(dr["time"]);
+                    _report.Comment = (string)dr["comment"];
+                    _report.Grade = Convert.ToDouble(dr["grade"]);
+                    _report.Project_num = Convert.ToInt32(dr["project_num"]);
+                    _report.User_mail = (string)dr["user_email"];
+                    reportList.Add(_report);
+                }
+
+                return reportList;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+
+        //read alert from home page
+        public List<alert> ReadAlertFromHome(string user_email, int Alert_type_num)
+        {
+            SqlConnection con = null;
+            List<alert> alertsList = new List<alert>();
+
+            try
+            {
+                con = connect("DBConnectionString");
+
+                String selectSTR = "SELECT * FROM alert WHERE user_email='" + user_email + "'and Alert_type_num=" + Alert_type_num + "and date>= DATEADD(day,-2, GETDATE())";
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                while (dr.Read())
+                {
+
+                    alert _alert = new alert();
+                    _alert.Alert_num = Convert.ToInt32(dr["alert_num"]);
+                    _alert.Content = (string)dr["content"];
+                    _alert.Date = Convert.ToDateTime(dr["date"]);
+                    _alert.Alert_type_num = Convert.ToInt32(dr["alert_type_num"]);
+                    _alert.User_email = (string)dr["user_email"];
+                    _alert.Status = Convert.ToInt32(dr["status"]);
+                    _alert.Proj_num = Convert.ToInt32(dr["proj_num"]);
+                    alertsList.Add(_alert);
+                }
+
+                return alertsList;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+        //insert a new instruction
+        public int InsertInstruction(instruction _instruction)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            String cStr = BuildInsertCommand(_instruction);      // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
+        private String BuildInsertCommand(instruction _instruction)
+        {
+            String command;
+
+            StringBuilder sb = new StringBuilder();
+            // use a string builder to create the dynamic string
+            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}')", _instruction.Instructor_email, _instruction.Invoice_num, _instruction.Total_price, _instruction.Pay_status, _instruction.Participants_num, _instruction.Company, _instruction.Date.ToString("yyyy-MM-dd"), _instruction.Address, _instruction.Delete_status, _instruction.Instruction_type_num, _instruction.Time.ToString("HH:mm"));
+            String prefix = "INSERT INTO instruction " + "(instructor_email,invoice_num,total_price,pay_status,participants_num,company,date,address,delete_status,instruction_type_num,time)";
+            command = prefix + sb.ToString();
+
+            return command;
+
+        }
+        //insert a new contact
+        public int InsertContact(contact _contact)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            String cStr = BuildInsertCommand(_contact);      // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
+        private String BuildInsertCommand(contact _contact)
+        {
+            String command;
+
+            StringBuilder sb = new StringBuilder();
+            // use a string builder to create the dynamic string
+            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}')", _contact.Id, _contact.Mail, _contact.Full_name, _contact.Phone );
+            String prefix = "INSERT INTO contact " + "(id,mail,full_name,phone)";
+            command = prefix + sb.ToString();
+
+            return command;
+
+        }
+
+        //insert a new contact in instruction
+        public int InsertContactInInstruction(contact_in_instruction _contact_in_instruction)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            String cStr = BuildInsertCommand(_contact_in_instruction);      // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
+        private String BuildInsertCommand(contact_in_instruction _contact_in_instruction)
+        {
+            String command;
+
+            StringBuilder sb = new StringBuilder();
+            // use a string builder to create the dynamic string
+            sb.AppendFormat("Values('{0}', '{1}')", _contact_in_instruction.Contact_id, _contact_in_instruction.Instruction_num);
+            String prefix = "INSERT INTO contact " + "(contact_id,instruction_num)";
+            command = prefix + sb.ToString();
+
+            return command;
+
+        }
     }
-   
+
 }

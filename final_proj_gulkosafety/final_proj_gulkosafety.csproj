@@ -215,6 +215,7 @@
     <Content Include="Global.asax" />
     <Content Include="Pages\alerts.html" />
     <Content Include="Pages\certificates.html" />
+    <Content Include="Pages\home.html" />
     <Content Include="Pages\instructions.html" />
     <Content Include="Pages\loginPage.html" />
     <Content Include="Pages\orders.html" />
@@ -223,6 +224,7 @@
     <Content Include="Pages\projtest.html" />
     <Content Include="Pages\styles\alertsStyles.css" />
     <Content Include="Pages\styles\certificatesStyleSheet.css" />
+    <Content Include="Pages\styles\homeStyleSheet.css" />
     <Content Include="Pages\styles\instructionsStyleSheet.css" />
     <Content Include="Pages\styles\ordersStyleSheet.css" />
     <Content Include="Pages\styles\projectsStyles.css" />

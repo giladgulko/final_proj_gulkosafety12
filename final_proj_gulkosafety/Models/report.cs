@@ -45,6 +45,12 @@ namespace final_proj_gulkosafety.Models
             dbs.InsertReport(this);
         }
 
+        public List<report> ReadReportFromHome()
+        {
+            DBServices dbs = new DBServices();
+            List<report> reportList = dbs.ReadReportFromHome();
+            return reportList;
+        }
         public List<report> ReadReport(int proj_num)
         {
             DBServices dbs = new DBServices();

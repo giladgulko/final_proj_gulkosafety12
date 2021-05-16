@@ -1,4 +1,5 @@
-﻿using System;
+﻿using final_proj_gulkosafety.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -21,10 +22,24 @@ namespace final_proj_gulkosafety.Controllers
             return "value";
         }
 
-        // POST api/<controller>
-        public void Post([FromBody]string value)
+        //POST api/<controller>
+        public HttpResponseMessage Post([FromBody] contact_in_instruction c)
         {
+            try
+            {
+                {
+                    c.InsertContactInInstruction();
+
+                }
+
+                return Request.CreateResponse(HttpStatusCode.Created, c);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
+            }
         }
+
 
         // PUT api/<controller>/5
         public void Put(int id, [FromBody]string value)

@@ -25,13 +25,31 @@ namespace final_proj_gulkosafety.Controllers
             }
         }
 
-        public HttpResponseMessage Post([FromBody] certificate c)
+        //public HttpResponseMessage Post([FromBody] certificate c)
+        //{
+        //    try
+        //    {
+        //        {
+        //            c.Insert();
+
+        //        }
+
+        //        return Request.CreateResponse(HttpStatusCode.Created, c);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
+        //    }
+        //}
+
+        // DELETE api/<controller>/5
+        public HttpResponseMessage DeleteCertificate([FromBody] certificate c)
         {
+
             try
             {
                 {
-                    c.Insert();
-
+                    c.DeleteCertificate(c.Certificate_num,c.Delete_status);
                 }
 
                 return Request.CreateResponse(HttpStatusCode.Created, c);
@@ -41,15 +59,21 @@ namespace final_proj_gulkosafety.Controllers
                 return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
             }
         }
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
+        //update certificate
+        public HttpResponseMessage Put([FromBody] certificate c)
         {
-        }
+            try
+            {
+                {
+                    c.UpdateCertificate();
+                }
 
-
-        // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
+                return Request.CreateResponse(HttpStatusCode.Created, c);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
+            }
         }
     }
 }

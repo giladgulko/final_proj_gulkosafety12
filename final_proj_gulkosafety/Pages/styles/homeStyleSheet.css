@@ -1,0 +1,45 @@
+﻿body {
+    background-color: #eeeeee;
+    direction:rtl;
+}
+
+#instruction_bar {
+    text-align: center;
+    display: flex;
+    margin-top: 40px
+}
+
+#headline {
+    font-family: 'Suez One', serif;
+    color: cadetblue;
+}
+
+.card {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.card-body.section1 {
+    BACKGROUND-COLOR: white;
+    margin: 3%;
+    padding: 2%;
+}
+h3 {
+    font-size: 20px;
+    font-weight: bold;
+    color: cadetblue;
+    text-align: right;
+    margin-top: 0px;
+    direction:rtl;
+}
+.w3-container, .w3-panel {
+    padding-right: 4%;
+    text-align: center;
+    border: 10px solid cadetblue;
+    padding-right: 37%;
+   
+}
+
+#report_paragraph {
+    padding: 2%;
+}
+
