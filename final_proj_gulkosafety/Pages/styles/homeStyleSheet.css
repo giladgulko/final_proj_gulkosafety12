@@ -31,4 +31,15 @@ h3 {
     margin-top: 0px;
     direction:rtl;
 }
+.w3-container, .w3-panel {
+    padding-right: 4%;
+    text-align: center;
+    border: 10px solid cadetblue;
+    padding-right: 37%;
+   
+}
+
+#report_paragraph {
+    padding: 2%;
+}
 

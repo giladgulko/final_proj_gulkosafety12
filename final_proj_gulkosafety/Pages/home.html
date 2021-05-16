@@ -32,7 +32,7 @@
             alertList = [];
             reportList = [];
             getAlerts();
-            getReports();
+          
   
         });
 
@@ -51,26 +51,33 @@
             alertList = data;
 
             for (i = 0; i < alertList.length; i++) {
-                if (alertList[i].Alert_type_num != 1) {
-
-                    if (alertList[i].Alert_type_num == 3) {
-                        document.getElementById('fixed_defects_photos_alerts').innerHTML += "<div  class='alerts'> <p id='" + alertList[i].Alert_num + "' href='#' </p><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='far fa-calendar-alt' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
-                    }
-                    if (alertList[i].Alert_type_num == 2) {
-                        document.getElementById('certificates_expire_alerts').innerHTML += "<div  class='alerts'> <p id='" + alertList[i].Alert_num + "' href='#' </p><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='far fa-calendar-alt' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
-                    }
-
-                }
+                        document.getElementById('fixed_defects_photos_alerts').innerHTML += "<div  class='alerts'> <p id='" + alertList[i].Alert_num + "' href='#' </p><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + " </strong> <i class='far fa-calendar-alt' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
             }
-
+            getReports();
         }
         function getReportsuccess(data) {
             reportList = data;
+            for (i = 0; i < alertList.length; i++) {
+                document.getElementById('recent_visit reports_alerts').innerHTML += "<div class='reports'><p id='" + reportList[i].Report_num + "' href='#' </p> <strong>" +reportList[i].Date.split("T")[0] + "</strong > דוח מספר " + reportList[i].Report_num + " בפרויקט מספר " + reportList[i].Project_num +" "+ "<a id='" + reportList[i].Report_num + "' href='#' onclick='renderSafetyAlert(this.id)'>לצפייה בפרטי הדוח לחץ כאן </a></div> ";
+            }
+        
         }
         
         function getError() {
             swal("Failed!", "Failed to read alerts!Please try again", "warning")
         }
+        function renderSafetyAlert(id) {
+            document.getElementById('report_paragraph').innerHTML = ""
+            document.getElementById('id04').style.display = 'block';
+            for (var i = 0; i < reportList.length; i++) {
+             
+                document.getElementById('report_paragraph').innerHTML += "<div class='reportPopUp'><h3>דוח מספר:  " + reportList[i].Report_num + "</h3><h3> פרויקט מספר: " + reportList[i].Project_num + "</h3><h3> בוצע בתאריך: " + reportList[i].Date.split("T")[0] + "</h3><h3> ציון הדוח הינו: " + reportList[i].Grade+"</h3></div>";
+                  
+                }
+
+            }
+
+        
     </script>
 </head>
 <body>
@@ -165,15 +172,22 @@
 
             </div>
         
-        <div class="card-body section1">
+            <div class="card-body section1">
 
-            <div class="row">
-                <h3>דוחות ביקור אחרונים</h3>
-            </div>
-            <div id="recent_visit reports_alerts">
+                <div class="row">
+                    <h3>דוחות ביקור אחרונים</h3>
+                </div>
+                <div id="recent_visit reports_alerts">
 
-            </div>
-            </div>
+                </div>
+                <div id="id04" class="w3-modal">
+                    <div class="w3-modal-content">
+                        <div class="w3-container">
+                            <span onclick="document.getElementById('id04').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                            <div id="report_paragraph"></div>
+                        </div>
+                    </div>
+                </div>
         </div>
 
     </div>
