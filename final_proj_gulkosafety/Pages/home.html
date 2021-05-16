@@ -58,7 +58,7 @@
         function getReportsuccess(data) {
             reportList = data;
             for (i = 0; i < alertList.length; i++) {
-                document.getElementById('recent_visit reports_alerts').innerHTML += "<div class='reports'><p id='" + reportList[i].Report_num + "' href='#' </p> <strong>" + reportList[i].Date.split("T")[0] + "</strong > דוח מספר " + reportList[i].Report_num + " בפרויקט " + reportList[i].Proj_name +" "+ "<a id='" + reportList[i].Report_num + "' href='#' onclick='renderSafetyAlert(this.id)'>לצפייה בפרטי הדוח לחץ כאן </a></div> ";
+                document.getElementById('recent_visit reports_alerts').innerHTML += "<div class='reports'><p id='" + reportList[i].Report_num + "' href='#' </p> <strong>" + reportList[i].Date.split("T")[0] + "</strong >  בפרויקט " + reportList[i].Proj_name + " " + " דוח מספר " + reportList[i].Report_num + "<a id='" + reportList[i].Report_num + "' href='#' onclick='renderSafetyAlert(this.id)'> לצפייה בפרטי הדוח לחץ כאן </a></div> ";
             }
         
         }
@@ -71,7 +71,7 @@
             document.getElementById('id04').style.display = 'block';
             for (var i = 0; i < reportList.length; i++) {
              
-                document.getElementById('report_paragraph').innerHTML += "<div class='reportPopUp'><h3>דוח מספר:  " + reportList[i].Report_num + "</h3><h3> פרויקט: " + reportList[i].Proj_name + "</h3><h3> בוצע בתאריך: " + reportList[i].Date.split("T")[0] + "</h3><h3> ציון הדוח הינו: " + reportList[i].Grade+"</h3></div>";
+                document.getElementById('report_paragraph').innerHTML += "<div class='reportPopUp'><h3>פרויקט:  " + reportList[i].Proj_name + "</h3><h3> דוח מספר: " + reportList[i].Report_num + "</h3><h3> בוצע בתאריך: " + reportList[i].Date.split("T")[0] + "</h3><h3> ציון הדוח הינו: " + reportList[i].Grade+"</h3></div>";
                   
                 }
 
