@@ -2435,6 +2435,50 @@ namespace final_proj_gulkosafety.Models.DAL
             return command;
 
         }
+        public user checkUserLogIn(string email, string password)
+        {
+            SqlConnection con = null;
+            user u = new user();
+
+            try
+            {
+                con = connect("DBConnectionString");
+
+                String selectSTR = "select* from [user] where email='"+email+"' and password='"+password+"'";
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+               
+                while (dr.Read())
+                {
+
+                    u.Email = (string)dr["email"];
+                    u.Name= (string)dr["name"];
+                    u.Phone= (string)dr["phone"];
+                    u.Password= (string)dr["password"];
+                    u.User_type_num = Convert.ToInt32(dr["user_type_num"]);
+
+
+                }
+
+                return u;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+        
     }
 
 }

@@ -38,12 +38,19 @@ namespace final_proj_gulkosafety.Controllers
                 throw (ex);
             }
         }
-       
+        [Route("api/user/{email}/{password}")]
         public user getLogInUser(string email,string password)
         {
-            user p = new user();
+            try
+            {
+                user p = new user();
+                return p.checkUserLogIn(email, password);
 
-            return p;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
         }
 
         public HttpResponseMessage Post([FromBody] user u)

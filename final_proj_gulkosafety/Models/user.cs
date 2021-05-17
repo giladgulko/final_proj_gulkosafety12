@@ -49,6 +49,11 @@ namespace final_proj_gulkosafety.Models
 
             return userListInProj;
         }
-
+        public user checkUserLogIn(string email, string password)
+        {
+             DBServices dbs = new DBServices();
+            user u = dbs.checkUserLogIn(email, password);
+            return u;
+        }
     }
 }
