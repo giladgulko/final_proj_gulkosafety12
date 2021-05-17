@@ -11,19 +11,19 @@ namespace final_proj_gulkosafety.Controllers
     public class contactController : ApiController
     {
 
-        //public List<contact> Get(int inst_num)
-        //{
-        //    try
-        //    {
-        //        contact c = new contact();
-        //        List<contact> cList = c.Read(inst_num);
-        //        return cList;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw (ex);
-        //    }
-        //}
+        public List<contact> Get(int instruction_num)
+        {
+            try
+            {
+                contact c = new contact();
+                List<contact> cList = c.Read(instruction_num);
+                return cList;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
 
         //POST api/<controller>
         public HttpResponseMessage Post([FromBody] contact c)
