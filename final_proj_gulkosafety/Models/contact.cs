@@ -12,13 +12,14 @@ namespace final_proj_gulkosafety.Models
         string full_name;
         int phone;
         string mail;
-
+        int instruction_num;
 
 
         public int Id { get => id; set => id = value; }
         public string Full_name { get => full_name; set => full_name = value; }
         public int Phone { get => phone; set => phone = value; }
         public string Mail { get => mail; set => mail = value; }
+        public int Instruction_num { get => instruction_num; set => instruction_num = value; }
 
         public contact(int id, string full_name, int phone, string mail)
         {
@@ -26,6 +27,7 @@ namespace final_proj_gulkosafety.Models
             Full_name = full_name;
             Phone = phone;
             Mail = mail;
+            Instruction_num = instruction_num;
         }
         public contact(){ }
 
@@ -34,11 +36,11 @@ namespace final_proj_gulkosafety.Models
             DBServices dbs = new DBServices();
             dbs.InsertContact(this);
         }
-        //public List<contact> Read(int inst_num)
-        //{
-        //    DBServices dbs = new DBServices();
-        //    List<contact> contactList = dbs.ReadContact(inst_num);
-        //    return contactList;
-        //}
+        public List<contact> Read(int instruction_num)
+        {
+            DBServices dbs = new DBServices();
+            List<contact> contactList = dbs.ReadContact(instruction_num);
+            return contactList;
+        }
     }
 }

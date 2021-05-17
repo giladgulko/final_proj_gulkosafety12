@@ -2429,7 +2429,7 @@ namespace final_proj_gulkosafety.Models.DAL
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
             sb.AppendFormat("Values('{0}', '{1}')", _contact_in_instruction.Contact_id, _contact_in_instruction.Instruction_num);
-            String prefix = "INSERT INTO contact " + "(contact_id,instruction_num)";
+            String prefix = "INSERT INTO contact_in_instruction " + "(contact_id,instruction_num)";
             command = prefix + sb.ToString();
 
             return command;
@@ -2478,7 +2478,51 @@ namespace final_proj_gulkosafety.Models.DAL
 
             }
         }
-        
+        //read contacts by number of instruction
+        public List<contact> ReadContact(int inst_num)
+        {
+            SqlConnection con = null;
+            List<contact> contactList = new List<contact>();
+
+            try
+            {
+                con = connect("DBConnectionString");
+
+                String selectSTR = "SELECT c.*, ci.* From contact c inner join contact_in_instruction ci on c.id = ci.contact_id where ci.instruction_num=" + inst_num;
+
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                while (dr.Read())
+                {
+
+                    contact _contact = new contact();
+                    _contact.Id = Convert.ToInt32(dr["id"]);
+                    _contact.Full_name = (string)dr["full_name"];
+                    _contact.Phone = Convert.ToInt32(dr["phone"]);
+                    _contact.Mail = (string)dr["mail"];
+                    _contact.Instruction_num = Convert.ToInt32(dr["instruction_num"]);
+                    contactList.Add(_contact);
+                }
+
+                return contactList;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+
     }
 
 }

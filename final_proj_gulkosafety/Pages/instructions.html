@@ -310,7 +310,7 @@
 
                                 editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editpartiBTN(this.value)'> עריכה </button>";
 
-                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='showPariticiTable(this.value)'> מחיקה </button>";
+                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value=' + def + ' onclick='deleteInstruction(this.value)'> מחיקה </button>";
                                 return editBtn + deleteBtn;
 
 
@@ -328,8 +328,9 @@
 
         }
         function showPariticiTable(def) {
-            let inst_num = def.Instruction_num;
-            getParticipantsInInst(inst_num);
+            console.log(def);
+            inst_num = JSON.parse(def);
+            getParticipantsInInst(inst_num.Instruction_num);
         }
         function createNewpartiSuccess(data) {
             swal({
@@ -425,25 +426,26 @@
             let api = "../api/instruction";
             ajaxCall("POST", api, JSON.stringify(newInst), createNewInstSuccess, createNewInstError);
         }
-        function createNewInstSuccess(data) {
+        function createNewInstSuccess(Instdata) {
             swal({
                 title: "מצוין!", text: "הדרכה חדשה נוצרה בהצלחה!", type: "success", icon: "success"
             }).then(function () {
+
                 getInstruAgain();
 
              });
 
         }
-        function getInstruAgain() {
+        function getInstruAgain(Instdata) {
             ajaxCall("GET", "../api/instruction", "", getsuccess, getError)
         }
-        function getsuccess() {
+        function getsuccess(data) {
             postTocontactInInstr(data);
         }
 
         function postTocontactInInstr(data){
 
-            let tail = data.slice(1);
+            let tail = data[data.length - 1];
             parti = {
                 Contact_id: contactList[0].Id,
                 Instruction_num: tail.Instruction_num,
@@ -456,7 +458,6 @@
             swal({
                 title: "מצוין!", text: "משתתף בהדרכה נוצר בהצלחה!", type: "success", icon: "success"
             }).then(function () {
-                location.reload();
 
             });
 
@@ -699,6 +700,7 @@
                 <div class="w3-container" dir="rtl">
                     <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                     <form id="pForm">
+                        <h2 id="new_inst">משתתפים בהדרכה</h2>
                         <table id="participantsTable1" class="display" style="width:100%" dir="rtl">
                             <thead>
                                 <tr>
