@@ -29,16 +29,21 @@
     <script>
         instructionTypeList = [];
         instToEdit = [];
+        contactList = [];
         var user_mail = "gulkosafety@gmail.com";
 
         $(document).ready(function () {
             getInstructionData();
             getCertificateTypeList();
+            getParticipantsInInst();
             $("#btn_update_inst").hide();
             $("#new_participant").hide();
             $('#participantsTable').hide();
             $("#btn_save_inst").hide();
             $("#btn_update_inst").hide();
+            $("#price_th").hide();
+
+
         });
 
         function getInstructionData() {
@@ -57,7 +62,59 @@
             renderInstructionsType();
         }
         function getInstructionTypeListError() {
-            swal("Failed!", "Failed to read the instruction Type!", "warning")
+            swal("נכשל!", "קריאת סוגי הדרכה נכשלה!", "warning")
+        }
+        function getParticipantsInInst(inst_num) {
+            let api = "../api/contact?instruction_num="+inst_num;
+            ajaxCall("GET", api, "", getContactInInstSuccess, getContactInInstError);
+        }
+        function getContactInInstSuccess(data){
+            console.log(data);
+            contacts = data;
+            createTBparticipants(contacts)
+        }
+        function createTBparticipants(contacts) {
+            document.getElementById('id03').style.display = 'block';
+            let participantToShow = [];
+            for (var i = 0; i < contacts.length; i++) {
+                participant = {
+                    Id: contacts[i].Id,
+                    Full_name: contacts[i].Full_name,
+                    Phone: contacts[i].Phone,
+                    Mail: contacts[i].Mail
+                }
+                participantToShow.push(participant);
+            }
+            try {
+                tbl = $('#participantsTable1').DataTable({
+                    data: participantToShow,
+                    pageLength: 10,
+                    columns: [
+
+                        { data: "Id" },
+                        { data: "Full_name" },
+                        { data: "Phone" },
+                        { data: "Mail" },
+
+                        {
+                            render: function (data, type, row, meta) {
+                                let def = JSON.stringify(row);
+
+                            }
+                        },
+
+                    ],
+                });
+
+            }
+
+            catch (err) {
+                alert(err);
+            }
+
+        }
+        function getContactInInstError(){
+            swal("נכשל!", "קריאת משתתפים בהדרכה נכשלה!", "warning")
         }
         function renderInstructionsType() {
             InstrTypeSelect = document.getElementById('instructionType');
@@ -81,7 +138,6 @@
         }
         //מחיקה לוגית ולא מחיקה מהדאטה בייס
         function delete_instruction(def) {
-            alert("in");
             let deleteStatus = {
                 Instruction_num: def.Instruction_num,
                 Delete_status: 1,
@@ -184,14 +240,15 @@
                 str += "<option value='" + instructionTypeList[i].Instruction_type_num + "'>" + instructionTypeList[i].Type_name + "</option>"
             }
             $("#instructionType").html(str);
+            $("#price_th").show();
             $("#checkpayStatus").val(instToEdit.Pay_status);
             $("#company").val(instToEdit.Company);
             $("#checkDate").val(instToEdit.Date.split("T")[0]);
             $("#address").val(instToEdit.Address);
             $("#time").val(instToEdit.Time.split("T")[1]);
-            $("#price").val(instToEdit.Total_price);
             $("#participants_num").val(instToEdit.Participants_num);
             $("#invoice_num").val(instToEdit.Invoice_num);
+            $("#price").val(instToEdit.Total_price);
             $("#btn_update_inst").show();
             $("#btn_save_inst").hide();
             $("#new_inst").hide();
@@ -209,7 +266,6 @@
             $("#checkDate").val("");
             $("#address").val("");
             $("#time").val("");
-            $("#price").val("");
             $("#participants_num").val("");
             $("#invoice_num").val("");
 
@@ -218,6 +274,7 @@
             $("#new_participant").show();
             $('#participantsTable').hide();
         }
+        //שמירת משתתף 
         function SaveNewParticipant() {
             $("#new_participant").hide();
             $('#participantsTable').show();
@@ -230,6 +287,7 @@
 
             }
             participantToShow.push(participant);
+            contactList.push(participant);
 
             let api = "../api/contact";
             ajaxCall("POST", api, JSON.stringify(participant), createNewpartiSuccess, createNewpartiError);
@@ -268,20 +326,21 @@
             }
 
         }
-        function showPariticiTable() {
-            
+        function showPariticiTable(def) {
+            let inst_num = def.Instruction_num;
+            getParticipantsInInst(inst_num);
         }
         function createNewpartiSuccess(data) {
             swal({
                 title: "מצוין!", text: "הוספת משתתף בהדרכה בוצע בהצלחה!", type: "success", icon: "success"
             }).then(function () {
 
-                participant = {
-                    Contact_id: data[i].Contact_id,
-                    Instruction_num: data[i].Instruction_num,
-                }
-                parti = JSON.stringify(participant)
-                insertNewPart(parti);
+                //participant = {
+                //    Contact_id: dinsata[i].Contact_id,
+                //    Instruction_num: data[i].Instruction_num,
+                //}
+                //parti = JSON.stringify(participant)
+                //insertNewPart(parti);
             });
 
 
@@ -323,6 +382,7 @@
                 Total_price: $("#price").val(),
                 Participants_num: $("#participants_num").val(),
                 Invoice_num: $("#invoice_num").val(),
+
             }
 
             let api = "../api/instruction";
@@ -342,6 +402,15 @@
         }
         function insertNewInst() {
             document.getElementById('id03').style.display = 'none';
+            typeNum = $("#instructionType").val();
+
+            let priceForParti = "";
+            for (var i = 0; i < instructionTypeList.length; i++) {
+                if (instructionTypeList[i].Instruction_type_num == typeNum) {
+                    priceForParti += instructionTypeList[i].Price;
+                }
+
+            }
             let newInst = {
 
                 Instruction_type_num: $("#instructionType").val(),
@@ -350,7 +419,7 @@
                 Date: $("#checkDate").val(),
                 Address: $("#address").val(),
                 Time: $("#time").val(),
-                Total_price: $("#price").val(),
+                Total_price: priceForParti * $("#participants_num").val(),
                 Participants_num: $("#participants_num").val(),
                 Delete_status: 0,
                 Instructor_email: user_mail,
@@ -366,7 +435,18 @@
             }).then(function () {
                 location.reload();
 
-            });
+                });
+            for (var i = 0; i < contactList.length; i++) {
+                for (var j = 0; j < data.length; j++) {
+                    if(contactList[i].Id==data)
+                    parti = {
+                        Contact_id: contactList[i].Id,
+                        Instruction_num: data[i].Instruction_num,
+                    }
+                }
+            }
+            let api = "../api/contact_in_instruction";
+            ajaxCall("POST", api, JSON.stringify(parti), createNewparticiSuccess, createNewparticiError);
         }
         function createNewInstError() {
             swal("נשכל!", " יצירת הדרכה חדשה נכשלה!", "warning")
@@ -404,7 +484,7 @@
                         <li><a href="projects.html">פרויקטים</a></li>
                         <li><a href="#">התחברות</a></li>
                         <li>
-                            <span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="#"></a>
+                            <span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="home.html"></a>
                         </li>
                     </ul>
                 </div>
@@ -504,22 +584,20 @@
                                 <tr>
                                     <th>
                                         <div class="form-group">
-                                            <label for="price">מחיר כולל</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="price" placeholder=" הזן מחיר כולל"></textarea>
-                                        </div>
-                                    </th>
-                                    <th>
-                                        <div class="form-group">
                                             <label for="participants_num">מספר משתתפים</label>
                                             <textarea rows="1" class="form-control groupDetails" id="participants_num" placeholder=" הזן מספר משתתפים"></textarea>
                                         </div>
                                     </th>
-                                </tr>
-                                <tr>
                                     <th>
                                         <div class="form-group">
                                             <label for="invoice_num">מספר חשבונית</label>
                                             <textarea rows="1" class="form-control groupDetails" id="invoice_num" placeholder=" הזן מספר חשבונית"></textarea>
+                                        </div>
+                                    </th>
+                                    <th id="price_th">
+                                        <div class="form-group">
+                                            <label for="price">מחיר כולל</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="price" placeholder=" הזן מחיר כולל"></textarea>
                                         </div>
                                     </th>
                                 </tr>
@@ -532,25 +610,25 @@
                         <tr>
                             <th>
                                 <div class="form-group">
-                                    <label for="participant_id">תעודת זהות</label>
+                                    <label for="participant_id"><span class="red-star">★ </span>תעודת זהות</label>
                                     <textarea rows="1" class="form-control groupDetails" id="participant_id" placeholder=" הזן ת.ז "></textarea>
                                 </div>
                             </th>
                             <th>
                                 <div class="form-group">
-                                    <label for="participant_name">שם מלא</label>
+                                    <label for="participant_name"><span class="red-star">★ </span>שם מלא</label>
                                     <textarea rows="1" class="form-control groupDetails" id="participant_name" placeholder=" הזן שם מלא "></textarea>
                                 </div>
                             </th>
                             <th>
                                 <div class="form-group">
-                                    <label for="participant_phone">טלפון</label>
+                                    <label for="participant_phone"><span class="red-star">★ </span>טלפון</label>
                                     <textarea rows="1" class="form-control groupDetails" id="participant_phone" placeholder=" הזן טלפון "></textarea>
                                 </div>
                             </th>
                             <th>
                                 <div class="form-group">
-                                    <label for="participant_mail">מייל</label>
+                                    <label for="participant_mail"><span class="red-star">★ </span>מייל</label>
                                     <textarea rows="1" class="form-control groupDetails" id="participant_mail" placeholder=" הזן מייל "></textarea>
                                 </div>
                             </th>
@@ -577,8 +655,30 @@
                     <button id="btn_update_inst" class="btn btn-primary" onclick="updateInst()"> עדכן הדרכה</button>
                 </div>
                 <br />
-          </div>
-       </div> 
+            </div>
+        </div>
+    </div>
+    <div class="w3-container">
+        <div id="id01" class="w3-modal">
+            <div class="w3-modal-content">
+                <div class="w3-container" dir="rtl">
+                    <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                    <form id="pForm">
+                        <table id="participantsTable1" class="display" style="width:100%" dir="rtl">
+                            <thead>
+                                <tr>
+                                    <th>ת.ז</th>
+                                    <th>שם מלא</th>
+                                    <th>טלפון</th>
+                                    <th>מייל</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

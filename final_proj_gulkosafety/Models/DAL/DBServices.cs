@@ -2195,7 +2195,7 @@ namespace final_proj_gulkosafety.Models.DAL
             {
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
 
-                String selectSTR = "SELECT * FROM report WHERE date>= DATEADD(day,-7, GETDATE())";
+                String selectSTR = "SELECT r.*,p.name FROM report r left join project p on r.project_num=p.project_num WHERE date>= DATEADD(day,-7, GETDATE())";
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
                 // get a reader
@@ -2211,6 +2211,7 @@ namespace final_proj_gulkosafety.Models.DAL
                     _report.Grade = Convert.ToDouble(dr["grade"]);
                     _report.Project_num = Convert.ToInt32(dr["project_num"]);
                     _report.User_mail = (string)dr["user_email"];
+                    _report.Proj_name= (string)dr["name"];
                     reportList.Add(_report);
                 }
 
@@ -2241,7 +2242,7 @@ namespace final_proj_gulkosafety.Models.DAL
             {
                 con = connect("DBConnectionString");
 
-                String selectSTR = "SELECT * FROM alert WHERE user_email='" + user_email + "'and Alert_type_num=" + Alert_type_num + "and date>= DATEADD(day,-2, GETDATE())";
+                String selectSTR = "SELECT a.*,p.name FROM alert a left join project p on a.proj_num=p.project_num WHERE user_email='" + user_email + "'and Alert_type_num=" + Alert_type_num + "and date>= DATEADD(day,-2, GETDATE())";
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
                 // get a reader
@@ -2257,6 +2258,7 @@ namespace final_proj_gulkosafety.Models.DAL
                     _alert.User_email = (string)dr["user_email"];
                     _alert.Status = Convert.ToInt32(dr["status"]);
                     _alert.Proj_num = Convert.ToInt32(dr["proj_num"]);
+                    _alert.Proj_name = (string)dr["name"];
                     alertsList.Add(_alert);
                 }
 

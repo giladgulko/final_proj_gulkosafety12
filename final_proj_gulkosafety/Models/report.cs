@@ -15,6 +15,7 @@ namespace final_proj_gulkosafety.Models
         double grade;
         int project_num;
         string user_mail;
+        string proj_name;
 
 
         public int Report_num { get => report_num; set => report_num = value; }
@@ -24,8 +25,20 @@ namespace final_proj_gulkosafety.Models
         public double Grade { get => grade; set => grade = value; }
         public int Project_num { get => project_num; set => project_num = value; }
         public string User_mail { get => user_mail; set => user_mail = value; }
+        public string Proj_name { get => proj_name; set => proj_name = value; }
 
 
+        public report(int report_num, DateTime date, DateTime time, string comment, double grade, int project_num, string user_mail, string proj_name)
+        {
+            Report_num = report_num;
+            Date = date;
+            Time = time;
+            Comment = comment;
+            Grade = grade;
+            Project_num = project_num;
+            User_mail = user_mail;
+            Proj_name = proj_name;
+        }
         public report(int report_num, DateTime date, DateTime time, string comment, double grade, int project_num, string user_mail)
         {
             Report_num = report_num;

@@ -18,10 +18,17 @@
     margin-left: 10px;
     margin-right: 10px;
 }
-.card-body.section1 {
+.card-body.section2 {
     BACKGROUND-COLOR: white;
     margin: 3%;
     padding: 2%;
+}
+.card-body.section1 {
+    BACKGROUND-COLOR: white;
+    margin: 3%;
+    height: 600px;
+    padding: 2%;
+    padding-bottom: 6%;
 }
 h3 {
     font-size: 20px;
@@ -43,3 +50,18 @@ h3 {
     padding: 2%;
 }
 
+#logo{
+    direction:ltr;
+}
+#calendar {
+    height:100%;
+    width:100%;
+}
+h1.instructions {
+    margin-right: 20px;
+}
+.navbar-right {
+    float: right!important;
+    margin-right: -15px;
+    direction: ltr;
+}
