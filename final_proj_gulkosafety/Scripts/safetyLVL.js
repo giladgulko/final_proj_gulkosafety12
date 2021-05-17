@@ -103,7 +103,7 @@ function safetyLeveL(curentReport, lastREPORTdefects, gradesARR, projTypeWEIGHT,
     updateProjectSafetyLevel(safetyLvLGrade.toFixed(2));
 
     let str = "";
-    let alretHtml = "<h2>סיכום עדכון רמת בטיחות פרויקט " + project.Project_num + "</h2>";
+    let alretHtml = "<h2>סיכום עדכון רמת בטיחות בפרויקט " + project.Name + "</h2>";
     alretHtml += "<h3>ציון דוח ביקור מספר " + report_num + ": "+ report_Grade + "</h3>";
     alretHtml += "<h3>ציון רמת בטיחות פרויקט: " + safetyLvLGrade + "</h3><br />";
     alretHtml += "<h3>פירוט ממצאים דוח ביקור:</h3>";

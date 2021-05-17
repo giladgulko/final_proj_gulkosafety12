@@ -1333,7 +1333,7 @@ namespace final_proj_gulkosafety.Models.DAL
             {
                 con = connect("DBConnectionString");
 
-                String selectSTR = "SELECT * FROM alert WHERE user_email='" + user_email + "'and status=0 order by [date] desc";
+                String selectSTR = "SELECT a.*,p.name FROM alert a left join project p on a.proj_num=p.project_num WHERE a.user_email='" + user_email + "'and a.status=0 order by [date] desc";
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
                 // get a reader
@@ -1349,6 +1349,7 @@ namespace final_proj_gulkosafety.Models.DAL
                     _alert.User_email = (string)dr["user_email"];
                     _alert.Status = Convert.ToInt32(dr["status"]);
                     _alert.Proj_num = Convert.ToInt32(dr["proj_num"]);
+                    _alert.Proj_name = (string)dr["name"];
                     alertsList.Add(_alert);
                 }
 
@@ -1378,7 +1379,7 @@ namespace final_proj_gulkosafety.Models.DAL
             {
                 con = connect("DBConnectionString");
 
-                String selectSTR = "SELECT * FROM alert WHERE proj_num='" + proj_num + "'and status=0 order by [date] desc";
+                String selectSTR = "SELECT a.*,p.name FROM alert a left join project p on a.proj_num=p.project_num WHERE a.proj_num='" + proj_num + "'and a.status=0 order by [date] desc";
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
                 // get a reader
@@ -1394,6 +1395,7 @@ namespace final_proj_gulkosafety.Models.DAL
                     _alert.User_email = (string)dr["user_email"];
                     _alert.Status = Convert.ToInt32(dr["status"]);
                     _alert.Proj_num = Convert.ToInt32(dr["proj_num"]);
+                    _alert.Proj_name = (string)dr["name"];
                     alertsList.Add(_alert);
                 }
 
@@ -2429,7 +2431,7 @@ namespace final_proj_gulkosafety.Models.DAL
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
             sb.AppendFormat("Values('{0}', '{1}')", _contact_in_instruction.Contact_id, _contact_in_instruction.Instruction_num);
-            String prefix = "INSERT INTO contact_in_instruction " + "(contact_id,instruction_num)";
+            String prefix = "INSERT INTO contact " + "(contact_id,instruction_num)";
             command = prefix + sb.ToString();
 
             return command;
@@ -2488,7 +2490,7 @@ namespace final_proj_gulkosafety.Models.DAL
             {
                 con = connect("DBConnectionString");
 
-                String selectSTR = "SELECT c.*, ci.* From contact c inner join contact_in_instruction ci on c.id = ci.contact_id where ci.instruction_num=" + inst_num;
+                String selectSTR = "SELECT c., ci. From contact c inner join contact_in_instruction ci on c.id = ci.contact_id where ci.instruction_num=" + inst_num;
 
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
