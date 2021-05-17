@@ -35,12 +35,14 @@
         $(document).ready(function () {
             getInstructionData();
             getCertificateTypeList();
+            getcontacts();
             $("#btn_update_inst").hide();
             $("#new_participant").hide();
             $('#participantsTable').hide();
             $("#btn_save_inst").hide();
             $("#btn_update_inst").hide();
             $("#price_th").hide();
+            
 
 
         });
@@ -49,7 +51,7 @@
             ajaxCall("GET", "../api/instruction", "", createDt, getError)
         }
         function getError() {
-            swal("Failed!", "Failed to read the instructions!", "warning")
+            swal("נכשל!", "קריאת הדרכות נכשלה!", "warning")
         }
         //get a list of all the instruction type for section list
         function getCertificateTypeList() {
@@ -63,6 +65,17 @@
         function getInstructionTypeListError() {
             swal("נכשל!", "קריאת סוגי הדרכה נכשלה!", "warning")
         }
+        //קריאת כל האנשי קשר
+        function getcontacts() {
+            let api = "../api/contact";
+            ajaxCall("GET", api, "", getContactSuccess, getContactError);
+        }
+        function getContactSuccess(data) {
+            renderInstructionsParticipants(data);
+        }
+        function getContactError() {
+            swal("נכשל!", "קריאת אנשי קשר נכשלה!", "warning")
+        }
         // קריאת משתתפים בהדרכה
         function getParticipantsInInst(inst_num) {
             let api = "../api/contact?instruction_num="+inst_num;
@@ -71,7 +84,8 @@
         function getContactInInstSuccess(data){
             console.log(data);
             contacts = data;
-            createTBparticipants(contacts)
+            createTBparticipants(contacts);
+   
         }
         function createTBparticipants(contacts) {
             document.getElementById('id01').style.display = 'block';
@@ -126,6 +140,12 @@
             InstrTypeSelect = document.getElementById('instructionType');
             for (i = 0; i < instructionTypeList.length; i++) {
                 InstrTypeSelect.innerHTML += "<option value=" + instructionTypeList[i].Instruction_type_num+ ">" + instructionTypeList[i].Type_name + "</option>";
+            }
+        }
+        function renderInstructionsParticipants(data) {
+            ExistParticipants = document.getElementById('searchParticipant');
+            for (i = 0; i < data.length; i++) {
+                ExistParticipants.innerHTML += "<option>" + data[i].Full_name + "," +data[i].Id + "</option>";
             }
         }
         function deleteInstruction(def) {
@@ -642,6 +662,9 @@
                             <td>
                                 <button id="btn_saveExist_participant" class="btn btn-primary" > שמור משתתף</button>
                             </td>
+                        </tr>
+                        <br />
+                        <tr>
                             <td>
                                 <button id="btn_new_participant" class="btn btn-primary" onclick="newParticipant()"> הוספת משתתף חדש</button>
                             </td>

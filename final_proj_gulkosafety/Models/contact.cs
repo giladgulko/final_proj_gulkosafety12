@@ -42,5 +42,12 @@ namespace final_proj_gulkosafety.Models
             List<contact> contactList = dbs.ReadContact(instruction_num);
             return contactList;
         }
+
+        public List<contact> Read()
+        {
+            DBServices dbs = new DBServices();
+            List<contact> contactList = dbs.ReadContact();
+            return contactList;
+        }
     }
 }

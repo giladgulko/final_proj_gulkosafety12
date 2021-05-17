@@ -24,6 +24,19 @@ namespace final_proj_gulkosafety.Controllers
                 throw (ex);
             }
         }
+        public List<contact> Get()
+        {
+            try
+            {
+                contact c = new contact();
+                List<contact> cList = c.Read();
+                return cList;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
 
         //POST api/<controller>
         public HttpResponseMessage Post([FromBody] contact c)

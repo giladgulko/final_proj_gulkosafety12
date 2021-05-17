@@ -2524,6 +2524,49 @@ namespace final_proj_gulkosafety.Models.DAL
 
             }
         }
+        //read all contacts 
+        public List<contact> ReadContact()
+        {
+            SqlConnection con = null;
+            List<contact> contactList = new List<contact>();
+
+            try
+            {
+                con = connect("DBConnectionString");
+
+                String selectSTR = "SELECT * FROM contact";
+
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                while (dr.Read())
+                {
+
+                    contact _contact = new contact();
+                    _contact.Id = Convert.ToInt32(dr["id"]);
+                    _contact.Full_name = (string)dr["full_name"];
+                    _contact.Phone = Convert.ToInt32(dr["phone"]);
+                    _contact.Mail = (string)dr["mail"];
+                    contactList.Add(_contact);
+                }
+
+                return contactList;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
 
     }
 
