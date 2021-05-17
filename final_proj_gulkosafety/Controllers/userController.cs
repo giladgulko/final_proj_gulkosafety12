@@ -38,7 +38,7 @@ namespace final_proj_gulkosafety.Controllers
                 throw (ex);
             }
         }
-        [Route("api/user/{email}/{password}")]
+       
         public user getLogInUser(string email,string password)
         {
             user p = new user();

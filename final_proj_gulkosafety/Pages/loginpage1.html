@@ -19,15 +19,14 @@
             margin-right: 15%;
             background-color: cadetblue;
         }
-        
     </style>
     <script>
         function checkUser() {
-            user = $("#exampleInputEmail1").val();
+            email = $("#exampleInputEmail1").val();
             password = $("#exampleInputPassword1").val();
-            
-            let api = "../api/user/" + user + "/" + password;
-            ajaxCall("GET", api, "", getUserSuccess, getLastReportError);
+            let api1 = "../api/user";
+            //let api = "../api/user/" + user + "/" + password;
+            ajaxCall("GET", api1, "", getUserSuccess, getLastReportError);
                 }
         function getUserSuccess(user) {
             console.log(user)
@@ -54,8 +53,9 @@
                 <input type="checkbox" class="form-check-input" id="exampleCheck1">
                 <label class="form-check-label" for="exampleCheck1">Check me out</label>
             </div>
-            <button type="submit" class="btn btn-primary" onclick="checkUser()">Submit</button>
+
         </form>
+        <button type="submit" class="btn btn-primary" onclick="checkUser()">Submit</button>
     </div>
 </body>
 </html>
