@@ -39,6 +39,7 @@
             $("#buttonUpload").click(uploadDefectPhoto);
             getAlertArchive();
             AlertDivByType = 0;
+            FirstTimeUploadTable = 0;
         });
 
         function check_if_date_pass() {
@@ -65,7 +66,8 @@
                         Alert_type_num: alertList[i].Alert_type_num,
                         User_email: alertList[i].User_email,
                         Status: 1,
-                        Proj_num: alertList[i].Proj_num
+                        Proj_num: alertList[i].Proj_num,
+                        Proj_name: alertList[i].Proj_name
 
                     }
                     let api = "../api/alert";
@@ -76,7 +78,7 @@
         }
 
         function UpdateAlertStatusSuccess2() {
-            swal("Good job!", "Alert status update successfully!", "success")
+            //swal("Good job!", "Alert status update successfully!", "success")
             renderAlerts();
         }
 
@@ -114,7 +116,8 @@
                         Alert_type_num: alertList[i].Alert_type_num,
                         User_email: alertList[i].User_email,
                         Status: 1,
-                        Proj_num: alertList[i].Proj_num
+                        Proj_num: alertList[i].Proj_num,
+                        Proj_name: alertList[i].Proj_name
 
                     }
                 }
@@ -125,6 +128,7 @@
         }
         function UpdateAlertStatusSuccess() {
             swal("Good job!", "Alert status update successfully!", "success")
+            location.reload();
         }
         function UpdateAlertStatusError() {
             swal("Failed!", "Failed to update the alerts!", "warning")
@@ -137,21 +141,21 @@
 
             for (i = 0; i < alertList.length; i++) {
                 if (alertList[i].Alert_type_num == 1) {
-                    document.getElementById('Alerts_div').innerHTML += "<div  class='alert alert-Safety-level alert-dismissible'> <a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='fas fa-tachometer-alt' style='font-size:24px'></i>&nbsp&nbsp<a id='" + alertList[i].Alert_num + "' href='#' onclick='renderSafetyAlert(this.id)'>סיכום עדכון רמת בטיחות פרויקט " + alertList[i].Proj_num + "</a></div> ";
+                    document.getElementById('Alerts_div').innerHTML += "<div  class='alert alert-Safety-level alert-dismissible'> <a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='fas fa-tachometer-alt' style='font-size:24px'></i>&nbsp&nbsp<a id='" + alertList[i].Alert_num + "' href='#' onclick='renderSafetyAlert(this.id)'>סיכום עדכון רמת בטיחות בפרויקט " + alertList[i].Proj_name + "</a></div> ";
                 }
                 if (alertList[i].Alert_type_num == 2) {
-                    document.getElementById('Alerts_div').innerHTML += "<div  class='alert alert-certificate alert-dismissible'> <a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='far fa-calendar-alt' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
+                    document.getElementById('Alerts_div').innerHTML += "<div  class='alert alert-certificate alert-dismissible'> <a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='far fa-calendar-alt' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " בפרויקט: " + alertList[i].Proj_name+ "</div> ";
                 }
                 if (alertList[i].Alert_type_num == 3) {
-                    document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-Defective-repair alert-dismissible'> <a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='far fa-check-circle' style='font-size:24px'></i >&nbsp&nbsp" + alertList[i].Content + "</div> ";
+                    document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-Defective-repair alert-dismissible'> <a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='far fa-check-circle' style='font-size:24px'></i >&nbsp&nbsp" + alertList[i].Content + " בפרויקט: " + alertList[i].Proj_name + "</div> ";
 
                 }
                 if (alertList[i].Alert_type_num == 4) {
-                    document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-instruction alert-dismissible'><a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='fas fa-chalkboard-teacher' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
+                    document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-instruction alert-dismissible'><a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='fas fa-chalkboard-teacher' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " בפרויקט: " + alertList[i].Proj_name + "</div> ";
 
                 }
                 if (alertList[i].Alert_type_num == 5) {
-                    document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-defect alert-dismissible'><a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='fas fa-exclamation-triangle' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
+                    document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-defect alert-dismissible'><a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='fas fa-exclamation-triangle' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " בפרויקט: " + alertList[i].Proj_name + "</div> ";
 
                 }
             }
@@ -174,14 +178,28 @@
         function RenderAlertDivByType() {
 
             if (AlertDivByType == 0) {
-                $("#archiv_alert_btn").text("התראות חדשות");
-                AlertDivByType = 1;
-                renderAlertsArchive();
+                if (FirstTimeUploadTable == 0) {
+                    $("#archiv_alert_btn").text("התראות חדשות");
+                    AlertDivByType = 1;
+                    $("#Alerts_div").hide();
+                    renderAlertsArchive();
+                    FirstTimeUploadTable = 1;
+                }
+                else {
+                    $("#archiv_alert_btn").text("התראות חדשות");
+                    AlertDivByType = 1;
+                    $("#Alerts_div").hide();
+                    $("#pForm").show();
+                    $("#AlertArchiveTable").show();
+                }
+
             }
             else {
                 $("#archiv_alert_btn").text("ארכיון התראות");
                 AlertDivByType = 0;
-                $("AlertArchiveTable").show();
+                $("#Alerts_div").show();
+                $("#pForm").hide();
+                $("#AlertArchiveTable").hide();
                 renderAlerts();
             }
 
