@@ -35,7 +35,6 @@
         $(document).ready(function () {
             getInstructionData();
             getCertificateTypeList();
-            getParticipantsInInst();
             $("#btn_update_inst").hide();
             $("#new_participant").hide();
             $('#participantsTable').hide();
@@ -45,7 +44,7 @@
 
 
         });
-
+        // קריאת כל ההדרכות
         function getInstructionData() {
             ajaxCall("GET", "../api/instruction", "", createDt, getError)
         }
@@ -64,6 +63,7 @@
         function getInstructionTypeListError() {
             swal("נכשל!", "קריאת סוגי הדרכה נכשלה!", "warning")
         }
+        // קריאת משתתפים בהדרכה
         function getParticipantsInInst(inst_num) {
             let api = "../api/contact?instruction_num="+inst_num;
             ajaxCall("GET", api, "", getContactInInstSuccess, getContactInInstError);
@@ -74,7 +74,7 @@
             createTBparticipants(contacts)
         }
         function createTBparticipants(contacts) {
-            document.getElementById('id03').style.display = 'block';
+            document.getElementById('id01').style.display = 'block';
             let participantToShow = [];
             for (var i = 0; i < contacts.length; i++) {
                 participant = {
@@ -156,6 +156,7 @@
         function deleteInstError(err) {
             swal("ההדרכה לא נמחקה!", err, "warning");
         }
+        //בניית טבלה של כל ההדרכות
         function createDt(instructiondata) {
             let instructionToShow = [];
 
@@ -335,12 +336,6 @@
                 title: "מצוין!", text: "הוספת משתתף בהדרכה בוצע בהצלחה!", type: "success", icon: "success"
             }).then(function () {
 
-                //participant = {
-                //    Contact_id: dinsata[i].Contact_id,
-                //    Instruction_num: data[i].Instruction_num,
-                //}
-                //parti = JSON.stringify(participant)
-                //insertNewPart(parti);
             });
 
 
@@ -400,6 +395,7 @@
         function UpdateError() {
             swal("נשכל!", "עדכון הדרכה נכשל!", "warning")
         }
+        //הוספת הדרכה חדשה
         function insertNewInst() {
             document.getElementById('id03').style.display = 'none';
             typeNum = $("#instructionType").val();
@@ -433,21 +429,42 @@
             swal({
                 title: "מצוין!", text: "הדרכה חדשה נוצרה בהצלחה!", type: "success", icon: "success"
             }).then(function () {
+                getInstruAgain();
+
+             });
+
+        }
+        function getInstruAgain() {
+            ajaxCall("GET", "../api/instruction", "", getsuccess, getError)
+        }
+        function getsuccess() {
+            postTocontactInInstr(data);
+        }
+
+        function postTocontactInInstr(data){
+
+            let tail = data.slice(1);
+            parti = {
+                Contact_id: contactList[0].Id,
+                Instruction_num: tail.Instruction_num,
+            }
+
+            let api = "../api/contact_in_instruction";
+            ajaxCall("POST", api, JSON.stringify(parti), InsertSuccess, InsertError);
+        }
+        function InsertSuccess(data) {
+            swal({
+                title: "מצוין!", text: "משתתף בהדרכה נוצר בהצלחה!", type: "success", icon: "success"
+            }).then(function () {
                 location.reload();
 
-                });
-            for (var i = 0; i < contactList.length; i++) {
-                for (var j = 0; j < data.length; j++) {
-                    if(contactList[i].Id==data)
-                    parti = {
-                        Contact_id: contactList[i].Id,
-                        Instruction_num: data[i].Instruction_num,
-                    }
-                }
-            }
-            let api = "../api/contact_in_instruction";
-            ajaxCall("POST", api, JSON.stringify(parti), createNewparticiSuccess, createNewparticiError);
+            });
+
         }
+        function InsertError() {
+            swal("נשכל!", "יצירת משתתף בהדרכה נכשל!", "warning")
+        }
+
         function createNewInstError() {
             swal("נשכל!", " יצירת הדרכה חדשה נכשלה!", "warning")
         }
@@ -605,7 +622,25 @@
                             </thead>
                         </table>
                     </form>
-                    <button id="btn_new_participant" class="btn btn-primary" onclick="newParticipant()"> הוספת משתתף חדש</button>
+                    <table>
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    <label for="searchParticipant"><span class="red-star">★ </span>חיפוש משתתף</label>
+                                    <select onchange="" class="form-control groupDetails" id="searchParticipant" required>
+                                        <option value="0">בחר משתתף קיים:</option>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <button id="btn_saveExist_participant" class="btn btn-primary" > שמור משתתף</button>
+                            </td>
+                            <td>
+                                <button id="btn_new_participant" class="btn btn-primary" onclick="newParticipant()"> הוספת משתתף חדש</button>
+                            </td>
+                        </tr>
+                    </table>
+
                     <table id="new_participant">
                         <tr>
                             <th>

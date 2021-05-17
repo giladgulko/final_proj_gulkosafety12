@@ -34,5 +34,11 @@ namespace final_proj_gulkosafety.Models
             DBServices dbs = new DBServices();
             dbs.InsertContact(this);
         }
+        //public List<contact> Read(int inst_num)
+        //{
+        //    DBServices dbs = new DBServices();
+        //    List<contact> contactList = dbs.ReadContact(inst_num);
+        //    return contactList;
+        //}
     }
 }

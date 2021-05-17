@@ -10,17 +10,20 @@ namespace final_proj_gulkosafety.Controllers
 {
     public class contactController : ApiController
     {
-        // GET api/<controller>
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
 
-        // GET api/<controller>/5
-        public string Get(int id)
-        {
-            return "value";
-        }
+        //public List<contact> Get(int inst_num)
+        //{
+        //    try
+        //    {
+        //        contact c = new contact();
+        //        List<contact> cList = c.Read(inst_num);
+        //        return cList;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw (ex);
+        //    }
+        //}
 
         //POST api/<controller>
         public HttpResponseMessage Post([FromBody] contact c)
