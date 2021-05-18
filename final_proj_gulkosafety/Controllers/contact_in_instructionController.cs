@@ -36,9 +36,23 @@ namespace final_proj_gulkosafety.Controllers
         {
         }
 
+
         // DELETE api/<controller>/5
-        public void Delete(int id)
+        public HttpResponseMessage DeleteContactInInstruction([FromBody] contact_in_instruction c)
         {
+
+            try
+            {
+                {
+                    c.DeleteContactInInstruction(c.Contact_id,c.Instruction_num);
+                }
+
+                return Request.CreateResponse(HttpStatusCode.Created, c);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
+            }
         }
     }
 }

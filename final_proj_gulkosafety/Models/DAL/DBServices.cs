@@ -2490,7 +2490,7 @@ namespace final_proj_gulkosafety.Models.DAL
             {
                 con = connect("DBConnectionString");
 
-                String selectSTR = "SELECT c., ci. From contact c inner join contact_in_instruction ci on c.id = ci.contact_id where ci.instruction_num=" + inst_num;
+                String selectSTR = "SELECT c.*, ci.* From contact c inner join contact_in_instruction ci on c.id = ci.contact_id where ci.instruction_num=" + inst_num;
 
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
@@ -2566,6 +2566,54 @@ namespace final_proj_gulkosafety.Models.DAL
                 }
 
             }
+
+        }
+        //delete contact in instruction
+        public int DeleteContactInInstruction(string contact_id, int instruction_num)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            String cStr = BuildDeleteCommand(contact_id, instruction_num);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+        private String BuildDeleteCommand(string contact_id, int instruction_num)
+        {
+            String command;
+            command = "delete from contact_in_instruction where contact_id=" + contact_id + "and instruction_num="+ instruction_num;
+            return command;
         }
 
     }

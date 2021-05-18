@@ -28,5 +28,11 @@ namespace final_proj_gulkosafety.Models
             dbs.InsertContactInInstruction(this);
         }
 
+        public void DeleteContactInInstruction(string contact_id, int instruction_num)
+        {
+            DBServices dbs = new DBServices();
+            dbs.DeleteContactInInstruction(contact_id, instruction_num);
+
+        }
     }
 }

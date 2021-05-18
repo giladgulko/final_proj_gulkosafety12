@@ -60,10 +60,5 @@ namespace final_proj_gulkosafety.Controllers
         public void Put(int id, [FromBody]string value)
         {
         }
-
-        // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
-        }
     }
 }
