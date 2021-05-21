@@ -15,7 +15,7 @@ namespace final_proj_gulkosafety.Models
         string description;
         int certificate_status;
         int pay_status;
-        string bill_num;
+        string invoice_num;
         int certificate_type_num;
         string user_email;
         string contact_id;
@@ -24,7 +24,7 @@ namespace final_proj_gulkosafety.Models
         int expiration;
         int delete_status;
 
-        public certificate(int certificate_num, string company, DateTime date, string address, string description, int certificate_status, int pay_status, string bill_num, int certificate_type_num, string user_email, string contact_id, string type_name, double price, int expiration, int delete_status)
+        public certificate(int certificate_num, string company, DateTime date, string address, string description, int certificate_status, int pay_status, string invoice_num, int certificate_type_num, string user_email, string contact_id, string type_name, double price, int expiration, int delete_status)
         {
             Certificate_num = certificate_num;
             Company = company;
@@ -33,7 +33,7 @@ namespace final_proj_gulkosafety.Models
             Description = description;
             Certificate_status = certificate_status;
             Pay_status = pay_status;
-            Bill_num = bill_num;
+            Invoice_num = invoice_num;
             Certificate_type_num = certificate_type_num;
             User_email = user_email;
             Contact_id = contact_id;
@@ -51,7 +51,7 @@ namespace final_proj_gulkosafety.Models
         public string Description { get => description; set => description = value; }
         public int Certificate_status { get => certificate_status; set => certificate_status = value; }
         public int Pay_status { get => pay_status; set => pay_status = value; }
-        public string Bill_num { get => bill_num; set => bill_num = value; }
+        public string Invoice_num { get => invoice_num; set => invoice_num = value; }
         public int Certificate_type_num { get => certificate_type_num; set => certificate_type_num = value; }
         public string User_email { get => user_email; set => user_email = value; }
         public string Contact_id { get => contact_id; set => contact_id = value; }

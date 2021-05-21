@@ -1639,7 +1639,7 @@ namespace final_proj_gulkosafety.Models.DAL
                     c.Description = (string)dr["description"];
                     c.Certificate_status = Convert.ToInt32(dr["certificate_status"]);
                     c.Pay_status = Convert.ToInt32(dr["pay_status"]);
-                    c.Bill_num = (string)dr["bill_num"];
+                    c.Invoice_num = (string)dr["invoice_num"];
                     c.Certificate_type_num = Convert.ToInt32(dr["certificate_type_num"]);
                     c.User_email = (string)dr["user_email"];
                     c.Contact_id = (string)dr["contact_id"];
@@ -1879,6 +1879,7 @@ namespace final_proj_gulkosafety.Models.DAL
         //    return command;
 
         //}
+
         //return all instructions 
         public List<instruction> ReadInstruction()
         {
@@ -2431,12 +2432,13 @@ namespace final_proj_gulkosafety.Models.DAL
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
             sb.AppendFormat("Values('{0}', '{1}')", _contact_in_instruction.Contact_id, _contact_in_instruction.Instruction_num);
-            String prefix = "INSERT INTO contact " + "(contact_id,instruction_num)";
+            String prefix = "INSERT INTO contact_in_instruction " + "(contact_id,instruction_num)";
             command = prefix + sb.ToString();
 
             return command;
 
         }
+        //check user by email and password
         public user checkUserLogIn(string email, string password)
         {
             SqlConnection con = null;
@@ -2613,6 +2615,55 @@ namespace final_proj_gulkosafety.Models.DAL
         {
             String command;
             command = "delete from contact_in_instruction where contact_id=" + contact_id + "and instruction_num="+ instruction_num;
+            return command;
+        }
+
+        // update contact details
+        public int UpdateContact(contact c)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            String cStr = BuildupdateCommand(c);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+
+        private String BuildupdateCommand(contact c)
+        {
+            String command;
+            command = "UPDATE contact SET id=" + c.Id + ",full_name = '" + c.Full_name + "',phone =" + c.Phone + ",mail='" + c.Mail + "' WHERE id=" + c.Id;
+
             return command;
         }
 

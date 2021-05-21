@@ -31,9 +31,11 @@
         instToEdit = [];
         contactList = [];
         AllContacts = [];
+        var firstTimeAddContact =1;
         var inst_num = "";
+        var allPariticipants = [];
         var user_mail = "gulkosafety@gmail.com";
-
+        timeOfPost=1
         $(document).ready(function () {
             getInstructionData();
             getCertificateTypeList();
@@ -44,7 +46,9 @@
             $("#btn_save_inst").hide();
             $("#btn_update_inst").hide();
             $("#price_th").hide();
-            
+            $("#btn_saveExist_participant").show();
+            $("#searchParticipant1").show();
+
 
 
         });
@@ -89,6 +93,7 @@
             createTBparticipants(contacts);
    
         }
+        //הטבלה שמוצגת בכפתור הצג משתתפים
         function createTBparticipants(contacts) {
             document.getElementById('id01').style.display = 'block';
             let participantToShow = [];
@@ -116,7 +121,7 @@
                             render: function (data, type, row, meta) {
                                 let def = JSON.stringify(row);
 
-                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editpartiBTN(this.value)'> עריכה </button>";
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editContact(this.value)'> עריכה </button>";
 
                                 deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteContactInInst(this.value)'> מחיקה </button>";
                                 return editBtn + deleteBtn;
@@ -138,6 +143,39 @@
         function getContactInInstError(){
             swal("נכשל!", "קריאת משתתפים בהדרכה נכשלה!", "warning")
         }
+        //עריכת משתתף בהדרכה קיימת-מכפתור הצג משתמשים
+        function editContact(datacontact) {
+            document.getElementById('id02').style.display = 'block';
+            let contact_data = JSON.parse(datacontact);
+            $("#participant_id1").val(contact_data.Id);
+            $("#participant_id1").prop('disabled', true);
+            $("#participant_name1").val(contact_data.Full_name);
+            $("#participant_phone1").val(contact_data.Phone);
+            $("#participant_mail1").val(contact_data.Mail);
+        }
+        //עריכת פרטי משתתף בהדרכה
+        function updateParticipant() {
+            participant_update = {
+               Id: $("#participant_id1").val(),
+               Full_name:$("#participant_name1").val(),
+               Phone: $("#participant_phone1").val(),
+               Mail: $("#participant_mail1").val(),
+            }
+            let api = "../api/contact";
+            ajaxCall("PUT", api, JSON.stringify(participant_update), UpdateContactSuccess, UpdateContactError);
+        }
+        function UpdateContactSuccess(){
+            swal({
+                title: "מצוין!", text: "עדכון משתתף בוצע", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
+        }
+        function UpdateContactError() {
+            swal("עדכון משתתף לא בוצע!", err, "warning");
+        }
+        // מרנדר את כל סוגי ההדרכות לרשימה
         function renderInstructionsType() {
             InstrTypeSelect = document.getElementById('instructionType');
             for (i = 0; i < instructionTypeList.length; i++) {
@@ -147,14 +185,14 @@
         //מרנדר את כל האנשי קשר לרשימה
         function renderInstructionsParticipants(data) {
             AllContacts = data;
-            ExistParticipants = document.getElementById('searchParticipant');
+            ExistParticipants = document.getElementById('searchParticipant1');
             for (i = 0; i < AllContacts.length; i++) {
                 ExistParticipants.innerHTML += "<option value=" + AllContacts[i].Id + ">" + AllContacts[i].Full_name + ", " + AllContacts[i].Id + "</option > ";
             }
         }
-
+        //שמירת משתתף קיים להדרכה חדשה
         function SaveExistContact() {
-            let contactId = $("#searchParticipant").val();
+            let contactId = $("#searchParticipant1").val();
             for (var i = 0; i < AllContacts.length; i++) {
                 if (contactId == AllContacts[i].Id) {
                     participant1 = {
@@ -169,7 +207,7 @@
             }
             
         } 
-
+        //מחיקת הדרכה - לוגית
         function deleteInstruction(def) {
             instructionToEdit = JSON.parse(def);
             swal({
@@ -266,7 +304,9 @@
                                 deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteInstruction(this.value)'> מחיקה </button>";
 
                                 showBtn = "<button type='button' class = 'showBtn btn btn-show' value='" + def + "' onclick='showPariticiTable(this.value)'>  הצג משתתפים </button>";
-                                return editBtn + deleteBtn + showBtn ;
+
+                                pdfBtn = "<button type='button' class = 'pdfBtn btn btn-pdf' value='" + def + "' onclick='showPariticiTable(this.value)'>  הורד תעודה הדרכה </button>";
+                                return editBtn + deleteBtn + showBtn + pdfBtn ;
 
                             }
                         },
@@ -281,14 +321,16 @@
             }
 
         }
+        //עריכת הדרכה
         function editinstrucBTN(datainst) {
             instToEdit = JSON.parse(datainst);
             document.getElementById('id03').style.display = 'block';
-            str = "<option>סוג הדרכה</option>"
             for (var i = 0; i < instructionTypeList.length; i++) {
-                str += "<option value='" + instructionTypeList[i].Instruction_type_num + "'>" + instructionTypeList[i].Type_name + "</option>"
+                if (instructionTypeList[i].Type_name == instToEdit.Type_name)
+                str = "<option value='" + instructionTypeList[i].Instruction_type_num + "'>" + instructionTypeList[i].Type_name + "</option>"
             }
             $("#instructionType").html(str);
+            $("#instructionType").prop('disabled', true)
             $("#price_th").show();
             $("#checkpayStatus").val(instToEdit.Pay_status);
             $("#company").val(instToEdit.Company);
@@ -296,12 +338,19 @@
             $("#address").val(instToEdit.Address);
             $("#time").val(instToEdit.Time.split("T")[1]);
             $("#participants_num").val(instToEdit.Participants_num);
+            $("#participants_num").prop('disabled', true);
             $("#invoice_num").val(instToEdit.Invoice_num);
             $("#price").val(instToEdit.Total_price);
+            $("#price").prop('disabled', true);
             $("#btn_update_inst").show();
             $("#btn_save_inst").hide();
             $("#new_inst").hide();
+            $("#btn_new_participant").hide();
+            $("#btn_saveExist_participant").hide();
+            $("#searchParticipant").hide();
         }
+
+        //ניקוי שדות הוספת הדרכה חדשה
         function clearPopuP() {
             $("#btn_save_inst").show()
             $("#btn_update_inst").hide();
@@ -310,15 +359,21 @@
                 str += "<option value='" + instructionTypeList[i].Instruction_type_num + "'>" + instructionTypeList[i].Type_name + "</option>"
             }
             $("#instructionType").html(str);
+            $("#instructionType").prop('disabled', false);
             $("#checkpayStatus").val("");
             $("#company").val("");
             $("#checkDate").val("");
             $("#address").val("");
             $("#time").val("");
             $("#participants_num").val("");
+            $("#participants_num").prop('disabled', false);
             $("#invoice_num").val("");
-
+            $("#searchParticipant").show()
+            $("#price_th").hide()
+            $("#btn_new_participant").show();
+            $("#btn_saveExist_participant").show();
         }
+        //הוספת משתתף חדש
         function newParticipant() {
             $("#new_participant").show();
             $("#participant_id").val("");
@@ -326,7 +381,7 @@
             $("#participant_phone").val("");
             $("#participant_mail").val("");
         }
-        //שמירת משתתף 
+        // שמירת משתתף בהדרכה חדשה ורנדור לטבלה 
         function SaveNewParticipant(participant1) {
 
             $("#new_participant").hide();
@@ -348,35 +403,36 @@
             }
             else {
                 participantToShow.push(participant1);
+                contactList.push(participant1);
             }
 
             try {
-                tbl = $('#participantsTable').DataTable({
-                    data: participantToShow,
-                    pageLength: 10,
-                    columns: [
+                if (firstTimeAddContact == 1) {
+                    tbl = $('#participantsTable').DataTable({
+                        data: participantToShow,
+                        pageLength: 10,
+                        columns: [
 
-                        { data: "Id" },
-                        { data: "Full_name" },
-                        { data: "Phone" },
-                        { data: "Mail" },
+                            { data: "Id" },
+                            { data: "Full_name" },
+                            { data: "Phone" },
+                            { data: "Mail" },
 
-                        {
-                            render: function (data, type, row, meta) {
-                                let def = JSON.stringify(row);
+                        ],
+                    });
+                    firstTimeAddContact = 0;
+                }
+                else {
+                    var table = $('#participantsTable').DataTable();
+                    console.table(participantToShow)
+                    table.row.add({
+                        "Id": participantToShow[participantToShow.length - 1].Id,
+                        "Full_name": participantToShow[participantToShow.length - 1].Full_name,
+                        "Phone": participantToShow[participantToShow.length - 1].Phone,
+                        "Mail": participantToShow[participantToShow.length - 1].Mail,
 
-                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editpartiBTN(this.value)'> עריכה </button>";
-
-                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteContactInInst(this.value)'> מחיקה </button>";
-                                return editBtn + deleteBtn;
-
-
-                            }
-                        },
-
-                    ],
-                });
-
+                    }).draw();
+                }
             }
 
             catch (err) {
@@ -384,6 +440,7 @@
             }
 
         }
+        //מחיקת משתתף בהדרכה
         function deleteContactInInst(def) {
             delete_contact = JSON.parse(def);
             contactToDelete = {
@@ -395,6 +452,19 @@
         }
         function deleteContactSuccess() {
             swal({
+                title: "האם אתה בטוח שברצונך למחוק את המשתתף?",
+                text: "",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true
+            })
+                .then(function (willDelete) {
+                    if (willDelete) delete_contact(instructionToEdit);
+                    else swal("המשתתף לא נמחק!");
+                });
+        }
+        function delete_contact() {
+            swal({
                 title: "מצוין!", text: "משתתף בהדרכה נמחק בהצלחה", type: "success", icon: "success"
             }).then(function () {
                 location.reload();
@@ -402,9 +472,9 @@
             });
         }
         function deleteContactError() {
-            swal("משתתף בהדרכה לא נמחק!", err, "warning");
+            swal("המשתתף לא נמחק!", err, "warning");
         }
-
+        //כפתור הצג משתתפים
         function showPariticiTable(def) {
             console.log(def);
             inst_num = JSON.parse(def);
@@ -422,8 +492,9 @@
         function createNewpartiError() {
             swal("נשכל!", "הוספת משתתף בהדרכה נכשל!", "warning")
         }
+        // הכנסת משתתף בהדרכה לדאטה בייס
         function insertNewPart(parti) {
-            alert("parti")
+
             let api = "../api/contact_in_instruction";
             ajaxCall("POST", api, JSON.stringify(parti), createNewparticiSuccess, createNewparticiError);
         }
@@ -439,7 +510,7 @@
         function createNewparticiError() {
             swal("נשכל!", "הוספת משתתף בהדרכה נכשל!", "warning")
         }
-
+        //עדכון הדרכה
         function updateInst() {
             document.getElementById('id03').style.display = 'none';
             $("#btn_update_inst").show();
@@ -514,32 +585,47 @@
              });
 
         }
+        //משיכת כל ההדרכות
         function getInstruAgain(Instdata) {
             ajaxCall("GET", "../api/instruction", "", getsuccess, getError)
         }
         function getsuccess(data) {
             postTocontactInInstr(data);
         }
-
-        function postTocontactInInstr(data){
-
+        //הכנסת משתתף בהדרכה חדש לדאטה בייס
+        function postTocontactInInstr(data) {
+            
             let tail = data[data.length - 1];
             for (var i = 0; i < contactList.length; i++) {
                 parti = {
                     Contact_id: contactList[i].Id,
                     Instruction_num: tail.Instruction_num,
                 }
-            } 
-           
+                allPariticipants.push(parti);
+            }
             let api = "../api/contact_in_instruction";
-            ajaxCall("POST", api, JSON.stringify(parti), InsertSuccess, InsertError);
+            ajaxCall("POST", api, JSON.stringify(allPariticipants[0]), InsertSuccess, InsertError);
+        }
+        function postCONTACTinInstruction(con) {
+            let api = "../api/contact_in_instruction";
+            ajaxCall("POST", api, JSON.stringify(con), InsertSuccess, InsertError);
         }
         function InsertSuccess(data) {
-            swal({
-                title: "מצוין!", text: "משתתף בהדרכה נוצר בהצלחה!", type: "success", icon: "success"
-            }).then(function () {
-                contactList = [];//ניקוי המערך
-            });
+            if (timeOfPost != allPariticipants.length) {
+                postCONTACTinInstruction(allPariticipants[timeOfPost]);
+                timeOfPost++;
+
+            }
+            else {
+                swal({
+                    title: "מצוין!", text: "משתתף בהדרכה נוצר בהצלחה!", type: "success", icon: "success"
+                }).then(function () {
+                    contactList = "";//ניקוי המערך
+                    timeOfPost = 1;
+                    location.reload();
+                });
+            }
+           
 
         }
         function InsertError() {
@@ -548,6 +634,9 @@
 
         function createNewInstError() {
             swal("נשכל!", " יצירת הדרכה חדשה נכשלה!", "warning")
+        }
+        function closeWindow() {
+            location.reload();
         }
     </script>
 </head>
@@ -705,16 +794,16 @@
                     </form>
                     <table>
                         <tr>
-                            <td>
+                            <td id="searchParticipant">
                                 <div class="form-group">
-                                    <label for="searchParticipant"><span class="red-star">★ </span>חיפוש משתתף</label>
-                                    <select onchange="" class="form-control groupDetails" id="searchParticipant" required>
+                                    <label for="searchParticipant1"><span class="red-star">★ </span>חיפוש משתתף</label>
+                                    <select onchange="" class="form-control groupDetails" id="searchParticipant1" required>
                                         <option value="0">בחר משתתף קיים:</option>
                                     </select>
                                 </div>
                             </td>
                             <td>
-                                <button id="btn_saveExist_participant" onclick="SaveExistContact()" class="btn btn-primary" > שמור משתתף</button>
+                                <button id="btn_saveExist_participant" onclick="SaveExistContact()" class="btn btn-primary"> שמור משתתף</button>
                             </td>
                         </tr>
                         <br />
@@ -781,7 +870,7 @@
         <div id="id01" class="w3-modal">
             <div class="w3-modal-content">
                 <div class="w3-container" dir="rtl">
-                    <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                    <span onclick="document.getElementById('id01').style.display='none',closeWindow()" class="w3-button w3-display-topright">&times;</span>
                     <form id="pForm">
                         <h2 id="new_inst">משתתפים בהדרכה</h2>
                         <table id="participantsTable1" class="display" style="width:100%" dir="rtl">
@@ -796,6 +885,49 @@
                             </thead>
                         </table>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="w3-container">
+        <div id="id02" class="w3-modal">
+            <div class="w3-modal-content">
+                <div class="w3-container" dir="rtl">
+                    <span onclick="document.getElementById('id02').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                    <form id="pForm">
+                        <h2 id="update_participant">עריכת משתתף</h2>
+                        <br />
+                        <table id="updatePaticipantTb">
+                            <tr>
+                                <th>
+                                    <div class="form-group">
+                                        <label for="participant_id"><span class="red-star">★ </span>תעודת זהות</label>
+                                        <textarea rows="1" class="form-control groupDetails" id="participant_id1" placeholder=" הזן ת.ז "></textarea>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="form-group">
+                                        <label for="participant_name"><span class="red-star">★ </span>שם מלא</label>
+                                        <textarea rows="1" class="form-control groupDetails" id="participant_name1" placeholder=" הזן שם מלא "></textarea>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="form-group">
+                                        <label for="participant_phone"><span class="red-star">★ </span>טלפון</label>
+                                        <textarea rows="1" class="form-control groupDetails" id="participant_phone1" placeholder=" הזן טלפון "></textarea>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="form-group">
+                                        <label for="participant_mail"><span class="red-star">★ </span>מייל</label>
+                                        <textarea rows="1" class="form-control groupDetails" id="participant_mail1" placeholder=" הזן מייל "></textarea>
+                                    </div>
+                                </th>
+                            </tr>
+                        </table>
+                    </form>
+                    <br />
+                    <button id="btnUpdate_participant" class="btn btn-primary" onclick="updateParticipant()"> עדכן משתתף </button>
                 </div>
             </div>
         </div>

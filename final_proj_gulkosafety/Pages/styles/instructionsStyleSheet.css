@@ -45,7 +45,7 @@
     background-color: cadetblue;
     border-color: cadetblue;
 }
-#btn_save_inst, #btn_update_inst {
+#btn_save_inst, #btn_update_inst, #btnUpdate_participant {
     float: left;
     color: #fff;
     background-color: cadetblue;
@@ -76,11 +76,22 @@ body {
 .btn-show {
     background-color: white;
     color: black;
-    border: 3px solid #b6ff00;
+    border: 3px solid #eeb414 ;
     margin: 3px;
 }
     .btn-show:hover {
-        background-color: #b6ff00;
+        background-color: #eeb414;
+        color: white;
+    }
+.btn-pdf {
+    background-color: white;
+    color: black;
+    border: 3px solid #00216f;
+    margin: 3px;
+}
+
+    .btn-pdf:hover {
+        background-color: #00216f;
         color: white;
     }
 
