@@ -1,2 +1,70 @@
-﻿body {
+﻿/*.sidenav {
+    height: 100%;
+    width: 200px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    overflow-x: hidden;
+    padding-top: 20px;
+    margin-top: 5.25%;
+    background-color: lightgrey;
+    border: 5px solid cadetblue;
+    padding: 5px;
+    margin-left: 90%;
+}
+
+    .sidenav a {
+        padding: 6px 6px 6px 32px;
+        text-decoration: none;
+        font-size: 25px;
+        color: #818181;
+        display: block;
+    }
+
+        .sidenav a:hover {
+            color: #f1f1f1;
+        }
+
+
+@media screen and (max-height: 450px) {
+    .sidenav {
+        padding-top: 15px;
+    }
+
+        .sidenav a {
+            font-size: 18px;
+        }
+}*/
+.btn-group button {
+    background-color: cadetblue; /* Green background */
+    border: 1px solid black; /* Green border */
+    color: white; /* White text */
+    padding: 10px 24px; /* Some padding */
+    cursor: pointer; /* Pointer/hand icon */
+    width: 50%; /* Set a width if needed */
+    display: block; /* Make the buttons appear below each other */
+}
+
+    .btn-group button:not(:last-child) {
+        border-bottom: none; /* Prevent double borders */
+    }
+
+    /* Add a background color on hover */
+    .btn-group button:hover {
+        background-color: #3e8e41;
+    }
+.btn-group, .btn-group-vertical {
+    position: relative;
+    vertical-align: middle;
+    width: 20%;
+    margin-left: 90%;
+    /*margin-top:2%*/
+}
+#headline {
+    font-family: 'Suez One', serif;
+    color: cadetblue;
+    margin-right:3%;
+    margin-top:2%
+   
 }
