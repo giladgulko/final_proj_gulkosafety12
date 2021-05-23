@@ -25,22 +25,22 @@ namespace final_proj_gulkosafety.Controllers
             }
         }
 
-        //public HttpResponseMessage Post([FromBody] certificate c)
-        //{
-        //    try
-        //    {
-        //        {
-        //            c.Insert();
+        public HttpResponseMessage Post([FromBody] certificate c)
+        {
+            try
+            {
+                {
+                    c.Insert();
 
-        //        }
+                }
 
-        //        return Request.CreateResponse(HttpStatusCode.Created, c);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
-        //    }
-        //}
+                return Request.CreateResponse(HttpStatusCode.Created, c);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
+            }
+        }
 
         // DELETE api/<controller>/5
         public HttpResponseMessage DeleteCertificate([FromBody] certificate c)

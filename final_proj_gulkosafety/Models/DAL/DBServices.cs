@@ -1828,57 +1828,57 @@ namespace final_proj_gulkosafety.Models.DAL
 
         }
         //insert a new certificate
-        //public int InsertCertificate(certificate _certificate)
-        //{
+        public int InsertCertificate(certificate _certificate)
+        {
 
-        //    SqlConnection con;
-        //    SqlCommand cmd;
+            SqlConnection con;
+            SqlCommand cmd;
 
-        //    try
-        //    {
-        //        con = connect("DBConnectionString"); // create the connection
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw (ex);
-        //    }
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
 
-        //    String cStr = BuildInsertCommand(_certificate);      // helper method to build the insert string
+            String cStr = BuildInsertCommand(_certificate);      // helper method to build the insert string
 
-        //    cmd = CreateCommand(cStr, con);             // create the command
+            cmd = CreateCommand(cStr, con);             // create the command
 
-        //    try
-        //    {
-        //        int numEffected = cmd.ExecuteNonQuery(); // execute the command
-        //        return numEffected;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw (ex);
-        //    }
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
 
-        //    finally
-        //    {
-        //        if (con != null)
-        //        {
-        //            // close the db connection
-        //            con.Close();
-        //        }
-        //    }
-        //}
-        //private String BuildInsertCommand(certificate _certificate)
-        //{
-        //    String command;
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
+        private String BuildInsertCommand(certificate _certificate)
+        {
+            String command;
 
-        //    StringBuilder sb = new StringBuilder();
-        //    // use a string builder to create the dynamic string
-        //    sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}','{4}','{5}')", _certificate.Certificate_status, _certificate.Pay_status, _certificate.Company, _certificate.Address,_certificate.Date.ToString("yyyy-MM-dd"),_certificate.Description);
-        //    String prefix = "INSERT INTO certificate " + "(certificate_status,pay_status,company,address,date,description)";
-        //    command = prefix + sb.ToString();
+            StringBuilder sb = new StringBuilder();
+            // use a string builder to create the dynamic string
+            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}')", _certificate.Certificate_status, _certificate.Pay_status, _certificate.Company, _certificate.Address, _certificate.Date.ToString("yyyy-MM-dd"), _certificate.Description , _certificate.User_email, _certificate.Invoice_num, _certificate.Certificate_type_num, _certificate.Contact_id,_certificate.Delete_status);
+            String prefix = "INSERT INTO certificate " + "(certificate_status,pay_status,company,address,date,description,user_email,invoice_num,certificate_type_num, contact_id,delete_status)";
+            command = prefix + sb.ToString();
 
-        //    return command;
+            return command;
 
-        //}
+        }
 
         //return all instructions 
         public List<instruction> ReadInstruction()
@@ -2034,7 +2034,7 @@ namespace final_proj_gulkosafety.Models.DAL
         private String BuildupdateCommand(certificate c)
         {
             String command;
-            command = "UPDATE certificate SET certificate_status=" + c.Certificate_status + ", pay_status=" + c.Pay_status + ", address='" + c.Address + "', date='" + c.Date.ToString("yyyy-MM-dd") +  "', company='" + c.Company + "', description='" + c.Description + "' WHERE certificate_num =" + c.Certificate_num;
+            command = "UPDATE certificate SET certificate_status=" + c.Certificate_status + ", invoice_num='" +c.Invoice_num+ "', pay_status=" + c.Pay_status + ", address='" + c.Address + "', date='" + c.Date.ToString("yyyy-MM-dd") +  "', company='" + c.Company + "', description='" + c.Description + "' WHERE certificate_num =" + c.Certificate_num;
 
             return command;
         }

@@ -29,6 +29,8 @@
         certToEdit = [];
         AllContacts = [];
         contactList = [];
+        var cert_num = "";
+        var user_mail = "gulkosafety@gmail.com";
 
         $(document).ready(function () {
             getCertificateTypeList();
@@ -51,13 +53,14 @@
         function getCertificateTypeListError() {
             swal("Failed!", "Failed to read the Certificate Type!", "warning")
         }
+        //רינדור של כל סוגי אישורים לתוך רשימה
         function renderCertificateType() {
             certTypeSelect = document.getElementById('certificateType');
             for (i = 0; i < certificateTypeList.length; i++) {
                 certTypeSelect.innerHTML += "<option value=" + certificateTypeList[i].Type_name + ">" + certificateTypeList[i].Type_name + "</option>";
             }
         }
-
+        // קריאת כל אנשי הקשר
         function getcontacts() {
             let api = "../api/contact";
             ajaxCall("GET", api, "", getContactSuccess, getContactError);
@@ -66,6 +69,8 @@
         function getContactSuccess(data) {
             renderContacts(data);
         }
+
+        // רינדור של כל אנשי הקשר לרשימה
         function renderContacts(data) {
             AllContacts = data;
             ExistContact = document.getElementById('searchContact1');
@@ -76,6 +81,7 @@
         function getContactError() {
             swal("נכשל!", "קריאת אנשי קשר נכשלה!", "warning")
         }
+
         function getCertData() {
 
             ajaxCall("GET", "../api/certificate", "", createDt, getError)
@@ -102,11 +108,12 @@
             }
 
         } 
+
         // שמירת איש קשר באישור חדש ורנדור לטבלה 
         function SaveNewcontact(contact1) {
 
             $("#newContact").hide();
-            $('#contactsTable').show();
+            $("#contantsTable").show();
             let contactToShow = [];
             if (contact1 == null) {
                 contact = {
@@ -128,7 +135,7 @@
             }
 
             try {
-                if (firstTimeAddContact == 1) {
+
                     tbl = $('#contantsTable').DataTable({
                         data: contactToShow,
                         pageLength: 10,
@@ -141,19 +148,6 @@
 
                         ],
                     });
-                    firstTimeAddContact = 0;
-                }
-                else {
-                    var table = $('#contantsTable').DataTable();
-                    console.table(contactToShow)
-                    table.row.add({
-                        "Id": contactToShow[contactToShow.length - 1].Id,
-                        "Full_name": contactToShow[contactToShow.length - 1].Full_name,
-                        "Phone": contactToShow[contactToShow.length - 1].Phone,
-                        "Mail": contactToShow[contactToShow.length - 1].Mail,
-
-                    }).draw();
-                }
             }
 
             catch (err) {
@@ -168,21 +162,22 @@
 
             });
 
-
         }
         function createNewcontactError() {
             swal("נשכל!", "הוספת איש קשר נכשל!", "warning")
         }
 
-        function newCertForm() {
-            $("#dateError").hide();
-            var checkDate = document.getElementById('checkDate').value;
-            if (checkDate < NOW()) {
-                $('#checkDate').after('<p id="dateError">תאריך הבדיקה קטן מהתאריך של היום</p>');
-            }
-            else createNewCert();
-            return false;
-        }
+        //function newCertForm() {
+        //    $("#dateError").hide();
+        //    var checkDate = document.getElementById('checkDate').value;
+        //    if (checkDate < NOW()) {
+        //        $('#checkDate').after('<p id="dateError">תאריך הבדיקה קטן מהתאריך של היום</p>');
+        //    }
+        //    else createNewCert();
+        //    return false;
+        //}
+
+        // יצירת טבלת אישורים
         function createDt(certificatedata) {
             let certificatesToShow = [];
             for (var i = 0; i < certificatedata.length; i++) {
@@ -269,6 +264,12 @@
                 alert(err);
             }
         }
+        // כפתור הצג איש קשר
+        function showContact(def) {
+            cert_num = JSON.parse(def);
+        }
+
+        //מחיקת אישור
         function deleteCertificate(def) {
             certificateToEdit = JSON.parse(def);
             swal({
@@ -303,6 +304,8 @@
         function deleteCertError(err) {
                 swal("האישור לא נמחק!", err, "warning");
         }
+
+        //עריכת אישור
         function editcertBTN(datacert) {
             certToEdit = JSON.parse(datacert);
             document.getElementById('id03').style.display = 'block';
@@ -310,7 +313,7 @@
                 if (certificateTypeList[i].Type_name == certToEdit.Type_name)
                     str = "<option value='" + certificateTypeList[i].Certificate_type_num + "'>" + certificateTypeList[i].Type_name + "</option>"
             }
-            $("#certificateType").val(certToEdit.Type_name);
+            $("#certificateType").html(str);
             $("#certificateType").prop('disabled', true)
             $("#payStatus").val(certToEdit.Pay_status);
             $("#checkStatus").val(certToEdit.Certificate_status);
@@ -319,7 +322,8 @@
             $("#address").val(certToEdit.Address);
             $("#description").val(certToEdit.Description);
             $("#price").val(certToEdit.Price);
-            $("#price").prop('disabled', true)
+            $("#price").prop('disabled', true);
+            $("#invoice_num").val(certToEdit.Invoice_num);
             $("#btn_update_cert").show();
             $("#saveBTN").hide();
             $("#new_cert").hide();
@@ -327,20 +331,22 @@
             $("#btn_new_contact").hide();
             $("#btn_saveExist_contact").hide();
             $("#searchContact").hide();
+            $("#btn_update_cert").show();
+            $("#priceTD").show();
         }
-
+        //עדכון אישור
         function updateCert() {
             let newCert = {
 
                 Certificate_num: certToEdit.Certificate_num,
+                Certificate_type_num: $("#certificateType").val(),
                 Certificate_status: $('#checkStatus').val(),
                 Pay_status: $('#payStatus').val(),
                 Company: $('#company').val(),
                 Address: $('#address').val(),
-                Date: $('#checkDate').val().split("T")[0],
+                Date: $('#checkDate').val(),
                 Description: $('#description').val(),
-                //Price: $('#price').val(),
-
+                Invoice_num: $("#invoice_num").val(),
             }
             let api = "../api/certificate";
                 ajaxCall("PUT", api, JSON.stringify(newCert), createNewCertSuccess, createNewCertError);
@@ -361,7 +367,7 @@
         function New_contact() {
             $("#newContact").show();
         }
-
+        //ניקוי פופ אפ של אישור חדש
         function clearPopuP() {
             $("#priceTD").hide()
             str = "<option>סוג אישור</option>"
@@ -380,9 +386,58 @@
             $("#btn_saveExist_contact").show();
             $("#searchContact").show();
             $("#new_cert").show();
+            $("#saveBTN").show();
+            $("#btn_update_cert").hide();
+        }
+        function new_cert() {
+            document.getElementById('id03').style.display = 'none';
+            typeNum = $("#certificateType").val();
 
+            let priceForCert = "";
+            for (var i = 0; i < certificateTypeList.length; i++) {
+                if (certificateTypeList[i].Certificate_type_num == typeNum) {
+                    priceForCert += certificateTypeList[i].Price;
+                }
+
+            }
+            let newCert= {
+
+                Certificate_type_num: $("#certificateType").val(),
+                Pay_status: $("#payStatus").val(),
+                Certificate_status: $("#checkStatus").val(),
+                Company: $("#company").val(),
+                Date: $("#checkDate").val(),
+                Address: $("#address").val(),
+                Description: $("#description").val(),
+                //Price: priceForCert,
+                Delete_status: 0,
+                Invoice_num: $("#invoice_num").val(),
+                User_email: user_mail,
+                Contact_id: contactList.Id,
+            }
+
+            let api = "../api/certificate";
+            ajaxCall("POST", api, JSON.stringify(newCert), createNewCertSuccess, createNewCertError);
         }
 
+        function createNewCertSuccess(Certdata) {
+            swal({
+                title: "מצוין!", text: "אישור חדש נוצר בהצלחה!", type: "success", icon: "success"
+            }).then(function () {
+
+                Location.reload();
+                //getCertAgain();
+
+            });
+
+        }
+        // משיכת כל האישורים שוב
+        //function getCertAgain(Certdata) {
+        //    ajaxCall("GET", "../api/certificate", "", getsuccess, getError)
+        //}
+        function createNewCertError() {
+            swal("נכשל!", "הכנסת אישור חדש נכשל!", "warning")
+        }
     </script>
 </head>
 <body>
@@ -567,7 +622,7 @@
                             <th>
                                 <div class="form-group">
                                     <label for="contact_id"><span class="red-star">★ </span>תעודת זהות</label>
-                                    <textarea rows="1" class="form-control groupDetails" id="participant_id" placeholder=" הזן ת.ז "></textarea>
+                                    <textarea rows="1" class="form-control groupDetails" id="contact_id" placeholder=" הזן ת.ז "></textarea>
                                 </div>
                             </th>
                             <th>
