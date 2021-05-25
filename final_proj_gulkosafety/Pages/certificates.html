@@ -29,6 +29,7 @@
         certToEdit = [];
         AllContacts = [];
         contactList = [];
+        certificatedata = [];
         var cert_num = "";
         var user_mail = "gulkosafety@gmail.com";
 
@@ -158,27 +159,16 @@
         function createNewcontactSuccess(data) {
             swal({
                 title: "מצוין!", text: "הוספת איש קשר בוצע בהצלחה!", type: "success", icon: "success"
-            }).then(function () {
-
-            });
+            })
 
         }
         function createNewcontactError() {
             swal("נשכל!", "הוספת איש קשר נכשל!", "warning")
         }
 
-        //function newCertForm() {
-        //    $("#dateError").hide();
-        //    var checkDate = document.getElementById('checkDate').value;
-        //    if (checkDate < NOW()) {
-        //        $('#checkDate').after('<p id="dateError">תאריך הבדיקה קטן מהתאריך של היום</p>');
-        //    }
-        //    else createNewCert();
-        //    return false;
-        //}
-
         // יצירת טבלת אישורים
-        function createDt(certificatedata) {
+        function createDt(data) {
+            certificatedata = data;
             let certificatesToShow = [];
             for (var i = 0; i < certificatedata.length; i++) {
                 certificatedata[i].Date = certificatedata[i].Date.split("T")[0];
@@ -266,7 +256,128 @@
         }
         // כפתור הצג איש קשר
         function showContact(def) {
-            cert_num = JSON.parse(def);
+            contactInCert = JSON.parse(def);
+            createTBcontact(contactInCert);
+        }
+        //הצגת איש קשר מכפתור של הצג איש קשר
+        function createTBcontact(contactInCert) {
+            document.getElementById('id01').style.display = 'block';
+            let cert_num = contactInCert.Certificate_num;
+            let contactToShow = [];
+            for (var i = 0; i < certificatedata.length; i++) {
+                if (cert_num == certificatedata[i].Certificate_num) {
+                    for (var j = 0; j < AllContacts.length; j++) {
+                        if (certificatedata[i].Contact_id == AllContacts[j].Id) {
+                            contact = {
+                                Id: AllContacts[j].Id,
+                                Full_name: AllContacts[j].Full_name,
+                                Phone: AllContacts[j].Phone,
+                                Mail: AllContacts[j].Mail
+                            }
+                            contactToShow.push(contact);
+                        }
+                    }
+                }
+            }
+            try {
+                tbl1 = $('#ContactTable1').DataTable({
+                    data: contactToShow,
+                    pageLength: 10,
+                    columns: [
+
+                        { data: "Id" },
+                        { data: "Full_name" },
+                        { data: "Phone" },
+                        { data: "Mail" },
+
+                        {
+                            render: function (data, type, row, meta) {
+                                let def = JSON.stringify(row);
+
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editContact(this.value)'> עריכה </button>";
+
+                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteContact(this.value)'> מחיקה </button>";
+                                return editBtn + deleteBtn;
+
+
+                            }
+                        },
+
+                    ],
+                })
+
+            }
+
+            catch (err) {
+                alert(err);
+            }
+
+        }
+        //עריכת איש קשר
+        function editContact(datacontact) {
+            document.getElementById('id02').style.display = 'block';
+            let contact_data = JSON.parse(datacontact);
+            $("#contact_id1").val(contact_data.Id);
+            $("#contact_id1").prop('disabled', true);
+            $("#contact_name1").val(contact_data.Full_name);
+            $("#contact_phone1").val(contact_data.Phone);
+            $("#contact_mail1").val(contact_data.Mail);
+        }
+        // עדכון איש קשר
+        function updateContact() {
+            contact_update = {
+                Id: $("#contact_id1").val(),
+                Full_name: $("#contact_name1").val(),
+                Phone: $("#contact_phone1").val(),
+                Mail: $("#contact_mail1").val(),
+            }
+            let api = "../api/contact";
+            ajaxCall("PUT", api, JSON.stringify(contact_update), UpdateContactSuccess, UpdateContactError);
+        }
+        function UpdateContactSuccess() {
+            swal({
+                title: "מצוין!", text: "עדכון משתתף בוצע", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
+        }
+        function UpdateContactError() {
+            swal("עדכון משתתף לא בוצע!", err, "warning");
+        }
+        // מחיקת איש קשר
+        function deleteContact(def) {
+            delete_contact = JSON.parse(def);
+            contactToDelete = {
+                Contact_id: delete_contact.Id,
+                Instruction_num: inst_num.Instruction_num,
+            }
+            ajaxCall("DELETE", "../api/contact_in_instruction", JSON.stringify(contactToDelete), deleteContactSuccess, deleteContactError);
+
+        }
+        function deleteContactSuccess() {
+            swal({
+                title: "האם אתה בטוח שברצונך למחוק את המשתתף?",
+                text: "",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true
+            })
+                .then(function (willDelete) {
+                    if (willDelete) delete_contact(instructionToEdit);
+                    else swal("המשתתף לא נמחק!");
+                });
+        }
+        function delete_contact() {
+            swal({
+                title: "מצוין!", text: "משתתף בהדרכה נמחק בהצלחה", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
+        }
+        function deleteContactError() {
+            swal("המשתתף לא נמחק!", err, "warning");
         }
 
         //מחיקת אישור
@@ -376,7 +487,7 @@
             }
             $("#certificateType").html(str);
             $("#certificateType").prop('disabled', false);
-            $("#checkStatus").val("");
+            $("#checkStatus").value(0);
             $("#company").val("");
             $("#payStatus").val("");
             $("#address").val("");
@@ -389,17 +500,10 @@
             $("#saveBTN").show();
             $("#btn_update_cert").hide();
         }
+        //הכנסת אישור חדש לדאטה בייס
         function new_cert() {
             document.getElementById('id03').style.display = 'none';
-            typeNum = $("#certificateType").val();
 
-            let priceForCert = "";
-            for (var i = 0; i < certificateTypeList.length; i++) {
-                if (certificateTypeList[i].Certificate_type_num == typeNum) {
-                    priceForCert += certificateTypeList[i].Price;
-                }
-
-            }
             let newCert= {
 
                 Certificate_type_num: $("#certificateType").val(),
@@ -409,11 +513,10 @@
                 Date: $("#checkDate").val(),
                 Address: $("#address").val(),
                 Description: $("#description").val(),
-                //Price: priceForCert,
                 Delete_status: 0,
                 Invoice_num: $("#invoice_num").val(),
                 User_email: user_mail,
-                Contact_id: contactList.Id,
+                Contact_id: contactList[0].Id,
             }
 
             let api = "../api/certificate";
@@ -424,20 +527,27 @@
             swal({
                 title: "מצוין!", text: "אישור חדש נוצר בהצלחה!", type: "success", icon: "success"
             }).then(function () {
-
-                Location.reload();
-                //getCertAgain();
-
+                contactList = "";
+                location.reload();
             });
 
         }
-        // משיכת כל האישורים שוב
-        //function getCertAgain(Certdata) {
-        //    ajaxCall("GET", "../api/certificate", "", getsuccess, getError)
-        //}
         function createNewCertError() {
             swal("נכשל!", "הכנסת אישור חדש נכשל!", "warning")
         }
+
+        function closeWindow() {
+            location.reload();
+            //redrawTable(tbl1,data);
+        }
+
+        //function redrawTable(tbl1, data) {
+        //    tbl.clear();
+        //    for (var i = 0; i < data.length; i++) {
+        //        tbl.row.add(data[i]);
+        //    }
+        //    tbl.draw();
+        //}
     </script>
 </head>
 <body>
@@ -594,7 +704,7 @@
                                 </tr>
                             </thead>
                         </table>
-                    </form>  
+                    </form>
                     <table>
                         <tr>
                             <td id="searchContact">
@@ -671,6 +781,72 @@
             </div>
         </div>
     </div>
-
+    <div class="w3-container">
+        <div id="id01" class="w3-modal">
+            <div class="w3-modal-content">
+                <div class="w3-container" dir="rtl">
+                    <span onclick="document.getElementById('id01').style.display='none',closeWindow()" class="w3-button w3-display-topright">&times;</span>
+                    <form id="pForm">
+                        <h2 id="new_cert">איש קשר</h2>
+                        <table id="ContactTable1" class="display" style="width:100%" dir="rtl">
+                            <thead>
+                                <tr>
+                                    <th>ת.ז</th>
+                                    <th>שם מלא</th>
+                                    <th>טלפון</th>
+                                    <th>מייל</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="w3-container">
+        <div id="id02" class="w3-modal">
+            <div class="w3-modal-content">
+                <div class="w3-container" dir="rtl">
+                    <span onclick="document.getElementById('id02').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                    <form id="pForm">
+                        <h2 id="update_contact">עריכת איש קשר</h2>
+                        <br />
+                        <table id="updateContactTb">
+                            <tr>
+                                <th>
+                                    <div class="form-group">
+                                        <label for="contact_id"><span class="red-star">★ </span>תעודת זהות</label>
+                                        <textarea rows="1" class="form-control groupDetails" id="contact_id1" placeholder=" הזן ת.ז "></textarea>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="form-group">
+                                        <label for="contact_name"><span class="red-star">★ </span>שם מלא</label>
+                                        <textarea rows="1" class="form-control groupDetails" id="contact_name1" placeholder=" הזן שם מלא "></textarea>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="form-group">
+                                        <label for="contact_phone"><span class="red-star">★ </span>טלפון</label>
+                                        <textarea rows="1" class="form-control groupDetails" id="contact_phone1" placeholder=" הזן טלפון "></textarea>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="form-group">
+                                        <label for="contact_mail"><span class="red-star">★ </span>מייל</label>
+                                        <textarea rows="2" class="form-control groupDetails" id="contact_mail1" placeholder=" הזן מייל "></textarea>
+                                    </div>
+                                </th>
+                            </tr>
+                        </table>
+                    </form>
+                    <br />
+                    <button id="btnUpdate_contact" class="btn btn-primary" onclick="updateContact()"> עדכן איש קשר </button>
+                </div>
+                <br />
+            </div>
+        </div>
+    </div>
 </body>
 </html>
