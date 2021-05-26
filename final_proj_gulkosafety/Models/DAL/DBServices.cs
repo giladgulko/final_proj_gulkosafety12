@@ -1747,12 +1747,13 @@ namespace final_proj_gulkosafety.Models.DAL
                     order o = new order();
 
                     o.Order_num = Convert.ToInt32(dr["order_num"]);
-                    o.Bill_num = (string)dr["bill_num"];
+                    o.Invoice_num = (string)dr["invoice_num"];
                     o.Date = Convert.ToDateTime(dr["date"]);
                     o.Contact_id = (string)dr["contact_id"];
                     o.Item_num = Convert.ToInt32(dr["item_num"]);
                     o.Quantity = Convert.ToInt32(dr["quantity"]);
                     o.Total_price = Convert.ToDouble(dr["total_price"]);
+                    o.Delete_status = Convert.ToInt32(dr["delete_status"]);
 
                     ordersList.Add(o);
 
@@ -1820,8 +1821,8 @@ namespace final_proj_gulkosafety.Models.DAL
 
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
-            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}')", _order.Bill_num, _order.Date.ToString("yyyy-MM-dd"), _order.Total_price,_order.Contact_id);
-            String prefix = "INSERT INTO project " + "(bill_num,date,total_price,contact_id)";
+            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}')", _order.Invoice_num, _order.Date.ToString("yyyy-MM-dd"), _order.Total_price,_order.Contact_id,_order.Delete_status);
+            String prefix = "INSERT INTO project " + "(invoice_num,date,total_price,contact_id,delete_status)";
             command = prefix + sb.ToString();
 
             return command;
@@ -2664,6 +2665,54 @@ namespace final_proj_gulkosafety.Models.DAL
             String command;
             command = "UPDATE contact SET id=" + c.Id + ",full_name = '" + c.Full_name + "',phone =" + c.Phone + ",mail='" + c.Mail + "' WHERE id=" + c.Id;
 
+            return command;
+        }
+
+        // change delete status of order
+        public int DeleteOrder(int order_num, int delete_status)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            String cStr = BuildDeleteOrderCommand(order_num, delete_status);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+        private String BuildDeleteOrderCommand(int order_num, int delete_status)
+        {
+            String command;
+            command = "UPDATE order SET delete_status = " + delete_status + " WHERE order_num = " + order_num;
             return command;
         }
 

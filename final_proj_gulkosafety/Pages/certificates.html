@@ -237,7 +237,7 @@
 
                                 showBtn = "<button type='button' class = 'showBtn btn btn-show' value='" + def + "' onclick='showContact(this.value)'>  הצג איש קשר </button>";
 
-                                pdfBtn = "<button type='button' class = 'deleteBtn btn btn-pdf' value='" + def + "' onclick='(this.value)'> הורדת אישור </button>";
+                                pdfBtn = "<button type='button' class = 'pdfBtn btn btn-pdf' value='" + def + "' onclick='(this.value)'> הורדת אישור </button>";
 
                                 return editBtn + deleteBtn + showBtn + pdfBtn ;
 
@@ -296,8 +296,7 @@
 
                                 editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editContact(this.value)'> עריכה </button>";
 
-                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteContact(this.value)'> מחיקה </button>";
-                                return editBtn + deleteBtn;
+                                return editBtn;
 
 
                             }

@@ -30,26 +30,26 @@
         $(document).ready(function () {
             getOrderData();
         });
-
+        //קריאת כל ההזמנות
         function getOrderData() {
             ajaxCall("GET", "../api/order", "", createDt, getError)
         }
         function getError() {
             swal("Failed!", "Failed to read the orders!", "warning")
         }
-        function newOrderForm() {
-            $("#dateError").hide();
-            var checkDate = document.getElementById('orderDate').value;
-            if (checkDate < NOW()) {
-                $('#orderDate').after('<p id="dateError">תאריך הבדיקה קטן מהתאריך של היום</p>');
-            }
-            else createNewOrder();
-            return false;
+        //ניקוי פופ אפ של הזמנה חדשה
+        function clearPopuP() {
+            $("#total_orderTD").hide();
+            $("#invoice_num").val("");
+            $("#orderDate").val("");
+            $("#quantity").val("");
+            $("#saveBTN").show();
         }
-        function createNewOrder() {
+        //הכנסת הזמנה חדשה
+        function new_order() {
             let newOrder = {
 
-                Bill_num: $('#billnum').val(),
+                Invoice_num: $('#invoice_num').val(),
                 Date: $('#orderDate').val().split("T")[0],
                 Quantity: $('#quantity').val(),
                 Total_price: $('#total_order').val(),
@@ -76,7 +76,7 @@
                     order = {
 
                         Order_num: orderdata[i].Order_num,
-                        Bill_num: orderdata[i].Bill_num,
+                        Invoice_num: orderdata[i].Invoice_num,
                         Date: orderdata[i].Date,
                         Quantity: orderdata[i].Quantity,
                         Total_price: orderdata[i].Total_price,
@@ -91,20 +91,24 @@
                     columns: [
 
                         { data: "Order_num" },
-                        { data: "Bill_num" },
+                        { data: "Invoice_num" },
                         { data: "Date" },
                         { data: "Quantity" },
                         { data: "Total_price" },
 
                         {
                             render: function (data, type, row, meta) {
-                                let dataorder = "order_data='" + row.Order_num + "'";
+                                let def = JSON.stringify(row);
 
-                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + dataorder + "' onclick='editDefectBTN(this.value)'> עריכה </button>";
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editDefectBTN(this.value)'> עריכה </button>";
 
-                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' " + dataorder + "> מחיקה </button>";
-                                return editBtn + deleteBtn;
+                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteOrder(this.value)'> מחיקה </button>";
 
+                                showBtn = "<button type='button' class = 'showBtn btn btn-show' value='" + def + "' onclick='showContact(this.value)'>  הצג איש קשר </button>";
+
+                                itemBtn = "<button type='button' class = 'itemBtn btn btn-item' value='" + def + "' onclick='(this.value)'> הצג פריטים </button>";
+
+                                return editBtn + deleteBtn + showBtn + itemBtn;
 
                             }
                         },
@@ -118,6 +122,41 @@
                 alert(err);
             }
 
+        }
+        //מחיקת הזמנה
+        function deleteOrder(def) {
+            orderToEdit = JSON.parse(def);
+            swal({
+                title: "האם אתה בטוח שברצונך למחוק את ההזמנה?",
+                text: "",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true
+            })
+                .then(function (willDelete) {
+                    if (willDelete) delete_order(orderToEdit);
+                    else swal("ההזמנה לא נמחקה!");
+                });
+        }
+        //מחיקה לוגית ולא מחיקה מהדאטה בייס
+        function delete_order(def) {
+            let deleteStatus = {
+                Order_num: def.Order_num,
+                Delete_status: 1,
+            }
+            ajaxCall("DELETE", "../api/order", JSON.stringify(deleteStatus), deleteCertSuccess, deleteCertError);
+        }
+        function deleteCertSuccess() {
+            swal({
+                title: "מצוין!", text: "ההזמנה נמחקה בהצלחה", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
+        }
+
+        function deleteCertError(err) {
+            swal("ההזמנה לא נמחקה!", err, "warning");
         }
 
 
@@ -170,7 +209,6 @@
         <br />
         <div id="buttons">
             <button id="myBtn" style="margin-left:10px" class="btn btn-primary" onclick="document.getElementById('id03').style.display='block'">הוסף הזמנה חדשה</button>
-            <button id="old_proj_btn" type="button" class="btn btn-primary" onclick="renderOldPROJ()">ארכיון הזמנות</button>
         </div>
     </div>
     <form id="pForm">
@@ -179,7 +217,7 @@
                 <tr>
                     <th>מספר הזמנה</th>
                     <th>מספר חשבונית</th>
-                    <th>תאריך רכישה</th>
+                    <th>תאריך הזמנה</th>
                     <th>כמות פריטים</th>
                     <th>סכום הזמנה</th>
                     <th></th>
@@ -200,8 +238,8 @@
                                 <tr>
                                     <th>
                                         <div class="form-group">
-                                            <label for="billnum">מספר חשבונית</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="billnum" placeholder="הזן מספר חשבונית"></textarea>
+                                            <label for="invoice_nume">מספר חשבונית</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="invoice_nume" placeholder="הזן מספר חשבונית"></textarea>
                                         </div>
                                     </th>
                                     <th>
@@ -217,7 +255,7 @@
                                             <textarea rows="1" class="form-control groupDetails" id="quantity" placeholder="הזן כמות פריטים"></textarea>
                                         </div>
                                     </th>
-                                    <th>
+                                    <th id="total_orderTD">
                                         <div class="form-group">
                                             <label for="total_order">סכום הזמנה</label>
                                             <textarea rows="1" class="form-control groupDetails" id="total_order" placeholder="הזן סכום הזמנה"></textarea>
@@ -234,17 +272,15 @@
                                         <input type="submit" class="btn btn-primary" value="איש קשר חדש" />
                                     </th>
                                 </tr>
-                                <tr>
-                                    <th>
-                                        <input type="submit" class="btn btn-primary" value="שמור" />
-                                    </th>
-                                </tr>
                             </thead>
                         </table>
                     </form>
+                    <button id="saveBTN" onclick="new_order()" class="btn btn-primary"> שמור הזמנה</button>
+                    <button id="btn_update_order" class="btn btn-primary" onclick="updateOrder()"> עדכן הזמנה</button>
                 </div>
             </div>
         </div>
     </div>
+    
 </body>
 </html>
