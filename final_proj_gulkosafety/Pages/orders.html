@@ -100,7 +100,7 @@
                             render: function (data, type, row, meta) {
                                 let def = JSON.stringify(row);
 
-                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editDefectBTN(this.value)'> עריכה </button>";
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editordertBTN(this.value)'> עריכה </button>";
 
                                 deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteOrder(this.value)'> מחיקה </button>";
 
@@ -122,6 +122,19 @@
                 alert(err);
             }
 
+        }
+        //עריכת הזמנה
+        function editordertBTN(dataorder) {
+            orderToEdit = JSON.parse(dataorder);
+            document.getElementById('id03').style.display = 'block';
+
+            $("#invoice_num").val(orderToEdit.Invoice_num);
+            $("#date").val(orderToEdit.Date);
+            $("#quantity").val(orderToEdit.Quantity);
+            $("#total_order").val(orderToEdit.Total_price);
+            $("#saveBTN").hide();
+            $("#btn_update_order").show();
+            $("#total_orderTD").show();
         }
         //מחיקת הזמנה
         function deleteOrder(def) {
@@ -238,8 +251,8 @@
                                 <tr>
                                     <th>
                                         <div class="form-group">
-                                            <label for="invoice_nume">מספר חשבונית</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="invoice_nume" placeholder="הזן מספר חשבונית"></textarea>
+                                            <label for="invoice_num">מספר חשבונית</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="invoice_num" placeholder="הזן מספר חשבונית"></textarea>
                                         </div>
                                     </th>
                                     <th>
