@@ -26,12 +26,68 @@
 
     <title>הגדרות</title>
     <script>
-        
+        defectTypeToShow = [];
         $(document).ready(function () {
-
-
+            getDefectType();
+            $("#defectTypeTable").hide();
 
         });
+
+
+        // קריאת כל סוגי ההדרכות
+        function getDefectType() {
+            ajaxCall("GET", "../api/defect_type", "", createDtDefectType, getErrorDefectType)
+        }
+        function getErrorDefectType() {
+            swal("נכשל!", "קריאת סוגי ליקוי נכשלה!", "warning")
+        }
+        //בניית טבלה של סוגי ליקוי
+        function createDtDefectType(defectTypedata) {
+            $("#defectTypeTable").show();
+             //defectTypeToShow = [];
+
+            for (var i = 0; i < defectTypedata.length; i++) {
+                defectType = {
+
+                    Defect_type_num: defectTypedata[i].Defect_type_num,
+                    Type_name: defectTypedata[i].Type_name,
+                    }
+                defectTypeToShow.push(defectType);
+                }
+            }
+
+            try {
+                tbl = $('#defectTypeTable').DataTable({
+                    data: defectTypeToShow,
+                    pageLength: 10,
+                    columns: [
+
+                        { data: "Defect_type_num" },
+                        { data: "Type_name" },
+
+                        {
+                            render: function (data, type, row, meta) {
+                                let def = JSON.stringify(row);
+
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editinstrucBTN(this.value)'> עריכה </button>";
+
+                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteInstruction(this.value)'> מחיקה </button>";
+
+                                return editBtn + deleteBtn;
+
+                            }
+                        },
+
+                    ],
+                });
+
+            }
+
+            catch (err) {
+                alert(err);
+            }
+
+       
     </script>
 </head >
 <body>
@@ -80,6 +136,22 @@
         </div>
         <br />
     </div>
+    <div id="buttons">
+        <button id="myBtn" style="margin-left:10px" class="btn btn-primary" onclick="document.getElementById('id03').style.display='block', clearPopuP()">הוסף סוג ליקוי חדש</button>
+    </div>
+    <form id="pForm">
+        <table id="defectTypeTable" class="display" style="width:100%" dir="rtl">
+            <thead>
+                <tr>
+                    <th>מספר סוג ליקוי</th>
+                    <th>שם סוג ליקוי</th>
+
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
+    </form>
+
     <!--<div class="sidenav">
         <a href="#">סוגי ליקוי</a>
         <a href="#">סוגי הדרכה</a>
@@ -87,12 +159,12 @@
         <a href="#">סוגי אישורים</a>
         <a href="#">פריטים</a>
     </div>-->
-    <div class="btn-group">
-        <button>סוגי ליקוי</button>
-        <button>סוגי הדרכה</button>
-        <button>סוגי משתמש</button>
-        <button>סוגי אישורים</button>
-        <button>פריטים</button>
-    </div>
+    <!--<div class="btn-group">
+        <button id="defectTypeBtn" onclick="getDefectType()">סוגי ליקוי</button>
+        <button id="instructionTypeBtn">סוגי הדרכה</button>
+        <button id="userTypeBtn">סוגי משתמש</button>
+        <button id="certificateTypeBtn">סוגי אישורים</button>
+        <button id="itemBtn">פריטים</button>
+    </div>-->
 </body>
 </html>

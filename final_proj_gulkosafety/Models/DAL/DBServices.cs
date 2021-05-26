@@ -2715,7 +2715,6 @@ namespace final_proj_gulkosafety.Models.DAL
             command = "UPDATE order SET delete_status = " + delete_status + " WHERE order_num = " + order_num;
             return command;
         }
-
     }
 
 }
