@@ -26,9 +26,12 @@
     <title>הזמנות</title>
     <script>
 
+        AllContacts = [];
+        contactList = [];
 
         $(document).ready(function () {
             getOrderData();
+            getcontacts();
         });
         //קריאת כל ההזמנות
         function getOrderData() {
@@ -37,22 +40,112 @@
         function getError() {
             swal("Failed!", "Failed to read the orders!", "warning")
         }
+        // קריאת כל אנשי הקשר
+        function getcontacts() {
+            let api = "../api/contact";
+            ajaxCall("GET", api, "", getContactSuccess, getContactError);
+        }
+
+        function getContactSuccess(data) {
+            renderContacts(data);
+        }
+
+        // רינדור של כל אנשי הקשר לרשימה
+        function renderContacts(data) {
+            AllContacts = data;
+            ExistContact = document.getElementById('searchContact1');
+            for (i = 0; i < AllContacts.length; i++) {
+                ExistContact.innerHTML += "<option value=" + AllContacts[i].Id + ">" + AllContacts[i].Full_name + ", " + AllContacts[i].Id + "</option > ";
+            }
+        }
+        function getContactError() {
+            swal("נכשל!", "קריאת אנשי קשר נכשלה!", "warning")
+        }
+        //שמירת איש קשר קיים לאישור חדש
+        function SaveExistContact() {
+            let contactId = $("#searchContact1").val();
+            for (var i = 0; i < AllContacts.length; i++) {
+                if (contactId == AllContacts[i].Id) {
+                    contact1 = {
+                        Id: AllContacts[i].Id,
+                        Full_name: AllContacts[i].Full_name,
+                        Phone: AllContacts[i].Phone,
+                        Mail: AllContacts[i].Mail,
+
+                    }
+                    SaveNewcontact(contact1)
+                }
+            }
+
+        } 
+        // שמירת איש קשר באישור חדש ורנדור לטבלה 
+        function SaveNewcontact(contact1) {
+
+            $("#newContact").hide();
+            $("#contactsTable").show();
+            let contactToShow = [];
+            if (contact1 == null) {
+                contact = {
+                    Id: $("#contact_id").val(),
+                    Full_name: $("#contact_name").val(),
+                    Phone: $("#contact_phone").val(),
+                    Mail: $("#contact_mail").val(),
+
+                }
+                contactToShow.push(contact);
+                contactList.push(contact);
+
+                let api = "../api/contact";
+                ajaxCall("POST", api, JSON.stringify(contact), createNewcontactSuccess, createNewcontactError);
+            }
+            else {
+                contactToShow.push(contact1);
+                contactList.push(contact1);
+            }
+
+            try {
+
+                tbl = $("#contactsTable").DataTable({
+                    data: contactToShow,
+                    pageLength: 10,
+                    columns: [
+
+                        { data: "Id" },
+                        { data: "Full_name" },
+                        { data: "Phone" },
+                        { data: "Mail" },
+
+                    ],
+                });
+            }
+
+            catch (err) {
+                alert(err);
+            }
+
+        }
         //ניקוי פופ אפ של הזמנה חדשה
         function clearPopuP() {
-            $("#total_orderTD").hide();
             $("#invoice_num").val("");
             $("#orderDate").val("");
             $("#quantity").val("");
             $("#saveBTN").show();
+            $("#total_orderTD").hide();
+            $("#btn_update_order").hide();
+            $("#newContact").hide();
+            $("#contactsTable").hide();
+            $("#searchContact1").val("");
         }
         //הכנסת הזמנה חדשה
         function new_order() {
+           
             let newOrder = {
 
                 Invoice_num: $('#invoice_num').val(),
                 Date: $('#orderDate').val().split("T")[0],
                 Quantity: $('#quantity').val(),
-                Total_price: $('#total_order').val(),
+                Contact_id: contactList[0].Id,
+                Delete_status: 0,
 
             }
             ajaxCall("POST", "../api/order", JSON.stringify(newOrders), createNewOrderSuccess, createNewOrderError);
@@ -129,7 +222,7 @@
             document.getElementById('id03').style.display = 'block';
 
             $("#invoice_num").val(orderToEdit.Invoice_num);
-            $("#date").val(orderToEdit.Date);
+            $("#orderDate").val(orderToEdit.Date);
             $("#quantity").val(orderToEdit.Quantity);
             $("#total_order").val(orderToEdit.Total_price);
             $("#saveBTN").hide();
@@ -170,6 +263,10 @@
 
         function deleteCertError(err) {
             swal("ההזמנה לא נמחקה!", err, "warning");
+        }
+
+        function New_contact() {
+            $("#newContact").show();
         }
 
 
@@ -221,7 +318,7 @@
         </div>
         <br />
         <div id="buttons">
-            <button id="myBtn" style="margin-left:10px" class="btn btn-primary" onclick="document.getElementById('id03').style.display='block'">הוסף הזמנה חדשה</button>
+            <button id="myBtn" style="margin-left:10px" class="btn btn-primary" onclick="document.getElementById('id03').style.display='block',clearPopuP()">הוסף הזמנה חדשה</button>
         </div>
     </div>
     <form id="pForm">
@@ -280,14 +377,78 @@
                                         <input type="submit" class="btn btn-primary" value="פריט חדש" />
                                     </th>
                                 </tr>
-                                <tr>
-                                    <th>
-                                        <input type="submit" class="btn btn-primary" value="איש קשר חדש" />
-                                    </th>
-                                </tr>
                             </thead>
                         </table>
                     </form>
+                    <table>
+                        <tr>
+                            <td id="searchContact">
+                                <div class="form-group">
+                                    <label for="searchContact1"><span class="red-star">★ </span>חיפוש איש קשר</label>
+                                    <select onchange="" class="form-control groupDetails" id="searchContact1" required>
+                                        <option value="0">בחר איש קשר קיים:</option>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <button id="btn_saveExist_contact" onclick="SaveExistContact()" class="btn btn-primary"> שמור איש קשר</button>
+                            </td>
+                        </tr>
+                        <br />
+                        <tr>
+                            <td>
+                                <button id="btn_new_contact" class="btn btn-primary" onclick="New_contact()"> איש קשר חדש</button>
+                            </td>
+                        </tr>
+                    </table>
+                    <table id="newContact">
+
+                        <tr>
+                            <th>
+                                <div class="form-group">
+                                    <label for="contact_id"><span class="red-star">★ </span>תעודת זהות</label>
+                                    <textarea rows="1" class="form-control groupDetails" id="contact_id" placeholder=" הזן ת.ז "></textarea>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="form-group">
+                                    <label for="contact_name">שם מלא</label>
+                                    <textarea rows="1" class="form-control groupDetails" id="contact_name" placeholder=" הזן שם מלא "></textarea>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="form-group">
+                                    <label for="contact_phone">טלפון</label>
+                                    <textarea rows="1" class="form-control groupDetails" id="contact_phone" placeholder=" הזן טלפון "></textarea>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="form-group">
+                                    <label for="contact_mail">מייל</label>
+                                    <textarea rows="1" class="form-control groupDetails" id="contact_mail" placeholder=" הזן מייל "></textarea>
+                                </div>
+                            </th>
+                            <th>
+
+                                <button id="btnSave_new_contact" class="btn btn-primary" onclick="SaveNewcontact()"> שמור איש קשר </button>
+                            </th>
+                        </tr>
+                    </table>
+                    <div>
+                        <form id="pForm">
+                            <table id="contactsTable" class="display" style="width:100%" dir="rtl">
+                                <thead>
+                                    <tr>
+                                        <th>ת.ז</th>
+                                        <th>שם מלא</th>
+                                        <th>טלפון</th>
+                                        <th>מייל</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </form>
+                    </div>
                     <button id="saveBTN" onclick="new_order()" class="btn btn-primary"> שמור הזמנה</button>
                     <button id="btn_update_order" class="btn btn-primary" onclick="updateOrder()"> עדכן הזמנה</button>
                 </div>

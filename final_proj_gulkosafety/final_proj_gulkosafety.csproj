@@ -224,7 +224,7 @@
     <Content Include="Pages\photos\logo.jpeg" />
     <Content Include="Pages\project.html" />
     <Content Include="Pages\projtest.html" />
-    <Content Include="Pages\Settings.html" />
+    <Content Include="Pages\settings.html" />
     <Content Include="Pages\styles\alertsStyles.css" />
     <Content Include="Pages\styles\certificatesStyleSheet.css" />
     <Content Include="Pages\styles\homeStyleSheet.css" />
@@ -236,7 +236,7 @@
     <Content Include="Pages\report.html" />
     <Content Include="Pages\styles\reportStyleSheet.css" />
     <Content Include="Pages\styles\nav_bar_style.css" />
-    <Content Include="Pages\styles\SettingsStyleSheet.css" />
+    <Content Include="Pages\styles\settingsStyleSheet.css" />
     <Content Include="Scripts\ajaxCalls.js" />
     <Content Include="Scripts\ajaxCallsWithKey.js" />
     <Content Include="Scripts\bootstrap.js" />

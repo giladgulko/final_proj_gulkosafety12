@@ -26,11 +26,10 @@
 
     <title>הגדרות</title>
     <script>
-        defectTypeToShow = [];
-        $(document).ready(function () {
-            getDefectType();
-            $("#defectTypeTable").hide();
 
+        $(document).ready(function () {
+            $("#defectTypeTable").hide();
+            $("#myBtn").hide();
         });
 
 
@@ -43,17 +42,16 @@
         }
         //בניית טבלה של סוגי ליקוי
         function createDtDefectType(defectTypedata) {
+            $("#myBtn").show();
             $("#defectTypeTable").show();
-             //defectTypeToShow = [];
+            let defectTypeToShow = [];
 
             for (var i = 0; i < defectTypedata.length; i++) {
                 defectType = {
-
                     Defect_type_num: defectTypedata[i].Defect_type_num,
                     Type_name: defectTypedata[i].Type_name,
-                    }
-                defectTypeToShow.push(defectType);
                 }
+                defectTypeToShow.push(defectType);
             }
 
             try {
@@ -86,7 +84,7 @@
             catch (err) {
                 alert(err);
             }
-
+        }
        
     </script>
 </head >
@@ -137,7 +135,7 @@
         <br />
     </div>
     <div id="buttons">
-        <button id="myBtn" style="margin-left:10px" class="btn btn-primary" onclick="document.getElementById('id03').style.display='block', clearPopuP()">הוסף סוג ליקוי חדש</button>
+        <button id="myBtn"  class="btn btn-primary" onclick="document.getElementById('id03').style.display='block',clearPopuP()">הוסף סוג ליקוי חדש</button>
     </div>
     <form id="pForm">
         <table id="defectTypeTable" class="display" style="width:100%" dir="rtl">
@@ -159,12 +157,12 @@
         <a href="#">סוגי אישורים</a>
         <a href="#">פריטים</a>
     </div>-->
-    <!--<div class="btn-group">
+    <div class="btn-group">
         <button id="defectTypeBtn" onclick="getDefectType()">סוגי ליקוי</button>
         <button id="instructionTypeBtn">סוגי הדרכה</button>
         <button id="userTypeBtn">סוגי משתמש</button>
         <button id="certificateTypeBtn">סוגי אישורים</button>
         <button id="itemBtn">פריטים</button>
-    </div>-->
+    </div>
 </body>
 </html>

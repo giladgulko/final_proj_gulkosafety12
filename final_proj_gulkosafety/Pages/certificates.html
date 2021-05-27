@@ -38,7 +38,7 @@
             getCertData();
             getcontacts();
             $("#btn_update_cert").hide();
-            $("#contantsTable").hide();
+            $("#contactsTable").hide();
             $("#newContact").hide();
         });
 
@@ -114,7 +114,7 @@
         function SaveNewcontact(contact1) {
 
             $("#newContact").hide();
-            $("#contantsTable").show();
+            $("#contactsTable").show();
             let contactToShow = [];
             if (contact1 == null) {
                 contact = {
@@ -137,7 +137,7 @@
 
             try {
 
-                    tbl = $('#contantsTable').DataTable({
+                tbl = $('#contactsTable').DataTable({
                         data: contactToShow,
                         pageLength: 10,
                         columns: [
@@ -759,7 +759,7 @@
                     </table>
                     <div>
                         <form id="pForm">
-                            <table id="contantsTable" class="display" style="width:100%" dir="rtl">
+                            <table id="contactsTable" class="display" style="width:100%" dir="rtl">
                                 <thead>
                                     <tr>
                                         <th>ת.ז</th>

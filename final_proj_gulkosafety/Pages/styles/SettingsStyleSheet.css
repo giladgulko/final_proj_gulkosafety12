@@ -37,7 +37,7 @@
         }
 }*/
 .btn-group button {
-    background-color: cadetblue; /* Green background */
+    background-color: cadetblue; /*Green background */
     border: 1px solid black; /* Green border */
     color: white; /* White text */
     padding: 10px 24px; /* Some padding */
@@ -45,10 +45,16 @@
     width: 50%; /* Set a width if needed */
     display: block; /* Make the buttons appear below each other */
 }
+.btn-primary {
+    color: #fff;
+    background-color: cadetblue;
+    border-color: cadetblue;
+    float:right;
+}
 
     .btn-group button:not(:last-child) {
         border-bottom: none; /* Prevent double borders */
-    }
+}
 
     /* Add a background color on hover */
     .btn-group button:hover {
@@ -68,12 +74,21 @@
     margin-top:2%
    
 }
-
+button#myBtn {
+    margin-right: 15%;
+}
 #table {
     margin-top: 30px;
     padding-left: 12%;
-    padding-right: 12%;
+    padding-right: 30%;
     text-align: center;
+}
+.dataTables_wrapper {
+    position: relative;
+    clear: both;
+    *zoom: 1;
+    zoom: 1;
+    padding-right: 25%;
 }
 
 #pForm {
@@ -81,3 +96,10 @@
     margin-right: 10%;
     margin-top: 5%;
 }
+
+th {
+    text-align: right;
+}
+    th.sorting {
+        text-align: center;
+    }
