@@ -71,23 +71,24 @@ namespace final_proj_gulkosafety.Controllers
             }
         }
 
-        public HttpResponseMessage PutProjectSafetyLevel(int project_num, double safety_lvl)
-        {
-            project p = new project();
-            try
-            {
-                {
-                    p.UpdateProjectSafetyLevel(project_num, safety_lvl);
 
-                }
+        //public HttpResponseMessage PutProjectSafetyLevel(int project_num, double safety_lvl)
+        //{
+        //    project p = new project();
+        //    try
+        //    {
+        //        {
+        //            p.UpdateProjectSafetyLevel(project_num, safety_lvl);
 
-                return Request.CreateResponse(HttpStatusCode.Created, p);
-            }
-            catch (Exception ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
-            }
-        }
+        //        }
+
+        //        return Request.CreateResponse(HttpStatusCode.Created, p);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
+        //    }
+        //}
 
         public HttpResponseMessage PutProjectUsers(int project_num, [FromBody] project p)
         {

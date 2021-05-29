@@ -23,6 +23,7 @@
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
     <link href="styles/reportStyleSheet.css" rel="stylesheet" />
     <link href="styles/nav_bar_style.css" rel="stylesheet" />
+    <link href="styles/alertsStyles.css" rel="stylesheet" />
     <script src="../Scripts/safetyLVL.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.8.1/html2pdf.bundle.min.js" integrity="sha512-vDKWohFHe2vkVWXHp3tKvIxxXg0pJxeid5eo+UjdjME3DBFBn2F8yWOE0XmiFcFbXxrEOR1JriWEno5Ckpn15A==" crossorigin="anonymous"></script>
     <title>דוח ביקור</title>
@@ -35,7 +36,7 @@
         allReports = [];
         defectToEdit = "";
         ptwList = [];
-        userType = JSON.parse(localStorage["userType"]) ;
+        userType = JSON.parse(localStorage["userType"]);
         Users = JSON.parse(localStorage["projContacts"])
         $(document).ready(function () {
             //build view page
@@ -63,7 +64,7 @@
             ptwList = ptwList1
         }
         function getPTWError(err) {
-            swal("משיכת משקלים לפי סוג פרויקט נכשלה!",err, "warning");
+            swal("משיכת משקלים לפי סוג פרויקט נכשלה!", err, "warning");
         }
 
 
@@ -100,7 +101,7 @@
             else {
                 headLine = "<h1>דוח ביקור חדש</h1>";
                 $('#proj_bar').html(headLine);
-                $("#defectsTBL").hide(); 
+                $("#defectsTBL").hide();
                 $("#lastReportdefectsTBL").hide();
                 $('.editReportDetailsBtns').hide();
             }
@@ -162,7 +163,7 @@
             else $("#lastReportdefectsTBL").hide();
         }
         function getLastRDefectError(err) {
-            swal("משיכת ליקויים מהדוח האחרון נכשלה!",err, "warning");
+            swal("משיכת ליקויים מהדוח האחרון נכשלה!", err, "warning");
         }
 
         function getNewReportsuccess(report) {
@@ -192,7 +193,7 @@
             $('#company').val(project.Company);
             $('#location').val(project.Address);
             let projUsers = JSON.parse(localStorage["projContacts"]);
-            $('#forman').val(projUsers[0].Name + ", " +projUsers[0].Phone);
+            $('#forman').val(projUsers[0].Name + ", " + projUsers[0].Phone);
             $('#projManeger').val(projUsers[1].Name + ", " + projUsers[1].Phone);
         }
 
@@ -218,7 +219,7 @@
 
         function uploadImg() {
             //upload img link
-         
+
             var data = new FormData();
             var files = document.getElementById('img').files;
 
@@ -241,13 +242,13 @@
         }
 
         function updateImage(data) {
-          
+
             let picture_link = "../" + data[0];
             let temp = JSON.parse(defectToEdit)
             temp.Picture_link = picture_link;
             console.log(temp.Picture_link)
-            let api = "../api/defect_in_report?picture_link="+picture_link;
-            ajaxCall("PUT", api,JSON.stringify(temp), updateImgSuccess, updateImgError);
+            let api = "../api/defect_in_report?picture_link=" + picture_link;
+            ajaxCall("PUT", api, JSON.stringify(temp), updateImgSuccess, updateImgError);
             alert("הצליח!")
 
             var now = new Date().toISOString();
@@ -265,7 +266,7 @@
         }
 
         function updateImgSuccess() {
-         
+
         }
         function updateImgError(err) {
             console.log(err);
@@ -474,7 +475,7 @@
             }).then(function () {
                 location.reload();
             }
-            );
+                );
         }
         function postDefectInReportError(err) {
             swal("הליקוי לא נוסף לדוח!", err, "warning");
@@ -526,7 +527,7 @@
                 if (localStorage["report"] != "") {
                     //update local storage with new info
                     report.Date = $('#Date').val();
-                    report.Time = "T"+$('#time').val();
+                    report.Time = "T" + $('#time').val();
                     report.Comment = $('#comments').val();
                     localStorage["report"] = JSON.stringify(report);
                     //save to db
@@ -606,8 +607,53 @@
             }
 
             gradesArr = JSON.parse(localStorage["gradesArr"]);
-            safetyLeveL(curentReport, lastReportDefects, gradesArr, ptwList, report.Report_num);
+            gradesArr.pop();
+            //safetyLeveL(curentReport, lastReportDefects, gradesArr, ptwList, report.Report_num);
             document.getElementById('id02').style.display = 'block';
+
+            let safetyLevel = {
+                ReportNum: report.Report_num,
+                Project: project,
+                CurrentReportDefects: curentReport,
+                PreviousReportDefects: lastReportDefects,
+                ProjReportGrades: gradesArr,
+                ProjTypeWeights: ptwList
+            }
+            let api = "../api/safety_level";
+            ajaxCall("PUT", api, JSON.stringify(safetyLevel), getSafetyLvlSuccess, getSafetyLvlError);
+
+        }
+
+        function getSafetyLvlSuccess(safetyLvl) {
+            $("#safetyAlert").html(safetyLvl.Alert);
+            $("#ReportGradeP").html(safetyLvl.ReportGrade);
+            $("#safetyLvlGraph").html(safetyLvl.SafetyLvlGrade);
+            alertConstractor(safetyLvl.Alert, 1, "gulkosafety@gmail.com", project.Project_num);
+        }
+
+        function getSafetyLvlError(err) {
+            alert("something went wrong");
+        }
+
+        function alertConstractor(content, alert_type_num, user_email, proj_num) {
+            var now = new Date().toISOString();
+            new_alert = {
+                Content: content,
+                Date: now,
+                Alert_type_num: alert_type_num,
+                User_email: user_email,
+                Status: 0,
+                Proj_num: proj_num
+            }
+            ajaxCall("POST", "../api/alert", JSON.stringify(new_alert), insertAlertSuccess, insertAlertError);
+        }
+
+        function insertAlertSuccess() {
+            console.log("התראה נשמרה");
+        }
+
+        function insertAlertError() {
+            console.log("התראה לא נשמרה");
         }
 
         function getPTWSuccess(ptwList1) {
@@ -672,17 +718,17 @@
 
         }
         function topdf() {
-            
+
             var element = document.getElementById('allPage');
             var opt = {
                 margin: 0,
-                filename: 'report-' + report.Report_num+'.pdf',
+                filename: 'report-' + report.Report_num + '.pdf',
                 pagebreak: { mode: 'avoid-all', before: '#page2el', avoid: document.getElementsByClassName('body-wrap') },
                 html2canvas: { scale: 2 },
                 jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
             };
-            html2pdf(element,opt);
-          
+            html2pdf(element, opt);
+
             console.log(result)
         }
         function changeUser() {
@@ -694,7 +740,7 @@
 
             }
             location.reload()
-            
+
         }
 
     </script>
