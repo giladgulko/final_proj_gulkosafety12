@@ -39,6 +39,8 @@
             }
             else {
                 getProjData2User();
+                userType2Mode();
+
             }
             
             buttonEvents();
@@ -49,6 +51,12 @@
             $("#newProjForm").submit(newProjForm);
 
         });
+
+        function userType2Mode() {
+            $("#myBtn").hide()
+            $(".type2mode").hide()
+          
+        }
         //מביא פרוייקטים של מנהלי עבודה או פרוייקט
         function getProjData2User() {
             userEmail=user.Email
@@ -231,11 +239,17 @@
                         {
                             render: function (data, type, row, meta) {
                                 let dataproj = "project_data='" + row.Project_num + "'";
+                                if (user.User_type_num == 1) {
+                                    editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataproj + "> עריכה </button>";
 
-                                editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataproj + "> עריכה </button>";
-
-                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' " + dataproj + "> מחיקה </button>";
-                                return editBtn + deleteBtn;
+                                    deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' " + dataproj + "> מחיקה </button>";
+                                    return editBtn + deleteBtn;
+                                }
+                                else {
+                                    editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataproj + "> צפה בפרטי הפרוייקט </button>";
+                                    return editBtn
+                                }
+                               
 
 
                             }
@@ -290,20 +304,20 @@
                 </div>
                 <div class="collapse navbar-collapse" id="navbarMenu">
                     <ul class="nav navbar-nav navbar-right  bts-nav">
-                        <li><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="#"></a></li>
+                        <li class="type2mode"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="#"></a></li>
                         <li></li>
                         <li class="nav-item">
                             <span class="glyphicon glyphicon-bell" aria-hidden="true"></span><a href="alerts.html"></a>
                         </li>
 
-                        <li><a href="#">סטטיסטיקות</a></li>
-                        <li><a href="#">משתמשים</a></li>
-                        <li><a href="orders.html">הזמנות</a></li>
-                        <li><a href="certificates.html">אישורים</a></li>
-                        <li><a href="instructions.html">הדרכות</a></li>
+                        <li class="type2mode"><a href="#">סטטיסטיקות</a></li>
+                        <li class="type2mode"><a href="#">משתמשים</a></li>
+                        <li class="type2mode"><a href="orders.html">הזמנות</a></li>
+                        <li class="type2mode"><a href="certificates.html">אישורים</a></li>
+                        <li class="type2mode"><a href="instructions.html">הדרכות</a></li>
                         <li class="active"><a href="projects.html">פרויקטים<span class="sr-only">(current)</span></a></li>
                         <li><a href="#">התחברות</a></li>
-                        <li>
+                        <li class="type2mode">
                             <span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="#"></a>
                         </li>
                     </ul>
