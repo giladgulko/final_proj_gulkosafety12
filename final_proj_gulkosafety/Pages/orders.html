@@ -53,7 +53,7 @@
         // רינדור של כל אנשי הקשר לרשימה
         function renderContacts(data) {
             AllContacts = data;
-            ExistContact = document.getElementById('searchContact1');
+            ExistContact = document.getElementById("searchContact1");
             for (i = 0; i < AllContacts.length; i++) {
                 ExistContact.innerHTML += "<option value=" + AllContacts[i].Id + ">" + AllContacts[i].Full_name + ", " + AllContacts[i].Id + "</option > ";
             }
@@ -135,6 +135,7 @@
             $("#newContact").hide();
             $("#contactsTable").hide();
             $("#searchContact1").val("");
+            $("#quantity_num").hide();
         }
         //הכנסת הזמנה חדשה
         function new_order() {
@@ -228,6 +229,14 @@
             $("#saveBTN").hide();
             $("#btn_update_order").show();
             $("#total_orderTD").show();
+            $("#contactsTable").hide();
+            $("#newContact").hide();
+            $("#searchContact").hide();
+            $("#btn_new_contact").hide();
+            $("#btn_save_item").hide();
+            $("#btn_saveExist_contact").hide();
+            $("#quantity_num").show();
+            $("#quantity").prop('disabled', true)
         }
         //מחיקת הזמנה
         function deleteOrder(def) {
@@ -289,7 +298,7 @@
                 </div>
                 <div class="collapse navbar-collapse" id="navbarMenu">
                     <ul class="nav navbar-nav navbar-right  bts-nav">
-                        <li><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="#"></a></li>
+                        <li><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="settings.html"></a></li>
                         <li></li>
                         <li class="nav-item">
                             <span class="glyphicon glyphicon-bell" aria-hidden="true"></span><a href="alerts.html"></a>
@@ -346,36 +355,36 @@
                         <table class="display" style="width:100%" dir="rtl">
                             <thead>
                                 <tr>
-                                    <th>
+                                    <td>
                                         <div class="form-group">
                                             <label for="invoice_num">מספר חשבונית</label>
                                             <textarea rows="1" class="form-control groupDetails" id="invoice_num" placeholder="הזן מספר חשבונית"></textarea>
                                         </div>
-                                    </th>
-                                    <th>
+                                    </td>
+                                    <td>
                                         <div class="form-group">
                                             <label for="orderDate"><span class="red-star">★ </span>תאריך הזמנה</label>
                                             <br />
                                             <input type="date" class="groupDetails" id="orderDate" required>
                                         </div>
-                                    </th>
-                                    <th>
+                                    </td>
+                                    <td id="quantity_num">
                                         <div class="form-group">
                                             <label for="quantity">כמות פריטים</label>
                                             <textarea rows="1" class="form-control groupDetails" id="quantity" placeholder="הזן כמות פריטים"></textarea>
                                         </div>
-                                    </th>
-                                    <th id="total_orderTD">
+                                    </td>
+                                    <td id="total_orderTD">
                                         <div class="form-group">
                                             <label for="total_order">סכום הזמנה</label>
                                             <textarea rows="1" class="form-control groupDetails" id="total_order" placeholder="הזן סכום הזמנה"></textarea>
                                         </div>
-                                    </th>
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <th>
-                                        <input type="submit" class="btn btn-primary" value="פריט חדש" />
-                                    </th>
+                                    <td>
+                                        <button id="btn_save_item" onclick="" class="btn btn-primary"> פריט חדש</button>
+                                    </td>
                                 </tr>
                             </thead>
                         </table>
@@ -404,34 +413,34 @@
                     <table id="newContact">
 
                         <tr>
-                            <th>
+                            <td>
                                 <div class="form-group">
                                     <label for="contact_id"><span class="red-star">★ </span>תעודת זהות</label>
                                     <textarea rows="1" class="form-control groupDetails" id="contact_id" placeholder=" הזן ת.ז "></textarea>
                                 </div>
-                            </th>
-                            <th>
+                            </td>
+                            <td>
                                 <div class="form-group">
                                     <label for="contact_name">שם מלא</label>
                                     <textarea rows="1" class="form-control groupDetails" id="contact_name" placeholder=" הזן שם מלא "></textarea>
                                 </div>
-                            </th>
-                            <th>
+                            </td>
+                            <td>
                                 <div class="form-group">
                                     <label for="contact_phone">טלפון</label>
                                     <textarea rows="1" class="form-control groupDetails" id="contact_phone" placeholder=" הזן טלפון "></textarea>
                                 </div>
-                            </th>
-                            <th>
+                            </td>
+                            <td>
                                 <div class="form-group">
                                     <label for="contact_mail">מייל</label>
                                     <textarea rows="1" class="form-control groupDetails" id="contact_mail" placeholder=" הזן מייל "></textarea>
                                 </div>
-                            </th>
-                            <th>
+                            </td>
+                            <td>
 
                                 <button id="btnSave_new_contact" class="btn btn-primary" onclick="SaveNewcontact()"> שמור איש קשר </button>
-                            </th>
+                            </td>
                         </tr>
                     </table>
                     <div>
@@ -452,6 +461,7 @@
                     <button id="saveBTN" onclick="new_order()" class="btn btn-primary"> שמור הזמנה</button>
                     <button id="btn_update_order" class="btn btn-primary" onclick="updateOrder()"> עדכן הזמנה</button>
                 </div>
+                <br />
             </div>
         </div>
     </div>

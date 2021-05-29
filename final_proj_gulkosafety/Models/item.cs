@@ -1,4 +1,5 @@
-﻿using System;
+﻿using final_proj_gulkosafety.Models.DAL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -22,9 +23,13 @@ namespace final_proj_gulkosafety.Models
             Price = price;
         }
 
-        public item()
-        {
+        public item() { }
 
+        public List<item> ReadItem()
+        {
+            DBServices dbs = new DBServices();
+            return dbs.ReadItem();
         }
+
     }
 }

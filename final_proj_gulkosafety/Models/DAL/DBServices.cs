@@ -2715,6 +2715,50 @@ namespace final_proj_gulkosafety.Models.DAL
             command = "UPDATE order SET delete_status = " + delete_status + " WHERE order_num = " + order_num;
             return command;
         }
+
+        //read all items
+        public List<item> ReadItem()
+        {
+            SqlConnection con = null;
+            List<item> itemList = new List<item>();
+
+            try
+            {
+                con = connect("DBConnectionString");
+
+                String selectSTR = "SELECT * FROM contact";
+
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                while (dr.Read())
+                {
+
+                    item _item = new item();
+                    _item.Item_num = Convert.ToInt32(dr["item_num"]);
+                    _item.Name = (string)dr["name"];
+                    _item.Price = Convert.ToDouble(dr["price"]);
+                    itemList.Add(_item);
+                }
+
+                return itemList;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
     }
 
 }
