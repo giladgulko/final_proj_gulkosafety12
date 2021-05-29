@@ -175,6 +175,7 @@
     <Compile Include="Controllers\project_typeController.cs" />
     <Compile Include="Controllers\proj_type_weightController.cs" />
     <Compile Include="Controllers\reportController.cs" />
+    <Compile Include="Controllers\safety_levelController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\userController.cs" />
     <Compile Include="Controllers\user_typeController.cs" />
@@ -190,6 +191,7 @@
     <Compile Include="Models\contact_in_instruction.cs" />
     <Compile Include="Models\DAL\DBServices.cs" />
     <Compile Include="Models\defect.cs" />
+    <Compile Include="Models\defect_for_algo.cs" />
     <Compile Include="Models\defect_in_report.cs" />
     <Compile Include="Models\defect_type.cs" />
     <Compile Include="Models\instruction.cs" />
@@ -201,6 +203,7 @@
     <Compile Include="Models\project_type.cs" />
     <Compile Include="Models\proj_type_weight.cs" />
     <Compile Include="Models\report.cs" />
+    <Compile Include="Models\SafetyLevel.cs" />
     <Compile Include="Models\user.cs" />
     <Compile Include="Models\user_type.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -266,7 +269,6 @@
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Scripts\safetyLVL.js" />
     <Content Include="SQLQuery1.sql" />
     <Content Include="uploadedFiles\Chrysanthemum.jpg" />
     <Content Include="uploadedFiles\G4634286.JPG" />

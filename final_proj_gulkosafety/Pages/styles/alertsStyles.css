@@ -145,3 +145,31 @@ h3 {
     text-align: right;
     margin-top: 0px;
 }
+
+/*algo alerts*/
+.algoHeader{
+    font-weight:bold;
+    font-size:18px;
+}
+
+.algoGoodFind {
+    background-color:rgba(226, 246, 210, 0.47);
+    font-size: 18px;
+}
+
+.algoBadFind {
+    background-color:rgba(248, 29, 29, 0.22);
+    font-size: 18px;
+}
+
+.algoRepAvg{
+    background-color:rgba(245, 236, 191, 0.75);
+}
+
+h2 {
+    color: cadetblue;
+}
+
+.grades{
+    color:black;
+}
