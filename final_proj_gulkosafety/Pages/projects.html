@@ -32,9 +32,15 @@
         status0proj = []
         contactList = [];
         projectTypes = [];
+        user =JSON.parse(localStorage["user"]);
         $(document).ready(function () {
-
-            getProjData();
+            if (user.User_type_num==1) {
+                getProjData();
+            }
+            else {
+                getProjData2User();
+            }
+            
             buttonEvents();
 
             getContactList();
@@ -43,6 +49,12 @@
             $("#newProjForm").submit(newProjForm);
 
         });
+        //מביא פרוייקטים של מנהלי עבודה או פרוייקט
+        function getProjData2User() {
+            userEmail=user.Email
+            let api = "../api/project?userEmail="+userEmail;
+            ajaxCall("GET", api, "" , createDt, getError)
+        }
 
         //get a list of all contacts for contact section list
         function getContactList() {

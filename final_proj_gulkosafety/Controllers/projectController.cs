@@ -23,7 +23,20 @@ namespace final_proj_gulkosafety.Controllers
                 throw (ex);
             }
         }
-
+       
+        public List<project> Get(string userEmail)
+        {
+            try
+            {
+                project p = new project();
+                List<project> pList = p.Read(userEmail);
+                return pList;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
         public HttpResponseMessage Post([FromBody] project p)
         {
             try
