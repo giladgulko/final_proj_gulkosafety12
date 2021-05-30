@@ -61,15 +61,16 @@ h3 {
 /*#selectdefect {
     max-width: -webkit-fill-available;
 }*/
-#btn_add_defect, #saveReport, #calcGrade, #addDefectToRBtn, #btn_update_defect, #savePicToDefBTN {
+#btn_add_defect, #saveReport, #calcGrade, #addDefectToRBtn, #btn_update_defect, #savePicToDefBTN, #sendPdf, #downPdf {
     float: left;
     color: #fff;
+    margin-right:7px;
     background-color: cadetblue;
     border-color: cadetblue;
 }
-#calcGrade {
+/*#calcGrade {
     margin-left: 15px;
-}
+}*/
 
 #saveReport {
     float: right;
@@ -202,3 +203,10 @@ p {
     margin-right: 15px;
     font-size: 18px;
 }
+
+#pdfAndSendBTN {
+    position: relative;
+    left: 50px;
+    bottom: 40px;
+}
+
