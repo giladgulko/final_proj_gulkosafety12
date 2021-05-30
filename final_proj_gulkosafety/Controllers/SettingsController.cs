@@ -7,7 +7,7 @@ using System.Web.Http;
 
 namespace final_proj_gulkosafety.Controllers
 {
-    public class SettingsController : ApiController
+    public class settingsController : ApiController
     {
         // GET api/<controller>
         public IEnumerable<string> Get()
