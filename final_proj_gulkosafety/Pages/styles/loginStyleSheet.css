@@ -1,0 +1,35 @@
+﻿
+.form-group {
+    text-align: right;
+}
+.btn-primary {
+    float:left;
+    color: #fff;
+    background-color: cadetblue;
+    border-color: cadetblue;
+}
+body {
+    background-color: cadetblue;
+}
+#logo {
+    margin-top: 5%;
+    margin-left: 15%;
+    margin-right: 15%;
+    
+}
+
+#loginDiv {
+    margin-top: 10%;
+    margin-left: 15%;
+    margin-right: 15%;
+    background-color: #eeeeee;
+}
+.form-check {
+    float: right;
+}
+input#exampleInputEmail {
+    text-align: right;
+}
+input#exampleInputPassword {
+    text-align: right;
+}

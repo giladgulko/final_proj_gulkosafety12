@@ -176,7 +176,7 @@
     <Compile Include="Controllers\proj_type_weightController.cs" />
     <Compile Include="Controllers\reportController.cs" />
     <Compile Include="Controllers\safety_levelController.cs" />
-    <Compile Include="Controllers\SettingsController.cs" />
+    <Compile Include="Controllers\settingsController.cs" />
     <Compile Include="Controllers\userController.cs" />
     <Compile Include="Controllers\user_typeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -221,7 +221,7 @@
     <Content Include="Pages\certificates.html" />
     <Content Include="Pages\home.html" />
     <Content Include="Pages\instructions.html" />
-    <Content Include="Pages\loginpage1.html" />
+    <Content Include="Pages\loginpage.html" />
     <Content Include="Pages\orders.html" />
     <Content Include="Pages\photos\logo.jpeg" />
     <Content Include="Pages\project.html" />
@@ -231,6 +231,7 @@
     <Content Include="Pages\styles\certificatesStyleSheet.css" />
     <Content Include="Pages\styles\homeStyleSheet.css" />
     <Content Include="Pages\styles\instructionsStyleSheet.css" />
+    <Content Include="Pages\styles\loginStyleSheet.css" />
     <Content Include="Pages\styles\ordersStyleSheet.css" />
     <Content Include="Pages\styles\projectsStyles.css" />
     <Content Include="Pages\projects.html" />
