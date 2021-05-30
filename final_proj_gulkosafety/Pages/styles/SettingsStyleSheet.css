@@ -91,7 +91,7 @@ button#myBtn {
     padding-right: 25%;
 }
 
-#pForm {
+.pForm {
     margin-left: 10%;
     margin-right: 10%;
     margin-top: 5%;
@@ -103,3 +103,10 @@ th {
     th.sorting {
         text-align: center;
     }
+button#myBtn {
+    float: left;
+    margin-right: 15%;
+}
+#main{
+
+}

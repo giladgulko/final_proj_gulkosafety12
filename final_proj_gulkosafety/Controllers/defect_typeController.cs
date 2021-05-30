@@ -24,11 +24,11 @@ namespace final_proj_gulkosafety.Controllers
             }
         }
 
-        // POST api/<controller>
-        // public void Post([FromBody] defect_type _defect_type)
-        // {
-        //    _defect_type.InsertDefectType();
-        //    }
+        //POST api/<controller>
+         public void Post([FromBody] defect_type _defect_type)
+        {
+            _defect_type.InsertDefectType();
+        }
 
         // PUT api/<controller>/5
         public void Put(int id, [FromBody] string value)

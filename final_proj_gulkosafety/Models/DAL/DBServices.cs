@@ -1176,9 +1176,45 @@ namespace final_proj_gulkosafety.Models.DAL
         //returns all user types
         public List<user_type> ReadUserTypes()
         {
-            List<user_type> utlist = new List<user_type>();
-            return utlist;
-        }
+                SqlConnection con = null;
+                List<user_type> userTypeList = new List<user_type>();
+
+                try
+                {
+                    con = connect("DBConnectionString");
+
+                    String selectSTR = "SELECT * FROM user_type";
+
+                    SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                    // get a reader
+                    SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                    while (dr.Read())
+                    {
+
+                    user_type _user_type = new user_type();
+                    _user_type.User_type_num = Convert.ToInt32(dr["user_type_num"]);
+                    _user_type.Type_name = (string)dr["type_name"];
+                    userTypeList.Add(_user_type);
+                    }
+
+                    return userTypeList;
+                }
+                catch (Exception ex)
+                {
+                    // write to log
+                    throw (ex);
+                }
+                finally
+                {
+                    if (con != null)
+                    {
+                        con.Close();
+                    }
+
+                }
+
+            }
         //insert a new user type
         public void InsertUserType(user_type ut)
         {
@@ -2726,7 +2762,7 @@ namespace final_proj_gulkosafety.Models.DAL
             {
                 con = connect("DBConnectionString");
 
-                String selectSTR = "SELECT * FROM contact";
+                String selectSTR = "SELECT * FROM item";
 
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
@@ -2815,6 +2851,59 @@ namespace final_proj_gulkosafety.Models.DAL
                 }
 
             }
+
+        }
+
+        //insert a new defect type
+        public int InsertDefectType(defect_type _defect_type)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            String cStr = BuildInsertCommand(_defect_type);      // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
+        private String BuildInsertCommand(defect_type _defect_type)
+        {
+            String command;
+
+            StringBuilder sb = new StringBuilder();
+            // use a string builder to create the dynamic string
+            sb.AppendFormat("Values('{0}')", _defect_type.Type_name);
+            String prefix = "INSERT INTO defect_type " + "(type_name)";
+            command = prefix + sb.ToString();
+
+            return command;
 
         }
     }

@@ -28,11 +28,11 @@ namespace final_proj_gulkosafety.Models
             return dbs.ReadDefectType();
         }
 
-        //   public void InsertDefectType()
-        // {
-        //      DBServices dbs = new DBServices();
-        //   dbs.InsertDefectType(this);
-        //  }
+        public void InsertDefectType()
+        {
+            DBServices dbs = new DBServices();
+            dbs.InsertDefectType(this);
+        }
 
 
     }
