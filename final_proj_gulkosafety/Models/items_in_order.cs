@@ -1,4 +1,5 @@
-﻿using System;
+﻿using final_proj_gulkosafety.Models.DAL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -22,9 +23,14 @@ namespace final_proj_gulkosafety.Models
             Quantity = quantity;
         }
 
-        public items_in_order()
-        {
+        public items_in_order() { }
 
+        public void InsertItemInOrder()
+        {
+            DBServices dbs = new DBServices();
+            dbs.InsertItemInOrder(this);
         }
+
+
     }
 }

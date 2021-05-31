@@ -30,6 +30,7 @@
         AllContacts = [];
         contactList = [];
         certificatedata = [];
+        var firstTimeAddContact = 1;
         var cert_num = "";
         var user_mail = "gulkosafety@gmail.com";
 
@@ -136,8 +137,8 @@
             }
 
             try {
-
-                tbl = $('#contactsTable').DataTable({
+                if (firstTimeAddContact == 1) {
+                    tbl = $('#contactsTable').DataTable({
                         data: contactToShow,
                         pageLength: 10,
                         columns: [
@@ -149,6 +150,11 @@
 
                         ],
                     });
+                    firstTimeAddContact = 0;
+                }
+                else {
+                    alert("You already add contact!")
+                }
             }
 
             catch (err) {

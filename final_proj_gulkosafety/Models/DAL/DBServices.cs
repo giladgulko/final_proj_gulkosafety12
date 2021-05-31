@@ -1769,7 +1769,7 @@ namespace final_proj_gulkosafety.Models.DAL
                 con = connect("DBConnectionString");
                 String selectSTR = "";
 
-                selectSTR = "select * from [order] o inner join items_in_order oi on o.order_num=oi.order_num ";
+                selectSTR = "select * from [order]";
 
 
 
@@ -1786,8 +1786,6 @@ namespace final_proj_gulkosafety.Models.DAL
                     o.Invoice_num = (string)dr["invoice_num"];
                     o.Date = Convert.ToDateTime(dr["date"]);
                     o.Contact_id = (string)dr["contact_id"];
-                    o.Item_num = Convert.ToInt32(dr["item_num"]);
-                    o.Quantity = Convert.ToInt32(dr["quantity"]);
                     o.Total_price = Convert.ToDouble(dr["total_price"]);
                     o.Delete_status = Convert.ToInt32(dr["delete_status"]);
 
@@ -2901,6 +2899,59 @@ namespace final_proj_gulkosafety.Models.DAL
             // use a string builder to create the dynamic string
             sb.AppendFormat("Values('{0}')", _defect_type.Type_name);
             String prefix = "INSERT INTO defect_type " + "(type_name)";
+            command = prefix + sb.ToString();
+
+            return command;
+
+        }
+
+        //insert a new item in order
+        public int InsertItemInOrder(items_in_order _items_in_order)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            String cStr = BuildInsertCommand(_items_in_order);      // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
+        private String BuildInsertCommand(items_in_order _items_in_order)
+        {
+            String command;
+
+            StringBuilder sb = new StringBuilder();
+            // use a string builder to create the dynamic string
+            sb.AppendFormat("Values('{0}','{1}','{2}')", _items_in_order.Item_num, _items_in_order.Order_num, _items_in_order.Quantity);
+            String prefix = "INSERT INTO items_in_order " + "(item_num,order_num,quantity)";
             command = prefix + sb.ToString();
 
             return command;

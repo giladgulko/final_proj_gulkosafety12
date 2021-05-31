@@ -28,18 +28,46 @@
 
         AllContacts = [];
         contactList = [];
+        itemList = [];
+        AllItems = [];
+        allItemsInOrder = [];
+        var firstTimeAddItem = 1;
+        var firstTimeAddContact = 1;
+        var timeOfPost = 1;
+        var order_number = "";
 
         $(document).ready(function () {
             getOrderData();
             getcontacts();
+            getItem();
         });
         //קריאת כל ההזמנות
         function getOrderData() {
             ajaxCall("GET", "../api/order", "", createDt, getError)
         }
         function getError() {
-            swal("Failed!", "Failed to read the orders!", "warning")
+            swal("Failed!", "קריאת הזמנות נכשלה!", "warning")
         }
+        //קריאת כל הפריטים
+        function getItem() {
+            let api = "../api/item";
+             ajaxCall("GET", api , "", getSuccessItem, getErrorItem)
+        }
+        function getSuccessItem(data) {
+            renderItems(data);
+        }
+        function getErrorItem() {
+            swal("נכשל!", "קריאת פריטים נכשלה!", "warning")
+        }
+        // רינדור של כל הפריטים לרשימה
+        function renderItems(data) {
+            AllItems = data;
+            ExistItem = document.getElementById("searchItem1");
+            for (i = 0; i < AllItems.length; i++) {
+                ExistItem.innerHTML += "<option value=" + AllItems[i].Item_num + ">" + AllItems[i].Name + "</option > ";
+            }
+        }
+        
         // קריאת כל אנשי הקשר
         function getcontacts() {
             let api = "../api/contact";
@@ -101,22 +129,28 @@
             else {
                 contactToShow.push(contact1);
                 contactList.push(contact1);
+                $("#searchContact1").val("");
             }
 
             try {
+                if (firstTimeAddContact == 1) {
+                    tbl = $("#contactsTable").DataTable({
+                        data: contactToShow,
+                        pageLength: 10,
+                        columns: [
 
-                tbl = $("#contactsTable").DataTable({
-                    data: contactToShow,
-                    pageLength: 10,
-                    columns: [
+                            { data: "Id" },
+                            { data: "Full_name" },
+                            { data: "Phone" },
+                            { data: "Mail" },
 
-                        { data: "Id" },
-                        { data: "Full_name" },
-                        { data: "Phone" },
-                        { data: "Mail" },
-
-                    ],
-                });
+                        ],
+                    });
+                    firstTimeAddContact = 0;
+                }
+                else {
+                    alert("You already add contact!")
+                }
             }
 
             catch (err) {
@@ -124,6 +158,71 @@
             }
 
         }
+        function createNewcontactSuccess(data) {
+            swal({
+                title: "מצוין!", text: "הוספת איש קשר להזמנה בוצע בהצלחה!", type: "success", icon: "success"
+            }).then(function () {
+
+            });
+        }
+        function createNewcontactError() {
+            swal("נשכל!", "הוספת איש קשר להזמנה נכשל!", "warning")
+        }
+        //  שמירת פריט קיים להזמנה חדשה ורנדור לטבלה
+        function SaveExistItem() {
+            $("#itemsTable").show();
+            let itemId = $("#searchItem1").val();
+            let itemsToShow = [];
+            for (var i = 0; i < AllItems.length; i++) {
+                if (itemId == AllItems[i].Item_num) {
+                    item1 = {
+                        Item_num: AllItems[i].Item_num,
+                        Name: AllItems[i].Name,
+                        Price: AllItems[i].Price,
+                    }
+                    itemsToShow.push(item1);
+                    item2 = {
+                        Item_num: AllItems[i].Item_num,
+                        Name: AllItems[i].Name,
+                        Price: AllItems[i].Price,
+                        QuantityOfItem: $("#item_quantity").val(),
+                    }
+                    itemList.push(item2);
+                }
+            }
+
+            try {
+                if (firstTimeAddItem == 1) {
+                    tbl = $("#itemsTable").DataTable({
+                        data: itemsToShow,
+                        pageLength: 10,
+                        columns: [
+
+                            { data: "Item_num" },
+                            { data: "Name" },
+                            { data: "Price" },
+
+                        ],
+                    });
+                    firstTimeAddItem = 0;
+                }
+                else {
+                    var table = $('#itemsTable').DataTable();
+                    console.table(itemsToShow)
+                    table.row.add({
+                        "Item_num": itemsToShow[itemsToShow.length - 1].Item_num,
+                        "Name": itemsToShow[itemsToShow.length - 1].Name,
+                        "Price": itemsToShow[itemsToShow.length - 1].Price,
+
+                    }).draw();
+                }
+            }
+
+            catch (err) {
+                alert(err);
+            }
+
+        } 
         //ניקוי פופ אפ של הזמנה חדשה
         function clearPopuP() {
             $("#invoice_num").val("");
@@ -136,31 +235,88 @@
             $("#contactsTable").hide();
             $("#searchContact1").val("");
             $("#quantity_num").hide();
+            $("#itemsTable").hide();
         }
         //הכנסת הזמנה חדשה
-        function new_order() {
-           
-            let newOrder = {
+        function insertNewOrder() {
+            let sumOfItems = 0;
+            let totalPrice = 0;
+            for (var i = 0; i < itemList.length; i++) {
+                sumOfItems += itemList[i].QuantityOfItem;
+                totalPrice += itemList[i].QuantityOfItem * itemList[i].Price;
+                let newOrder = {
 
-                Invoice_num: $('#invoice_num').val(),
-                Date: $('#orderDate').val().split("T")[0],
-                Quantity: $('#quantity').val(),
-                Contact_id: contactList[0].Id,
-                Delete_status: 0,
+                    Invoice_num: $('#invoice_num').val(),
+                    Date: $('#orderDate').val().split("T")[0],
+                    Quantity: sumOfItems,
+                    Contact_id: contactList[0].Id,
+                    Total_price: totalPrice,
+                    Delete_status: 0,
 
+                }
             }
             ajaxCall("POST", "../api/order", JSON.stringify(newOrders), createNewOrderSuccess, createNewOrderError);
         }
         function createNewOrderSuccess(data) {
             swal({
-                title: "Good job!", text: "You created new order successfully!", type: "success", icon: "success"
+                title: "מצוין!", text: "יצירת הזמנה חדשה נוצרה בהצלחה!", type: "success", icon: "success"
             }).then(function () {
-                location.reload();
+                getOrderAgain();
 
             });
         }
+        //משיכת כל ההזמנות שוב
+        function getInstruAgain(Instdata) {
+            ajaxCall("GET", "../api/order", "", getsuccess, getError)
+        }
+        
+        function getsuccess(data) {
+            postToItemInOrder(data);
+        }
+        //הכנסת פריט חדש בהזמנה לדאטה בייס
+        function postToItemInOrder(data) {
+
+            let tail = data[data.length - 1];
+            for (var i = 0; i < itemList.length; i++) {
+                item = {
+                    Item_num: itemList[i].Item_num,
+                    Quantity: itemList[i].QuantityOfItem,
+                    Order_num: tail.Order_num,
+                }
+                allItemsInOrder.push(item);
+            }
+            let api = "../api/items_in_order";
+            ajaxCall("POST", api, JSON.stringify(allItemsInOrder[0]), InsertSuccess, InsertError);
+        }
+        function InsertSuccess(data) {
+            if (timeOfPost != allItemsInOrder.length) {
+                postItemInOrder(allItemsInOrder[timeOfPost]);
+                timeOfPost++;
+
+            }
+            else {
+                swal({
+                    title: "מצוין!", text: "פריט בהזמנה נוצר בהצלחה!", type: "success", icon: "success"
+                }).then(function () {
+                    itemList = "";//ניקוי המערך
+                    timeOfPost = 1;
+                    location.reload();
+                });
+            }
+
+
+        }
+        //שוב פוסט של פריט בהזמנה
+        function postItemInOrder(item) {
+            let api = "../api/items_in_order";
+            ajaxCall("POST", api, JSON.stringify(item), InsertSuccess, InsertError);
+        }
+        function InsertError() {
+            swal("נשכל!", "יצירת פריט בהזמנה נכשל!", "warning")
+        }
+
         function createNewOrderError() {
-            swal("Failed!", "You failed to create a new order!", "warning")
+            swal("נכשל!", "יצירת הזמנה חדשה נכשלה!", "warning")
         }
 
         function createDt(orderdata) {
@@ -172,7 +328,6 @@
                         Order_num: orderdata[i].Order_num,
                         Invoice_num: orderdata[i].Invoice_num,
                         Date: orderdata[i].Date,
-                        Quantity: orderdata[i].Quantity,
                         Total_price: orderdata[i].Total_price,
 
                     }
@@ -187,7 +342,6 @@
                         { data: "Order_num" },
                         { data: "Invoice_num" },
                         { data: "Date" },
-                        { data: "Quantity" },
                         { data: "Total_price" },
 
                         {
@@ -217,6 +371,18 @@
             }
 
         }
+        //כפתור הצג איש קשר
+        //function showContact(def) {
+        //    console.log(def);
+        //    order_number = JSON.parse(def);
+        //    for (var i = 0; i < AllContacts.length; i++) {
+        //        if (AllContacts[i].Id == order_number.Contact_id) {
+
+        //        }
+
+        //    }
+        //    getContactInOrder(order_number.Instruction_num);
+        //}
         //עריכת הזמנה
         function editordertBTN(dataorder) {
             orderToEdit = JSON.parse(dataorder);
@@ -277,7 +443,9 @@
         function New_contact() {
             $("#newContact").show();
         }
-
+        function AddItem() {
+            window.location.href = "settings.html";
+        }
 
     </script>
 </head>
@@ -337,7 +505,6 @@
                     <th>מספר הזמנה</th>
                     <th>מספר חשבונית</th>
                     <th>תאריך הזמנה</th>
-                    <th>כמות פריטים</th>
                     <th>סכום הזמנה</th>
                     <th></th>
                 </tr>
@@ -381,14 +548,53 @@
                                         </div>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>
-                                        <button id="btn_save_item" onclick="" class="btn btn-primary"> פריט חדש</button>
-                                    </td>
-                                </tr>
                             </thead>
                         </table>
                     </form>
+                    <table>
+                        <tr>
+                            <td id="searchItem">
+                                <div class="form-group">
+                                    <label for="searchItem1"><span class="red-star">★ </span>חיפוש פריט</label>
+                                    <select onchange="" class="form-control groupDetails" id="searchItem1" required>
+                                        <option value="0">בחר פריט קיים:</option>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <button id="btn_saveExist_item" onclick="SaveExistItem()" class="btn btn-primary"> שמור פריט</button>
+                            </td>
+                            <br />
+                            <br />
+                            <td>
+                                <div class="form-group">
+                                    <label for="item_quantity">כמות מפריט</label>
+                                    <textarea rows="1" class="form-control groupDetails" id="item_quantity" placeholder=" הכנס כמות מפריט "></textarea>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button id="add_item" onclick="AddItem()" class="btn btn-primary"> הוסף פריט בהגדרות</button>
+                            </td>
+                        </tr>
+                        <br />
+                    </table>
+                    <div>
+                        <form id="pForm">
+                            <table id="itemsTable" class="display" style="width:100%" dir="rtl">
+                                <thead>
+                                    <tr>
+                                        <th>מספר פריט</th>
+                                        <th>שם פריט</th>
+                                        <th>מחיר ליחידה</th>
+                                        <th>כמות לפריט</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </form>
+                    </div>
                     <table>
                         <tr>
                             <td id="searchContact">
@@ -458,7 +664,7 @@
                             </table>
                         </form>
                     </div>
-                    <button id="saveBTN" onclick="new_order()" class="btn btn-primary"> שמור הזמנה</button>
+                    <button id="saveBTN" onclick="insertNewOrder()" class="btn btn-primary"> שמור הזמנה</button>
                     <button id="btn_update_order" class="btn btn-primary" onclick="updateOrder()"> עדכן הזמנה</button>
                 </div>
                 <br />
