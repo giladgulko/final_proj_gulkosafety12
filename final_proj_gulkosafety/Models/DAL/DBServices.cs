@@ -1164,7 +1164,7 @@ namespace final_proj_gulkosafety.Models.DAL
 
             StringBuilder sb = new StringBuilder();
 
-            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}', '{4}','{5}','{6}')", _defect_in_report.Report_num, _defect_in_report.Defect_num, _defect_in_report.Fix_date.ToString("yyyy-MM-dd"), _defect_in_report.Fix_time.ToShortTimeString(), _defect_in_report.Picture_link, _defect_in_report.Fix_status, _defect_in_report.Description); ;
+            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}', '{4}','{5}','{6}')", _defect_in_report.Report_num, _defect_in_report.Defect_num, _defect_in_report.Fix_date.ToString("yyyy-MM-dd"), _defect_in_report.Fix_time.ToShortTimeString(), _defect_in_report.Picture_link, _defect_in_report.Fix_status, _defect_in_report.Description); 
             String prefix = "INSERT INTO defect_in_report " + "(report_num,defect_num,fix_date,fix_time,picture_link,fix_status,description)";
             command = prefix + sb.ToString();
 
@@ -1855,8 +1855,8 @@ namespace final_proj_gulkosafety.Models.DAL
 
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
-            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}')", _order.Invoice_num, _order.Date.ToString("yyyy-MM-dd"), _order.Total_price,_order.Contact_id,_order.Delete_status);
-            String prefix = "INSERT INTO project " + "(invoice_num,date,total_price,contact_id,delete_status)";
+            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}','{4}')", _order.Invoice_num, _order.Date.ToString("yyyy-MM-dd"), _order.Total_price, _order.Contact_id, _order.Delete_status);
+            String prefix = "INSERT INTO order " + "(invoice_num,date,total_price,contact_id,delete_status)";
             command = prefix + sb.ToString();
 
             return command;
@@ -2957,6 +2957,101 @@ namespace final_proj_gulkosafety.Models.DAL
             return command;
 
         }
+
+        //read items in order by number of order
+        public List<items_in_order> ReadItemsInOrder(int order_num)
+        {
+            SqlConnection con = null;
+            List<items_in_order> itemInOrdertList = new List<items_in_order>();
+
+            try
+            {
+                con = connect("DBConnectionString");
+
+                String selectSTR = "SELECT i.*, io.order_num, io.quantity FROM item i inner join items_in_order io on i.item_num = io.item_num where io.order_num = " + order_num;
+
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                while (dr.Read())
+                {
+
+                    items_in_order _items_in_order = new items_in_order();
+                    _items_in_order.Item_num = Convert.ToInt32(dr["item_num"]);
+                    _items_in_order.Name1 = (string)dr["name"];
+                    _items_in_order.Price = Convert.ToDouble(dr["price"]);
+                    _items_in_order.Order_num = Convert.ToInt32(dr["order_num"]);
+                    _items_in_order.Quantity = Convert.ToInt32(dr["quantity"]);
+                    itemInOrdertList.Add(_items_in_order);
+                }
+
+                return itemInOrdertList;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+
+        //update order detail
+        public int UpdateOrder(order o)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            String cStr = BuildupdateCommand(o);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+
+        private String BuildupdateCommand(order o)
+        {
+            String command;
+            command = "UPDATE order SET total_price=" + o.Total_price + ", invoice_num='" + o.Invoice_num + "', date='" + o.Date.ToString("yyyy-MM-dd") + "' WHERE order_num =" + o.Order_num;
+
+            return command;
+        }
+
     }
 
 }

@@ -27,7 +27,19 @@ namespace final_proj_gulkosafety.Controllers
                 return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
             }
         }
-
+        public List<items_in_order> Get(int order_num)
+        {
+            try
+            {
+                items_in_order i = new items_in_order();
+                List<items_in_order> iList = i.Read(order_num);
+                return iList;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
 
         // PUT api/<controller>/5
         public void Put(int id, [FromBody]string value)

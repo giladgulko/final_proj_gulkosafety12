@@ -30,6 +30,7 @@
         contactList = [];
         itemList = [];
         AllItems = [];
+        orderToEdit = [];
         allItemsInOrder = [];
         var firstTimeAddItem = 1;
         var firstTimeAddContact = 1;
@@ -37,7 +38,6 @@
         var order_number = "";
 
         $(document).ready(function () {
-            getOrderData();
             getcontacts();
             getItem();
         });
@@ -75,6 +75,7 @@
         }
 
         function getContactSuccess(data) {
+            getOrderData();
             renderContacts(data);
         }
 
@@ -88,6 +89,65 @@
         }
         function getContactError() {
             swal("נכשל!", "קריאת אנשי קשר נכשלה!", "warning")
+        }
+        function getItemInOrder(order_number) {
+            let api = "../api/items_in_order?order_num=" + order_number;
+            ajaxCall("GET", api, "", getItemInOrderSuccess, getItemInOrderError);
+        }
+        function getItemInOrderSuccess(data) {
+            console.log(data);
+            items = data;
+            createTBitems(items);
+
+        }
+        //הטבלה שמוצגת בכפתור הצג פריטים
+        function createTBitems(items) {
+            document.getElementById('id04').style.display = 'block';
+            let itemToShow = [];
+            for (var i = 0; i < items.length; i++) {
+                    item = {
+                        Item_num: items[i].Item_num,
+                        Name: items[i].Name1,
+                        Price: items[i].Price,
+                        Quantity: items[i].Quantity,
+                    }
+                    itemToShow.push(item);
+            }
+            try {
+                tbl = $('#itemTable1').DataTable({
+                    data: itemToShow,
+                    pageLength: 10,
+                    columns: [
+
+                        { data: "Item_num" },
+                        { data: "Name" },
+                        { data: "Price" },
+                        { data: "Quantity" },
+
+                        {
+                            render: function (data, type, row, meta) {
+                                let def = JSON.stringify(row);
+
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editItem(this.value)'> עריכה </button>";
+
+                                return editBtn;
+
+
+                            }
+                        },
+
+                    ],
+                })
+
+            }
+
+            catch (err) {
+                alert(err);
+            }
+
+        }
+        function getItemInOrderError() {
+            swal("נכשל!", "קריאת פריטים בהזמנה נכשלה!", "warning")
         }
         //שמירת איש קשר קיים לאישור חדש
         function SaveExistContact() {
@@ -179,15 +239,10 @@
                         Item_num: AllItems[i].Item_num,
                         Name: AllItems[i].Name,
                         Price: AllItems[i].Price,
-                    }
-                    itemsToShow.push(item1);
-                    item2 = {
-                        Item_num: AllItems[i].Item_num,
-                        Name: AllItems[i].Name,
-                        Price: AllItems[i].Price,
                         QuantityOfItem: $("#item_quantity").val(),
                     }
-                    itemList.push(item2);
+                    itemsToShow.push(item1);
+                    itemList.push(item1);
                 }
             }
 
@@ -201,10 +256,13 @@
                             { data: "Item_num" },
                             { data: "Name" },
                             { data: "Price" },
+                            { data: "QuantityOfItem"},
 
                         ],
                     });
                     firstTimeAddItem = 0;
+                    $("#item_quantity").val("");
+                    $("#searchItem1").val("");
                 }
                 else {
                     var table = $('#itemsTable').DataTable();
@@ -213,8 +271,11 @@
                         "Item_num": itemsToShow[itemsToShow.length - 1].Item_num,
                         "Name": itemsToShow[itemsToShow.length - 1].Name,
                         "Price": itemsToShow[itemsToShow.length - 1].Price,
+                        "QuantityOfItem": itemsToShow[itemsToShow - 1].QuantityOfItem,
 
                     }).draw();
+                    $("#item_quantity").val("");
+                    $("#searchItem1").val("");
                 }
             }
 
@@ -227,7 +288,6 @@
         function clearPopuP() {
             $("#invoice_num").val("");
             $("#orderDate").val("");
-            $("#quantity").val("");
             $("#saveBTN").show();
             $("#total_orderTD").hide();
             $("#btn_update_order").hide();
@@ -236,26 +296,29 @@
             $("#searchContact1").val("");
             $("#quantity_num").hide();
             $("#itemsTable").hide();
+            $("#searchContact").show();
+            $("#btn_saveExist_contact").show();
+            $("#btn_new_contact").show();
+            $("#search_item").show();
+
         }
         //הכנסת הזמנה חדשה
         function insertNewOrder() {
-            let sumOfItems = 0;
+            let newOrder = "";
             let totalPrice = 0;
             for (var i = 0; i < itemList.length; i++) {
-                sumOfItems += itemList[i].QuantityOfItem;
                 totalPrice += itemList[i].QuantityOfItem * itemList[i].Price;
-                let newOrder = {
+                newOrder = {
 
                     Invoice_num: $('#invoice_num').val(),
                     Date: $('#orderDate').val().split("T")[0],
-                    Quantity: sumOfItems,
                     Contact_id: contactList[0].Id,
                     Total_price: totalPrice,
                     Delete_status: 0,
 
                 }
             }
-            ajaxCall("POST", "../api/order", JSON.stringify(newOrders), createNewOrderSuccess, createNewOrderError);
+            ajaxCall("POST", "../api/order", JSON.stringify(newOrder), createNewOrderSuccess, createNewOrderError);
         }
         function createNewOrderSuccess(data) {
             swal({
@@ -265,8 +328,11 @@
 
             });
         }
+        function createNewOrderError() {
+            swal("נכשל!", "יצירת הזמנה חדשה נכשלה!", "warning")
+        }
         //משיכת כל ההזמנות שוב
-        function getInstruAgain(Instdata) {
+        function getOrderAgain(orderdata) {
             ajaxCall("GET", "../api/order", "", getsuccess, getError)
         }
         
@@ -299,6 +365,7 @@
                     title: "מצוין!", text: "פריט בהזמנה נוצר בהצלחה!", type: "success", icon: "success"
                 }).then(function () {
                     itemList = "";//ניקוי המערך
+                    contactList = "";//ניקוי המערך
                     timeOfPost = 1;
                     location.reload();
                 });
@@ -315,23 +382,24 @@
             swal("נשכל!", "יצירת פריט בהזמנה נכשל!", "warning")
         }
 
-        function createNewOrderError() {
-            swal("נכשל!", "יצירת הזמנה חדשה נכשלה!", "warning")
-        }
-
         function createDt(orderdata) {
             let ordersToShow = [];
             for (var i = 0; i < orderdata.length; i++) {
                 orderdata[i].Date = orderdata[i].Date.split("T")[0];
-                    order = {
+                for (var j = 0; j < AllContacts.length; j++) {
+                    if (orderdata[i].Contact_id == AllContacts[j].Id) {
+                        order = {
 
-                        Order_num: orderdata[i].Order_num,
-                        Invoice_num: orderdata[i].Invoice_num,
-                        Date: orderdata[i].Date,
-                        Total_price: orderdata[i].Total_price,
+                            Order_num: orderdata[i].Order_num,
+                            Invoice_num: orderdata[i].Invoice_num,
+                            Date: orderdata[i].Date,
+                            Total_price: orderdata[i].Total_price,
+                            Contact_id: AllContacts[j].Full_name,
 
+                        }
+                        ordersToShow.push(order);
                     }
-                    ordersToShow.push(order);
+                }
             }
             try {
                 tbl = $('#orderTable').DataTable({
@@ -343,6 +411,7 @@
                         { data: "Invoice_num" },
                         { data: "Date" },
                         { data: "Total_price" },
+                        { data: "Contact_id"},
 
                         {
                             render: function (data, type, row, meta) {
@@ -354,7 +423,7 @@
 
                                 showBtn = "<button type='button' class = 'showBtn btn btn-show' value='" + def + "' onclick='showContact(this.value)'>  הצג איש קשר </button>";
 
-                                itemBtn = "<button type='button' class = 'itemBtn btn btn-item' value='" + def + "' onclick='(this.value)'> הצג פריטים </button>";
+                                itemBtn = "<button type='button' class = 'itemBtn btn btn-item' value='" + def + "' onclick='showItems(this.value)'> הצג פריטים </button>";
 
                                 return editBtn + deleteBtn + showBtn + itemBtn;
 
@@ -372,17 +441,93 @@
 
         }
         //כפתור הצג איש קשר
-        //function showContact(def) {
-        //    console.log(def);
-        //    order_number = JSON.parse(def);
-        //    for (var i = 0; i < AllContacts.length; i++) {
-        //        if (AllContacts[i].Id == order_number.Contact_id) {
+        function showContact(def) {
+            console.log(def);
+            document.getElementById('id01').style.display = 'block';
+            order_number = JSON.parse(def);
+            let contactToShow = [];
+            for (var i = 0; i < AllContacts.length; i++) {
+                if (AllContacts[i].Full_name == order_number.Contact_id) {
+                    contact = {
+                        Id: AllContacts[i].Id,
+                        Full_name: AllContacts[i].Full_name,
+                        Phone: AllContacts[i].Phone,
+                        Mail: AllContacts[i].Mail
+                    }
+                    contactToShow.push(contact);
+                }
 
-        //        }
+            }
+            try {
+                tbl = $('#contactTable1').DataTable({
+                    data: contactToShow,
+                    pageLength: 10,
+                    columns: [
 
-        //    }
-        //    getContactInOrder(order_number.Instruction_num);
-        //}
+                        { data: "Id" },
+                        { data: "Full_name" },
+                        { data: "Phone" },
+                        { data: "Mail" },
+
+                        {
+                            render: function (data, type, row, meta) {
+                                let def = JSON.stringify(row);
+
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editContact(this.value)'> עריכה </button>";
+
+                                return editBtn;
+
+
+                            }
+                        },
+
+                    ],
+                })
+
+            }
+
+            catch (err) {
+                alert(err);
+            }
+        }
+        //עריכת איש קשר
+        function editContact(datacontact) {
+            document.getElementById('id02').style.display = 'block';
+            let contact_data = JSON.parse(datacontact);
+            $("#contact_id1").val(contact_data.Id);
+            $("#contact_id1").prop('disabled', true);
+            $("#contact_name1").val(contact_data.Full_name);
+            $("#contact_phone1").val(contact_data.Phone);
+            $("#contact_mail1").val(contact_data.Mail);
+        }
+        // עדכון איש קשר
+        function updateContact() {
+            contact_update = {
+                Id: $("#contact_id1").val(),
+                Full_name: $("#contact_name1").val(),
+                Phone: $("#contact_phone1").val(),
+                Mail: $("#contact_mail1").val(),
+            }
+            let api = "../api/contact";
+            ajaxCall("PUT", api, JSON.stringify(contact_update), UpdateContactSuccess, UpdateContactError);
+        }
+        function UpdateContactSuccess() {
+            swal({
+                title: "מצוין!", text: "עדכון משתתף בוצע", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
+        }
+        function UpdateContactError() {
+            swal("עדכון משתתף לא בוצע!", err, "warning");
+        }
+        //כפתור הצג פריטים
+        function showItems(def) {
+            console.log(def);
+            order_number = JSON.parse(def);
+            getItemInOrder(order_number.Order_num);
+        }
         //עריכת הזמנה
         function editordertBTN(dataorder) {
             orderToEdit = JSON.parse(dataorder);
@@ -390,7 +535,6 @@
 
             $("#invoice_num").val(orderToEdit.Invoice_num);
             $("#orderDate").val(orderToEdit.Date);
-            $("#quantity").val(orderToEdit.Quantity);
             $("#total_order").val(orderToEdit.Total_price);
             $("#saveBTN").hide();
             $("#btn_update_order").show();
@@ -402,7 +546,8 @@
             $("#btn_save_item").hide();
             $("#btn_saveExist_contact").hide();
             $("#quantity_num").show();
-            $("#quantity").prop('disabled', true)
+            $("#search_item").hide();
+            $("#div_TB_item").hide();
         }
         //מחיקת הזמנה
         function deleteOrder(def) {
@@ -440,11 +585,39 @@
             swal("ההזמנה לא נמחקה!", err, "warning");
         }
 
+        //עדכון הזמנה
+        function updateOrder() {
+            let newOrder = {
+
+                Certificate_num: orderToEdit.Order_num,
+                Invoice_num: $("#invoice_num").val(),
+                Date: $("#orderDate").val(),
+                Total_order: $("#total_order").val(),
+            }
+            let api = "../api/order";
+            ajaxCall("PUT", api, JSON.stringify(newOrder), updateOrderSuccess, updateOrderError);
+        }
+
+        function updateOrderSuccess(data) {
+            swal({
+                title: "מצוין!", text: "עדכון הזמנה בוצע בהצלחה!", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
+        }
+        function updateOrderError() {
+            swal("נכשל!", "עדכון הזמנה נכשל!", "warning")
+        }
+
         function New_contact() {
             $("#newContact").show();
         }
         function AddItem() {
             window.location.href = "settings.html";
+        }
+        function closeWindow() {
+            location.reload();
         }
 
     </script>
@@ -506,6 +679,7 @@
                     <th>מספר חשבונית</th>
                     <th>תאריך הזמנה</th>
                     <th>סכום הזמנה</th>
+                    <th>שם איש קשר</th>
                     <th></th>
                 </tr>
             </thead>
@@ -535,12 +709,6 @@
                                             <input type="date" class="groupDetails" id="orderDate" required>
                                         </div>
                                     </td>
-                                    <td id="quantity_num">
-                                        <div class="form-group">
-                                            <label for="quantity">כמות פריטים</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="quantity" placeholder="הזן כמות פריטים"></textarea>
-                                        </div>
-                                    </td>
                                     <td id="total_orderTD">
                                         <div class="form-group">
                                             <label for="total_order">סכום הזמנה</label>
@@ -551,26 +719,26 @@
                             </thead>
                         </table>
                     </form>
-                    <table>
+                    <table id="search_item">
                         <tr>
                             <td id="searchItem">
                                 <div class="form-group">
                                     <label for="searchItem1"><span class="red-star">★ </span>חיפוש פריט</label>
                                     <select onchange="" class="form-control groupDetails" id="searchItem1" required>
-                                        <option value="0">בחר פריט קיים:</option>
+                                        <option value="">בחר פריט קיים:</option>
                                     </select>
                                 </div>
                             </td>
-                            <td>
-                                <button id="btn_saveExist_item" onclick="SaveExistItem()" class="btn btn-primary"> שמור פריט</button>
-                            </td>
-                            <br />
-                            <br />
                             <td>
                                 <div class="form-group">
                                     <label for="item_quantity">כמות מפריט</label>
                                     <textarea rows="1" class="form-control groupDetails" id="item_quantity" placeholder=" הכנס כמות מפריט "></textarea>
                                 </div>
+                            </td>
+                            <br />
+                            <br />
+                            <td>
+                                <button id="btn_saveExist_item" onclick="SaveExistItem()" class="btn btn-primary"> שמור פריט</button>
                             </td>
                         </tr>
                         <tr>
@@ -580,7 +748,7 @@
                         </tr>
                         <br />
                     </table>
-                    <div>
+                    <div id="div_TB_item">
                         <form id="pForm">
                             <table id="itemsTable" class="display" style="width:100%" dir="rtl">
                                 <thead>
@@ -600,8 +768,8 @@
                             <td id="searchContact">
                                 <div class="form-group">
                                     <label for="searchContact1"><span class="red-star">★ </span>חיפוש איש קשר</label>
-                                    <select onchange="" class="form-control groupDetails" id="searchContact1" required>
-                                        <option value="0">בחר איש קשר קיים:</option>
+                                    <select  class="form-control groupDetails" id="searchContact1" required>
+                                        <option value="">בחר איש קשר קיים:</option>
                                     </select>
                                 </div>
                             </td>
@@ -671,6 +839,95 @@
             </div>
         </div>
     </div>
-    
+    <div class="w3-container">
+        <div id="id01" class="w3-modal">
+            <div class="w3-modal-content">
+                <div class="w3-container" dir="rtl">
+                    <span onclick="document.getElementById('id01').style.display='none',closeWindow()" class="w3-button w3-display-topright">&times;</span>
+                    <form id="pForm">
+                        <h2 id="contactInOrder">איש קשר</h2>
+                        <table id="contactTable1" class="display" style="width:100%" dir="rtl">
+                            <thead>
+                                <tr>
+                                    <th>ת.ז</th>
+                                    <th>שם מלא</th>
+                                    <th>טלפון</th>
+                                    <th>מייל</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="w3-container">
+        <div id="id02" class="w3-modal">
+            <div class="w3-modal-content">
+                <div class="w3-container" dir="rtl">
+                    <span onclick="document.getElementById('id02').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                    <form id="pForm">
+                        <h2 id="update_contact">עריכת איש קשר</h2>
+                        <br />
+                        <table id="updateContactTb">
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="contact_id"><span class="red-star">★ </span>תעודת זהות</label>
+                                        <textarea rows="1" class="form-control groupDetails" id="contact_id1" placeholder=" הזן ת.ז "></textarea>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="contact_name"><span class="red-star">★ </span>שם מלא</label>
+                                        <textarea rows="1" class="form-control groupDetails" id="contact_name1" placeholder=" הזן שם מלא "></textarea>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="contact_phone"><span class="red-star">★ </span>טלפון</label>
+                                        <textarea rows="1" class="form-control groupDetails" id="contact_phone1" placeholder=" הזן טלפון "></textarea>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="contact_mail"><span class="red-star">★ </span>מייל</label>
+                                        <textarea rows="2" class="form-control groupDetails" id="contact_mail1" placeholder=" הזן מייל "></textarea>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                    <br />
+                    <button id="btnUpdate_contact" class="btn btn-primary" onclick="updateContact()"> עדכן איש קשר </button>
+                </div>
+                <br />
+            </div>
+        </div>
+    </div>
+    <div class="w3-container">
+        <div id="id04" class="w3-modal">
+            <div class="w3-modal-content">
+                <div class="w3-container" dir="rtl">
+                    <span onclick="document.getElementById('id04').style.display='none',closeWindow()" class="w3-button w3-display-topright">&times;</span>
+                    <form id="pForm">
+                        <h2 id="itemInOrder">פריטים בהזמנה</h2>
+                        <table id="itemTable1" class="display" style="width:100%" dir="rtl">
+                            <thead>
+                                <tr>
+                                    <th>מספר פריט</th>
+                                    <th>שם פריט</th>
+                                    <th>מחיר ליחידה</th>
+                                    <th>כמות לפריט</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

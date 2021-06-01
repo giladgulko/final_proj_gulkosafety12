@@ -50,6 +50,13 @@ namespace final_proj_gulkosafety.Models
             DBServices dbs = new DBServices();
             dbs.InsertOrder(this);
         }
+
+        public void UpdateOrder()
+        {
+            DBServices dbs = new DBServices();
+            dbs.UpdateOrder(this);
+
+        }
     }
 
 }
