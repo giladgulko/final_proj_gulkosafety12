@@ -231,8 +231,8 @@
         //  שמירת פריט קיים להזמנה חדשה ורנדור לטבלה
         function SaveExistItem() {
             $("#itemsTable").show();
-            let itemId = $("#searchItem1").val();
             let itemsToShow = [];
+            let itemId = $("#searchItem1").val();
             for (var i = 0; i < AllItems.length; i++) {
                 if (itemId == AllItems[i].Item_num) {
                     item1 = {
@@ -271,7 +271,7 @@
                         "Item_num": itemsToShow[itemsToShow.length - 1].Item_num,
                         "Name": itemsToShow[itemsToShow.length - 1].Name,
                         "Price": itemsToShow[itemsToShow.length - 1].Price,
-                        "QuantityOfItem": itemsToShow[itemsToShow - 1].QuantityOfItem,
+                        "QuantityOfItem": itemsToShow[itemsToShow.length - 1].QuantityOfItem,
 
                     }).draw();
                     $("#item_quantity").val("");
@@ -289,7 +289,7 @@
             $("#invoice_num").val("");
             $("#orderDate").val("");
             $("#saveBTN").show();
-            $("#total_orderTD").hide();
+            $("#total_priceTD").hide();
             $("#btn_update_order").hide();
             $("#newContact").hide();
             $("#contactsTable").hide();
@@ -535,10 +535,10 @@
 
             $("#invoice_num").val(orderToEdit.Invoice_num);
             $("#orderDate").val(orderToEdit.Date);
-            $("#total_order").val(orderToEdit.Total_price);
+            $("#total_price").val(orderToEdit.Total_price);
             $("#saveBTN").hide();
             $("#btn_update_order").show();
-            $("#total_orderTD").show();
+            $("#total_priceTD").show();
             $("#contactsTable").hide();
             $("#newContact").hide();
             $("#searchContact").hide();
@@ -589,10 +589,10 @@
         function updateOrder() {
             let newOrder = {
 
-                Certificate_num: orderToEdit.Order_num,
+                Order_num: orderToEdit.Order_num,
                 Invoice_num: $("#invoice_num").val(),
                 Date: $("#orderDate").val(),
-                Total_order: $("#total_order").val(),
+                Total_price: $("#total_price").val(),
             }
             let api = "../api/order";
             ajaxCall("PUT", api, JSON.stringify(newOrder), updateOrderSuccess, updateOrderError);
@@ -709,10 +709,10 @@
                                             <input type="date" class="groupDetails" id="orderDate" required>
                                         </div>
                                     </td>
-                                    <td id="total_orderTD">
+                                    <td id="total_priceTD">
                                         <div class="form-group">
-                                            <label for="total_order">סכום הזמנה</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="total_order" placeholder="הזן סכום הזמנה"></textarea>
+                                            <label for="total_price">סכום הזמנה</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="total_price" placeholder="הזן סכום הזמנה"></textarea>
                                         </div>
                                     </td>
                                 </tr>

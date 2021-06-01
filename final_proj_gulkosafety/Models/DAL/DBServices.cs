@@ -1856,7 +1856,7 @@ namespace final_proj_gulkosafety.Models.DAL
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
             sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}','{4}')", _order.Invoice_num, _order.Date.ToString("yyyy-MM-dd"), _order.Total_price, _order.Contact_id, _order.Delete_status);
-            String prefix = "INSERT INTO order " + "(invoice_num,date,total_price,contact_id,delete_status)";
+            String prefix = "INSERT INTO [order] " + "(invoice_num,date,total_price,contact_id,delete_status)";
             command = prefix + sb.ToString();
 
             return command;
@@ -2746,7 +2746,7 @@ namespace final_proj_gulkosafety.Models.DAL
         private String BuildDeleteOrderCommand(int order_num, int delete_status)
         {
             String command;
-            command = "UPDATE order SET delete_status = " + delete_status + " WHERE order_num = " + order_num;
+            command = "UPDATE [order] SET delete_status = " + delete_status + " WHERE order_num = " + order_num;
             return command;
         }
 
@@ -3047,7 +3047,7 @@ namespace final_proj_gulkosafety.Models.DAL
         private String BuildupdateCommand(order o)
         {
             String command;
-            command = "UPDATE order SET total_price=" + o.Total_price + ", invoice_num='" + o.Invoice_num + "', date='" + o.Date.ToString("yyyy-MM-dd") + "' WHERE order_num =" + o.Order_num;
+            command = "UPDATE [order] SET total_price=" + o.Total_price + ", invoice_num='" + o.Invoice_num + "', date='" + o.Date.ToString("yyyy-MM-dd") + "' WHERE order_num =" + o.Order_num;
 
             return command;
         }
