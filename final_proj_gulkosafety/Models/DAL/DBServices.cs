@@ -3052,6 +3052,104 @@ namespace final_proj_gulkosafety.Models.DAL
             return command;
         }
 
+        //update Defect Type 
+        public int UpdateDefectType(defect_type _defect_type)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            String cStr = BuildupdateCommand(_defect_type);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+
+        private String BuildupdateCommand(defect_type _defect_type)
+        {
+            String command;
+            command = "UPDATE [defect_type] SET type_name='" + _defect_type.Type_name + "' WHERE defect_type_num =" + _defect_type.Defect_type_num;
+
+            return command;
+        }
+
+        //delete defect_type 
+        public int DeleteDefectType(int Defect_type_num)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            String cStr = BuildDeleteCommandDefect(Defect_type_num);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+        private String BuildDeleteCommandDefect(int Defect_type_num)
+        {
+            String command;
+            command = "delete from defect_type where defect_type_num=" + Defect_type_num;
+            return command;
+        }
+
+
     }
 
 }

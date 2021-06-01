@@ -33,6 +33,7 @@
             $("#addDefectTypeBtn").hide();
             $("#defectTypeForm").hide();
             FirstTimeUploadDefectTypeTable = 0;
+            defectTypeToEdit = [];
             // סוגי הדרכות
             $("#addInstructionTypeBtn").hide();
             $("#instructionTypeTable").hide();
@@ -125,9 +126,9 @@
                             render: function (data, type, row, meta) {
                                 let def = JSON.stringify(row);
 
-                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editinstrucBTN(this.value)'> עריכה </button>";
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editDefectType(this.value)'> עריכה </button>";
 
-                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteInstruction(this.value)'> מחיקה </button>";
+                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteDefectType(this.value)'> מחיקה </button>";
 
                                 return editBtn + deleteBtn;
 
@@ -143,7 +144,7 @@
                 alert(err);
             }
         }
-
+        //הוספת סוג ליקוי חדש
         function insert_new_defect_type() {
 
             document.getElementById('id01').style.display = 'none';
@@ -168,6 +169,68 @@
         }
         function createNewDefectTypeError() {
             swal("נכשל!", "הכנסת סוג ליקוי חדש נכשל!", "warning")
+        }
+
+        //עריכת סוג ליקוי
+        function editDefectType(dataDefectType) {
+            document.getElementById('id011').style.display = 'block';
+            defectTypeToEdit = JSON.parse(dataDefectType);
+            $("#defect_type_number").val(defectTypeToEdit.Defect_type_num);
+            $("#defect_type_number").prop('disabled', true);
+            $("#defect_type_name1").val(defectTypeToEdit.Type_name);
+        } 
+        // עדכון סוג ליקוי
+        function updateDefectType() {
+            defect_type_update = {
+                Defect_type_num: $("#defect_type_number").val(),
+                Type_name: $("#defect_type_name1").val(),
+            }
+            let api = "../api/defect_type";
+            ajaxCall("PUT", api, JSON.stringify(defect_type_update), UpdateDefectTypeSuccess, UpdateDefectTypetError);
+        }
+        function UpdateDefectTypeSuccess() {
+            swal({
+                title: "מצוין!", text: "עדכון סוג ליקוי בוצע", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
+        }
+        function UpdateDefectTypetError() {
+            swal("עדכון סוג ליקוי לא בוצע!", err, "warning");
+        }
+        // מחיקת סוג ליקוי
+        function deleteDefectType(def) {
+            delete_defect_type = JSON.parse(def);
+            defectTypeToDelete = {
+                Defect_type_num: delete_defect_type.Defect_type_num,
+            }
+            swal({
+                title: "האם אתה בטוח שברצונך למחוק את הסוג ליקוי?",
+                text: "",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true
+            })
+                .then(function (willDelete) {
+                    if (willDelete) delete_defect_type_func(defectTypeToDelete);
+                    else swal("סוג ליקוי לא נמחק!");
+                });
+        }
+        function delete_defect_type_func(defectTypeToDelete) {
+            ajaxCall("DELETE", "../api/defect_type", JSON.stringify(defectTypeToDelete), deleteDefectTypeSuccess, deleteDefectTypeError);
+          
+        }
+        function deleteDefectTypeSuccess() {
+            swal({
+                title: "מצוין!", text: "סוג ליקוי נמחק בהצלחה", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
+        }
+        function deleteDefectTypeError() {
+            swal("סוג ליקוי לא נמחק!", err, "warning");
         }
         //////////////////////////////////////////////////////סוגי הדרכות
         // קריאת כל סוגי הדרכות
@@ -591,7 +654,7 @@
         <a href="#">סוגי אישורים</a>
         <a href="#">פריטים</a>
     </div>-->
-<div id="main">
+    <div id="main">
         <div class="btn-group">
             <button id="defectTypeBtn" onclick="getDefectType()">סוגי ליקוי</button>
             <button id="instructionTypeBtn" onclick="getInstructionType()">סוגי הדרכה</button>
@@ -693,6 +756,38 @@
                         <br />
                         <button id="saveBTN" onclick="insert_new_defect_type()" class="btn btn-primary"> שמור סוג ליקוי</button>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="w3-container">
+            <div id="id011" class="w3-modal">
+                <div class="w3-modal-content">
+                    <div class="w3-container" dir="rtl">
+                        <span onclick="document.getElementById('id011').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                        <form id="updateDefectTypeForm">
+                            <h2 id="update_defect_type">עריכת סוג ליקוי</h2>
+                            <br />
+                            <table id="updateDefectTypeTb">
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="defect_type_number"><span class="red-star">★ </span>מספר סוג ליקוי</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="defect_type_number" placeholder=" מספר סוג ליקוי "></textarea>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="defect_type_name1"><span class="red-star">★ </span>שם סוג ליקוי</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="defect_type_name1" placeholder=" הזן שם סוג ליקוי "></textarea>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                        <br />
+                        <button id="btn_update_defect_type" class="btn btn-primary" onclick="updateDefectType()"> עדכן סוג ליקוי </button>
+                    </div>
+                    <br />
                 </div>
             </div>
         </div>
