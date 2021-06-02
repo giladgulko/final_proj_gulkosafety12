@@ -168,55 +168,80 @@
         } 
         // שמירת איש קשר באישור חדש ורנדור לטבלה 
         function SaveNewcontact(contact1) {
-
             $("#newContact").hide();
             $("#contactsTable").show();
+            $("#contactsTable1").show();
             let contactToShow = [];
             if (contact1 == null) {
-                contact = {
-                    Id: $("#contact_id").val(),
-                    Full_name: $("#contact_name").val(),
-                    Phone: $("#contact_phone").val(),
-                    Mail: $("#contact_mail").val(),
-
+                checkId = $("#contact_id").val()
+                checkMail = $("#contact_mail").val()
+                let isBreak = 0;
+                for (var i = 0; i < AllContacts.length; i++) {
+                    if (AllContacts[i].Id == checkId) {
+                        alert("מספר ת.ז זה קיים במערכת - נסה שנית")
+                        isBreak = 1;
+                        break;
+                    }
+                    if (AllContacts[i].Mail == checkMail) {
+                        alert("כתובת מייל זו קיימת במערכת - נסה שנית")
+                        isBreak = 1;
+                        break;
+                    }
+                    else {
+                    }
                 }
-                contactToShow.push(contact);
-                contactList.push(contact);
+                if (isBreak == 0) {
+                    contact = {
+                        Id: $("#contact_id").val(),
+                        Full_name: $("#contact_name").val(),
+                        Phone: $("#contact_phone").val(),
+                        Mail: $("#contact_mail").val(),
 
-                let api = "../api/contact";
-                ajaxCall("POST", api, JSON.stringify(contact), createNewcontactSuccess, createNewcontactError);
+                    }
+                    contactToShow.push(contact);
+                    contactList.push(contact);
+
+                    let api = "../api/contact";
+                    ajaxCall("POST", api, JSON.stringify(contact), createNewcontactSuccess, createNewcontactError);
+                }
+                else{}
+               
             }
             else {
                 contactToShow.push(contact1);
                 contactList.push(contact1);
                 $("#searchContact1").val("");
             }
+            if (isBreak == 0) {
+                try {
+                    if (firstTimeAddContact == 1) {
+                        tbl = $("#contactsTable").DataTable({
+                            data: contactToShow,
+                            pageLength: 10,
+                            columns: [
 
-            try {
-                if (firstTimeAddContact == 1) {
-                    tbl = $("#contactsTable").DataTable({
-                        data: contactToShow,
-                        pageLength: 10,
-                        columns: [
+                                { data: "Id" },
+                                { data: "Full_name" },
+                                { data: "Phone" },
+                                { data: "Mail" },
 
-                            { data: "Id" },
-                            { data: "Full_name" },
-                            { data: "Phone" },
-                            { data: "Mail" },
-
-                        ],
-                    });
-                    firstTimeAddContact = 0;
+                            ],
+                        });
+                        firstTimeAddContact = 0;
+                    }
+                    else {
+                        alert("You already add contact!")
+                    }
                 }
-                else {
-                    alert("You already add contact!")
+                catch (err) {
+                    alert(err);
                 }
             }
 
-            catch (err) {
-                alert(err);
+            else {
+                $("#contactsTable1").hide();
+                $("#contactsTable1").hide()
             }
-
         }
         function createNewcontactSuccess(data) {
             swal({
@@ -231,6 +256,7 @@
         //  שמירת פריט קיים להזמנה חדשה ורנדור לטבלה
         function SaveExistItem() {
             $("#itemsTable").show();
+            $("#div_TB_item").show();
             let itemsToShow = [];
             let itemId = $("#searchItem1").val();
             for (var i = 0; i < AllItems.length; i++) {
@@ -300,6 +326,8 @@
             $("#btn_saveExist_contact").show();
             $("#btn_new_contact").show();
             $("#search_item").show();
+            $("#div_TB_item").hide();
+            $("#contactsTable1").hide();
 
         }
         //הכנסת הזמנה חדשה
@@ -698,8 +726,10 @@
                                 <tr>
                                     <td>
                                         <div class="form-group">
-                                            <label for="invoice_num">מספר חשבונית</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="invoice_num" placeholder="הזן מספר חשבונית"></textarea>
+                                            <label for="invoice_num"><span class="red-star">★ </span>מספר חשבונית</label>
+                                            <input type="number" rows="1" class="form-control groupDetails" id="invoice_num" placeholder="הזן מספר חשבונית" pattern="[0-9]{1,20}" required="required"
+                       oninvalid="this.setCustomValidity('')"
+                       oninput="this.setCustomValidity('')">
                                         </div>
                                     </td>
                                     <td>
@@ -731,8 +761,8 @@
                             </td>
                             <td>
                                 <div class="form-group">
-                                    <label for="item_quantity">כמות מפריט</label>
-                                    <textarea rows="1" class="form-control groupDetails" id="item_quantity" placeholder=" הכנס כמות מפריט "></textarea>
+                                    <label for="item_quantity"><span class="red-star">★ </span>כמות מפריט</label>
+                                    <input type="number" rows="1" class="form-control groupDetails" id="item_quantity" placeholder=" הכנס כמות מפריט ">
                                 </div>
                             </td>
                             <br />
@@ -763,61 +793,72 @@
                             </table>
                         </form>
                     </div>
-                    <table>
-                        <tr>
-                            <td id="searchContact">
-                                <div class="form-group">
-                                    <label for="searchContact1"><span class="red-star">★ </span>חיפוש איש קשר</label>
-                                    <select  class="form-control groupDetails" id="searchContact1" required>
-                                        <option value="">בחר איש קשר קיים:</option>
-                                    </select>
-                                </div>
-                            </td>
-                            <td>
-                                <button id="btn_saveExist_contact" onclick="SaveExistContact()" class="btn btn-primary"> שמור איש קשר</button>
-                            </td>
-                        </tr>
-                        <br />
-                        <tr>
-                            <td>
-                                <button id="btn_new_contact" class="btn btn-primary" onclick="New_contact()"> איש קשר חדש</button>
-                            </td>
-                        </tr>
-                    </table>
-                    <table id="newContact">
+                        <table>
+                            <tr>
+                                <td id="searchContact">
+                                    <div class="form-group">
+                                        <label for="searchContact1">חיפוש איש קשר</label>
+                                        <select class="form-control groupDetails" id="searchContact1" >
+                                            <option value="">בחר איש קשר קיים:</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <button id="btn_saveExist_contact" onclick="SaveExistContact()" class="btn btn-primary"> שמור איש קשר</button>
+                                </td>
+                            </tr>
+                            <br />
+                            <tr>
+                                <td>
+                                    <button id="btn_new_contact" class="btn btn-primary" onclick="New_contact()"> איש קשר חדש</button>
+                                </td>
+                            </tr>
+                        </table>
 
-                        <tr>
-                            <td>
-                                <div class="form-group">
-                                    <label for="contact_id"><span class="red-star">★ </span>תעודת זהות</label>
-                                    <textarea rows="1" class="form-control groupDetails" id="contact_id" placeholder=" הזן ת.ז "></textarea>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-group">
-                                    <label for="contact_name">שם מלא</label>
-                                    <textarea rows="1" class="form-control groupDetails" id="contact_name" placeholder=" הזן שם מלא "></textarea>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-group">
-                                    <label for="contact_phone">טלפון</label>
-                                    <textarea rows="1" class="form-control groupDetails" id="contact_phone" placeholder=" הזן טלפון "></textarea>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-group">
-                                    <label for="contact_mail">מייל</label>
-                                    <textarea rows="1" class="form-control groupDetails" id="contact_mail" placeholder=" הזן מייל "></textarea>
-                                </div>
-                            </td>
-                            <td>
+                    <form>
+                        <table id="newContact">
 
-                                <button id="btnSave_new_contact" class="btn btn-primary" onclick="SaveNewcontact()"> שמור איש קשר </button>
-                            </td>
-                        </tr>
-                    </table>
-                    <div>
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="contact_id"><span class="red-star">★ </span>תעודת זהות</label>
+                                        <input type="number" rows="1" class="form-control groupDetails" id="contact_id" placeholder=" הזן ת.ז " pattern="[0-9]{9}" required="required"
+                                               oninvalid="this.setCustomValidity(' הכנס 9 ספרות - כולל קידומת')"
+                                               oninput="this.setCustomValidity('')">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="contact_name"><span class="red-star">★ </span>שם מלא</label>
+                                        <input type="text" rows="1" class="form-control groupDetails" id="contact_name" placeholder=" הזן שם מלא " required="required"
+                                               oninvalid="this.setCustomValidity('הכנס רק אותיות')"
+                                               oninput="this.setCustomValidity('')" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="contact_phone"><span class="red-star">★ </span>טלפון</label>
+                                        <input type="tel" rows="1" class="form-control groupDetails" id="contact_phone" placeholder=" הזן טלפון " pattern="[0-9]{3}-[0-9]{7}" required="required"
+                                               oninvalid="this.setCustomValidity('התבנית הינה 054-6954541')"
+                                               oninput="this.setCustomValidity('')">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="contact_mail"><span class="red-star">★ </span>מייל</label>
+                                        <input type="email" rows="1" class="form-control groupDetails" id="contact_mail" placeholder=" הזן מייל " pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$" required="required"
+                                               oninvalid="this.setCustomValidity('הכנס את האימייל שלך- שים לב לתבנית')"
+                                               oninput="this.setCustomValidity('')">
+                                    </div>
+                                </td>
+                                <td>
+
+                                    <button id="btnSave_new_contact" class="btn btn-primary" onclick="SaveNewcontact()"> שמור איש קשר </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                    <div id="contactsTable1">
                         <form id="pForm">
                             <table id="contactsTable" class="display" style="width:100%" dir="rtl">
                                 <thead>
@@ -832,7 +873,7 @@
                             </table>
                         </form>
                     </div>
-                    <button id="saveBTN" onclick="insertNewOrder()" class="btn btn-primary"> שמור הזמנה</button>
+                    <button type="submit" id="saveBTN" onclick="insertNewOrder()" class="btn btn-primary"> שמור הזמנה</button>
                     <button id="btn_update_order" class="btn btn-primary" onclick="updateOrder()"> עדכן הזמנה</button>
                 </div>
                 <br />
@@ -875,25 +916,33 @@
                                 <td>
                                     <div class="form-group">
                                         <label for="contact_id"><span class="red-star">★ </span>תעודת זהות</label>
-                                        <textarea rows="1" class="form-control groupDetails" id="contact_id1" placeholder=" הזן ת.ז "></textarea>
+                                        <input type="number" rows="1" class="form-control groupDetails" id="contact_id1" placeholder=" הזן ת.ז " pattern="[0-9]{9}" required="required"
+                                               oninvalid="this.setCustomValidity(' הכנס 9 ספרות - כולל קידומת')"
+                                               oninput="this.setCustomValidity('')">
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group">
                                         <label for="contact_name"><span class="red-star">★ </span>שם מלא</label>
-                                        <textarea rows="1" class="form-control groupDetails" id="contact_name1" placeholder=" הזן שם מלא "></textarea>
+                                        <input type="text" rows="1" class="form-control groupDetails" id="contact_name1" placeholder=" הזן שם מלא " required="required"
+                                               oninvalid="this.setCustomValidity('הכנס רק אותיות')"
+                                               oninput="this.setCustomValidity('')" />
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group">
                                         <label for="contact_phone"><span class="red-star">★ </span>טלפון</label>
-                                        <textarea rows="1" class="form-control groupDetails" id="contact_phone1" placeholder=" הזן טלפון "></textarea>
+                                        <input type="tel" rows="1" class="form-control groupDetails" id="contact_phone1" placeholder=" הזן טלפון " pattern="[0-9]{3}-[0-9]{7}" required="required"
+                                               oninvalid="this.setCustomValidity('התבנית הינה 054-6954541')"
+                                               oninput="this.setCustomValidity('')">
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group">
                                         <label for="contact_mail"><span class="red-star">★ </span>מייל</label>
-                                        <textarea rows="2" class="form-control groupDetails" id="contact_mail1" placeholder=" הזן מייל "></textarea>
+                                        <input type="email" rows="1" class="form-control groupDetails" id="contact_mail1" placeholder=" הזן מייל " pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$" required="required"
+                                               oninvalid="this.setCustomValidity('הכנס את האימייל שלך- שים לב לתבנית')"
+                                               oninput="this.setCustomValidity('')">
                                     </div>
                                 </td>
                             </tr>

@@ -1,0 +1,154 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Suez+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@1,700&family=Suez+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <link href="styles/nav_bar_style.css" rel="stylesheet" />
+
+    <script src="../Scripts/ajaxCallsWithKey.js"></script>
+
+    <title>משתמשים</title>
+    <script>
+
+        $(document).ready(function () {
+            getusersData()
+
+        });
+        // קריאת כל המשתמשים
+        function getusersData() {
+
+            let api = "../api/user";
+            ajaxCall("GET",api, "", createDt, getError)
+        }
+        function getError() {
+            swal("נכשל!", "קריאת משתמשים נכשלה!", "warning")
+        }
+
+        //בניית טבלה של כל המשתמשים
+        function createDt(userdata) {
+            let userToShow = [];
+
+            for (var i = 0; i < userdata.length; i++) {
+
+                    user = {
+
+                        Email: userdata[i].Email,
+                        Name: userdata[i].Name,
+                        Phone: userdata[i].Phone,
+                        Password: userdata[i].Password,
+                        Type_name: userdata[i].Type_name,
+                    }
+                userToShow.push(user);
+            }
+
+            try {
+                tbl = $('#usersTable').DataTable({
+                    data: userToShow,
+                    pageLength: 10,
+                    columns: [
+
+                        { data: "Email" },
+                        { data: "Name" },
+                        { data: "Phone" },
+                        { data: "Password" },
+                        { data: "Type_name" },
+                        {
+                            render: function (data, type, row, meta) {
+                                let def = JSON.stringify(row);
+
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editinstrucBTN(this.value)'> עריכה </button>";
+
+                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteInstruction(this.value)'> מחיקה </button>";
+
+                                return editBtn + deleteBtn;
+
+                            }
+                        },
+
+                    ],
+                });
+
+            }
+    </script>
+</html>
+<body>
+    <div id="logo">
+        <img class="logo" src="photos/logo.jpeg" height="50" />
+    </div>
+    <div class="body-wrap">
+        <nav class="navbar navbar-inverse">
+            <div class="container1">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarMenu" aria-expanded="false">
+                        <span id="navigation" class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="navbarMenu">
+                    <ul class="nav navbar-nav navbar-right  bts-nav">
+                        <li><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="settings.html"></a></li>
+                        <li></li>
+                        <li class="nav-item">
+                            <span class="glyphicon glyphicon-bell" aria-hidden="true"></span><a href="alerts.html"></a>
+                        </li>
+
+                        <li><a href="#">סטטיסטיקות</a></li>
+                        <li class="active"><a href="users.html">משתמשים<span class="sr-only">(current)</span></a></li>
+                        <li><a href="orders.html">הזמנות</a></li>
+                        <li><a href="certificates.html">אישורים</a></li>
+                        <li><a href="instructions.html"></a></li>
+                        <li><a href="projects.html">פרויקטים</a></li>
+                        <li><a href="#">התחברות</a></li>
+                        <li>
+                            <span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="home.html"></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!--NavBar-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <div id="instruction_bar" dir="rtl">
+        <div id="headline">
+            <h1 class="instructions">משתמשים</h1>
+        </div>
+        <br />
+        <div id="buttons">
+            <button id="myBtn" style="margin-left:10px" class="btn btn-primary" onclick="document.getElementById('id03').style.display='block', clearPopuP()">הוסף משתמש חדש</button>
+        </div>
+    </div>
+    <form id="pForm">
+        <table id="usersTable" class="display" style="width:100%" dir="rtl">
+            <thead>
+                <tr>
+                    <th>מייל</th>
+                    <th>שם מלא</th>
+                    <th>טלפון</th>
+                    <th>סיסמא</th>
+                    <th>סוג משתמש</th>
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
+    </form>
+
+</body>

@@ -1074,7 +1074,7 @@ namespace final_proj_gulkosafety.Models.DAL
         {
 
         }
-
+        // return all users
         public List<user> ReadUsers()
         {
             SqlConnection con = null;
@@ -1084,7 +1084,7 @@ namespace final_proj_gulkosafety.Models.DAL
             {
                 con = connect("DBConnectionString");
 
-                String selectSTR = "SELECT * FROM [user]";
+                String selectSTR = "select u.*, ut.type_name from [user] u inner join [user_type] ut on u.user_type_num = ut.user_type_num";
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
 
@@ -1098,6 +1098,7 @@ namespace final_proj_gulkosafety.Models.DAL
                     u.Phone = (string)dr["phone"];
                     u.Password = (string)dr["password"];
                     u.User_type_num = Convert.ToInt32(dr["user_type_num"]);
+                    u.Type_name = (string)dr["type_name"];
                     uList.Add(u);
                 }
 
