@@ -305,9 +305,9 @@
                             render: function (data, type, row, meta) {
                                 let def = JSON.stringify(row);
 
-                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editinstrucBTN(this.value)'> עריכה </button>";
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editInstructionType(this.value)'> עריכה </button>";
 
-                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteInstruction(this.value)'> מחיקה </button>";
+                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteDefectType(this.value)'> מחיקה </button>";
 
                                 return editBtn + deleteBtn;
 
@@ -323,7 +323,99 @@
                 alert(err);
             }
         }
+        //הוספת סוג הדרכה חדש
+        function insert_new_instruction_type() {
 
+            document.getElementById('id02').style.display = 'none';
+
+            let newInstructionType = {
+
+                Type_name: $("#instruction_type_name").val(),
+                Expiration: $("#instruction_expiration").val(),
+                Price: $("#instruction_price").val(),
+            }
+
+            let api = "../api/instruction_type";
+            ajaxCall("POST", api, JSON.stringify(newInstructionType), createNewInstructionTypeSuccess, createNewInstructionTypeError);
+        }
+
+        function createNewInstructionTypeSuccess(instructiondata) {
+            swal({
+                title: "מצוין!", text: "סוג הדרכה חדש נוצר בהצלחה!", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+            });
+
+        }
+        function createNewInstructionTypeError() {
+            swal("נכשל!", "הכנסת סוג הדרכה חדש נכשל!", "warning")
+        }
+
+        //עריכת סוג הדרכה
+        function editInstructionType(dataInstructionType) {
+            document.getElementById('id022').style.display = 'block';
+            instructionTypeToEdit = JSON.parse(dataInstructionType);
+            $("#instruction_type_number").val(instructionTypeToEdit.Instruction_type_num);
+            $("#instruction_type_number").prop('disabled', true);
+            $("#instruction_type_name1").val(instructionTypeToEdit.Type_name);
+            $("#instruction_expiration1").val(instructionTypeToEdit.Expiration);
+            $("#instruction_price1").val(instructionTypeToEdit.Price);
+        }
+        // עדכון סוג הדרכה
+        function updateInstructionType() {
+            instruction_type_update = {
+                Instruction_type_num: $("#instruction_type_number").val(),
+                Type_name: $("#instruction_type_name1").val(),
+                Expiration: $("#instruction_expiration1").val(),
+                Price: $("#instruction_price1").val(),
+            }
+            let api = "../api/instruction_type";
+            ajaxCall("PUT", api, JSON.stringify(instruction_type_update), UpdateInstructionTypeSuccess, UpdateInstructionTypetError);
+        }
+        function UpdateInstructionTypeSuccess() {
+            swal({
+                title: "מצוין!", text: "עדכון סוג הדרכה בוצע", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
+        }
+        function UpdateInstructionTypetError() {
+            swal("עדכון סוג הדרכה לא בוצע!", err, "warning");
+        }
+        // מחיקת סוג הדרכה
+        function deleteDefectType(def) {
+            delete_defect_type = JSON.parse(def);
+            defectTypeToDelete = {
+                Defect_type_num: delete_defect_type.Defect_type_num,
+            }
+            swal({
+                title: "האם אתה בטוח שברצונך למחוק את הסוג הדרכה?",
+                text: "",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true
+            })
+                .then(function (willDelete) {
+                    if (willDelete) delete_defect_type_func(defectTypeToDelete);
+                    else swal("סוג הדרכה לא נמחק!");
+                });
+        }
+        function delete_defect_type_func(defectTypeToDelete) {
+            ajaxCall("DELETE", "../api/defect_type", JSON.stringify(defectTypeToDelete), deleteDefectTypeSuccess, deleteDefectTypeError);
+
+        }
+        function deleteDefectTypeSuccess() {
+            swal({
+                title: "מצוין!", text: "סוג הדרכה נמחק בהצלחה", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
+        }
+        function deleteDefectTypeError() {
+            swal("סוג הדרכה לא נמחק!", err, "warning");
+        }
         //////////////////////////////////////////////////////סוגי משתמשים
         // קריאת כל סוגי משתמשים
         function getUserType() {
@@ -760,6 +852,42 @@
             </div>
         </div>
         <div class="w3-container">
+            <div id="id02" class="w3-modal">
+                <div class="w3-modal-content">
+                    <div class="w3-container" dir="rtl">
+                        <!--<span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>-->
+                        <form id="newInstructionTypeForm">
+                            <br />
+                            <h2 id="new_instruction_type_headline">סוג הדרכה חדש</h2>
+                            <br />
+                            <table class="display" style="width:100%" dir="rtl">
+                                <thead>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="instruction_type_name">שם סוג הדרכה</label>
+                                                <textarea rows="1" class="form-control groupDetails" id="instruction_type_name" placeholder="שם סוג ליקוי"></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="instruction_expiration">תוקף </label>
+                                                <textarea rows="1" class="form-control groupDetails" id="instruction_expiration" placeholder="שם סוג ליקוי"></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="instruction_price">מחיר</label>
+                                                <textarea rows="1" class="form-control groupDetails" id="instruction_price" placeholder="שם סוג ליקוי"></textarea>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </form>
+                        <br />
+                        <button id="saveBTN" onclick="insert_new_instruction_type()" class="btn btn-primary"> שמור סוג ליקוי</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="w3-container">
             <div id="id011" class="w3-modal">
                 <div class="w3-modal-content">
                     <div class="w3-container" dir="rtl">
@@ -786,6 +914,50 @@
                         </form>
                         <br />
                         <button id="btn_update_defect_type" class="btn btn-primary" onclick="updateDefectType()"> עדכן סוג ליקוי </button>
+                    </div>
+                    <br />
+                </div>
+            </div>
+        </div>
+        <div class="w3-container">
+            <div id="id022" class="w3-modal">
+                <div class="w3-modal-content">
+                    <div class="w3-container" dir="rtl">
+                        <span onclick="document.getElementById('id022').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                        <form id="updateInstructionTypeForm">
+                            <h2 id="update_instruction_type">עריכת סוג ליקוי</h2>
+                            <br />
+                            <table id="updateInstructionTypeTb">
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="instruction_type_number"><span class="red-star">★ </span>מספר סוג הדרכה</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="instruction_type_number" placeholder=" מספר סוג הדרכה "></textarea>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="instruction_type_name1"><span class="red-star">★ </span>שם סוג הדרכה</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="instruction_type_name1" placeholder=" הזן שם סוג הדרכה "></textarea>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="instruction_expiration1"><span class="red-star">★ </span>תוקף</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="instruction_expiration1" placeholder=" הזן תוקף הדרכה "></textarea>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="instruction_price1"><span class="red-star">★ </span>מחיר</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="instruction_price1" placeholder=" הזן מחיר הדרכה "></textarea>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                        <br />
+                        <button id="btn_update_instruction_type" class="btn btn-primary" onclick="updateInstructionType()"> עדכן סוג ליקוי </button>
                     </div>
                     <br />
                 </div>

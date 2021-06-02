@@ -3149,6 +3149,155 @@ namespace final_proj_gulkosafety.Models.DAL
             command = "delete from defect_type where defect_type_num=" + Defect_type_num;
             return command;
         }
+        //insert a new instruction type
+        public int InsertInstructionType(instruction_type _instruction_type)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            String cStr = BuildInsertCommand(_instruction_type);      // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
+        private String BuildInsertCommand(instruction_type _instruction_type)
+        {
+            String command;
+
+            StringBuilder sb = new StringBuilder();
+            // use a string builder to create the dynamic string
+            sb.AppendFormat("Values('{0}', '{1}', '{2}')", _instruction_type.Type_name, _instruction_type.Expiration, _instruction_type.Price);
+            String prefix = "INSERT INTO instruction_type " + "(type_name,expiration,price)";
+            command = prefix + sb.ToString();
+
+            return command;
+
+        }
+
+        //update Instruction Type 
+        public int UpdateInstructionType(instruction_type _instruction_type)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            String cStr = BuildupdateCommand(_instruction_type);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+
+        private String BuildupdateCommand(instruction_type _instruction_type)
+        {
+            String command;
+            command = "UPDATE [instruction_type] SET type_name='" + _instruction_type.Type_name + "'expiration='" + _instruction_type.Expiration + "'price='" + _instruction_type.Price + "' WHERE instruction_type_num =" + _instruction_type.Instruction_type_num;
+
+            return command;
+        }
+
+        //delete Instruction type 
+        public int DeleteInstructionType(int Instruction_type_num)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            String cStr = BuildDeleteCommandInstruction(Instruction_type_num);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+        private String BuildDeleteCommandInstruction(int Instruction_type_num)
+        {
+            String command;
+            command = "delete from instruction_type where instruction_type_num=" + Instruction_type_num;
+            return command;
+        }
 
 
     }
