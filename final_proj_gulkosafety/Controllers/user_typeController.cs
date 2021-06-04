@@ -44,13 +44,38 @@ namespace final_proj_gulkosafety.Controllers
         }
 
         // PUT api/<controller>/5
-        public void Put(int id, [FromBody] string value)
+        public HttpResponseMessage Put([FromBody]user_type _user_type)
         {
+            try
+            {
+                {
+                    _user_type.UpdateUserType();
+                }
+
+                return Request.CreateResponse(HttpStatusCode.Created, _user_type);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
+            }
         }
 
         // DELETE api/<controller>/5
-        public void Delete(int id)
+        public HttpResponseMessage Delete([FromBody] user_type _user_type)
         {
+
+            try
+            {
+                {
+                    _user_type.DeleteUserType(_user_type.User_type_num);
+                }
+
+                return Request.CreateResponse(HttpStatusCode.Created, _user_type);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
+            }
         }
     }
 }

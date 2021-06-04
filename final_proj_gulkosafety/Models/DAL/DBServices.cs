@@ -1217,10 +1217,61 @@ namespace final_proj_gulkosafety.Models.DAL
 
             }
         //insert a new user type
-        public void InsertUserType(user_type ut)
+        public int InsertUserType(user_type _user_type)
         {
 
-        }
+                SqlConnection con;
+                SqlCommand cmd;
+
+                try
+                {
+                    con = connect("DBConnectionString");
+                }
+                catch (Exception ex)
+                {
+                    throw (ex);
+                }
+
+                String cStr = BuildInsertCommand(_user_type);
+
+                cmd = CreateCommand(cStr, con);
+
+                try
+                {
+                    int numEffected = cmd.ExecuteNonQuery();
+                    return numEffected;
+                }
+                catch (Exception ex)
+                {
+                    throw (ex);
+                }
+
+                finally
+                {
+                    if (con != null)
+                    {
+                        // close the db connection
+                        con.Close();
+                    }
+                }
+
+            }
+            private String BuildInsertCommand(user_type _user_type)
+            {
+                String command;
+
+                StringBuilder sb = new StringBuilder();
+
+                sb.AppendFormat("Values('{0}')", _user_type.Type_name);
+                String prefix = "INSERT INTO user_type " + "(type_name)";
+                command = prefix + sb.ToString();
+
+                return command;
+
+            }
+
+
+       
         //get last report
         public report ReadLastReport(int proj_num)
         {
@@ -3246,7 +3297,7 @@ namespace final_proj_gulkosafety.Models.DAL
         private String BuildupdateCommand(instruction_type _instruction_type)
         {
             String command;
-            command = "UPDATE [instruction_type] SET type_name='" + _instruction_type.Type_name + "'expiration='" + _instruction_type.Expiration + "'price='" + _instruction_type.Price + "' WHERE instruction_type_num =" + _instruction_type.Instruction_type_num;
+            command = "UPDATE [instruction_type] SET type_name='" + _instruction_type.Type_name + "', expiration='" + _instruction_type.Expiration + "', price='" + _instruction_type.Price + "' WHERE instruction_type_num =" + _instruction_type.Instruction_type_num;
 
             return command;
         }
@@ -3296,6 +3347,103 @@ namespace final_proj_gulkosafety.Models.DAL
         {
             String command;
             command = "delete from instruction_type where instruction_type_num=" + Instruction_type_num;
+            return command;
+        }
+
+        //update User Type 
+        public int UpdateUserType(user_type _user_type)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            String cStr = BuildupdateCommand(_user_type);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+
+        private String BuildupdateCommand(user_type _user_type)
+        {
+            String command;
+            command = "UPDATE [user_type] SET type_name='" + _user_type.Type_name + "' WHERE user_type_num =" + _user_type.User_type_num;
+
+            return command;
+        }
+
+        //delete user_type 
+        public int DeleteUserType(int User_type_num)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            String cStr = BuildDeleteCommandUser(User_type_num);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+        private String BuildDeleteCommandUser(int User_type_num)
+        {
+            String command;
+            command = "delete from user_type where user_type_num=" + User_type_num;
             return command;
         }
 
