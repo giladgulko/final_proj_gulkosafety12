@@ -1,4 +1,5 @@
-﻿using final_proj_gulkosafety.Models.DAL;
+﻿
+using final_proj_gulkosafety.Models.DAL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,23 @@ namespace final_proj_gulkosafety.Models
         {
             DBServices dbs = new DBServices();
             return dbs.ReadItem();
+        }
+        public void InsertItem()
+        {
+            DBServices dbs = new DBServices();
+            dbs.InsertItem(this);
+        }
+        public void UpdateItem()
+        {
+            DBServices dbs = new DBServices();
+            dbs.UpdateItem(this);
+
+        }
+        public void DeleteItem(int Item_num)
+        {
+            DBServices dbs = new DBServices();
+            dbs.DeleteItem(Item_num);
+
         }
 
     }
