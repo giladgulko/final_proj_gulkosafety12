@@ -58,8 +58,11 @@ namespace final_proj_gulkosafety.Controllers
             }
         }
         // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
-        }
-    }
+    //    public void DeleteItemInOrder(int item_num, int order_num)
+    //    {
+    //        items_in_order io = new items_in_order();
+    //        io.DeleteItemInOrder(item_num, order_num);
+
+    //    }
+    //}
 }

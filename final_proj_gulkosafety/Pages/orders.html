@@ -150,6 +150,12 @@
             }
 
         }
+        //מחיקת פריט בהזמנה
+        function deleteItem(def) {
+            itemToDelete = JSON.parse(def);
+            let api = "../api/items_in_order?item_num="+ itemToDelete.Item_num + "& order_num="+ itemToDelete.Order_num;
+            ajaxCall("PUT", api, JSON.stringify(item), UpdateItemSuccess, UpdateItemError);
+        }
         //עריכה פריט בהזמנה
         function editItem(itemdata) {
             document.getElementById('id05').style.display = 'block';
@@ -361,6 +367,7 @@
             $("#search_item").show();
             $("#div_TB_item").hide();
             $("#contactsTable1").hide();
+            $("#showItems").hide();
 
         }
         //הכנסת הזמנה חדשה
@@ -604,8 +611,26 @@
             $("#btn_save_item").hide();
             $("#btn_saveExist_contact").hide();
             $("#quantity_num").show();
-            $("#search_item").hide();
-            $("#div_TB_item").hide();
+            $("#search_item").show();
+            $("#div_TB_item").show();
+            $("#btn_saveExist_item").hide();
+            $("#itemsTable").hide();
+        }
+
+        //הוספת פריט להזמנה קיימת
+        function addItemToExistOrder() {
+            let itemId = $("#searchItem1").val();
+            for (var i = 0; i < AllItems.length; i++) {
+                if (itemId == AllItems[i].Item_num) {
+                    item = {
+                        Item_num: itemId,
+                        Order_num: orderToEdit.Order_num,
+                        quantity: $("#item_quantity").val(),
+                    }
+                }
+            }
+            let api = "../api/items_in_order";
+            ajaxCall("POST", api, JSON.stringify(item), AddItemSuccess,  AddItemError);
         }
         //מחיקת הזמנה
         function deleteOrder(def) {
@@ -799,6 +824,9 @@
                             <br />
                             <td>
                                 <button id="btn_saveExist_item" onclick="SaveExistItem()" class="btn btn-primary"> שמור פריט</button>
+                            </td>
+                            <td>
+                                <button id="btn_saveExist_itemToOrder" onclick="addItemToExistOrder()" class="btn btn-primary"> שמור פריט להזמנה</button>
                             </td>
                         </tr>
                         <tr>

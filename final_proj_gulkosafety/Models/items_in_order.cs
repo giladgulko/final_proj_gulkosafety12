@@ -48,6 +48,12 @@ namespace final_proj_gulkosafety.Models
             dbs.UpdateItemInOrder(this);
 
         }
+        //public void DeleteItemInOrder(int item_num, int order_num)
+        //{
+        //    DBServices dbs = new DBServices();
+        //    dbs.DeleteItemInOrder(item_num, order_num);
+
+        //}
 
     }
 }
