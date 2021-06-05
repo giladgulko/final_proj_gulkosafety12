@@ -47,10 +47,7 @@
             projContactsTest = [];
             projectTypes = [];
             contactList = [];
-            user = JSON.parse(localStorage["user"]);
-            if (user.User_type_num == 2) {
-                userType2Mode();
-            }
+
             managerSelect = document.getElementById('manager');
             foremanSelect = document.getElementById('foreman');
             projectTypeSelect = document.getElementById('projectType');
@@ -70,11 +67,7 @@
             renderProjTypes();
             getAlerts();
         });
-        function userType2Mode() {
-            //$("#myBtn").hide()
-            $(".type2mode").hide()
 
-        }
         function getAlerts() {
             let proj_num = project.Project_num;
             let api = "../api/alert?proj_num=" + proj_num;
@@ -437,20 +430,20 @@
                 </div>
                 <div class="collapse navbar-collapse" id="navbarMenu">
                     <ul class="nav navbar-nav navbar-right  bts-nav">
-                        <li class="type2mode"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="#"></a></li>
+                        <li><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="#"></a></li>
                         <li></li>
                         <li class="nav-item">
                             <span class="glyphicon glyphicon-bell" aria-hidden="true"></span><a href="alerts.html"></a>
                         </li>
 
-                        <li class="type2mode"><a href="#">סטטיסטיקות</a></li>
-                        <li class="type2mode"><a href="#">משתמשים</a></li>
-                        <li class="type2mode"><a href="#">הזמנות</a></li>
-                        <li class="type2mode"><a href="#">אישורים</a></li>
-                        <li class="type2mode"><a href="#">הדרכות</a></li>
+                        <li><a href="#">סטטיסטיקות</a></li>
+                        <li><a href="#">משתמשים</a></li>
+                        <li><a href="#">הזמנות</a></li>
+                        <li><a href="#">אישורים</a></li>
+                        <li><a href="#">הדרכות</a></li>
                         <li class="active"><a href="projects.html">פרויקטים<span class="sr-only">(current)</span></a></li>
                         <li><a href="#">התחברות</a></li>
-                        <li class="type2mode">
+                        <li>
                             <span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="#"></a>
                         </li>
                     </ul>
@@ -543,7 +536,7 @@
                                 </div>
                                 <div class="form-group col-sm-4 editLocation">
                                     <p>
-                                        <button type="button" id="editDetailsBTN" class="btn btn-default btn-sm type2mode">
+                                        <button type="button" id="editDetailsBTN" class="btn btn-default btn-sm">
                                             <span class="glyphicon glyphicon-pencil"></span>
                                         </button>
                                         <button type="submit" id="saveDetailsBTN" class="btn btn-default btn-sm">
@@ -599,7 +592,7 @@
                             <div class="row">
                                 <div class="form-group col editLocation">
                                     <p>
-                                        <button  type="button" id="editContactsBTN" class="btn btn-default btn-sm type2mode">
+                                        <button type="button" id="editContactsBTN" class="btn btn-default btn-sm">
                                             <span class="glyphicon glyphicon-pencil"></span>
                                         </button>
                                         <button type="submit" id="saveContactsBTN" class="btn btn-default btn-sm">
@@ -638,7 +631,7 @@
                             <h3>דוחות ביקור</h3>
                         </div>
                         <div id="report_BTN">
-                            <button class='btn btn-primary type2mode' id="newBTN">דוח ביקור חדש</button>
+                            <button class='btn btn-primary' id="newBTN">דוח ביקור חדש</button>
                         </div>
 
                         <form id="pForm">
