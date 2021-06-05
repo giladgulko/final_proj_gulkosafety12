@@ -240,8 +240,11 @@
     <Content Include="Pages\styles\reportStyleSheet.css" />
     <Content Include="Pages\styles\nav_bar_style.css" />
     <Content Include="Pages\styles\settingsStyleSheet.css" />
+<<<<<<< HEAD
     <Content Include="Pages\users.html" />
     <Content Include="Pages\test.html" />
+=======
+>>>>>>> parent of 4b8df3f (התאמת מערכת לכמה משתמשים, סידור דוח PDF)
     <Content Include="Scripts\ajaxCalls.js" />
     <Content Include="Scripts\ajaxCallsWithKey.js" />
     <Content Include="Scripts\bootstrap.js" />

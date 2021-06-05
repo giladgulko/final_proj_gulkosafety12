@@ -28,8 +28,7 @@
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
 
     <script>
-        user = JSON.parse(localStorage["user"]);
-        var user_email = user.Email// צריך לקחת את היוזר מהלוקאל סטורג - של מי שנמצא בלוג אין
+        var user_email = "gulkosafety@gmail.com";// צריך לקחת את היוזר מהלוקאל סטורג - של מי שנמצא בלוג אין
 
         $(document).ready(function () {
             $("#pForm").hide();
@@ -41,9 +40,6 @@
             getAlertArchive();
             AlertDivByType = 0;
             FirstTimeUploadTable = 0;
-            if (user.User_type_num==2) {
-                $('.type2mode').hide();
-            }
         });
 
         function check_if_date_pass() {
@@ -333,18 +329,22 @@
                 </div>
                 <div class="collapse navbar-collapse" id="navbarMenu">
                     <ul class="nav navbar-nav navbar-right  bts-nav">
-                        <li class="type2mode"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="#"></a></li>
+                        <li><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="#"></a></li>
                         <li></li>
                         <li class="nav-item" id="active">
                             <span class="glyphicon glyphicon-bell" aria-hidden="true"></span><a href="alerts.html"></a>
                         </li>
 
-                        <li class="type2mode"><a href="#">סטטיסטיקות</a></li>
-                        <li class="type2mode"><a href="#">משתמשים</a></li>
-                        <li class="type2mode"><a href="orders.html">הזמנות</a></li>
-                        <li class="type2mode"><a href="certificates.html">אישורים</a></li>
-                        <li class="type2mode"><a href="instructions.html">הדרכות</a></li>
+                        <li><a href="#">סטטיסטיקות</a></li>
+                        <li><a href="#">משתמשים</a></li>
+                        <li><a href="orders.html">הזמנות</a></li>
+                        <li><a href="certificates.html">אישורים</a></li>
+                        <li><a href="instructions.html">הדרכות</a></li>
                         <li><a href="projects.html">פרויקטים</a></li>
+<<<<<<< HEAD
+=======
+                        <li><a href="#">התחברות</a></li>
+>>>>>>> parent of 4b8df3f (התאמת מערכת לכמה משתמשים, סידור דוח PDF)
                         <li>
                             <span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="home.html"></a>
                         </li>
