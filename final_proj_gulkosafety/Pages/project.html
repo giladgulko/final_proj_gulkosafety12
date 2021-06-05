@@ -49,6 +49,10 @@
             projContactsTest = [];
             projectTypes = [];
             contactList = [];
+            user = JSON.parse(localStorage["user"]);
+            if (user.User_type_num == 2) {
+                userType2Mode();
+            }
 
             managerSelect = document.getElementById('manager');
             foremanSelect = document.getElementById('foreman');
@@ -70,7 +74,11 @@
             renderProjTypes();
             getAlerts();
         });
+        function userType2Mode() {
+            //$("#myBtn").hide()
+            $(".type2mode").hide()
 
+        }
         function getAlerts() {
             let proj_num = project.Project_num;
             let api = "../api/alert?proj_num=" + proj_num;
@@ -403,9 +411,17 @@
                         {
                             render: function (data, type, row, meta) {
                                 let dataReport = "data-reportId='" + row.Report_num + "'";
-                                editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataReport + "> צפייה ועריכת  דוח </button>";
-                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' " + dataReport + "> מחק </button>";
-                                return editBtn + deleteBtn;
+                                if (user.User_type_num == 2) {
+                                    editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataReport + "> צפייה בדוח </button>";
+                                    return editBtn
+                                }
+                                else {
+                                    editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataReport + "> צפייה ועריכת  דוח </button>";
+                                    deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' " + dataReport + "> מחק </button>";
+                                    return editBtn + deleteBtn;
+                                }
+                                
+                                
                             }
                         }
                     ],
@@ -458,20 +474,20 @@
                 </div>
                 <div class="collapse navbar-collapse" id="navbarMenu">
                     <ul class="nav navbar-nav navbar-right  bts-nav">
-                        <li><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="settings.html"></a></li>
+                        <li class="type2mode"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="settings.html"></a></li>
                         <li></li>
                         <li class="nav-item">
                             <span class="glyphicon glyphicon-bell" aria-hidden="true"></span><a href="alerts.html"></a>
                         </li>
 
-                        <li><a href="#">סטטיסטיקות</a></li>
-                        <li><a href="#">משתמשים</a></li>
-                        <li><a href="orders.html">הזמנות</a></li>
-                        <li><a href="certificates.html">אישורים</a></li>
-                        <li><a href="instructions.html">הדרכות</a></li>
+                        <li class="type2mode"><a href="#">סטטיסטיקות</a></li>
+                        <li class="type2mode"><a href="#">משתמשים</a></li>
+                        <li class="type2mode"><a href="orders.html">הזמנות</a></li>
+                        <li class="type2mode"><a href="certificates.html">אישורים</a></li>
+                        <li class="type2mode"><a href="instructions.html">הדרכות</a></li>
                         <li class="active"><a href="projects.html">פרויקטים<span class="sr-only">(current)</span></a></li>
                         <li><a href="#">התחברות</a></li>
-                        <li>
+                        <li class="type2mode">
                             <span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="home.html"></a>
                         </li>
                     </ul>
@@ -564,7 +580,7 @@
                                 </div>
                                 <div class="form-group col-sm-4 editLocation">
                                     <p class="editLocation">
-                                        <button type="button" id="editDetailsBTN" class="btn btn-default btn-sm">
+                                        <button type="button" id="editDetailsBTN" class="btn btn-default btn-sm type2mode">
                                             <span class="glyphicon glyphicon-pencil"></span>
                                         </button>
                                         <button type="submit" id="saveDetailsBTN" class="btn btn-default btn-sm">
@@ -620,7 +636,7 @@
                             <div class="row">
                                 <div class="form-group col editLocation">
                                     <p class="editLocation">
-                                        <button type="button" id="editContactsBTN" class="btn btn-default btn-sm">
+                                        <button type="button" id="editContactsBTN" class="btn btn-default btn-sm type2mode">
                                             <span class="glyphicon glyphicon-pencil"></span>
                                         </button>
                                         <button type="submit" id="saveContactsBTN" class="btn btn-default btn-sm">
@@ -660,7 +676,7 @@
                                 <h3>דוחות ביקור</h3>
                             </div>
                             <div id="report_BTN" class="form-group col-sm-6">
-                                <button class='btn btn-primary' id="newBTN">דוח ביקור חדש</button>
+                                <button class='btn btn-primary type2mode' id="newBTN">דוח ביקור חדש</button>
                             </div>
                         </div>
                         <form id="pForm">
