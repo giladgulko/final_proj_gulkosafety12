@@ -1011,17 +1011,20 @@
         <br />
     </div>
 
-
-    <!--<div class="sidenav">
-        <a href="#">סוגי ליקוי</a>
-        <a href="#">סוגי הדרכה</a>
-        <a href="#">סוגי משתמש</a>
-        <a href="#">סוגי אישורים</a>
-        <a href="#">פריטים</a>
-    </div>-->
     <div id="main">
         <div class="row">
-            <div class="col-lg-8 mb-3">
+
+            <div class="col-md-10 col-sm-9">
+                <div>
+                    <div id="addbuttons">
+                        <button id="addDefectTypeBtn" class="btn btn-primary" onclick="document.getElementById('id01').style.display='block',clearPopuP()">הוסף סוג ליקוי חדש</button>
+                        <button id="addInstructionTypeBtn" class="btn btn-primary" onclick="document.getElementById('id02').style.display='block',clearPopuP()">הוסף סוג הדרכה חדש</button>
+                        <button id="addUserTypeBtn" class="btn btn-primary" onclick="document.getElementById('id03').style.display='block',clearPopuP()">הוסף סוג משתמש חדש</button>
+                        <button id="addCertificateTypeBtn" class="btn btn-primary" onclick="document.getElementById('id04').style.display='block',clearPopuP()">הוסף סוג אישור חדש</button>
+                        <button id="addItemBtn" class="btn btn-primary" onclick="document.getElementById('id05').style.display='block',clearPopuP()">הוסף פריט חדש</button>
+                    </div>
+                </div>
+                </br>
                 <form class="pForm" id="defectTypeForm">
                     <table id="defectTypeTable" class="display" style="width:100%" dir="rtl">
                         <thead>
@@ -1084,16 +1087,7 @@
                     </table>
                 </form>
             </div>
-            <div class="col-lg-2 mb-3">
-                <div id="addbuttons">
-                    <button id="addDefectTypeBtn" class="btn btn-primary" onclick="document.getElementById('id01').style.display='block',clearPopuP()">הוסף סוג ליקוי חדש</button>
-                    <button id="addInstructionTypeBtn" class="btn btn-primary" onclick="document.getElementById('id02').style.display='block',clearPopuP()">הוסף סוג הדרכה חדש</button>
-                    <button id="addUserTypeBtn" class="btn btn-primary" onclick="document.getElementById('id03').style.display='block',clearPopuP()">הוסף סוג משתמש חדש</button>
-                    <button id="addCertificateTypeBtn" class="btn btn-primary" onclick="document.getElementById('id04').style.display='block',clearPopuP()">הוסף סוג אישור חדש</button>
-                    <button id="addItemBtn" class="btn btn-primary" onclick="document.getElementById('id05').style.display='block',clearPopuP()">הוסף פריט חדש</button>
-                </div>
-            </div>
-            <div class="col-lg-2 mb-3">
+            <div class="col-md-2 col-sm-3">
                 <div class="btn-group">
                     <button id="defectTypeBtn" onclick="getDefectType()">סוגי ליקוי</button>
                     <button id="instructionTypeBtn" onclick="getInstructionType()">סוגי הדרכה</button>
@@ -1102,6 +1096,7 @@
                     <button id="itemBtn" onclick="getItem()">פריטים</button>
                 </div>
             </div>
+
         </div>
         <div class="w3-container">
             <div id="id01" class="w3-modal">
