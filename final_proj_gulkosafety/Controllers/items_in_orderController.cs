@@ -57,9 +57,22 @@ namespace final_proj_gulkosafety.Controllers
                 return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
             }
         }
-        // DELETE api/<controller>/5
-        public void Delete(int id)
+        //DELETE api/<controller>/5
+        public HttpResponseMessage Delete([FromBody] items_in_order _item_in_order)
         {
+
+            try
+            {
+                {
+                    _item_in_order.DeleteItemInOrder(_item_in_order.Item_num, _item_in_order.Order_num);
+                }
+
+                return Request.CreateResponse(HttpStatusCode.Created, _item_in_order);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
+            }
         }
     }
 }

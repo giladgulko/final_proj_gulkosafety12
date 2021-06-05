@@ -20,7 +20,7 @@ namespace final_proj_gulkosafety.Models
         public string Name1 { get => name1; set => name1 = value; }
         public double Price { get => price; set => price = value; }
 
-        public items_in_order(int order_num, int item_num, int quantity,string name1, double price)
+        public items_in_order(int order_num, int item_num, int quantity, string name1, double price)
         {
             Order_num = order_num;
             Item_num = item_num;
@@ -46,6 +46,12 @@ namespace final_proj_gulkosafety.Models
         {
             DBServices dbs = new DBServices();
             dbs.UpdateItemInOrder(this);
+
+        }
+        public void DeleteItemInOrder(int item_num, int order_num)
+        {
+            DBServices dbs = new DBServices();
+            dbs.DeleteItemInOrder(item_num, order_num);
 
         }
 
