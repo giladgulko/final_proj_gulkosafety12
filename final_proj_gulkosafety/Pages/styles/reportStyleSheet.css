@@ -1,12 +1,11 @@
 ﻿#proj_bar {
     text-align: right;
     display: flex;
-    /*margin-top: 15px;
-    margin-right: 50px;*/
+    margin-top: 15px;
+    margin-right: 50px;
 }
 h1 {
     direction: ltr;
-    margin-right: 50px;
 }
 body {
     background-color: #eeeeee;
@@ -208,6 +207,6 @@ p {
 #pdfAndSendBTN {
     position: relative;
     left: 50px;
-    top: 20px;
+    bottom: 40px;
 }
 

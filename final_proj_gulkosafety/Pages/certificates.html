@@ -30,7 +30,6 @@
         AllContacts = [];
         contactList = [];
         certificatedata = [];
-        var firstTimeAddContact = 1;
         var cert_num = "";
         var user_mail = "gulkosafety@gmail.com";
 
@@ -137,8 +136,8 @@
             }
 
             try {
-                if (firstTimeAddContact == 1) {
-                    tbl = $('#contactsTable').DataTable({
+
+                tbl = $('#contactsTable').DataTable({
                         data: contactToShow,
                         pageLength: 10,
                         columns: [
@@ -150,11 +149,6 @@
 
                         ],
                     });
-                    firstTimeAddContact = 0;
-                }
-                else {
-                    alert("You already add contact!")
-                }
             }
 
             catch (err) {
@@ -464,19 +458,19 @@
                 Invoice_num: $("#invoice_num").val(),
             }
             let api = "../api/certificate";
-                ajaxCall("PUT", api, JSON.stringify(newCert), updateCertSuccess, updateCertError);
+                ajaxCall("PUT", api, JSON.stringify(newCert), createNewCertSuccess, createNewCertError);
         }
 
-        function updateCertSuccess(data) {
+        function createNewCertSuccess(data) {
                 swal({
-                    title: "מצוין!", text: "עדכון אישור בוצע בהצלחה!", type: "success", icon: "success"
+                    title: "Good job!", text: "You created new certificate successfully!", type: "success", icon: "success"
                 }).then(function () {
                     location.reload();
 
                 });
         }
-        function updateCertError() {
-                swal("נכשל!", "עדכון אישור נכשל!", "warning")
+        function createNewCertError() {
+                swal("Failed!", "You failed to create a new certificate!", "warning")
         }
 
         function New_contact() {
@@ -491,7 +485,7 @@
             }
             $("#certificateType").html(str);
             $("#certificateType").prop('disabled', false);
-            $("#checkStatus").val("");
+            $("#checkStatus").value(0);
             $("#company").val("");
             $("#payStatus").val("");
             $("#address").val("");
@@ -583,6 +577,7 @@
                         <li class="active"><a href="certificates.html">אישורים<span class="sr-only">(current)</span></a></li>
                         <li><a href="instructions.html">הדרכות</a></li>
                         <li><a href="projects.html">פרויקטים</a></li>
+                        <li><a href="#">התחברות</a></li>
                         <li>
                             <span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="home.html"></a>
                         </li>
@@ -645,7 +640,7 @@
                                         <div class="form-group">
                                             <label for="checkStatus"><span class="red-star">★ </span>סטאטוס בדיקה</label>
                                             <select class="form-control groupDetails" id="checkStatus" required>
-                                                <option value="">בחר סטאטוס בדיקה</option>
+                                                <option value="0">בחר סטאטוס בדיקה</option>
                                                 <option value="1">עבר</option>
                                                 <option value="2">לא עבר</option>
                                             </select>
@@ -714,7 +709,7 @@
                                 <div class="form-group">
                                     <label for="searchContact1"><span class="red-star">★ </span>חיפוש איש קשר</label>
                                     <select onchange="" class="form-control groupDetails" id="searchContact1" required>
-                                        <option value="">בחר איש קשר קיים:</option>
+                                        <option value="0">בחר איש קשר קיים:</option>
                                     </select>
                                 </div>
                             </td>

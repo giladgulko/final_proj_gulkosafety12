@@ -90,14 +90,11 @@
 
             //editing report
             if (localStorage["report"] != "") {
-                //editing mode for admin- ממונה בטיחות
                 if (userType == 1) {
                     editReportPageBtnEvents();
                 }
 
                 $("#saveNewReport").hide();
-                $('#pdfAndSendBTN').show(); 
-                $('#calcAndSend').show(); 
                 $(".groupDetails").prop('disabled', true);
 
                 renderReportDetails();
@@ -110,18 +107,11 @@
                 $("#defectsTBL").hide();
                 $("#lastReportdefectsTBL").hide();
                 $('.editReportDetailsBtns').hide();
-                $('#pdfAndSendBTN').hide();
-                $('#calcAndSend').hide(); 
             }
         }
 
         function renderReportDetails() {
             report = JSON.parse(localStorage["report"]);
-            allReports = JSON.parse(localStorage["allReports"]);
-            if (report.Report_num < allReports[allReports.length-1].Report_num) {
-                $("#calcGrade").hide();
-                $("#addDefectToRBtn").hide();
-            }
             headLine = "<h1>" + report.Report_num + " דוח ביקור " + "</h1>";
             time = report.Time.split('T');
             date = report.Date.split('T');
@@ -262,12 +252,8 @@
             console.log(temp.Picture_link)
             let api = "../api/defect_in_report?picture_link=" + picture_link;
             ajaxCall("PUT", api, JSON.stringify(temp), updateImgSuccess, updateImgError);
-            //alert("הצליח!")
+            alert("הצליח!")
 
-        }
-
-        function updateImgSuccess() {
-            alert("תמונה הועלתה בהצלחה");
             var now = new Date().toISOString();
             newAlertOnAprroveIMG = {
                 Content: "הועלתה תמונה חדשה לליקוי בדוח-  " + report.Report_num + " בפרויקט - " + project.Project_num,
@@ -279,7 +265,11 @@
 
             }
             let api1 = "../api/alert";
-            ajaxCall("POST", api1, JSON.stringify(newAlertOnAprroveIMG), PostAlertSuccess, PostAlertError);
+            ajaxCall("POST", api1, JSON.stringify(newAlertOnAprroveIMG), PostAlertSuccess, PostAlertError)
+        }
+
+        function updateImgSuccess() {
+
         }
         function updateImgError(err) {
             console.log(err);
@@ -454,10 +444,6 @@
                 str += "<option value='" + defects_types[i].Defect_type_num + "'>" + defects_types[i].Type_name + "</option>"
             }
             $("#selectType").html(str);
-            $("#fixDate").val("");
-            $("#fixTime").val("");
-            $("#description").val("");
-            $("#fixStatus").val("");
         }
         function createDefectList(value) {
             str = "<option>ליקויים</option>"
@@ -535,7 +521,6 @@
 
         function saveNewReport() {
             //date validation
-            $("#dateError").hide();
             let date = $('#Date').val();
             if (date < project.Start_date || date > project.End_date) {
                 $('#Date').after('<p id="dateError">תאריך התחלה גדול מתאריך הסיום</p>');
@@ -797,29 +782,6 @@
                                     <span class="glyphicon glyphicon-bell" aria-hidden="true"></span><a href="alerts.html"></a>
                                 </li>
 
-                            <li><a href="#">סטטיסטיקות</a></li>
-                            <li><a href="#">משתמשים</a></li>
-                            <li><a href="orders.html">הזמנות</a></li>
-                            <li><a href="certificates.html">אישורים</a></li>
-                            <li><a href="instructions.html">הדרכות</a></li>
-                            <li class="active"><a href="projects.html">פרויקטים<span class="sr-only">(current)</span></a></li>
-                            <li><a href="#">התחברות</a></li>
-                            <li>
-                                <span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="home.html"></a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </div>
-        <!--NavBar-->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <div class="row">
-            <div id="pdfAndSendBTN" class="col-sm-2">
-                <button id="downPdf" class="btn btn-primary" onclick="topdf()">הורד דוח</button>
-                <button id="sendPdf" class="btn btn-primary" onclick="topdf()">שלח לבעלי עניין</button>
-            </div>
-            <div id="proj_bar" class="col-sm-10" dir="rtl">
                                 <li class="type2mode"><a href="#">סטטיסטיקות</a></li>
                                 <li class="type2mode"><a href="#">משתמשים</a></li>
                                 <li class="type2mode"><a href="orders.html">הזמנות</a></li>
@@ -864,27 +826,6 @@
                             <input type="text" class="form-control" id="projManeger" disabled>
                         </div>
                     </div>
-            </div>
-        </div>
-
-        <!--פרטי דוח-->
-        <div id="reportDetails" class="mainCards">
-            <form id="reportDetailsForm" onsubmit="return false">
-                <div class="row">
-                    <div class="form-group col-sm-4">
-                        <label for="company">שם חברה</label>
-                        <input type="text" class="form-control" id="company" disabled>
-                    </div>
-                    <div class="form-group col-sm-4">
-                        <label for="tDate"><span class="red-star">★</span>תאריך ביקור</label>
-                        <br />
-                        <input type="date" id="Date" class="form-control groupDetails" required>
-                    </div>
-                    <div class="form-group col-sm-4">
-                        <label for="projManeger">מנהל פרויקט</label>
-                        <input type="text" class="form-control" id="projManeger" disabled>
-                    </div>
-                </div>
 
                     <div class="row">
                         <div class="form-group col-sm-4">

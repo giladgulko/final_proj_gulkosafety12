@@ -40,21 +40,9 @@ namespace final_proj_gulkosafety.Controllers
                 return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
             }
         }
-        //update order
-        public HttpResponseMessage Put([FromBody] order o)
+        // PUT api/<controller>/5
+        public void Put(int id, [FromBody]string value)
         {
-            try
-            {
-                {
-                    o.UpdateOrder();
-                }
-
-                return Request.CreateResponse(HttpStatusCode.Created, o);
-            }
-            catch (Exception ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
-            }
         }
         // DELETE api/<controller>/5
         public HttpResponseMessage DeleteOrder([FromBody] order o)

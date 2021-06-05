@@ -188,22 +188,22 @@ namespace final_proj_gulkosafety.Models
             //if num of defects bigger than 10 reduce points
             if (CurrentReportDefects.Count > maxdefects)
             {
-                alretHtml += "<p class='algoHeader'>נמצא מספר חריג של ליקויים: מעל 10 ליקויים</p>";
+                alretHtml += "<p class='algoBadFind algoHeader'>נמצא מספר חריג של ליקויים: מעל 10 ליקויים</p>";
             }
 
             if (severeDefects.Count > 0)
             {
-                alretHtml += "<p class='algoHeader'>נמצאו " + severeDefects.Count + " ליקויים חמורים בביקור הנוכחי:</p>";
+                alretHtml += "<p class='algoBadFind algoHeader'>נמצאו " + severeDefects.Count + " ליקויים חמורים בביקור הנוכחי:</p>";
                 for (var d = 0; d < severeDefects.Count; d++)
                 {
                     alretHtml += "<p class='algoBadFind'>" + (d+1) +". " + severeDefects[d].Defect_type_name + "- " + severeDefects[d].Defect_name + " </p>";
                 }
             }
-            else alretHtml += "<p class='algoHeader'>לא נמצאו ליקויים חמורים</p>";
+            else alretHtml += "<p class='algoGoodFind algoHeader'>לא נמצאו ליקויים חמורים</p>";
 
             if (TenGradeDefects.Count > 0)
             {
-                alretHtml += "<p class='algoHeader'>נמצאו " + TenGradeDefects.Count + " ליקויים חמורים ביותר בציון 10: ";
+                alretHtml += "<p class='algoBadFind algoHeader'>נמצאו " + TenGradeDefects.Count + " ליקויים חמורים ביותר בציון 10: ";
                 for (var d1 = 0; d1 < TenGradeDefects.Count; d1++)
                 {
                     alretHtml += "<p class='algoBadFind'>" + (d1+1) + ". " + TenGradeDefects[d1].Defect_name + " </p>";
@@ -215,17 +215,17 @@ namespace final_proj_gulkosafety.Models
 
             if (returnDefects.Count > 0)
             {
-                alretHtml += "<p class='algoHeader'>מספר הליקויים החוזרים מהביקור הקודם: " + returnDefects.Count + "</p>";
+                alretHtml += "<p class='algoBadFind algoHeader'>מספר הליקויים החוזרים מהביקור הקודם: " + returnDefects.Count + "</p>";
                 for (var r = 0; r < returnDefects.Count; r++)
                 {
                     alretHtml += "<p class='algoBadFind'>" + (r + 1) + ". " + returnDefects[r].Defect_type_name + "- " + returnDefects[r].Defect_name + " </p>";
                 }
             }
-            else alretHtml += "<p class='algoHeader'>לא נמצאו ליקויים שחזרו על עצמם מהביקור הקודם</p>";
+            else alretHtml += "<p class='algoGoodFind algoHeader'>לא נמצאו ליקויים שחזרו על עצמם מהביקור הקודם</p>";
 
             if (notFixedDefects.Count > 0)
             {
-                alretHtml += "<p class='algoHeader'>ליקויים מהביקור הקודם שלא תוקנו בזמן: </p>";
+                alretHtml += "<p class='algoBadFind algoHeader'>ליקויים מהביקור הקודם שלא תוקנו בזמן: </p>";
                 for (var n = 0; n < notFixedDefects.Count; n++)
                 {
                     alretHtml += "<p class='algoBadFind'>"+(n+1)+". " + notFixedDefects[n].Defect_name + " </p>";
