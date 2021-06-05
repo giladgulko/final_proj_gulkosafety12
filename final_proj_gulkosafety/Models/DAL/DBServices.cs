@@ -1542,6 +1542,15 @@ namespace final_proj_gulkosafety.Models.DAL
 
             }
         }
+
+        private String BuildUpdateReportCommand(int report_num, double grade)
+        {
+            String command;
+            command = "UPDATE report SET grade=" + grade + " WHERE report_num =" + report_num;
+
+            return command;
+        }
+
         //update alert
         public int UpdateAlert(alert a)
         {
@@ -1643,13 +1652,6 @@ namespace final_proj_gulkosafety.Models.DAL
             return command;
         }
 
-        private String BuildUpdateReportCommand(int report_num, double grade)
-        {
-            String command;
-            command = "UPDATE report SET grade=" + grade + " WHERE report_num =" + report_num;
-
-            return command;
-        }
         //read Alert Archive by user_email
         public List<alert> ReadAlertArchive(string user_email)
         {
@@ -1994,7 +1996,7 @@ namespace final_proj_gulkosafety.Models.DAL
                     i.Instruction_num = Convert.ToInt32(dr["instruction_num"]);
                     i.Company = (string)dr["company"];
                     i.Date = Convert.ToDateTime(dr["date"]);
-                    //i.Time = Convert.ToDateTime(dr["time"]);
+                    i.Time = Convert.ToDateTime(dr["time"]);
                     i.Address = (string)dr["address"];
                     i.Participants_num = Convert.ToInt32(dr["participants_num"]);
                     i.Pay_status = Convert.ToInt32(dr["pay_status"]);
@@ -3444,6 +3446,54 @@ namespace final_proj_gulkosafety.Models.DAL
         {
             String command;
             command = "delete from user_type where user_type_num=" + User_type_num;
+            return command;
+        }
+
+        //update item in order
+        public int UpdateItemInOrder(items_in_order _items_in_order)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception)
+            {
+                throw new Exception("The connection to sever is not good");
+            }
+
+            String cStr = BuildUpdateItemInOrderCommand(_items_in_order);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+
+        private String BuildUpdateItemInOrderCommand(items_in_order _items_in_order)
+        {
+            String command;
+            command = "UPDATE items_in_order SET quantity=" + _items_in_order.Quantity + " WHERE item_num =" + _items_in_order.Item_num + "and order_num=" + _items_in_order.Order_num;
+
             return command;
         }
 

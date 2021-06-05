@@ -42,10 +42,21 @@ namespace final_proj_gulkosafety.Controllers
         }
 
         // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
+        public HttpResponseMessage Put([FromBody] items_in_order io)
         {
-        }
+            try
+            {
+                {
+                    io.UpdateItemInOrder();
+                }
 
+                return Request.CreateResponse(HttpStatusCode.Created, io);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
+            }
+        }
         // DELETE api/<controller>/5
         public void Delete(int id)
         {

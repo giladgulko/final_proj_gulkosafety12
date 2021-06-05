@@ -42,6 +42,12 @@ namespace final_proj_gulkosafety.Models
             List<items_in_order> itemInOrdertList = dbs.ReadItemsInOrder(order_num);
             return itemInOrdertList;
         }
+        public void UpdateItemInOrder()
+        {
+            DBServices dbs = new DBServices();
+            dbs.UpdateItemInOrder(this);
+
+        }
 
     }
 }
