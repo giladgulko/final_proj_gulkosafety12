@@ -1,8 +1,6 @@
 ﻿#proj_bar {
     text-align: right;
     display: flex;
-    /*margin-top: 15px;
-    margin-right: 50px;*/
 }
 h1 {
     direction: ltr;
@@ -36,9 +34,7 @@ form {
 .red-star{
     color:red;
 }
-/*input {
-    max-width: fit-content;
-}*/
+
 h1, .proj {
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     color: cadetblue;
@@ -69,13 +65,9 @@ h3 {
     background-color: cadetblue;
     border-color: cadetblue;
 }
-/*#calcGrade {
-    margin-left: 15px;
-}*/
 
 #saveReport {
-    float: right;
-    margin-right: 15px;
+    margin-left: 15px;
 }
 
 .btn-success {
