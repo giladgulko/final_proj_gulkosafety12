@@ -33,22 +33,5 @@ namespace final_proj_gulkosafety.Models
             DBServices dbs = new DBServices();
             return dbs.ReadInstruction_type();
         }
-        public void InsertInstructionType()
-        {
-            DBServices dbs = new DBServices();
-            dbs.InsertInstructionType(this);
-        }
-        public void UpdateInstructionType()
-        {
-            DBServices dbs = new DBServices();
-            dbs.UpdateInstructionType(this);
-
-        }
-        public void DeleteInstructionType(int Instruction_type_num)
-        {
-            DBServices dbs = new DBServices();
-            dbs.DeleteInstructionType(Instruction_type_num);
-
-        }
     }
 }

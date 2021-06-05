@@ -204,12 +204,3 @@ p {
     text-align: right;
     /* direction: rtl; */
 }
-
-#saveBTN {
-    color: #fff;
-    background-color: cadetblue;
-    border-color: cadetblue;
-}
-input#saveBTN {
-    margin-right: 235%;
-}
