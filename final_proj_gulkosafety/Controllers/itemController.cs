@@ -1,4 +1,5 @@
-﻿using final_proj_gulkosafety.Models;
+﻿
+using final_proj_gulkosafety.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
