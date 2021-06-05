@@ -31,38 +31,13 @@ namespace final_proj_gulkosafety.Controllers
         }
 
         // PUT api/<controller>/5
-        public HttpResponseMessage Put( [FromBody]defect_type _defect_type)
+        public void Put(int id, [FromBody] string value)
         {
-            try
-            {
-                {
-                    _defect_type.UpdateDefectType();
-                }
-
-                return Request.CreateResponse(HttpStatusCode.Created, _defect_type);
-            }
-            catch (Exception ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
-            }
         }
 
         // DELETE api/<controller>/5
-        public HttpResponseMessage Delete([FromBody] defect_type _defect_type)
+        public void Delete(int id)
         {
-
-            try
-            {
-                {
-                    _defect_type.DeleteDefectType(_defect_type.Defect_type_num);
-                }
-
-                return Request.CreateResponse(HttpStatusCode.Created, _defect_type);
-            }
-            catch (Exception ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
-            }
         }
     }
 }

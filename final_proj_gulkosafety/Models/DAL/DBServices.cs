@@ -1074,7 +1074,7 @@ namespace final_proj_gulkosafety.Models.DAL
         {
 
         }
-        // return all users
+
         public List<user> ReadUsers()
         {
             SqlConnection con = null;
@@ -1084,7 +1084,7 @@ namespace final_proj_gulkosafety.Models.DAL
             {
                 con = connect("DBConnectionString");
 
-                String selectSTR = "select u.*, ut.type_name from [user] u inner join [user_type] ut on u.user_type_num = ut.user_type_num";
+                String selectSTR = "SELECT * FROM [user]";
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
 
@@ -1098,7 +1098,6 @@ namespace final_proj_gulkosafety.Models.DAL
                     u.Phone = (string)dr["phone"];
                     u.Password = (string)dr["password"];
                     u.User_type_num = Convert.ToInt32(dr["user_type_num"]);
-                    u.Type_name = (string)dr["type_name"];
                     uList.Add(u);
                 }
 
@@ -1165,7 +1164,7 @@ namespace final_proj_gulkosafety.Models.DAL
 
             StringBuilder sb = new StringBuilder();
 
-            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}', '{4}','{5}','{6}')", _defect_in_report.Report_num, _defect_in_report.Defect_num, _defect_in_report.Fix_date.ToString("yyyy-MM-dd"), _defect_in_report.Fix_time.ToShortTimeString(), _defect_in_report.Picture_link, _defect_in_report.Fix_status, _defect_in_report.Description); 
+            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}', '{4}','{5}','{6}')", _defect_in_report.Report_num, _defect_in_report.Defect_num, _defect_in_report.Fix_date.ToString("yyyy-MM-dd"), _defect_in_report.Fix_time.ToShortTimeString(), _defect_in_report.Picture_link, _defect_in_report.Fix_status, _defect_in_report.Description); ;
             String prefix = "INSERT INTO defect_in_report " + "(report_num,defect_num,fix_date,fix_time,picture_link,fix_status,description)";
             command = prefix + sb.ToString();
 
@@ -1217,61 +1216,10 @@ namespace final_proj_gulkosafety.Models.DAL
 
             }
         //insert a new user type
-        public int InsertUserType(user_type _user_type)
+        public void InsertUserType(user_type ut)
         {
 
-                SqlConnection con;
-                SqlCommand cmd;
-
-                try
-                {
-                    con = connect("DBConnectionString");
-                }
-                catch (Exception ex)
-                {
-                    throw (ex);
-                }
-
-                String cStr = BuildInsertCommand(_user_type);
-
-                cmd = CreateCommand(cStr, con);
-
-                try
-                {
-                    int numEffected = cmd.ExecuteNonQuery();
-                    return numEffected;
-                }
-                catch (Exception ex)
-                {
-                    throw (ex);
-                }
-
-                finally
-                {
-                    if (con != null)
-                    {
-                        // close the db connection
-                        con.Close();
-                    }
-                }
-
-            }
-            private String BuildInsertCommand(user_type _user_type)
-            {
-                String command;
-
-                StringBuilder sb = new StringBuilder();
-
-                sb.AppendFormat("Values('{0}')", _user_type.Type_name);
-                String prefix = "INSERT INTO user_type " + "(type_name)";
-                command = prefix + sb.ToString();
-
-                return command;
-
-            }
-
-
-       
+        }
         //get last report
         public report ReadLastReport(int proj_num)
         {
@@ -1542,15 +1490,6 @@ namespace final_proj_gulkosafety.Models.DAL
 
             }
         }
-
-        private String BuildUpdateReportCommand(int report_num, double grade)
-        {
-            String command;
-            command = "UPDATE report SET grade=" + grade + " WHERE report_num =" + report_num;
-
-            return command;
-        }
-
         //update alert
         public int UpdateAlert(alert a)
         {
@@ -1652,6 +1591,13 @@ namespace final_proj_gulkosafety.Models.DAL
             return command;
         }
 
+        private String BuildUpdateReportCommand(int report_num, double grade)
+        {
+            String command;
+            command = "UPDATE report SET grade=" + grade + " WHERE report_num =" + report_num;
+
+            return command;
+        }
         //read Alert Archive by user_email
         public List<alert> ReadAlertArchive(string user_email)
         {
@@ -1823,7 +1769,7 @@ namespace final_proj_gulkosafety.Models.DAL
                 con = connect("DBConnectionString");
                 String selectSTR = "";
 
-                selectSTR = "select * from [order]";
+                selectSTR = "select * from [order] o inner join items_in_order oi on o.order_num=oi.order_num ";
 
 
 
@@ -1840,6 +1786,8 @@ namespace final_proj_gulkosafety.Models.DAL
                     o.Invoice_num = (string)dr["invoice_num"];
                     o.Date = Convert.ToDateTime(dr["date"]);
                     o.Contact_id = (string)dr["contact_id"];
+                    o.Item_num = Convert.ToInt32(dr["item_num"]);
+                    o.Quantity = Convert.ToInt32(dr["quantity"]);
                     o.Total_price = Convert.ToDouble(dr["total_price"]);
                     o.Delete_status = Convert.ToInt32(dr["delete_status"]);
 
@@ -1909,8 +1857,8 @@ namespace final_proj_gulkosafety.Models.DAL
 
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
-            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}','{4}')", _order.Invoice_num, _order.Date.ToString("yyyy-MM-dd"), _order.Total_price, _order.Contact_id, _order.Delete_status);
-            String prefix = "INSERT INTO [order] " + "(invoice_num,date,total_price,contact_id,delete_status)";
+            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}')", _order.Invoice_num, _order.Date.ToString("yyyy-MM-dd"), _order.Total_price,_order.Contact_id,_order.Delete_status);
+            String prefix = "INSERT INTO project " + "(invoice_num,date,total_price,contact_id,delete_status)";
             command = prefix + sb.ToString();
 
             return command;
@@ -1996,7 +1944,7 @@ namespace final_proj_gulkosafety.Models.DAL
                     i.Instruction_num = Convert.ToInt32(dr["instruction_num"]);
                     i.Company = (string)dr["company"];
                     i.Date = Convert.ToDateTime(dr["date"]);
-                    i.Time = Convert.ToDateTime(dr["time"]);
+                    //i.Time = Convert.ToDateTime(dr["time"]);
                     i.Address = (string)dr["address"];
                     i.Participants_num = Convert.ToInt32(dr["participants_num"]);
                     i.Pay_status = Convert.ToInt32(dr["pay_status"]);
@@ -2800,7 +2748,7 @@ namespace final_proj_gulkosafety.Models.DAL
         private String BuildDeleteOrderCommand(int order_num, int delete_status)
         {
             String command;
-            command = "UPDATE [order] SET delete_status = " + delete_status + " WHERE order_num = " + order_num;
+            command = "UPDATE order SET delete_status = " + delete_status + " WHERE order_num = " + order_num;
             return command;
         }
 
@@ -2958,546 +2906,6 @@ namespace final_proj_gulkosafety.Models.DAL
             return command;
 
         }
-
-        //insert a new item in order
-        public int InsertItemInOrder(items_in_order _items_in_order)
-        {
-
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            {
-                con = connect("DBConnectionString"); // create the connection
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-
-            String cStr = BuildInsertCommand(_items_in_order);      // helper method to build the insert string
-
-            cmd = CreateCommand(cStr, con);             // create the command
-
-            try
-            {
-                int numEffected = cmd.ExecuteNonQuery(); // execute the command
-                return numEffected;
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-
-            finally
-            {
-                if (con != null)
-                {
-                    // close the db connection
-                    con.Close();
-                }
-            }
-        }
-        private String BuildInsertCommand(items_in_order _items_in_order)
-        {
-            String command;
-
-            StringBuilder sb = new StringBuilder();
-            // use a string builder to create the dynamic string
-            sb.AppendFormat("Values('{0}','{1}','{2}')", _items_in_order.Item_num, _items_in_order.Order_num, _items_in_order.Quantity);
-            String prefix = "INSERT INTO items_in_order " + "(item_num,order_num,quantity)";
-            command = prefix + sb.ToString();
-
-            return command;
-
-        }
-
-        //read items in order by number of order
-        public List<items_in_order> ReadItemsInOrder(int order_num)
-        {
-            SqlConnection con = null;
-            List<items_in_order> itemInOrdertList = new List<items_in_order>();
-
-            try
-            {
-                con = connect("DBConnectionString");
-
-                String selectSTR = "SELECT i.*, io.order_num, io.quantity FROM item i inner join items_in_order io on i.item_num = io.item_num where io.order_num = " + order_num;
-
-                SqlCommand cmd = new SqlCommand(selectSTR, con);
-
-                // get a reader
-                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-                while (dr.Read())
-                {
-
-                    items_in_order _items_in_order = new items_in_order();
-                    _items_in_order.Item_num = Convert.ToInt32(dr["item_num"]);
-                    _items_in_order.Name1 = (string)dr["name"];
-                    _items_in_order.Price = Convert.ToDouble(dr["price"]);
-                    _items_in_order.Order_num = Convert.ToInt32(dr["order_num"]);
-                    _items_in_order.Quantity = Convert.ToInt32(dr["quantity"]);
-                    itemInOrdertList.Add(_items_in_order);
-                }
-
-                return itemInOrdertList;
-            }
-            catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-            finally
-            {
-                if (con != null)
-                {
-                    con.Close();
-                }
-
-            }
-        }
-
-        //update order detail
-        public int UpdateOrder(order o)
-        {
-
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            {
-                con = connect("DBConnectionString");
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-
-            String cStr = BuildupdateCommand(o);
-
-            cmd = CreateCommand(cStr, con);
-
-            try
-            {
-                int numEffected = cmd.ExecuteNonQuery();
-                return numEffected;
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-
-
-            finally
-            {
-                if (con != null)
-                {
-                    con.Close();
-                }
-            }
-
-        }
-
-        private String BuildupdateCommand(order o)
-        {
-            String command;
-            command = "UPDATE [order] SET total_price=" + o.Total_price + ", invoice_num='" + o.Invoice_num + "', date='" + o.Date.ToString("yyyy-MM-dd") + "' WHERE order_num =" + o.Order_num;
-
-            return command;
-        }
-
-        //update Defect Type 
-        public int UpdateDefectType(defect_type _defect_type)
-        {
-
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            {
-                con = connect("DBConnectionString");
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-
-            String cStr = BuildupdateCommand(_defect_type);
-
-            cmd = CreateCommand(cStr, con);
-
-            try
-            {
-                int numEffected = cmd.ExecuteNonQuery();
-                return numEffected;
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-
-
-            finally
-            {
-                if (con != null)
-                {
-                    con.Close();
-                }
-            }
-
-        }
-
-        private String BuildupdateCommand(defect_type _defect_type)
-        {
-            String command;
-            command = "UPDATE [defect_type] SET type_name='" + _defect_type.Type_name + "' WHERE defect_type_num =" + _defect_type.Defect_type_num;
-
-            return command;
-        }
-
-        //delete defect_type 
-        public int DeleteDefectType(int Defect_type_num)
-        {
-
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            {
-                con = connect("DBConnectionString");
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-
-
-            String cStr = BuildDeleteCommandDefect(Defect_type_num);
-
-            cmd = CreateCommand(cStr, con);
-
-            try
-            {
-                int numEffected = cmd.ExecuteNonQuery();
-                return numEffected;
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-
-
-            finally
-            {
-                if (con != null)
-                {
-                    con.Close();
-                }
-            }
-
-        }
-        private String BuildDeleteCommandDefect(int Defect_type_num)
-        {
-            String command;
-            command = "delete from defect_type where defect_type_num=" + Defect_type_num;
-            return command;
-        }
-        //insert a new instruction type
-        public int InsertInstructionType(instruction_type _instruction_type)
-        {
-
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            {
-                con = connect("DBConnectionString"); // create the connection
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-
-            String cStr = BuildInsertCommand(_instruction_type);      // helper method to build the insert string
-
-            cmd = CreateCommand(cStr, con);             // create the command
-
-            try
-            {
-                int numEffected = cmd.ExecuteNonQuery(); // execute the command
-                return numEffected;
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-
-            finally
-            {
-                if (con != null)
-                {
-                    // close the db connection
-                    con.Close();
-                }
-            }
-        }
-        private String BuildInsertCommand(instruction_type _instruction_type)
-        {
-            String command;
-
-            StringBuilder sb = new StringBuilder();
-            // use a string builder to create the dynamic string
-            sb.AppendFormat("Values('{0}', '{1}', '{2}')", _instruction_type.Type_name, _instruction_type.Expiration, _instruction_type.Price);
-            String prefix = "INSERT INTO instruction_type " + "(type_name,expiration,price)";
-            command = prefix + sb.ToString();
-
-            return command;
-
-        }
-
-        //update Instruction Type 
-        public int UpdateInstructionType(instruction_type _instruction_type)
-        {
-
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            {
-                con = connect("DBConnectionString");
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-
-            String cStr = BuildupdateCommand(_instruction_type);
-
-            cmd = CreateCommand(cStr, con);
-
-            try
-            {
-                int numEffected = cmd.ExecuteNonQuery();
-                return numEffected;
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-
-
-            finally
-            {
-                if (con != null)
-                {
-                    con.Close();
-                }
-            }
-
-        }
-
-        private String BuildupdateCommand(instruction_type _instruction_type)
-        {
-            String command;
-            command = "UPDATE [instruction_type] SET type_name='" + _instruction_type.Type_name + "', expiration='" + _instruction_type.Expiration + "', price='" + _instruction_type.Price + "' WHERE instruction_type_num =" + _instruction_type.Instruction_type_num;
-
-            return command;
-        }
-
-        //delete Instruction type 
-        public int DeleteInstructionType(int Instruction_type_num)
-        {
-
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            {
-                con = connect("DBConnectionString");
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-
-
-            String cStr = BuildDeleteCommandInstruction(Instruction_type_num);
-
-            cmd = CreateCommand(cStr, con);
-
-            try
-            {
-                int numEffected = cmd.ExecuteNonQuery();
-                return numEffected;
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-
-
-            finally
-            {
-                if (con != null)
-                {
-                    con.Close();
-                }
-            }
-
-        }
-        private String BuildDeleteCommandInstruction(int Instruction_type_num)
-        {
-            String command;
-            command = "delete from instruction_type where instruction_type_num=" + Instruction_type_num;
-            return command;
-        }
-
-        //update User Type 
-        public int UpdateUserType(user_type _user_type)
-        {
-
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            {
-                con = connect("DBConnectionString");
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-
-            String cStr = BuildupdateCommand(_user_type);
-
-            cmd = CreateCommand(cStr, con);
-
-            try
-            {
-                int numEffected = cmd.ExecuteNonQuery();
-                return numEffected;
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-
-
-            finally
-            {
-                if (con != null)
-                {
-                    con.Close();
-                }
-            }
-
-        }
-
-        private String BuildupdateCommand(user_type _user_type)
-        {
-            String command;
-            command = "UPDATE [user_type] SET type_name='" + _user_type.Type_name + "' WHERE user_type_num =" + _user_type.User_type_num;
-
-            return command;
-        }
-
-        //delete user_type 
-        public int DeleteUserType(int User_type_num)
-        {
-
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            {
-                con = connect("DBConnectionString");
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-
-
-            String cStr = BuildDeleteCommandUser(User_type_num);
-
-            cmd = CreateCommand(cStr, con);
-
-            try
-            {
-                int numEffected = cmd.ExecuteNonQuery();
-                return numEffected;
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-
-
-            finally
-            {
-                if (con != null)
-                {
-                    con.Close();
-                }
-            }
-
-        }
-        private String BuildDeleteCommandUser(int User_type_num)
-        {
-            String command;
-            command = "delete from user_type where user_type_num=" + User_type_num;
-            return command;
-        }
-
-        //update item in order
-        public int UpdateItemInOrder(items_in_order _items_in_order)
-        {
-
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            {
-                con = connect("DBConnectionString");
-            }
-            catch (Exception)
-            {
-                throw new Exception("The connection to sever is not good");
-            }
-
-            String cStr = BuildUpdateItemInOrderCommand(_items_in_order);
-
-            cmd = CreateCommand(cStr, con);
-
-            try
-            {
-                int numEffected = cmd.ExecuteNonQuery();
-                return numEffected;
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-
-            finally
-            {
-                if (con != null)
-                {
-                    con.Close();
-                }
-
-            }
-        }
-
-        private String BuildUpdateItemInOrderCommand(items_in_order _items_in_order)
-        {
-            String command;
-            command = "UPDATE items_in_order SET quantity=" + _items_in_order.Quantity + " WHERE item_num =" + _items_in_order.Item_num + "and order_num=" + _items_in_order.Order_num;
-
-            return command;
-        }
-
-
     }
 
 }
