@@ -153,12 +153,12 @@
         //עריכה פריט בהזמנה
         function editItem(itemdata) {
             document.getElementById('id05').style.display = 'block';
-            let item_data = JSON.parse(itemdata);
+            item_data = JSON.parse(itemdata);
             $("#item_num").val(item_data.Item_num);
             $("#item_num").prop('disabled', true);
             $("#item_name").val(item_data.Name);
             $("#item_name").prop('disabled', true);
-            $("#item_quantity").val(item_data.Quantity);
+            $("#item_quantity1").val(item_data.Quantity);
             $("#item_price").val(item_data.Price);
             $("#item_price").prop('disabled', true);
         }
@@ -166,9 +166,10 @@
         function updateItem() {
             let totaLPrice = "";
             itemNum = $("#item_num").val();
+            quantity = $("#item_quantity1").val();
             for (var i = 0; i < AllItems.length; i++) {
                 if (itemNum ==AllItems[i].Item_num) {
-                    totaLPrice += AllItems[i].Price * $("#item_quantity").val();
+                    totaLPrice += AllItems[i].Price * quantity;
                 }
             }
             for (var j = 0; j < orderdata.length; j++) {
@@ -176,7 +177,9 @@
                     let newOrder = {
 
                         Order_num: orderToEdit.Order_num,
-                        Total_price: (orderToEdit.Total_price -(item_data.Price* item_data.Quantity))+ totaLPrice,
+                        Total_price: parseInt((orderToEdit.Total_price - (item_data.Price * item_data.Quantity))) +parseInt(totaLPrice),
+                        Invoice_num: orderToEdit.Invoice_num,
+                        Date: orderToEdit.Date,
                     }
                     let api = "../api/order";
                     ajaxCall("PUT", api, JSON.stringify(newOrder), updateOrderSuccess, updateOrderError);
@@ -185,8 +188,8 @@
 
             item = {
                 Order_num: orderToEdit.Order_num,
-                Item_num: itemNum,
-                Quantity: $("#item_quantity").val(),
+                Item_num: $("#item_num").val(),
+                Quantity: $("#item_quantity1").val(),
             }
 
             let api = "../api/items_in_order";
@@ -440,7 +443,8 @@
             swal("נשכל!", "יצירת פריט בהזמנה נכשל!", "warning")
         }
 
-        function createDt(orderdata) {
+        function createDt(order_data) {
+            orderdata = order_data;
             let ordersToShow = [];
             for (var i = 0; i < orderdata.length; i++) {
                 orderdata[i].Date = orderdata[i].Date.split("T")[0];
@@ -481,9 +485,7 @@
 
                                 showBtn = "<button type='button' class = 'showBtn btn btn-show' value='" + def + "' onclick='showContact(this.value)'>  הצג איש קשר </button>";
 
-                                itemBtn = "<button type='button' class = 'itemBtn btn btn-item' value='" + def + "' onclick='showItems(this.value)'> הצג פריטים </button>";
-
-                                return editBtn + deleteBtn + showBtn + itemBtn;
+                                return editBtn + deleteBtn + showBtn ;
 
                             }
                         },
@@ -581,10 +583,8 @@
             swal("עדכון משתתף לא בוצע!", err, "warning");
         }
         //כפתור הצג פריטים
-        function showItems(def) {
-            console.log(def);
-            order_number = JSON.parse(def);
-            getItemInOrder(order_number.Order_num);
+        function showItems() {
+            getItemInOrder(orderToEdit.Order_num);
         }
         //עריכת הזמנה
         function editordertBTN(dataorder) {
@@ -709,7 +709,6 @@
                         <li><a href="certificates.html">אישורים</a></li>
                         <li><a href="instructions.html">הדרכות</a></li>
                         <li><a href="projects.html">פרויקטים</a></li>
-                        <li><a href="#">התחברות</a></li>
                         <li>
                             <span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="home.html"></a>
                         </li>
@@ -779,6 +778,7 @@
                             </thead>
                         </table>
                     </form>
+                    <button id="btn_ShowItems" onclick="showItems()" class="btn btn-primary"> הצג פריטים</button>
                     <table id="search_item">
                         <tr>
                             <td id="searchItem">
@@ -1038,8 +1038,8 @@
                                 </td>
                                 <td>
                                     <div class="form-group">
-                                        <label for="item_quantity">כמות לפריט</label>
-                                        <textarea rows="1" class="form-control groupDetails" id="item_quantity" ></textarea>
+                                        <label for="item_quantity1">כמות לפריט</label>
+                                        <textarea rows="1" class="form-control groupDetails" id="item_quantity1" ></textarea>
                                     </div>
                                 </td>
                             </tr>
