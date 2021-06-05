@@ -30,44 +30,18 @@ namespace final_proj_gulkosafety.Controllers
         }
 
         // POST api/<controller>
-        public void Post([FromBody] item _item)
+        public void Post([FromBody]string value)
         {
-            _item.InsertItem();
         }
 
         // PUT api/<controller>/5
-        public HttpResponseMessage Put([FromBody]item _item)
+        public void Put(int id, [FromBody]string value)
         {
-            try
-            {
-                {
-                    _item.UpdateItem();
-                }
-
-                return Request.CreateResponse(HttpStatusCode.Created, _item);
-            }
-            catch (Exception ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
-            }
         }
 
         // DELETE api/<controller>/5
-        public HttpResponseMessage Delete([FromBody] item _item)
+        public void Delete(int id)
         {
-
-            try
-            {
-                {
-                    _item.DeleteItem(_item.Item_num);
-                }
-
-                return Request.CreateResponse(HttpStatusCode.Created, _item);
-            }
-            catch (Exception ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
-            }
         }
     }
 }

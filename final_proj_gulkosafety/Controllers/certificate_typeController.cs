@@ -26,44 +26,18 @@ namespace final_proj_gulkosafety.Controllers
         }
 
         // POST api/<controller>
-        public void Post([FromBody] certificate_type _certificate_type)
+        public void Post([FromBody]string value)
         {
-            _certificate_type.InsertCertificateType();
         }
 
         // PUT api/<controller>/5
-        public HttpResponseMessage Put([FromBody]certificate_type _certificate_type)
+        public void Put(int id, [FromBody]string value)
         {
-            try
-            {
-                {
-                    _certificate_type.UpdateCertificateType();
-                }
-
-                return Request.CreateResponse(HttpStatusCode.Created, _certificate_type);
-            }
-            catch (Exception ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
-            }
         }
 
         // DELETE api/<controller>/5
-        public HttpResponseMessage Delete([FromBody] certificate_type _certificate_type)
+        public void Delete(int id)
         {
-
-            try
-            {
-                {
-                    _certificate_type.DeleteCertificateType(_certificate_type.Certificate_type_num);
-                }
-
-                return Request.CreateResponse(HttpStatusCode.Created, _certificate_type);
-            }
-            catch (Exception ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
-            }
         }
     }
 }

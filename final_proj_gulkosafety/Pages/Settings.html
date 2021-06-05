@@ -33,6 +33,7 @@
             $("#addDefectTypeBtn").hide();
             $("#defectTypeForm").hide();
             FirstTimeUploadDefectTypeTable = 0;
+            defectTypeToEdit = [];
             // סוגי הדרכות
             $("#addInstructionTypeBtn").hide();
             $("#instructionTypeTable").hide();
@@ -125,9 +126,9 @@
                             render: function (data, type, row, meta) {
                                 let def = JSON.stringify(row);
 
-                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editinstrucBTN(this.value)'> עריכה </button>";
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editDefectType(this.value)'> עריכה </button>";
 
-                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteInstruction(this.value)'> מחיקה </button>";
+                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteDefectType(this.value)'> מחיקה </button>";
 
                                 return editBtn + deleteBtn;
 
@@ -143,7 +144,7 @@
                 alert(err);
             }
         }
-
+        //הוספת סוג ליקוי חדש
         function insert_new_defect_type() {
 
             document.getElementById('id01').style.display = 'none';
@@ -168,6 +169,68 @@
         }
         function createNewDefectTypeError() {
             swal("נכשל!", "הכנסת סוג ליקוי חדש נכשל!", "warning")
+        }
+
+        //עריכת סוג ליקוי
+        function editDefectType(dataDefectType) {
+            document.getElementById('id011').style.display = 'block';
+            defectTypeToEdit = JSON.parse(dataDefectType);
+            $("#defect_type_number").val(defectTypeToEdit.Defect_type_num);
+            $("#defect_type_number").prop('disabled', true);
+            $("#defect_type_name1").val(defectTypeToEdit.Type_name);
+        } 
+        // עדכון סוג ליקוי
+        function updateDefectType() {
+            defect_type_update = {
+                Defect_type_num: $("#defect_type_number").val(),
+                Type_name: $("#defect_type_name1").val(),
+            }
+            let api = "../api/defect_type";
+            ajaxCall("PUT", api, JSON.stringify(defect_type_update), UpdateDefectTypeSuccess, UpdateDefectTypetError);
+        }
+        function UpdateDefectTypeSuccess() {
+            swal({
+                title: "מצוין!", text: "עדכון סוג ליקוי בוצע", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
+        }
+        function UpdateDefectTypetError() {
+            swal("עדכון סוג ליקוי לא בוצע!", err, "warning");
+        }
+        // מחיקת סוג ליקוי
+        function deleteDefectType(def) {
+            delete_defect_type = JSON.parse(def);
+            defectTypeToDelete = {
+                Defect_type_num: delete_defect_type.Defect_type_num,
+            }
+            swal({
+                title: "האם אתה בטוח שברצונך למחוק את הסוג ליקוי?",
+                text: "",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true
+            })
+                .then(function (willDelete) {
+                    if (willDelete) delete_defect_type_func(defectTypeToDelete);
+                    else swal("סוג ליקוי לא נמחק!");
+                });
+        }
+        function delete_defect_type_func(defectTypeToDelete) {
+            ajaxCall("DELETE", "../api/defect_type", JSON.stringify(defectTypeToDelete), deleteDefectTypeSuccess, deleteDefectTypeError);
+          
+        }
+        function deleteDefectTypeSuccess() {
+            swal({
+                title: "מצוין!", text: "סוג ליקוי נמחק בהצלחה", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
+        }
+        function deleteDefectTypeError() {
+            swal("סוג ליקוי לא נמחק!", err, "warning");
         }
         //////////////////////////////////////////////////////סוגי הדרכות
         // קריאת כל סוגי הדרכות
@@ -242,9 +305,9 @@
                             render: function (data, type, row, meta) {
                                 let def = JSON.stringify(row);
 
-                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editinstrucBTN(this.value)'> עריכה </button>";
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editInstructionType(this.value)'> עריכה </button>";
 
-                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteInstruction(this.value)'> מחיקה </button>";
+                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteInstructionType(this.value)'> מחיקה </button>";
 
                                 return editBtn + deleteBtn;
 
@@ -260,7 +323,100 @@
                 alert(err);
             }
         }
+        //הוספת סוג הדרכה חדש
+        function insert_new_instruction_type() {
 
+            document.getElementById('id02').style.display = 'none';
+
+            let newInstructionType = {
+
+                Type_name: $("#instruction_type_name").val(),
+                Expiration: $("#instruction_expiration").val(),
+                Price: $("#instruction_price").val(),
+            }
+
+            let api = "../api/instruction_type";
+            ajaxCall("POST", api, JSON.stringify(newInstructionType), createNewInstructionTypeSuccess, createNewInstructionTypeError);
+        }
+
+        function createNewInstructionTypeSuccess(instructiondata) {
+            swal({
+                title: "מצוין!", text: "סוג הדרכה חדש נוצר בהצלחה!", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+            });
+
+        }
+        function createNewInstructionTypeError() {
+            swal("נכשל!", "הכנסת סוג הדרכה חדש נכשל!", "warning")
+        }
+
+        //עריכת סוג הדרכה
+        function editInstructionType(dataInstructionType) {
+            document.getElementById('id022').style.display = 'block';
+            instructionTypeToEdit = JSON.parse(dataInstructionType);
+            $("#instruction_type_number").val(instructionTypeToEdit.Instruction_type_num);
+            $("#instruction_type_number").prop('disabled', true);
+            $("#instruction_type_name1").val(instructionTypeToEdit.Type_name);
+            $("#instruction_expiration1").val(instructionTypeToEdit.Expiration);
+            $("#instruction_price1").val(instructionTypeToEdit.Price);
+        }
+        // עדכון סוג הדרכה
+        function updateInstructionType() {
+            instruction_type_update = {
+                Instruction_type_num: $("#instruction_type_number").val(),
+                Type_name: $("#instruction_type_name1").val(),
+                Expiration: $("#instruction_expiration1").val(),
+                Price: $("#instruction_price1").val(),
+            }
+            let api = "../api/instruction_type";
+            ajaxCall("PUT", api, JSON.stringify(instruction_type_update), UpdateInstructionTypeSuccess, UpdateInstructionTypetError);
+        }
+        function UpdateInstructionTypeSuccess() {
+            swal({
+                title: "מצוין!", text: "עדכון סוג הדרכה בוצע", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
+        }
+        function UpdateInstructionTypetError() {
+            swal("עדכון סוג הדרכה לא בוצע!", err, "warning");
+        }
+        //מחיקת סוג הדרכה חדש
+        function deleteInstructionType(def) {
+            delete_instruction_type = JSON.parse(def);
+            instructionTypeToDelete = {
+                Instruction_type_num: delete_instruction_type.Instruction_type_num,
+            }
+            swal({
+                title: "האם אתה בטוח שברצונך למחוק את הסוג ההדרכה?",
+                text: "",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true
+            })
+                .then(function (willDelete) {
+                    if (willDelete) delete_instruction_type_func(instructionTypeToDelete);
+                    else swal("סוג הדרכה לא נמחק!");
+                });
+        }
+        function delete_instruction_type_func(instructionTypeToDelete) {
+            ajaxCall("DELETE", "../api/instruction_type", JSON.stringify(instructionTypeToDelete), deleteInstructionTypeSuccess, deleteInstructionTypeError);
+
+        }
+        function deleteInstructionTypeSuccess() {
+            swal({
+                title: "מצוין!", text: "סוג הדרכה נמחק בהצלחה", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
+        }
+        function deleteInstructionTypeError() {
+            swal("סוג הדרכה לא נמחק!", err, "warning");
+        }
+      
         //////////////////////////////////////////////////////סוגי משתמשים
         // קריאת כל סוגי משתמשים
         function getUserType() {
@@ -331,9 +487,9 @@
                             render: function (data, type, row, meta) {
                                 let def = JSON.stringify(row);
 
-                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editinstrucBTN(this.value)'> עריכה </button>";
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editUserType(this.value)'> עריכה </button>";
 
-                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteInstruction(this.value)'> מחיקה </button>";
+                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteUserType(this.value)'> מחיקה </button>";
 
                                 return editBtn + deleteBtn;
 
@@ -348,6 +504,93 @@
             catch (err) {
                 alert(err);
             }
+        }
+        //הוספת סוג משתמש חדש
+        function insert_new_user_type() {
+
+            document.getElementById('id03').style.display = 'none';
+
+            let newUserType = {
+
+                Type_name: $("#user_type_name").val(),
+            }
+
+            let api = "../api/user_type";
+            ajaxCall("POST", api, JSON.stringify(newUserType), createNewUserTypeSuccess, createNewUserTypeError);
+        }
+
+        function createNewUserTypeSuccess(userdata) {
+            swal({
+                title: "מצוין!", text: "סוג משתמש חדש נוצר בהצלחה!", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+            });
+
+        }
+        function createNewUserTypeError() {
+            swal("נכשל!", "הכנסת סוג משתמש חדש נכשל!", "warning")
+        }
+
+        //עריכת סוג משתמש
+        function editUserType(dataUserType) {
+            document.getElementById('id033').style.display = 'block';
+            userTypeToEdit = JSON.parse(dataUserType);
+            $("#user_type_number").val(userTypeToEdit.User_type_num);
+            $("#user_type_number").prop('disabled', true);
+            $("#user_type_name1").val(userTypeToEdit.Type_name);
+        }
+        // עדכון סוג משתמש
+        function updateUserType() {
+            user_type_update = {
+                User_type_num: $("#user_type_number").val(),
+                Type_name: $("#user_type_name1").val(),
+            }
+            let api = "../api/user_type";
+            ajaxCall("PUT", api, JSON.stringify(user_type_update), UpdateUserTypeSuccess, UpdateUserTypetError);
+        }
+        function UpdateUserTypeSuccess() {
+            swal({
+                title: "מצוין!", text: "עדכון סוג משתמש בוצע", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
+        }
+        function UpdateUserTypetError() {
+            swal("עדכון סוג משתמש לא בוצע!", err, "warning");
+        }
+        //מחיקת סוג משתמש חדש
+        function deleteUserType(def) {
+            delete_user_type = JSON.parse(def);
+            userTypeToDelete = {
+                User_type_num: delete_user_type.User_type_num,
+            }
+            swal({
+                title: "האם אתה בטוח שברצונך למחוק את סוג המשתמש?",
+                text: "",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true
+            })
+                .then(function (willDelete) {
+                    if (willDelete) delete_user_type_func(userTypeToDelete);
+                    else swal("סוג משתמש לא נמחק!");
+                });
+        }
+        function delete_user_type_func(userTypeToDelete) {
+            ajaxCall("DELETE", "../api/user_type", JSON.stringify(userTypeToDelete), deleteUserTypeSuccess, deleteUserTypeError);
+
+        }
+        function deleteUserTypeSuccess() {
+            swal({
+                title: "מצוין!", text: "סוג משתמש נמחק בהצלחה", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
+        }
+        function deleteUserTypeError() {
+            swal("סוג משתמש לא נמחק!", err, "warning");
         }
 
         //////////////////////////////////////////////////////סוגי אישורים
@@ -425,9 +668,9 @@
                             render: function (data, type, row, meta) {
                                 let def = JSON.stringify(row);
 
-                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editinstrucBTN(this.value)'> עריכה </button>";
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editCertificateType(this.value)'> עריכה </button>";
 
-                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteInstruction(this.value)'> מחיקה </button>";
+                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteCertificateType(this.value)'> מחיקה </button>";
 
                                 return editBtn + deleteBtn;
 
@@ -443,6 +686,100 @@
                 alert(err);
             }
         }
+        //הוספת סוג אישור חדש
+        function insert_new_certificate_type() {
+
+            document.getElementById('id04').style.display = 'none';
+
+            let newCertificateType = {
+
+                Type_name: $("#certificate_type_name").val(),
+                Expiration: $("#certificate_expiration").val(),
+                Price: $("#certificate_price").val(),
+            }
+
+            let api = "../api/certificate_type";
+            ajaxCall("POST", api, JSON.stringify(newCertificateType), createNewCertificateTypeSuccess, createNewCertificateTypeError);
+        }
+
+        function createNewCertificateTypeSuccess(certificatedata) {
+            swal({
+                title: "מצוין!", text: "סוג אישור חדש נוצר בהצלחה!", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+            });
+
+        }
+        function createNewCertificateTypeError() {
+            swal("נכשל!", "הכנסת סוג אישור חדש נכשל!", "warning")
+        }
+
+        //עריכת סוג אישור
+        function editCertificateType(dataCertificateType) {
+            document.getElementById('id044').style.display = 'block';
+            certificateTypeToEdit = JSON.parse(dataCertificateType);
+            $("#certificate_type_number").val(certificateTypeToEdit.Certificate_type_num);
+            $("#certificate_type_number").prop('disabled', true);
+            $("#certificate_type_name1").val(certificateTypeToEdit.Type_name);
+            $("#certificate_expiration1").val(certificateTypeToEdit.Expiration);
+            $("#certificate_price1").val(certificateTypeToEdit.Price);
+        }
+        // עדכון סוג אישור
+        function updateCertificateType() {
+            certificate_type_update = {
+                Certificate_type_num: $("#certificate_type_number").val(),
+                Type_name: $("#certificate_type_name1").val(),
+                Expiration: $("#certificate_expiration1").val(),
+                Price: $("#certificate_price1").val(),
+            }
+            let api = "../api/certificate_type";
+            ajaxCall("PUT", api, JSON.stringify(certificate_type_update), UpdateCertificateTypeSuccess, UpdateCertificateTypetError);
+        }
+        function UpdateCertificateTypeSuccess() {
+            swal({
+                title: "מצוין!", text: "עדכון סוג אישור בוצע", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
+        }
+        function UpdateCertificateTypetError() {
+            swal("עדכון סוג אישור לא בוצע!", err, "warning");
+        }
+        //מחיקת סוג אישור חדש
+        function deleteCertificateType(def) {
+            delete_certificate_type = JSON.parse(def);
+            certificateTypeToDelete = {
+                certificate_type_num: delete_certificate_type.certificate_type_num,
+            }
+            swal({
+                title: "האם אתה בטוח שברצונך למחוק את סוג האישור?",
+                text: "",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true
+            })
+                .then(function (willDelete) {
+                    if (willDelete) delete_certificate_type_func(certificateTypeToDelete);
+                    else swal("סוג משתמש לא נמחק!");
+                });
+        }
+        function delete_certificate_type_func(certificateTypeToDelete) {
+            ajaxCall("DELETE", "../api/certificate_type", JSON.stringify(certificateTypeToDelete), deleteCertificateTypeSuccess, deleteCertificateTypeError);
+
+        }
+        function deleteCertificateTypeSuccess() {
+            swal({
+                title: "מצוין!", text: "סוג אישור נמחק בהצלחה", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
+        }
+        function deleteCertificateTypeError() {
+            swal("סוג אישור לא נמחק!", err, "warning");
+        }
+
         //////////////////////////////////////////////////////פריטים
         // קריאת כל הפריטים
         function getItem() {
@@ -591,7 +928,7 @@
         <a href="#">סוגי אישורים</a>
         <a href="#">פריטים</a>
     </div>-->
-<div id="main">
+    <div id="main">
         <div class="btn-group">
             <button id="defectTypeBtn" onclick="getDefectType()">סוגי ליקוי</button>
             <button id="instructionTypeBtn" onclick="getInstructionType()">סוגי הדרכה</button>
@@ -693,6 +1030,258 @@
                         <br />
                         <button id="saveBTN" onclick="insert_new_defect_type()" class="btn btn-primary"> שמור סוג ליקוי</button>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="w3-container">
+            <div id="id02" class="w3-modal">
+                <div class="w3-modal-content">
+                    <div class="w3-container" dir="rtl">
+                        <!--<span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>-->
+                        <form id="newInstructionTypeForm">
+                            <br />
+                            <h2 id="new_instruction_type_headline">סוג הדרכה חדש</h2>
+                            <br />
+                            <table class="display" style="width:100%" dir="rtl">
+                                <thead>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="instruction_type_name">שם סוג הדרכה</label>
+                                                <textarea rows="1" class="form-control groupDetails" id="instruction_type_name" placeholder="שם סוג ליקוי"></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="instruction_expiration">תוקף </label>
+                                                <textarea rows="1" class="form-control groupDetails" id="instruction_expiration" placeholder="שם סוג ליקוי"></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="instruction_price">מחיר</label>
+                                                <textarea rows="1" class="form-control groupDetails" id="instruction_price" placeholder="שם סוג ליקוי"></textarea>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </form>
+                        <br />
+                        <button id="saveBTN" onclick="insert_new_instruction_type()" class="btn btn-primary"> שמור סוג ליקוי</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="w3-container">
+            <div id="id03" class="w3-modal">
+                <div class="w3-modal-content">
+                    <div class="w3-container" dir="rtl">
+                        <!--<span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>-->
+                        <form id="newUserTypeForm">
+                            <br />
+                            <h2 id="new_user_type_headline">סוג משתמש חדש</h2>
+                            <br />
+                            <table class="display" style="width:100%" dir="rtl">
+                                <thead>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="user_type_name">שם סוג משתמש</label>
+                                                <textarea rows="1" class="form-control groupDetails" id="user_type_name" placeholder="שם סוג משתמש"></textarea>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </form>
+                        <br />
+                        <button id="saveBTN" onclick="insert_new_user_type()" class="btn btn-primary"> שמור סוג משתמש</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="w3-container">
+            <div id="id04" class="w3-modal">
+                <div class="w3-modal-content">
+                    <div class="w3-container" dir="rtl">
+                        <!--<span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>-->
+                        <form id="newCertificateTypeForm">
+                            <br />
+                            <h2 id="new_certificate_type_headline">סוג אישור חדש</h2>
+                            <br />
+                            <table class="display" style="width:100%" dir="rtl">
+                                <thead>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="certificate_type_name">שם סוג אישור</label>
+                                                <textarea rows="1" class="form-control groupDetails" id="certificate_type_name" placeholder="שם סוג אישור"></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="certificate_expiration">תוקף </label>
+                                                <textarea rows="1" class="form-control groupDetails" id="certificate_expiration" placeholder="תוקף"></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="certificate_price">מחיר</label>
+                                                <textarea rows="1" class="form-control groupDetails" id="certificate_price" placeholder="מחיר"></textarea>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </form>
+                        <br />
+                        <button id="saveBTN" onclick="insert_new_certificate_type()" class="btn btn-primary"> שמור סוג אישור</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="w3-container">
+            <div id="id011" class="w3-modal">
+                <div class="w3-modal-content">
+                    <div class="w3-container" dir="rtl">
+                        <span onclick="document.getElementById('id011').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                        <form id="updateDefectTypeForm">
+                            <h2 id="update_defect_type">עריכת סוג ליקוי</h2>
+                            <br />
+                            <table id="updateDefectTypeTb">
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="defect_type_number"><span class="red-star">★ </span>מספר סוג ליקוי</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="defect_type_number" placeholder=" מספר סוג ליקוי "></textarea>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="defect_type_name1"><span class="red-star">★ </span>שם סוג ליקוי</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="defect_type_name1" placeholder=" הזן שם סוג ליקוי "></textarea>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                        <br />
+                        <button id="btn_update_defect_type" class="btn btn-primary" onclick="updateDefectType()"> עדכן סוג ליקוי </button>
+                    </div>
+                    <br />
+                </div>
+            </div>
+        </div>
+        <div class="w3-container">
+            <div id="id022" class="w3-modal">
+                <div class="w3-modal-content">
+                    <div class="w3-container" dir="rtl">
+                        <span onclick="document.getElementById('id022').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                        <form id="updateInstructionTypeForm">
+                            <h2 id="update_instruction_type">עריכת סוג הדרכה</h2>
+                            <br />
+                            <table id="updateInstructionTypeTb">
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="instruction_type_number"><span class="red-star">★ </span>מספר סוג הדרכה</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="instruction_type_number" placeholder=" מספר סוג הדרכה "></textarea>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="instruction_type_name1"><span class="red-star">★ </span>שם סוג הדרכה</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="instruction_type_name1" placeholder=" הזן שם סוג הדרכה "></textarea>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="instruction_expiration1"><span class="red-star">★ </span>תוקף</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="instruction_expiration1" placeholder=" הזן תוקף הדרכה "></textarea>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="instruction_price1"><span class="red-star">★ </span>מחיר</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="instruction_price1" placeholder=" הזן מחיר הדרכה "></textarea>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                        <br />
+                        <button id="btn_update_instruction_type" class="btn btn-primary" onclick="updateInstructionType()"> עדכן סוג ליקוי </button>
+                    </div>
+                    <br />
+                </div>
+            </div>
+        </div>
+        <div class="w3-container">
+            <div id="id033" class="w3-modal">
+                <div class="w3-modal-content">
+                    <div class="w3-container" dir="rtl">
+                        <span onclick="document.getElementById('id033').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                        <form id="updateUserTypeForm">
+                            <h2 id="update_user_type">עריכת סוג משתמש</h2>
+                            <br />
+                            <table id="updateUserTypeTb">
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="user_type_number"><span class="red-star">★ </span>מספר סוג משתמש</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="user_type_number" placeholder=" מספר סוג משתמש "></textarea>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="user_type_name1"><span class="red-star">★ </span>שם סוג משתמש</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="user_type_name1" placeholder=" הזן שם סוג משתמש "></textarea>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                        <br />
+                        <button id="btn_update_user_type" class="btn btn-primary" onclick="updateUserType()"> עדכן סוג משתמש </button>
+                    </div>
+                    <br />
+                </div>
+            </div>
+        </div>
+        <div class="w3-container">
+            <div id="id044" class="w3-modal">
+                <div class="w3-modal-content">
+                    <div class="w3-container" dir="rtl">
+                        <span onclick="document.getElementById('id044').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                        <form id="updateCertificateTypeForm">
+                            <h2 id="update_certificate_type">עריכת סוג אישור</h2>
+                            <br />
+                            <table id="updateCertificateTypeTb">
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="certificate_type_number"><span class="red-star">★ </span>מספר סוג הדרכה</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="certificate_type_number" placeholder=" מספר סוג אישור "></textarea>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="certificate_type_name1"><span class="red-star">★ </span>שם סוג הדרכה</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="certificate_type_name1" placeholder=" הזן שם סוג אישור "></textarea>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="certificate_expiration1"><span class="red-star">★ </span>תוקף</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="certificate_expiration1" placeholder=" הזן תוקף אישור "></textarea>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="certificate_price1"><span class="red-star">★ </span>מחיר</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="certificate_price1" placeholder=" הזן מחיר אישור "></textarea>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                        <br />
+                        <button id="btn_update_certificate_type" class="btn btn-primary" onclick="updateCertificateType()"> עדכן סוג ליקוי </button>
+                    </div>
+                    <br />
                 </div>
             </div>
         </div>

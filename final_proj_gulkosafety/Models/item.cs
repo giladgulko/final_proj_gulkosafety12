@@ -30,23 +30,6 @@ namespace final_proj_gulkosafety.Models
             DBServices dbs = new DBServices();
             return dbs.ReadItem();
         }
-        public void InsertItem()
-        {
-            DBServices dbs = new DBServices();
-            dbs.InsertItem(this);
-        }
-        public void UpdateItem()
-        {
-            DBServices dbs = new DBServices();
-            dbs.UpdateItem(this);
-
-        }
-        public void DeleteItem(int Instruction_type_num)
-        {
-            DBServices dbs = new DBServices();
-            dbs.DeleteItem(Instruction_type_num);
-
-        }
 
     }
 }
