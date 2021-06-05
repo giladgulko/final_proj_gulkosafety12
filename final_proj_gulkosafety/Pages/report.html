@@ -24,7 +24,6 @@
     <link href="styles/reportStyleSheet.css" rel="stylesheet" />
     <link href="styles/nav_bar_style.css" rel="stylesheet" />
     <link href="styles/alertsStyles.css" rel="stylesheet" />
-    <script src="../Scripts/safetyLVL.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.8.1/html2pdf.bundle.min.js" integrity="sha512-vDKWohFHe2vkVWXHp3tKvIxxXg0pJxeid5eo+UjdjME3DBFBn2F8yWOE0XmiFcFbXxrEOR1JriWEno5Ckpn15A==" crossorigin="anonymous"></script>
     <title>דוח ביקור</title>
 
@@ -37,7 +36,7 @@
         defectToEdit = "";
         ptwList = [];
         userType = JSON.parse(localStorage["userType"]);
-        Users = JSON.parse(localStorage["projContacts"])
+        Users = JSON.parse(localStorage["projContacts"]);
         $(document).ready(function () {
             //build view page
             if (userType != 1)
@@ -246,25 +245,35 @@
                 contentType: false,
                 processData: false,
                 data: data,
-                success: updateImage,
+                success: updateImageLink,
                 error: updateImgError
             });
+
+            return false;
         }
 
-        function updateImage(data) {
+        function updateImageLink(data) {
 
             let picture_link = "../" + data[0];
-            let temp = JSON.parse(defectToEdit)
+            let temp = JSON.parse(defectToEdit);
             temp.Picture_link = picture_link;
             console.log(temp.Picture_link)
             let api = "../api/defect_in_report?picture_link=" + picture_link;
-            ajaxCall("PUT", api, JSON.stringify(temp), updateImgSuccess, updateImgError);
-            //alert("הצליח!")
-
+            ajaxCall("PUT", api, JSON.stringify(temp), updateImgLinkSuccess, updateImgLinkError);
         }
 
-        function updateImgSuccess() {
-            alert("תמונה הועלתה בהצלחה");
+        function updateImgLinkError(data){
+            alert("לינק התמונה לא הועלה לשרת");
+            location.reload();
+        }
+
+        function updateImgLinkSuccess(data) {
+            swal({
+                title: "מצוין!", text: "תמונה הועלתה בהצלחה!", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
             var now = new Date().toISOString();
             newAlertOnAprroveIMG = {
                 Content: "הועלתה תמונה חדשה לליקוי בדוח-  " + report.Report_num + " בפרויקט - " + project.Project_num,
@@ -279,7 +288,7 @@
             ajaxCall("POST", api1, JSON.stringify(newAlertOnAprroveIMG), PostAlertSuccess, PostAlertError);
         }
         function updateImgError(err) {
-            console.log(err);
+            alert("תמונה לא נשמרה");
         }
 
         function checkImg(def) {
