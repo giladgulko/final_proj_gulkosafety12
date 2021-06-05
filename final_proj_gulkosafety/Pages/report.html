@@ -255,7 +255,7 @@
         function updateImageLink(data) {
 
             let picture_link = "../" + data[0];
-            let temp = JSON.parse(defectToEdit)
+            let temp = JSON.parse(defectToEdit);
             temp.Picture_link = picture_link;
             console.log(temp.Picture_link)
             let api = "../api/defect_in_report?picture_link=" + picture_link;
