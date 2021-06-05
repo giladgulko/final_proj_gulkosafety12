@@ -3497,6 +3497,308 @@ namespace final_proj_gulkosafety.Models.DAL
             return command;
         }
 
+        //insert a new Certificate type
+        public int InsertCertificateType(certificate_type _certificate_type)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            String cStr = BuildInsertCommand(_certificate_type);      // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
+        private String BuildInsertCommand(certificate_type _certificate_type)
+        {
+            String command;
+
+            StringBuilder sb = new StringBuilder();
+            // use a string builder to create the dynamic string
+            sb.AppendFormat("Values('{0}', '{1}', '{2}')", _certificate_type.Type_name, _certificate_type.Expiration, _certificate_type.Price);
+            String prefix = "INSERT INTO certificate_type " + "(type_name,expiration,price)";
+            command = prefix + sb.ToString();
+
+            return command;
+
+        }
+
+        //update Certificate Type 
+        public int UpdateCertificateType(certificate_type _certificate_type)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            String cStr = BuildupdateCommand(_certificate_type);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+
+        private String BuildupdateCommand(certificate_type _certificate_type)
+        {
+            String command;
+            command = "UPDATE [certificate_type] SET type_name='" + _certificate_type.Type_name + "', expiration='" + _certificate_type.Expiration + "', price='" + _certificate_type.Price + "' WHERE certificate_type_num =" + _certificate_type.Certificate_type_num;
+
+            return command;
+        }
+
+        //delete Certificate type 
+        public int DeleteCertificateType(int Certificate_type_num)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            String cStr = BuildDeleteCommandCertificate(Certificate_type_num);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+        private String BuildDeleteCommandCertificate(int Certificate_type_num)
+        {
+            String command;
+            command = "delete from certificate_type where certificate_type_num=" + Certificate_type_num;
+            return command;
+        }
+
+
+        //insert a new Item type
+        public int InsertItem(item _item)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            String cStr = BuildInsertCommand(_item);      // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
+        private String BuildInsertCommand(item _item)
+        {
+            String command;
+
+            StringBuilder sb = new StringBuilder();
+            // use a string builder to create the dynamic string
+            sb.AppendFormat("Values('{0}', '{1}')", _item.Name, _item.Price);
+            String prefix = "INSERT INTO item " + "(name,price)";
+            command = prefix + sb.ToString();
+
+            return command;
+
+        }
+
+        //update Item Type 
+        public int UpdateItem(item _item)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            String cStr = BuildupdateCommand(_item);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+
+        private String BuildupdateCommand(item _item)
+        {
+            String command;
+            command = "UPDATE [item] SET name='" + _item.Name + "', price='" + _item.Price + "' WHERE item_num =" + _item.Item_num;
+
+            return command;
+        }
+
+        //delete Item type 
+        public int DeleteItem(int Item_num)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            String cStr = BuildDeleteCommandItem(Item_num);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+        private String BuildDeleteCommandItem(int Item_num)
+        {
+            String command;
+            command = "delete from item where item_num=" + Item_num;
+            return command;
+        }
+
+
 
     }
 

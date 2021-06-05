@@ -32,5 +32,22 @@ namespace final_proj_gulkosafety.Models
             DBServices dbs = new DBServices();
             return dbs.ReadCertificate_type();
         }
+        public void InsertCertificateType()
+        {
+            DBServices dbs = new DBServices();
+            dbs.InsertCertificateType(this);
+        }
+        public void UpdateCertificateType()
+        {
+            DBServices dbs = new DBServices();
+            dbs.UpdateCertificateType(this);
+
+        }
+        public void DeleteCertificateType(int Certificate_type_num)
+        {
+            DBServices dbs = new DBServices();
+            dbs.DeleteCertificateType(Certificate_type_num);
+
+        }
     }
 }
