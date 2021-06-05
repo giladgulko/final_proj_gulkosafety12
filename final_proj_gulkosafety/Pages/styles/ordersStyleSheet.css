@@ -90,17 +90,6 @@ body {
         background-color: #bd3636;
         color: white;
     }
-.btn-item {
-    background-color: white;
-    color: black;
-    border: 3px solid #00216f;
-    margin: 3px;
-}
-
-    .btn-item:hover {
-        background-color: #00216f;
-        color: white;
-    }
 
 th.sorting {
     text-align: center;
@@ -118,7 +107,7 @@ th.sorting {
 th {
     text-align: right;
 }
-#saveBTN, #btn_update_order {
+#saveBTN, #btn_update_order, #btnUpdate_contact , #btn_ShowItems{
     float: left;
     color: #fff;
     background-color: cadetblue;

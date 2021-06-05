@@ -316,7 +316,6 @@
                         <li class="type2mode"><a href="certificates.html">אישורים</a></li>
                         <li class="type2mode"><a href="instructions.html">הדרכות</a></li>
                         <li class="active"><a href="projects.html">פרויקטים<span class="sr-only">(current)</span></a></li>
-                        <li><a href="#">התחברות</a></li>
                         <li class="type2mode">
                             <span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="home.html"></a>
                         </li>
@@ -367,7 +366,7 @@
                                     <th>
                                         <div class="form-group">
                                             <label for="projectName"><span class="red-star">★ </span>שם הפרויקט</label>
-                                            <input type="text" class="form-control groupDetails" id="projectName"
+                                            <input type="text" class="form-control groupDetails" id="projectName" placeholder="הזן שם פרויקט"
                                                    oninvalid="this.setCustomValidity('הכנס שם פרויקט')"
                                                    oninput="this.setCustomValidity('')" required>
                                         </div>
@@ -411,13 +410,13 @@
                                     <th>
                                         <div class="form-group">
                                             <label for="company"><span class="red-star">★ </span>חברה</label>
-                                            <input type="text" class="form-control groupDetails" id="company" required>
+                                            <input type="text" class="form-control groupDetails" id="company" placeholder="הזן חברה" required>
                                         </div>
                                     </th>
                                     <th>
                                         <div class="form-group">
                                             <label for="address"><span class="red-star">★ </span>כתובת</label>
-                                            <input type="text" class="form-control groupDetails" id="address" required>
+                                            <input type="text" class="form-control groupDetails" id="address"  placeholder="הזן כתובת" required>
                                         </div>
                                     </th>
                                 </tr>
@@ -449,11 +448,12 @@
                                 </tr>
                                 <tr>
                                     <th>
-                                        <input type="submit" class="btn btn-primary" value="שמור" />
+                                        <input type="submit" id="saveBTN" class="btn btn-primary" value=" שמור פרויקט" />
                                     </th>
                                 </tr>
                             </thead>
                         </table>
+                        <br />
                     </form>
                 </div>
             </div>

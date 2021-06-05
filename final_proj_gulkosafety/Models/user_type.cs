@@ -34,5 +34,17 @@ namespace final_proj_gulkosafety.Models
             DBServices dbs = new DBServices();
             dbs.InsertUserType(this);
         }
+        public void UpdateUserType()
+        {
+            DBServices dbs = new DBServices();
+            dbs.UpdateUserType(this);
+
+        }
+        public void DeleteUserType(int User_type_num)
+        {
+            DBServices dbs = new DBServices();
+            dbs.DeleteUserType(User_type_num);
+
+        }
     }
 }

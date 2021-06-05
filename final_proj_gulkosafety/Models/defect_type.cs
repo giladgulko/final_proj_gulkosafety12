@@ -33,7 +33,18 @@ namespace final_proj_gulkosafety.Models
             DBServices dbs = new DBServices();
             dbs.InsertDefectType(this);
         }
+        
+        public void UpdateDefectType()
+        {
+            DBServices dbs = new DBServices();
+            dbs.UpdateDefectType(this);
 
+        }
+        public void DeleteDefectType(int Defect_type_num)
+        {
+            DBServices dbs = new DBServices();
+            dbs.DeleteDefectType(Defect_type_num);
 
+        }
     }
 }

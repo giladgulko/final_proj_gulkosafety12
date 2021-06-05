@@ -31,11 +31,12 @@
         instToEdit = [];
         contactList = [];
         AllContacts = [];
+        allPariticipants = [];
         var firstTimeAddContact =1;
         var inst_num = "";
-        var allPariticipants = [];
         var user_mail = "gulkosafety@gmail.com";
-        timeOfPost=1
+        var timeOfPost = 1;
+
         $(document).ready(function () {
             getInstructionData();
             getCertificateTypeList();
@@ -59,7 +60,7 @@
         function getError() {
             swal("נכשל!", "קריאת הדרכות נכשלה!", "warning")
         }
-        //get a list of all the instruction type for section list
+        //קריאת כל רשימת סוגי ההדרכות
         function getCertificateTypeList() {
             let api = "../api/instruction_type";
             ajaxCall("GET", api, "", getInstructionTypeListSuccess, getInstructionTypeListError);
@@ -483,11 +484,7 @@
         function createNewpartiSuccess(data) {
             swal({
                 title: "מצוין!", text: "הוספת משתתף בהדרכה בוצע בהצלחה!", type: "success", icon: "success"
-            }).then(function () {
-
-            });
-
-
+            })
         }
         function createNewpartiError() {
             swal("נשכל!", "הוספת משתתף בהדרכה נכשל!", "warning")
@@ -606,10 +603,6 @@
             let api = "../api/contact_in_instruction";
             ajaxCall("POST", api, JSON.stringify(allPariticipants[0]), InsertSuccess, InsertError);
         }
-        function postCONTACTinInstruction(con) {
-            let api = "../api/contact_in_instruction";
-            ajaxCall("POST", api, JSON.stringify(con), InsertSuccess, InsertError);
-        }
         function InsertSuccess(data) {
             if (timeOfPost != allPariticipants.length) {
                 postCONTACTinInstruction(allPariticipants[timeOfPost]);
@@ -627,6 +620,11 @@
             }
            
 
+        }
+        //שוב פוסט של משתתף בהדרכה
+        function postCONTACTinInstruction(con) {
+            let api = "../api/contact_in_instruction";
+            ajaxCall("POST", api, JSON.stringify(con), InsertSuccess, InsertError);
         }
         function InsertError() {
             swal("נשכל!", "יצירת משתתף בהדרכה נכשל!", "warning")
@@ -669,7 +667,6 @@
                         <li><a href="certificates.html">אישורים</a></li>
                         <li class="active"><a href="instructions.html">הדרכות<span class="sr-only">(current)</span></a></li>
                         <li><a href="projects.html">פרויקטים</a></li>
-                        <li><a href="#">התחברות</a></li>
                         <li>
                             <span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="home.html"></a>
                         </li>
@@ -798,7 +795,7 @@
                                 <div class="form-group">
                                     <label for="searchParticipant1"><span class="red-star">★ </span>חיפוש משתתף</label>
                                     <select onchange="" class="form-control groupDetails" id="searchParticipant1" required>
-                                        <option value="0">בחר משתתף קיים:</option>
+                                        <option value="">בחר משתתף קיים:</option>
                                     </select>
                                 </div>
                             </td>
