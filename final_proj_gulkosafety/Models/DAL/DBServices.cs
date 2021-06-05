@@ -72,7 +72,7 @@ namespace final_proj_gulkosafety.Models.DAL
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
             sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}', '{4}')", _user.Email, _user.Name, _user.Phone, _user.Password, _user.User_type_num);
-            String prefix = "INSERT INTO user " + "(email,name,phone,password,user_type_num)";
+            String prefix = "INSERT INTO [user] " + "(email,name,phone,password,user_type_num)";
             command = prefix + sb.ToString();
 
             return command;
@@ -3701,7 +3701,7 @@ namespace final_proj_gulkosafety.Models.DAL
 
         }
 
-        //update Item Type 
+        //update Item  
         public int UpdateItem(item _item)
         {
 
@@ -3750,7 +3750,7 @@ namespace final_proj_gulkosafety.Models.DAL
             return command;
         }
 
-        //delete Item type 
+        //delete Item  
         public int DeleteItem(int Item_num)
         {
 
@@ -3846,7 +3846,102 @@ namespace final_proj_gulkosafety.Models.DAL
             return command;
         }
 
+        //update User 
+        public int UpdateUser(user _user)
+        {
 
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            String cStr = BuildupdateCommand(_user);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+
+        private String BuildupdateCommand(user _user)
+        {
+            String command;
+            command = "UPDATE [user] SET name='" + _user.Name + "', phone='" + _user.Phone + "', password='" + _user.Password + "', user_type_num='" + _user.User_type_num + "' WHERE (email) =" + _user.Email;
+
+            return command;
+        }
+
+        //delete Item type 
+        public int DeleteUser(string Email)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            String cStr = BuildDeleteCommandUser(Email);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+        private String BuildDeleteCommandUser(string Email)
+        {
+            String command;
+            command = "delete from [user] where email=" + Email;
+            return command;
+        }
 
 
     }

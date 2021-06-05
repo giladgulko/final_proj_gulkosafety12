@@ -240,6 +240,7 @@
     <Content Include="Pages\styles\reportStyleSheet.css" />
     <Content Include="Pages\styles\nav_bar_style.css" />
     <Content Include="Pages\styles\settingsStyleSheet.css" />
+    <Content Include="Pages\styles\usersStyleSheet.css" />
     <Content Include="Pages\users.html" />
     <Content Include="Scripts\ajaxCalls.js" />
     <Content Include="Scripts\ajaxCallsWithKey.js" />

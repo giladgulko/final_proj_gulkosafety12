@@ -18,7 +18,7 @@
     <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
+    <link href="styles/usersStyleSheet.css" rel="stylesheet" />
     <link href="styles/nav_bar_style.css" rel="stylesheet" />
 
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
@@ -27,14 +27,14 @@
     <script>
 
         $(document).ready(function () {
-            getusersData()
+            getusersData();
 
         });
         // קריאת כל המשתמשים
         function getusersData() {
 
             let api = "../api/user";
-            ajaxCall("GET",api, "", createDt, getError)
+            ajaxCall("GET", api, "", createDt, getError)
         }
         function getError() {
             swal("נכשל!", "קריאת משתמשים נכשלה!", "warning")
@@ -46,14 +46,14 @@
 
             for (var i = 0; i < userdata.length; i++) {
 
-                    user = {
+                user = {
 
-                        Email: userdata[i].Email,
-                        Name: userdata[i].Name,
-                        Phone: userdata[i].Phone,
-                        Password: userdata[i].Password,
-                        Type_name: userdata[i].Type_name,
-                    }
+                    Email: userdata[i].Email,
+                    Name: userdata[i].Name,
+                    Phone: userdata[i].Phone,
+                    Password: userdata[i].Password,
+                    Type_name: userdata[i].Type_name,
+                }
                 userToShow.push(user);
             }
 
@@ -72,9 +72,9 @@
                             render: function (data, type, row, meta) {
                                 let def = JSON.stringify(row);
 
-                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editinstrucBTN(this.value)'> עריכה </button>";
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editUser(this.value)'> עריכה </button>";
 
-                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteInstruction(this.value)'> מחיקה </button>";
+                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteUser(this.value)'> מחיקה </button>";
 
                                 return editBtn + deleteBtn;
 
@@ -85,8 +85,123 @@
                 });
 
             }
+            catch (err) {
+                alert(err);
+            }
+        }
+        //הוספת משתמש חדש
+        function insert_new_user() {
+            let userTypeName = "";
+            document.getElementById('id01').style.display = 'none';
+            if ($("#user_type").val() == "משתמש על") {
+                userTypeName = 1;
+                }
+            else {
+                userTypeName = 2;
+            }
+
+            let newUser = {
+                Email: $("#user_email").val(),
+                Name: $("#user_name").val(),
+                Phone: $("#user_phone").val(),
+                Password: $("#user_password").val(),
+                Type_name: $("#user_type").val(),
+                User_type_num: userTypeName,
+            }
+
+            let api = "../api/user";
+            ajaxCall("POST", api, JSON.stringify(newUser), createNewUserSuccess, createNewUserError);
+        }
+
+        function createNewUserSuccess(userdata) {
+            swal({
+                title: "מצוין!", text: "פריט חדש נוצר בהצלחה!", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+            });
+
+        }
+        function createNewUserError() {
+            swal("נכשל!", "הכנסת פריט חדש נכשל!", "warning")
+        }
+
+        //עריכת משתמש
+        function editUser(dataUser) {
+            document.getElementById('id02').style.display = 'block';
+            UserToEdit = JSON.parse(dataUser);
+            $("#user_email1").val(UserToEdit.Email);
+            $("#user_email1").prop('disabled', true);
+            $("#user_name1").val(UserToEdit.Name);
+            $("#user_phone1").val(UserToEdit.Phone);
+            $("#user_password1").val(UserToEdit.Password);
+            $("#user_type1").val(UserToEdit.Type_name);
+        }
+        // עדכון משתמש
+        function updateUser() {
+            let userTypeName = "";
+            if ($("#user_type1").val() == "משתמש על") {
+                userTypeName = 1;
+            }
+            else {
+                userTypeName = 2;
+            }
+            user_update = {
+                Email: $("#user_email1").val(),
+                Name: $("#user_name1").val(),
+                Phone: $("#user_phone1").val(),
+                Password: $("#user_password1").val(),
+                Type_name: $("#user_type1").val(),
+                User_type_num: userTypeName,
+            }
+            let api = "../api/user";
+            ajaxCall("PUT", api, JSON.stringify(user_update), UpdateUserSuccess, UpdateUserError);
+        }
+        function UpdateUserSuccess() {
+            swal({
+                title: "מצוין!", text: "עדכון משתמש בוצע", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
+        }
+        function UpdateUserError() {
+            swal("עדכון משתמש לא בוצע!", err, "warning");
+        }
+        //מחיקת משתמש חדש
+        function deleteUser(def) {
+            delete_user = JSON.parse(def);
+            userToDelete = {
+                Email: delete_user.Email,
+            }
+            swal({
+                title: "האם אתה בטוח שברצונך למחוק את משתמש?",
+                text: "",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true
+            })
+                .then(function (willDelete) {
+                    if (willDelete) delete_user_func(userToDelete);
+                    else swal("משתמש לא נמחק!");
+                });
+        }
+        function delete_user_func(userToDelete) {
+            ajaxCall("DELETE", "../api/user", JSON.stringify(userToDelete), deleteUserSuccess, deleteUserError);
+
+        }
+        function deleteUserSuccess() {
+            swal({
+                title: "מצוין!", text: "משתמש נמחק בהצלחה", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
+        }
+        function deleteUserError() {
+            swal("משתמש לא נמחק!", err, "warning");
+        }
     </script>
-</html>
+    </head>
 <body>
     <div id="logo">
         <img class="logo" src="photos/logo.jpeg" height="50" />
@@ -126,28 +241,143 @@
     </div>
     <!--NavBar-->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <div id="instruction_bar" dir="rtl">
+    <div id="users_bar" dir="rtl">
         <div id="headline">
-            <h1 class="instructions">משתמשים</h1>
+            <h1 class="users">משתמשים</h1>
         </div>
         <br />
         <div id="buttons">
-            <button id="myBtn" style="margin-left:10px" class="btn btn-primary" onclick="document.getElementById('id03').style.display='block', clearPopuP()">הוסף משתמש חדש</button>
+            <button id="myBtn" style="margin-left:10px" class="btn btn-primary" onclick="document.getElementById('id01').style.display='block', clearPopuP()">הוסף משתמש חדש</button>
         </div>
     </div>
-    <form id="pForm">
-        <table id="usersTable" class="display" style="width:100%" dir="rtl">
-            <thead>
-                <tr>
-                    <th>מייל</th>
-                    <th>שם מלא</th>
-                    <th>טלפון</th>
-                    <th>סיסמא</th>
-                    <th>סוג משתמש</th>
-                    <th></th>
-                </tr>
-            </thead>
-        </table>
-    </form>
-
+    <div id="main">
+        <div class="row">
+            <div class="col-md-12 col-sm-9">
+                <form id="pForm">
+                    <table id="usersTable" class="display" style="width:100%" dir="rtl">
+                        <thead>
+                            <tr>
+                                <th>מייל</th>
+                                <th>שם מלא</th>
+                                <th>טלפון</th>
+                                <th>סיסמא</th>
+                                <th>סוג משתמש</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </form>
+            </div>
+        </div>
+        <div class="w3-container">
+            <div id="id01" class="w3-modal">
+                <div class="w3-modal-content">
+                    <div class="w3-container" dir="rtl">
+                        <form id="newUsersTypeForm">
+                            <br />
+                            <h2 id="new_user_headline">משתמש חדש</h2>
+                            <br />
+                            <table class="display" style="width:100%" dir="rtl">
+                                <thead>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="user_email">מייל </label>
+                                                <textarea rows="1" class="form-control groupDetails" id="user_email" placeholder="מייל "></textarea>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="user_name">שם מלא</label>
+                                                <textarea rows="1" class="form-control groupDetails" id="user_name" placeholder="שם מלא"></textarea>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="user_phone">טלפון</label>
+                                                <textarea rows="1" class="form-control groupDetails" id="user_phone" placeholder="טלפון"></textarea>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="user_password">סיסמא</label>
+                                                <textarea rows="1" class="form-control groupDetails" id="user_password" placeholder="סיסמא"></textarea>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="user_type"><span class="red-star">★ </span>סוג משתמש</label>
+                                                <select class="form-control groupDetails" id="user_type" required>
+                                                    <option value="">בחר סוג משתמש</option>
+                                                    <option value="1">משתמש על</option>
+                                                    <option value="2">מנהל עבודה/פרויקט</option>
+                                                </select>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </form>
+                        <br />
+                        <button id="saveBTN" onclick="insert_new_user()" class="btn btn-primary"> שמור משתמש חדש</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="w3-container">
+            <div id="id02" class="w3-modal">
+                <div class="w3-modal-content">
+                    <div class="w3-container" dir="rtl">
+                        <span onclick="document.getElementById('id02').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                        <form id="updateUserForm">
+                            <h2 id="update_user_type">עריכת משתמש</h2>
+                            <br />
+                            <table id="updateUserTb">
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="user_email1"><span class="red-star">★ </span>מייל</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="user_email1" placeholder=" הזן מייל "></textarea>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="user_name1"><span class="red-star">★ </span>שם מלא</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="user_name1" placeholder=" הזן שם מלא "></textarea>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="user_phone1"><span class="red-star">★ </span>טלפון</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="user_phone1" placeholder=" הזן טלפון "></textarea>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="user_password1"><span class="red-star">★ </span>סיסמא</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="user_password1" placeholder=" הזן סיסמא "></textarea>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="user_type1"><span class="red-star">★ </span>סוג משתמש</label>
+                                            <select class="form-control groupDetails" id="user_type1" required>
+                                                <option value="">בחר סוג משתמש</option>
+                                                <option value="1">משתמש על</option>
+                                                <option value="2">מנהל עבודה/פרויקט</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                        <br />
+                        <button id="btn_update_user" class="btn btn-primary" onclick="updateUser()"> עדכן סוג הדרכה </button>
+                    </div>
+                    <br />
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
+</html>

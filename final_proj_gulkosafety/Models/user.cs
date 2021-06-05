@@ -24,7 +24,14 @@ namespace final_proj_gulkosafety.Models
             User_type_num = user_type_num;
             Type_name = type_name;
         }
-
+        public user(string email, string name, string phone, string password, int user_type_num)
+        {
+            Email = email;
+            Name = name;
+            Phone = phone;
+            Password = password;
+            User_type_num = user_type_num;
+        }
         public string Email { get => email; set => email = value; }
         public string Name { get => name; set => name = value; }
         public string Phone { get => phone; set => phone = value; }
@@ -57,6 +64,18 @@ namespace final_proj_gulkosafety.Models
              DBServices dbs = new DBServices();
             user u = dbs.checkUserLogIn(email, password);
             return u;
+        }
+        public void UpdateUser()
+        {
+            DBServices dbs = new DBServices();
+            dbs.UpdateUser(this);
+
+        }
+        public void DeleteUser(string Email)
+        {
+            DBServices dbs = new DBServices();
+            dbs.DeleteUser(Email);
+
         }
     }
 }

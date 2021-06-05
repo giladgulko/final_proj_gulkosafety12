@@ -1,0 +1,81 @@
+﻿.btn-primary {
+    color: #fff;
+    background-color: cadetblue;
+    border-color: cadetblue;
+    float: right;
+}
+#headline {
+    font-family: 'Suez One', serif;
+    color: cadetblue;
+    /*margin-right:3%;*/
+    margin-top:2%
+   
+}
+button#myBtn {
+    margin-right: 15%;
+}
+#table {
+    margin-top: 30px;
+    padding-left: 12%;
+    padding-right: 30%;
+    text-align: center;
+}
+.dataTables_wrapper {
+    position: relative;
+    clear: both;
+    *zoom: 1;
+    zoom: 1;
+    /*padding-left: 10%;
+    padding-left: 10%;*/
+}
+
+#pForm {
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 5%;
+}
+
+th {
+    text-align: right;
+}
+    th.sorting {
+        text-align: center;
+    }
+button#myBtn {
+    /*float: left;*/
+    margin-right: 10%;
+}
+#active {
+    color: cadetblue;
+    background-color: #eeeeee;
+    FONT-WEIGHT: bold;
+    border-color: cadetblue;
+}
+
+.btn-success {
+    background-color: white;
+    color: black;
+    border: 3px solid #569366;
+    margin: 3px;
+}
+
+    .btn-success:hover {
+        background-color: #569366;
+        color: white;
+    }
+
+.btn-danger {
+    background-color: white;
+    color: black;
+    border: 3px solid #bd3636;
+    margin: 3px;
+}
+
+    .btn-danger:hover {
+        background-color: #bd3636;
+        color: white;
+    }
+
+body {
+    background-color: #eeeeee;
+}

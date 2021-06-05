@@ -71,13 +71,38 @@ namespace final_proj_gulkosafety.Controllers
         }
 
         // PUT api/<controller>/5
-        public void Put(int id, [FromBody] string value)
+        public HttpResponseMessage Put([FromBody] user _user)
         {
+            try
+            {
+                {
+                    _user.UpdateUser();
+                }
+
+                return Request.CreateResponse(HttpStatusCode.Created, _user);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
+            }
         }
 
         // DELETE api/<controller>/5
-        public void Delete(int id)
+        public HttpResponseMessage Delete([FromBody] user _user)
         {
+
+            try
+            {
+                {
+                    _user.DeleteUser(_user.Email);
+                }
+
+                return Request.CreateResponse(HttpStatusCode.Created, _user);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
+            }
         }
 
 
