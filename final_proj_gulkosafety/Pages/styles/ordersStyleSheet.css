@@ -107,7 +107,8 @@ th.sorting {
 th {
     text-align: right;
 }
-#saveBTN, #btn_update_order, #btnUpdate_contact , #btn_ShowItems{
+
+#saveBTN, #btn_update_order, #btnUpdate_contact, #btn_saveExist_itemToOrder, #btnUpdate_item {
     float: left;
     color: #fff;
     background-color: cadetblue;

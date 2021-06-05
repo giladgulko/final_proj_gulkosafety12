@@ -3798,6 +3798,54 @@ namespace final_proj_gulkosafety.Models.DAL
             return command;
         }
 
+        //delete item in order
+        public int DeleteItemInOrder(int item_num, int order_num)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            String cStr = BuildDeleteItemInOrderCommand(item_num, order_num);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+        private String BuildDeleteItemInOrderCommand(int item_num,int order_num)
+        {
+            String command;
+            command = "DELETE FROM items_in_order where item_num=" + item_num + "and order_num="+ order_num;
+            return command;
+        }
+
 
 
 

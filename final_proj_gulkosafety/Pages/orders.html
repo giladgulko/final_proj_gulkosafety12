@@ -53,7 +53,7 @@
         //קריאת כל הפריטים
         function getItem() {
             let api = "../api/item";
-             ajaxCall("GET", api , "", getSuccessItem, getErrorItem)
+            ajaxCall("GET", api, "", getSuccessItem, getErrorItem)
         }
         function getSuccessItem(data) {
             renderItems(data);
@@ -69,7 +69,7 @@
                 ExistItem.innerHTML += "<option value=" + AllItems[i].Item_num + ">" + AllItems[i].Name + "</option > ";
             }
         }
-        
+
         // קריאת כל אנשי הקשר
         function getcontacts() {
             let api = "../api/contact";
@@ -107,13 +107,13 @@
             document.getElementById('id04').style.display = 'block';
             let itemToShow = [];
             for (var i = 0; i < items.length; i++) {
-                    item = {
-                        Item_num: items[i].Item_num,
-                        Name: items[i].Name1,
-                        Price: items[i].Price,
-                        Quantity: items[i].Quantity,
-                    }
-                    itemToShow.push(item);
+                item = {
+                    Item_num: items[i].Item_num,
+                    Name: items[i].Name1,
+                    Price: items[i].Price,
+                    Quantity: items[i].Quantity,
+                }
+                itemToShow.push(item);
             }
             try {
                 tbl = $('#itemTable1').DataTable({
@@ -150,6 +150,44 @@
             }
 
         }
+        //מחיקת פריט בהזמנה
+        function deleteItem(def) {
+            let priceToDelete = "";
+            itemToDelete = JSON.parse(def);
+            for (var i = 0; i < AllItems.length; i++) {
+                if (itemToDelete.Item_num == AllItems[i].Item_num) {
+                    priceToDelete += AllItems[i].Price * itemToDelete.Quantity;
+                }
+            }
+            for (var i = 0; i < orderdata.length; i++) {
+                if (orderdata[i].Order_num == orderToEdit.Order_num) {
+                    let newOrder = {
+
+                        Order_num: orderToEdit.Order_num,
+                        Total_price: parseInt(orderToEdit.Total_price) - parseInt(priceToDelete),
+                        Invoice_num: orderToEdit.Invoice_num,
+                        Date: orderToEdit.Date,
+                    }
+                    let api = "../api/order";
+                    ajaxCall("PUT", api, JSON.stringify(newOrder), updateOrderSuccess, updateOrderError);
+                }
+            }
+            item = {
+                Item_num: itemToDelete.Item_num,
+                Order_num: orderToEdit.Order_num,
+            }
+            let api = "../api/items_in_order";
+            ajaxCall("DELETE", api, JSON.stringify(item), deleteItemSuccess,deleteItemError);
+        }
+        function deleteItemSuccess() {
+            swal({
+                title: "מצוין!", text: "מחיקת פריט בהזמנה בוצעה בהצלחה!", type: "success", icon: "success"
+            })
+        }
+        function deleteItemError() {
+            swal("נכשל!", "מחיקת פריט בהזמנה נכשלה!", "warning")
+        }
+
         //עריכה פריט בהזמנה
         function editItem(itemdata) {
             document.getElementById('id05').style.display = 'block';
@@ -168,16 +206,16 @@
             itemNum = $("#item_num").val();
             quantity = $("#item_quantity1").val();
             for (var i = 0; i < AllItems.length; i++) {
-                if (itemNum ==AllItems[i].Item_num) {
+                if (itemNum == AllItems[i].Item_num) {
                     totaLPrice += AllItems[i].Price * quantity;
                 }
             }
             for (var j = 0; j < orderdata.length; j++) {
-                if (orderdata[j].Order_num == orderToEdit.Order_num ) {
+                if (orderdata[j].Order_num == orderToEdit.Order_num) {
                     let newOrder = {
 
                         Order_num: orderToEdit.Order_num,
-                        Total_price: parseInt((orderToEdit.Total_price - (item_data.Price * item_data.Quantity))) +parseInt(totaLPrice),
+                        Total_price: parseInt((orderToEdit.Total_price - (item_data.Price * item_data.Quantity))) + parseInt(totaLPrice),
                         Invoice_num: orderToEdit.Invoice_num,
                         Date: orderToEdit.Date,
                     }
@@ -222,8 +260,8 @@
                 }
             }
 
-        } 
-        // שמירת איש קשר באישור חדש ורנדור לטבלה 
+        }
+        // שמירת איש קשר באישור חדש ורנדור לטבלה
         function SaveNewcontact(contact1) {
             $("#newContact").hide();
             $("#contactsTable").show();
@@ -232,19 +270,19 @@
             if (contact1 == null) {
                 checkId = $("#contact_id").val()
                 checkMail = $("#contact_mail").val()
-                    contact = {
-                        Id: $("#contact_id").val(),
-                        Full_name: $("#contact_name").val(),
-                        Phone: $("#contact_phone").val(),
-                        Mail: $("#contact_mail").val(),
+                contact = {
+                    Id: $("#contact_id").val(),
+                    Full_name: $("#contact_name").val(),
+                    Phone: $("#contact_phone").val(),
+                    Mail: $("#contact_mail").val(),
 
-                    }
-                    contactToShow.push(contact);
-                    contactList.push(contact);
+                }
+                contactToShow.push(contact);
+                contactList.push(contact);
 
-                    let api = "../api/contact";
-                    ajaxCall("POST", api, JSON.stringify(contact), createNewcontactSuccess, createNewcontactError);
-               
+                let api = "../api/contact";
+                ajaxCall("POST", api, JSON.stringify(contact), createNewcontactSuccess, createNewcontactError);
+
             }
             else {
                 contactToShow.push(contact1);
@@ -272,15 +310,13 @@
                 }
             }
             catch (err) {
-                    alert(err);
+                alert(err);
             }
 
         }
         function createNewcontactSuccess(data) {
             swal({
                 title: "מצוין!", text: "הוספת איש קשר להזמנה בוצע בהצלחה!", type: "success", icon: "success"
-            }).then(function () {
-
             });
         }
         function createNewcontactError() {
@@ -315,7 +351,7 @@
                             { data: "Item_num" },
                             { data: "Name" },
                             { data: "Price" },
-                            { data: "QuantityOfItem"},
+                            { data: "QuantityOfItem" },
 
                         ],
                     });
@@ -342,7 +378,7 @@
                 alert(err);
             }
 
-        } 
+        }
         //ניקוי פופ אפ של הזמנה חדשה
         function clearPopuP() {
             $("#invoice_num").val("");
@@ -361,6 +397,9 @@
             $("#search_item").show();
             $("#div_TB_item").hide();
             $("#contactsTable1").hide();
+            $("#btn_ShowItems").hide();
+            $("#btn_saveExist_itemToOrder").hide();
+            $("#btn_saveExist_item").show();
 
         }
         //הכנסת הזמנה חדשה
@@ -396,7 +435,7 @@
         function getOrderAgain(orderdata) {
             ajaxCall("GET", "../api/order", "", getsuccess, getError)
         }
-        
+
         function getsuccess(data) {
             postToItemInOrder(data);
         }
@@ -473,7 +512,7 @@
                         { data: "Invoice_num" },
                         { data: "Date" },
                         { data: "Total_price" },
-                        { data: "Contact_id"},
+                        { data: "Contact_id" },
 
                         {
                             render: function (data, type, row, meta) {
@@ -485,7 +524,7 @@
 
                                 showBtn = "<button type='button' class = 'showBtn btn btn-show' value='" + def + "' onclick='showContact(this.value)'>  הצג איש קשר </button>";
 
-                                return editBtn + deleteBtn + showBtn ;
+                                return editBtn + deleteBtn + showBtn;
 
                             }
                         },
@@ -604,8 +643,56 @@
             $("#btn_save_item").hide();
             $("#btn_saveExist_contact").hide();
             $("#quantity_num").show();
-            $("#search_item").hide();
-            $("#div_TB_item").hide();
+            $("#search_item").show();
+            $("#div_TB_item").show();
+            $("#btn_saveExist_item").hide();
+            $("#itemsTable").hide();
+            $("#btn_saveExist_itemToOrder").show();
+            $("#btn_ShowItems").show();
+        }
+
+        //הוספת פריט להזמנה קיימת
+        function addItemToExistOrder() {
+            let priceToAdd = "";
+            itemid = $("#searchItem1").val();
+            itemToAdd = $("#item_quantity").val();
+            for (var i = 0; i < AllItems.length; i++) {
+                if (itemid == AllItems[i].Item_num) {
+                    priceToAdd += AllItems[i].Price * itemToAdd;
+                }
+            }
+            for (var i = 0; i < orderdata.length; i++) {
+                if (orderdata[i].Order_num == orderToEdit.Order_num) {
+                    let newOrder = {
+
+                        Order_num: orderToEdit.Order_num,
+                        Total_price: parseInt(orderToEdit.Total_price) + parseInt(priceToAdd),
+                        Invoice_num: orderToEdit.Invoice_num,
+                        Date: orderToEdit.Date,
+                    }
+                    let api = "../api/order";
+                    ajaxCall("PUT", api, JSON.stringify(newOrder), updateOrderSuccess, updateOrderError);
+                }
+            }
+            for (var i = 0; i < AllItems.length; i++) {
+                if (itemid == AllItems[i].Item_num) {
+                    item = {
+                        Item_num: itemid,
+                        Order_num: orderToEdit.Order_num,
+                        quantity: $("#item_quantity").val(),
+                    }
+                }
+            }
+            let api = "../api/items_in_order";
+            ajaxCall("POST", api, JSON.stringify(item), AddItemSuccess, AddItemError);
+        }
+        function AddItemSuccess() {
+            swal({
+                title: "מצוין!", text: "הוספת פריט חדש להזמנה בוצעה בהצלחה!", type: "success", icon: "success"
+            })
+        }
+        function AddItemError() {
+            swal("נכשל!", "הוספת פריט חדש להזמנה נכשלה!", "warning")
         }
         //מחיקת הזמנה
         function deleteOrder(def) {
@@ -800,6 +887,9 @@
                             <td>
                                 <button id="btn_saveExist_item" onclick="SaveExistItem()" class="btn btn-primary"> שמור פריט</button>
                             </td>
+                            <td>
+                                <button id="btn_saveExist_itemToOrder" onclick="addItemToExistOrder()" class="btn btn-primary"> שמור פריט להזמנה</button>
+                            </td>
                         </tr>
                         <tr>
                             <td>
@@ -989,7 +1079,7 @@
         <div id="id04" class="w3-modal">
             <div class="w3-modal-content">
                 <div class="w3-container" dir="rtl">
-                    <span onclick="document.getElementById('id04').style.display='none',closeWindow()" class="w3-button w3-display-topright">&times;</span>
+                    <span onclick="document.getElementById('id04').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                     <form id="pForm">
                         <h2 id="itemInOrder">פריטים בהזמנה</h2>
                         <table id="itemTable1" class="display" style="width:100%" dir="rtl">
@@ -1033,13 +1123,13 @@
                                 <td>
                                     <div class="form-group">
                                         <label for="item_price">מחיר ליחידה</label>
-                                        <textarea rows="1" class="form-control groupDetails" id="item_price" ></textarea>
+                                        <textarea rows="1" class="form-control groupDetails" id="item_price"></textarea>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group">
                                         <label for="item_quantity1">כמות לפריט</label>
-                                        <textarea rows="1" class="form-control groupDetails" id="item_quantity1" ></textarea>
+                                        <textarea rows="1" class="form-control groupDetails" id="item_quantity1"></textarea>
                                     </div>
                                 </td>
                             </tr>
