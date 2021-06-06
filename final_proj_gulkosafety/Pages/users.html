@@ -106,7 +106,7 @@
                 Name: $("#user_name").val(),
                 Phone: $("#user_phone").val(),
                 Password: $("#user_password").val(),
-                Type_name: $("#user_type").val(),
+                Type_name:$("#user_type").val(),
                 User_type_num: userTypeName,
             }
 
@@ -151,8 +151,8 @@
                 Name: $("#user_name1").val(),
                 Phone: $("#user_phone1").val(),
                 Password: $("#user_password1").val(),
-                Type_name: $("#user_type1").val(),
                 User_type_num: userTypeName,
+                Delete_status:0 ,
             }
             let api = "../api/user";
             ajaxCall("PUT", api, JSON.stringify(user_update), UpdateUserSuccess, UpdateUserError);
@@ -173,6 +173,7 @@
             delete_user = JSON.parse(def);
             userToDelete = {
                 Email: delete_user.Email,
+                Delete_status: 1,
             }
             swal({
                 title: "האם אתה בטוח שברצונך למחוק את משתמש?",
@@ -363,9 +364,8 @@
                                         <div class="form-group">
                                             <label for="user_type1"><span class="red-star">★ </span>סוג משתמש</label>
                                             <select class="form-control groupDetails" id="user_type1" required>
-                                                <option value="">בחר סוג משתמש</option>
-                                                <option value="1">משתמש על</option>
-                                                <option value="2">מנהל עבודה/פרויקט</option>
+                                                <option value="מנהל עבודה/פרויקט">מנהל עבודה/פרויקט</option>
+                                                <option value="משתמש על">משתמש על</option>
                                             </select>
                                         </div>
                                     </td>

@@ -3891,13 +3891,13 @@ namespace final_proj_gulkosafety.Models.DAL
         private String BuildupdateCommand(user _user)
         {
             String command;
-            command = "UPDATE [user] SET name='" + _user.Name + "', phone='" + _user.Phone + "', password='" + _user.Password + "', user_type_num='" + _user.User_type_num + "' WHERE [email] =" + _user.Email;
+            command = "UPDATE [user] SET name='" + _user.Name + "', phone='" + _user.Phone + "', password='" + _user.Password + "', user_type_num=" + _user.User_type_num+ ", delete_status=" + _user.Delete_status + " WHERE email ='" + _user.Email+"'";
 
             return command;
         }
 
         //delete user
-        public int DeleteUser(string Email)
+        public int DeleteUser(user _user)
         {
 
             SqlConnection con;
@@ -3913,7 +3913,7 @@ namespace final_proj_gulkosafety.Models.DAL
             }
 
 
-            String cStr = BuildDeleteCommandUser(Email);
+            String cStr = BuildDeleteCommandUser(_user);
 
             cmd = CreateCommand(cStr, con);
 
@@ -3937,10 +3937,10 @@ namespace final_proj_gulkosafety.Models.DAL
             }
 
         }
-        private String BuildDeleteCommandUser(string Email)
+        private String BuildDeleteCommandUser(user _user )
         {
             String command;
-            command = "UPDATE  [user] set delete_status = " ;
+            command = "UPDATE [user] set delete_status ="+_user.Delete_status+" WHERE email ='" + _user.Email+"'";
             return command;
         }
 

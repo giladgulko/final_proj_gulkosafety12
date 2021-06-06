@@ -40,7 +40,7 @@ namespace final_proj_gulkosafety.Models
         public string Password { get => password; set => password = value; }
         public int User_type_num { get => user_type_num; set => user_type_num = value; }
         public string Type_name { get => type_name; set => type_name = value; }
-        public int Delete_status { get => delete_status; set => dselete_status = value; }
+        public int Delete_status { get => delete_status; set => delete_status = value; }
 
         public user() { }
 
@@ -74,10 +74,10 @@ namespace final_proj_gulkosafety.Models
             dbs.UpdateUser(this);
 
         }
-        public void DeleteUser(string Email)
+        public void DeleteUser()
         {
             DBServices dbs = new DBServices();
-            dbs.DeleteUser(Email);
+            dbs.DeleteUser(this);
 
         }
     }

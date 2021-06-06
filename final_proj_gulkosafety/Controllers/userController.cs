@@ -94,7 +94,7 @@ namespace final_proj_gulkosafety.Controllers
             try
             {
                 {
-                    _user.DeleteUser(_user.Email);
+                    _user.DeleteUser();
                 }
 
                 return Request.CreateResponse(HttpStatusCode.Created, _user);
