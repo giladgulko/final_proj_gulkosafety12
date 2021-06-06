@@ -302,7 +302,9 @@
 
                                 editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editContact(this.value)'> עריכה </button>";
 
-                                return editBtn;
+                                pdfBtn = "<button type='button' class = 'pdfBtn btn btn-pdf' value='" + def + "' onclick='(this.value)'> שליחת אישור במייל </button>";
+
+                                return editBtn + pdfBtn;
 
 
                             }

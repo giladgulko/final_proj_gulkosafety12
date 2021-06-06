@@ -45,16 +45,17 @@
             let userToShow = [];
 
             for (var i = 0; i < userdata.length; i++) {
+                if (userdata[i].Delete_status == 0) {
+                    user = {
 
-                user = {
-
-                    Email: userdata[i].Email,
-                    Name: userdata[i].Name,
-                    Phone: userdata[i].Phone,
-                    Password: userdata[i].Password,
-                    Type_name: userdata[i].Type_name,
+                        Email: userdata[i].Email,
+                        Name: userdata[i].Name,
+                        Phone: userdata[i].Phone,
+                        Password: userdata[i].Password,
+                        Type_name: userdata[i].Type_name,
+                    }
+                    userToShow.push(user);
                 }
-                userToShow.push(user);
             }
 
             try {

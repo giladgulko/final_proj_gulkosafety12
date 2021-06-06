@@ -337,7 +337,7 @@
             $("#company").val(instToEdit.Company);
             $("#checkDate").val(instToEdit.Date.split("T")[0]);
             $("#address").val(instToEdit.Address);
-            $("#time").val(instToEdit.Time.split("T")[1]);
+            $("#time").val(instToEdit.Time);
             $("#participants_num").val(instToEdit.Participants_num);
             $("#participants_num").prop('disabled', true);
             $("#invoice_num").val(instToEdit.Invoice_num);
@@ -346,9 +346,13 @@
             $("#btn_update_inst").show();
             $("#btn_save_inst").hide();
             $("#new_inst").hide();
-            $("#btn_new_participant").hide();
+            $("#btn_new_participant").show();
             $("#btn_saveExist_participant").hide();
-            $("#searchParticipant").hide();
+            $("#searchParticipant").show();
+            $("#btn_saveExist_participant1").show();
+            $("#btnSave_new_participant1").show();
+            $("#btnSave_new_participant").hide();
+            $("#new_participant").hide();
         }
 
         //ניקוי שדות הוספת הדרכה חדשה
@@ -373,6 +377,9 @@
             $("#price_th").hide()
             $("#btn_new_participant").show();
             $("#btn_saveExist_participant").show();
+            $("#btn_saveExist_participant1").hide();
+            $("#btnSave_new_participant1").hide();
+            $("#new_participant").hide();
         }
         //הוספת משתתף חדש
         function newParticipant() {
@@ -636,6 +643,7 @@
         function closeWindow() {
             location.reload();
         }
+ 
     </script>
 </head>
 <body>
@@ -802,6 +810,9 @@
                             <td>
                                 <button id="btn_saveExist_participant" onclick="SaveExistContact()" class="btn btn-primary"> שמור משתתף</button>
                             </td>
+                            <td>
+                                <button id="btn_saveExist_participant1" onclick="SaveContactToExistIns()" class="btn btn-primary"> שמור משתתף</button>
+                            </td>
                         </tr>
                         <br />
                         <tr>
@@ -840,6 +851,10 @@
                             <th>
 
                                 <button id="btnSave_new_participant" class="btn btn-primary" onclick="SaveNewParticipant()"> שמור משתתף </button>
+                            </th>
+                            <th>
+
+                                <button id="btnSave_new_participant1" class="btn btn-primary" onclick="SaveNewParticipantToExistIns()"> שמור משתתף </button>
                             </th>
                         </tr>
                     </table>

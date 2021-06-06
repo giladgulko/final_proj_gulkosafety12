@@ -1099,6 +1099,7 @@ namespace final_proj_gulkosafety.Models.DAL
                     u.Password = (string)dr["password"];
                     u.User_type_num = Convert.ToInt32(dr["user_type_num"]);
                     u.Type_name = (string)dr["type_name"];
+                    u.Delete_status = Convert.ToInt32(dr["delete_status"]);
                     uList.Add(u);
                 }
 
@@ -3890,12 +3891,12 @@ namespace final_proj_gulkosafety.Models.DAL
         private String BuildupdateCommand(user _user)
         {
             String command;
-            command = "UPDATE [user] SET name='" + _user.Name + "', phone='" + _user.Phone + "', password='" + _user.Password + "', user_type_num='" + _user.User_type_num + "' WHERE (email) =" + _user.Email;
+            command = "UPDATE [user] SET name='" + _user.Name + "', phone='" + _user.Phone + "', password='" + _user.Password + "', user_type_num='" + _user.User_type_num + "' WHERE [email] =" + _user.Email;
 
             return command;
         }
 
-        //delete Item type 
+        //delete user
         public int DeleteUser(string Email)
         {
 
@@ -3939,7 +3940,7 @@ namespace final_proj_gulkosafety.Models.DAL
         private String BuildDeleteCommandUser(string Email)
         {
             String command;
-            command = "delete from [user] where email=" + Email;
+            command = "UPDATE  [user] set delete_status = " ;
             return command;
         }
 
