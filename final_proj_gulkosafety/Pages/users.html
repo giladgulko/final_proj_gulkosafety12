@@ -25,6 +25,7 @@
 
     <title>משתמשים</title>
     <script>
+        user_data=[];
 
         $(document).ready(function () {
             getusersData();
@@ -43,7 +44,7 @@
         //בניית טבלה של כל המשתמשים
         function createDt(userdata) {
             let userToShow = [];
-
+            user_data = userdata;
             for (var i = 0; i < userdata.length; i++) {
                 if (userdata[i].Delete_status == 0) {
                     user = {
@@ -142,6 +143,10 @@
         function editUser(dataUser) {
             document.getElementById('id01').style.display = 'block';
             UserToEdit = JSON.parse(dataUser);
+            for (var i = 0; i < user_data.length; i++) {
+                if (user_data[i].Email == UserToEdit.Email)
+                    str = "<option value='" + user_data[i].User_type_num + "'>" + user_data[i].Type_name + "</option>"
+            }
             $("#btn_update_user").show();
             $("#new_user_headline").hide();
             $("#saveBTN").hide();
@@ -150,7 +155,7 @@
             $("#user_name").val(UserToEdit.Name);
             $("#user_phone").val(UserToEdit.Phone);
             $("#user_password").val(UserToEdit.Password);
-            $("#user_type").val(UserToEdit.Type_name);
+            $("#user_type").html(str);
         }
         // עדכון משתמש
         function updateUser() {
@@ -349,6 +354,5 @@
             </div>
         </div>
     </div>
- 
 </body>
 </html>
