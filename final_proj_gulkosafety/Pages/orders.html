@@ -400,6 +400,7 @@
             $("#btn_ShowItems").hide();
             $("#btn_saveExist_itemToOrder").hide();
             $("#btn_saveExist_item").show();
+            $("#NewOrder").show();
 
         }
         //הכנסת הזמנה חדשה
@@ -649,6 +650,7 @@
             $("#itemsTable").hide();
             $("#btn_saveExist_itemToOrder").show();
             $("#btn_ShowItems").show();
+            $("#NewOrder").hide();
         }
 
         //הוספת פריט להזמנה קיימת
@@ -836,7 +838,7 @@
                     <span onclick="document.getElementById('id03').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                     <form id="newOrderForm">
                         <br />
-                        <h2>הזמנה חדשה</h2>
+                        <h2 id="NewOrder">הזמנה חדשה</h2>
                         <table class="display" style="width:100%" dir="rtl">
                             <thead>
                                 <tr>

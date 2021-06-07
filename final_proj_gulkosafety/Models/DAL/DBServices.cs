@@ -71,8 +71,8 @@ namespace final_proj_gulkosafety.Models.DAL
 
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
-            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}', '{4}')", _user.Email, _user.Name, _user.Phone, _user.Password, _user.User_type_num);
-            String prefix = "INSERT INTO [user] " + "(email,name,phone,password,user_type_num)";
+            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}', '{4}','{5}')", _user.Email, _user.Name, _user.Phone, _user.Password, _user.User_type_num,_user.Delete_status);
+            String prefix = "INSERT INTO [user] " + "(email,name,phone,password,user_type_num,delete_status)";
             command = prefix + sb.ToString();
 
             return command;
@@ -1256,23 +1256,20 @@ namespace final_proj_gulkosafety.Models.DAL
                     }
                 }
 
-            }
-            private String BuildInsertCommand(user_type _user_type)
-            {
-                String command;
+        }
+        private String BuildInsertCommand(user_type _user_type)
+        {
+            String command;
 
-                StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
 
-                sb.AppendFormat("Values('{0}')", _user_type.Type_name);
-                String prefix = "INSERT INTO user_type " + "(type_name)";
-                command = prefix + sb.ToString();
+            sb.AppendFormat("Values('{0}')", _user_type.Type_name);
+            String prefix = "INSERT INTO user_type " + "(type_name)";
+            command = prefix + sb.ToString();
 
-                return command;
+            return command;
+        }
 
-            }
-
-
-       
         //get last report
         public report ReadLastReport(int proj_num)
         {
@@ -1504,7 +1501,7 @@ namespace final_proj_gulkosafety.Models.DAL
 
             }
         }
-
+        //עדכון ציון דוח 
         public int UpdateReportGrade(int report_num, double grade)
         {
 

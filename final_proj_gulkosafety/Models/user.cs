@@ -26,14 +26,7 @@ namespace final_proj_gulkosafety.Models
             Type_name = type_name;
             Delete_status = delete_status;
         }
-        public user(string email, string name, string phone, string password, int user_type_num)
-        {
-            Email = email;
-            Name = name;
-            Phone = phone;
-            Password = password;
-            User_type_num = user_type_num;
-        }
+
         public string Email { get => email; set => email = value; }
         public string Name { get => name; set => name = value; }
         public string Phone { get => phone; set => phone = value; }

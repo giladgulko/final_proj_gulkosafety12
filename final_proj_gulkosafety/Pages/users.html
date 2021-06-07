@@ -106,8 +106,8 @@
                 Name: $("#user_name").val(),
                 Phone: $("#user_phone").val(),
                 Password: $("#user_password").val(),
-                Type_name:$("#user_type").val(),
                 User_type_num: userTypeName,
+                Delete_status:0,
             }
 
             let api = "../api/user";
@@ -116,41 +116,57 @@
 
         function createNewUserSuccess(userdata) {
             swal({
-                title: "מצוין!", text: "פריט חדש נוצר בהצלחה!", type: "success", icon: "success"
+                title: "מצוין!", text: "משתמש חדש נוצר בהצלחה!", type: "success", icon: "success"
             }).then(function () {
                 location.reload();
             });
 
         }
         function createNewUserError() {
-            swal("נכשל!", "הכנסת פריט חדש נכשל!", "warning")
+            swal("נכשל!", "הכנסת משתמש חדש נכשלה!", "warning")
+        }
+        //ניקוי שדות משתמש חדש
+        function clearPopuP() {
+            $("#saveBTN").show();
+            $("#btn_update_user").hide();
+            $("#user_email").prop('disabled', false);
+            $("#user_email").val("");
+            $("#user_name").val("");
+            $("#user_phone").val("");
+            $("#user_password").val("");
+            $("#user_type").val("");
+            $("#new_user_headline").show();
         }
 
         //עריכת משתמש
         function editUser(dataUser) {
-            document.getElementById('id02').style.display = 'block';
+            document.getElementById('id01').style.display = 'block';
             UserToEdit = JSON.parse(dataUser);
-            $("#user_email1").val(UserToEdit.Email);
-            $("#user_email1").prop('disabled', true);
-            $("#user_name1").val(UserToEdit.Name);
-            $("#user_phone1").val(UserToEdit.Phone);
-            $("#user_password1").val(UserToEdit.Password);
-            $("#user_type1").val(UserToEdit.Type_name);
+            $("#btn_update_user").show();
+            $("#new_user_headline").hide();
+            $("#saveBTN").hide();
+            $("#user_email").val(UserToEdit.Email);
+            $("#user_email").prop('disabled', true);
+            $("#user_name").val(UserToEdit.Name);
+            $("#user_phone").val(UserToEdit.Phone);
+            $("#user_password").val(UserToEdit.Password);
+            $("#user_type").val(UserToEdit.Type_name);
         }
         // עדכון משתמש
         function updateUser() {
+            document.getElementById('id01').style.display = 'none';
             let userTypeName = "";
-            if ($("#user_type1").val() == "משתמש על") {
+            if ($("#user_type").val() == "משתמש על") {
                 userTypeName = 1;
             }
             else {
                 userTypeName = 2;
             }
             user_update = {
-                Email: $("#user_email1").val(),
-                Name: $("#user_name1").val(),
-                Phone: $("#user_phone1").val(),
-                Password: $("#user_password1").val(),
+                Email: $("#user_email").val(),
+                Name: $("#user_name").val(),
+                Phone: $("#user_phone").val(),
+                Password: $("#user_password").val(),
                 User_type_num: userTypeName,
                 Delete_status:0 ,
             }
@@ -275,8 +291,9 @@
             <div id="id01" class="w3-modal">
                 <div class="w3-modal-content">
                     <div class="w3-container" dir="rtl">
+                        <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                        <br />
                         <form id="newUsersTypeForm">
-                            <br />
                             <h2 id="new_user_headline">משתמש חדש</h2>
                             <br />
                             <table class="display" style="width:100%" dir="rtl">
@@ -284,26 +301,28 @@
                                     <tr>
                                         <td>
                                             <div class="form-group">
-                                                <label for="user_email">מייל </label>
-                                                <textarea rows="1" class="form-control groupDetails" id="user_email" placeholder="מייל "></textarea>
+                                                <label for="user_email">מייל <span class="red-star">★</span></label>
+                                                <textarea rows="1" class="form-control groupDetails" id="user_email" placeholder="הזן מייל"></textarea>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="form-group">
-                                                <label for="user_name">שם מלא</label>
-                                                <textarea rows="1" class="form-control groupDetails" id="user_name" placeholder="שם מלא"></textarea>
+                                                <label for="user_name"><span class="red-star">★</span>שם מלא</label>
+                                                <textarea rows="1" class="form-control groupDetails" id="user_name" placeholder="הזן שם מלא"></textarea>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="form-group">
-                                                <label for="user_phone">טלפון</label>
-                                                <textarea rows="1" class="form-control groupDetails" id="user_phone" placeholder="טלפון"></textarea>
+                                                <label for="user_phone"><span class="red-star">★</span>טלפון</label>
+                                                <textarea rows="1" class="form-control groupDetails" id="user_phone" placeholder="הזן טלפון"></textarea>
                                             </div>
                                         </td>
+                                    </tr>
+                                    <tr>
                                         <td>
                                             <div class="form-group">
-                                                <label for="user_password">סיסמא</label>
-                                                <textarea rows="1" class="form-control groupDetails" id="user_password" placeholder="סיסמא"></textarea>
+                                                <label for="user_password"><span class="red-star">★</span>סיסמא</label>
+                                                <textarea rows="1" class="form-control groupDetails" id="user_password" placeholder="הזן סיסמא"></textarea>
                                             </div>
                                         </td>
                                         <td>
@@ -321,64 +340,15 @@
                             </table>
                         </form>
                         <br />
-                        <button id="saveBTN" onclick="insert_new_user()" class="btn btn-primary"> שמור משתמש חדש</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="w3-container">
-            <div id="id02" class="w3-modal">
-                <div class="w3-modal-content">
-                    <div class="w3-container" dir="rtl">
-                        <span onclick="document.getElementById('id02').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-                        <form id="updateUserForm">
-                            <h2 id="update_user_type">עריכת משתמש</h2>
-                            <br />
-                            <table id="updateUserTb">
-                                <tr>
-                                    <td>
-                                        <div class="form-group">
-                                            <label for="user_email1"><span class="red-star">★ </span>מייל</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="user_email1" placeholder=" הזן מייל "></textarea>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-group">
-                                            <label for="user_name1"><span class="red-star">★ </span>שם מלא</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="user_name1" placeholder=" הזן שם מלא "></textarea>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-group">
-                                            <label for="user_phone1"><span class="red-star">★ </span>טלפון</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="user_phone1" placeholder=" הזן טלפון "></textarea>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-group">
-                                            <label for="user_password1"><span class="red-star">★ </span>סיסמא</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="user_password1" placeholder=" הזן סיסמא "></textarea>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-group">
-                                            <label for="user_type1"><span class="red-star">★ </span>סוג משתמש</label>
-                                            <select class="form-control groupDetails" id="user_type1" required>
-                                                <option value="מנהל עבודה/פרויקט">מנהל עבודה/פרויקט</option>
-                                                <option value="משתמש על">משתמש על</option>
-                                            </select>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </form>
+                        <button id="saveBTN" onclick="insert_new_user()" class="btn btn-primary"> שמור משתמש</button>
+                        <button id="btn_update_user" class="btn btn-primary" onclick="updateUser()">עדכן משתמש </button>
                         <br />
-                        <button id="btn_update_user" class="btn btn-primary" onclick="updateUser()"> עדכן סוג הדרכה </button>
                     </div>
                     <br />
                 </div>
             </div>
         </div>
     </div>
+ 
 </body>
 </html>

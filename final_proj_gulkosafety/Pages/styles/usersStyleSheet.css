@@ -4,12 +4,13 @@
     border-color: cadetblue;
     float: right;
 }
+#new_user_headline {
+    font-family: 'Suez One', serif;
+    color: cadetblue;
+}
 #headline {
     font-family: 'Suez One', serif;
     color: cadetblue;
-    /*margin-right:3%;*/
-    margin-top:2%
-   
 }
 button#myBtn {
     margin-right: 15%;
@@ -45,6 +46,9 @@ button#myBtn {
     /*float: left;*/
     margin-right: 10%;
 }
+.red-star, #dateError {
+    color: red;
+}
 #active {
     color: cadetblue;
     background-color: #eeeeee;
@@ -78,4 +82,23 @@ button#myBtn {
 
 body {
     background-color: #eeeeee;
+}
+
+#saveBTN, #btn_update_user {
+    float: left;
+    color: #fff;
+    background-color: cadetblue;
+    border-color: cadetblue;
+}
+
+#pForm {
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 5%;
+}
+
+.form-group {
+    margin-bottom: 5px;
+    text-align: right;
+    max-width: 80%;
 }
