@@ -100,11 +100,6 @@
             $("#calcGrade").hide();
             $('.fixBTNs').hide();
             $('.editReportDetailsBtns').hide();
-            //if save pic button is clicked
-            //$('#savePicToDefBTN').click(function () {
-            //    uploadImg();
-
-            //});
         }
 
         function bringDataFromLocal() {
@@ -253,32 +248,6 @@
 
         }
 
-        //function uploadImg() {
-        //    //upload img link
-
-        //    var data = new FormData();
-        //    var files = document.getElementById('img').files;
-
-        //    if (files.length > 0) {
-        //        for (f = 0; f < files.length; f++) {
-        //            data.append("UploadedImage", files[f]);
-        //        }
-        //        data.append("name", "NewImgDefect");
-        //    }
-
-        //    $.ajax({
-        //        type: "POST",
-        //        url: "../Api/FileUpload",
-        //        contentType: false,
-        //        processData: false,
-        //        data: data,
-        //        success: updateImageLink,
-        //        error: updateImgError
-        //    });
-
-        //    return false;
-        //}
-
         function updateImageLink(data) {
 
             let picture_link = "../" + data[0];
@@ -300,7 +269,7 @@
             });
             var now = new Date().toISOString();
             newAlertOnAprroveIMG = {
-                Content: "הועלתה תמונה חדשה לליקוי בדוח-  " + report.Report_num + " בפרויקט - " + project.Project_num,
+                Content: "הועלתה תמונה חדשה לליקוי בדוח-  " + report.Report_num + " בפרויקט - " + project.Project_num + "," + data.Picture_link,
                 Date: now,
                 Alert_type_num: 3,
                 User_email: "gulkosafety@gmail.com",
@@ -736,7 +705,7 @@
             for (var i = 0; i < Users.length; i++) {
                 var now = new Date().toISOString();
                 newAlertOnAprroveIMG = {
-                    Content: "תמונת תיקון ליקוי פיגום אושרה ",
+                    Content: "תמונת תיקון ליקוי פיגום אושרה," + defectToEdit.Picture_link,
                     Date: now,
                     Alert_type_num: 3,
                     User_email: Users[i].Email,
@@ -761,7 +730,7 @@
             var now = new Date().toISOString();
             for (var i = 0; i < Users.length; i++) {
                 newAlertOnAprroveIMG = {
-                    Content: "תמונת תיקון ליקוי פיגום לא אושרה ",
+                    Content: "תמונת תיקון ליקוי פיגום לא אושרה," + defectToEdit.Picture_link,
                     Date: now,
                     Alert_type_num: 3,
                     User_email: Users[i].Email,

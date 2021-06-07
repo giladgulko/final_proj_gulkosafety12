@@ -90,6 +90,8 @@
                     document.getElementById('alerts').innerHTML += "<div  class='alerts'> <p id='" + alertList[i].Alert_num + "' href='#' </p><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='fas fa-tachometer-alt' style='font-size:24px'></i>&nbsp&nbsp<a id='" + alertList[i].Alert_num + "' href='#' onclick='renderSafetyAlert(this.id)'>סיכום עדכון רמת בטיחות פרויקט " + alertList[i].Proj_num + "</a></div> ";
 
                 }
+                if (alertList[i].Alert_type_num == 3)
+                    document.getElementById('alerts').innerHTML += "<div  class='alerts'> <p id='" + alertList[i].Alert_num + "' href='#' </p><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='fas fa-tachometer-alt' style='font-size:24px'></i>&nbsp&nbsp<a id='" + alertList[i].Alert_num + "' href='#' onclick='renderDefectPic(this.id)'>" + alertList[i].Content.split(",")[0]+"</a ></div > ";
                 else {
                     document.getElementById('alerts').innerHTML += "<div  class='alerts'> <p id='" + alertList[i].Alert_num + "' href='#' </p><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='far fa-calendar-alt' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
                 }
@@ -107,6 +109,34 @@
             }
 
         }
+
+        function renderDefectPic(alertNum) {
+            $('#mask').addClass('showing');
+            $('html').addClass('hide-scroll');
+            //var id = '#dialog';
+            var fullImagePath = "";
+            for (var i = 0; i < alertList.length; i++) {
+                if (alertList[i].Alert_num == alertNum) {
+                    $('#alert_title').html(alertList[i].Content.split(",")[0]);
+                    fullImagePath = alertList[i].Content.split(",")[1];
+                    break;
+                }
+            }
+
+            $('.image').attr({
+                'src': fullImagePath
+            });
+
+            //if close button is clicked
+            $('.window .close').click(function (e) {
+                ////Cancel the link behavior
+                e.preventDefault();
+                $('#mask').removeClass('showing');
+                $('html').removeClass('hide-scroll');
+            });
+
+        }
+
         function getAlertError() {
             swal("Failed!", "Failed to read alerts!Please try again", "warning")
         }
@@ -713,6 +743,20 @@
                     <div class="w3-container">
                         <span onclick="document.getElementById('id04').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                         <div id="alert_paragraph"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="mask">
+            <div id="boxes">
+                <div class="inner">
+                    <div id="dialog" class="window">
+                        <a href="#" class="close">x</a>
+                        
+                        <div id="showImg">
+                            <p id="alert_title"></p>
+                            <div id="popupfoot"> <img src="#" class="image" alt="Loading..." /> </div>
+                        </div>
                     </div>
                 </div>
             </div>
