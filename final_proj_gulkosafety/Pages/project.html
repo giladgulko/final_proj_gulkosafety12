@@ -254,6 +254,7 @@
                 console.log(reportToEdit);
                 localStorage["report"] = JSON.stringify(reportToEdit);
                 localStorage["projContacts"] = JSON.stringify(projContacts);
+                localStorage["userType"] = JSON.stringify(user.User_type_num);
                 window.location = "report.html"
             });
             //reports table BTNs
