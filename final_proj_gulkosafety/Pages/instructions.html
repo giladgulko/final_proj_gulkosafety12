@@ -121,11 +121,13 @@
                         {
                             render: function (data, type, row, meta) {
                                 let def = JSON.stringify(row);
+                                checkBox = "<input type='checkbox'>";
 
                                 editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editContact(this.value)'> עריכה </button>";
 
                                 deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteContactInInst(this.value)'> מחיקה </button>";
-                                return editBtn + deleteBtn;
+
+                                return checkBox + editBtn + deleteBtn;
 
 
                             }
@@ -663,14 +665,14 @@
                 </div>
                 <div class="collapse navbar-collapse" id="navbarMenu">
                     <ul class="nav navbar-nav navbar-right  bts-nav">
-                        <li><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="#"></a></li>
+                        <li><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="settings.html"></a></li>
                         <li></li>
                         <li class="nav-item">
                             <span class="glyphicon glyphicon-bell" aria-hidden="true"></span><a href="alerts.html"></a>
                         </li>
 
                         <li><a href="#">סטטיסטיקות</a></li>
-                        <li><a href="#">משתמשים</a></li>
+                        <li><a href="users.html">משתמשים</a></li>
                         <li><a href="orders.html">הזמנות</a></li>
                         <li><a href="certificates.html">אישורים</a></li>
                         <li class="active"><a href="instructions.html">הדרכות<span class="sr-only">(current)</span></a></li>
@@ -694,255 +696,262 @@
             <button id="myBtn" style="margin-left:10px" class="btn btn-primary" onclick="document.getElementById('id03').style.display='block', clearPopuP()">הוסף הדרכה חדשה</button>
         </div>
     </div>
-    <form id="pForm">
-        <table id="instructionTable" class="display" style="width:100%" dir="rtl">
-            <thead>
-                <tr>
-                    <th>מספר הדרכה</th>
-                    <th>שם סוג</th>
-                    <th>חברה</th>
-                    <th>תאריך</th>
-                    <th>שעה</th>
-                    <th>כתובת</th>
-                    <th>משתתפים</th>
-                    <th>סטטוס תשלום</th>
-                    <th>מספר חשבונית</th>
-                    <th>מחיר כולל</th>
-                    <th></th>
-                </tr>
-            </thead>
-        </table>
-    </form>
-    <div class="w3-container">
-        <div id="id03" class="w3-modal">
-            <div class="w3-modal-content">
-                <div class="w3-container" dir="rtl">
-                    <span onclick="document.getElementById('id03').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-                    <form id="newCertForm">
-                        <br />
-                        <h2 id="new_inst">הדרכה חדשה</h2>
-                        <table class="display" style="width:100%" dir="rtl">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <div class="form-group">
-                                            <label for="instructionType"><span class="red-star">★ </span>סוג הדרכה</label>
-                                            <select id="instructionType" class="form-control groupDetails" required>
-                                                <option value="">בחר סוג הדרכה</option>
-                                            </select>
-                                        </div>
-                                    </th>
-                                    <th>
-                                        <div class="form-group">
-                                            <label for="checkpayStatus"><span class="red-star">★ </span>סטאטוס תשלום</label>
-                                            <select class="form-control groupDetails" id="checkpayStatus" required>
-                                                <option value="">בחר סטאטוס תשלום</option>
-                                                <option value="1">שולם</option>
-                                                <option value="2">לא שולם</option>
-                                            </select>
-                                        </div>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <div class="form-group">
-                                            <label for="company">שם החברה</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="company" placeholder="הזן שם החברה"></textarea>
-                                        </div>
-                                    </th>
-                                    <th>
-                                        <div class="form-group">
-                                            <label for="address">כתובת</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="address" placeholder="הזן כתובת"></textarea>
-                                        </div>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <div class="form-group">
-                                            <label for="checkDate"><span class="red-star">★ </span>תאריך הדרכה</label>
-                                            <br />
-                                            <input type="date" class="groupDetails" id="checkDate" required>
-                                        </div>
-                                    </th>
-                                    <th>
-                                        <div class="form-group">
-                                            <label for="time"><span class="red-star">★</span>שעת הדרכה</label>
-                                            <br />
-                                            <input type="time" id="time" class="form-control groupDetails" required>
-                                        </div>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <div class="form-group">
-                                            <label for="participants_num">מספר משתתפים</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="participants_num" placeholder=" הזן מספר משתתפים"></textarea>
-                                        </div>
-                                    </th>
-                                    <th>
-                                        <div class="form-group">
-                                            <label for="invoice_num">מספר חשבונית</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="invoice_num" placeholder=" הזן מספר חשבונית"></textarea>
-                                        </div>
-                                    </th>
-                                    <th id="price_th">
-                                        <div class="form-group">
-                                            <label for="price">מחיר כולל</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="price" placeholder=" הזן מחיר כולל"></textarea>
-                                        </div>
-                                    </th>
-                                </tr>
-                                <br />
-                            </thead>
-                        </table>
-                    </form>
-                    <table>
-                        <tr>
-                            <td id="searchParticipant">
-                                <div class="form-group">
-                                    <label for="searchParticipant1"><span class="red-star">★ </span>חיפוש משתתף</label>
-                                    <select onchange="" class="form-control groupDetails" id="searchParticipant1" required>
-                                        <option value="">בחר משתתף קיים:</option>
-                                    </select>
-                                </div>
-                            </td>
-                            <td>
-                                <button id="btn_saveExist_participant" onclick="SaveExistContact()" class="btn btn-primary"> שמור משתתף</button>
-                            </td>
-                            <td>
-                                <button id="btn_saveExist_participant1" onclick="SaveContactToExistIns()" class="btn btn-primary"> שמור משתתף</button>
-                            </td>
-                        </tr>
-                        <br />
-                        <tr>
-                            <td>
-                                <button id="btn_new_participant" class="btn btn-primary" onclick="newParticipant()"> הוספת משתתף חדש</button>
-                            </td>
-                        </tr>
-                    </table>
-
-                    <table id="new_participant">
-                        <tr>
-                            <th>
-                                <div class="form-group">
-                                    <label for="participant_id"><span class="red-star">★ </span>תעודת זהות</label>
-                                    <textarea rows="1" class="form-control groupDetails" id="participant_id" placeholder=" הזן ת.ז "></textarea>
-                                </div>
-                            </th>
-                            <th>
-                                <div class="form-group">
-                                    <label for="participant_name"><span class="red-star">★ </span>שם מלא</label>
-                                    <textarea rows="1" class="form-control groupDetails" id="participant_name" placeholder=" הזן שם מלא "></textarea>
-                                </div>
-                            </th>
-                            <th>
-                                <div class="form-group">
-                                    <label for="participant_phone"><span class="red-star">★ </span>טלפון</label>
-                                    <textarea rows="1" class="form-control groupDetails" id="participant_phone" placeholder=" הזן טלפון "></textarea>
-                                </div>
-                            </th>
-                            <th>
-                                <div class="form-group">
-                                    <label for="participant_mail"><span class="red-star">★ </span>מייל</label>
-                                    <textarea rows="1" class="form-control groupDetails" id="participant_mail" placeholder=" הזן מייל "></textarea>
-                                </div>
-                            </th>
-                            <th>
-
-                                <button id="btnSave_new_participant" class="btn btn-primary" onclick="SaveNewParticipant()"> שמור משתתף </button>
-                            </th>
-                            <th>
-
-                                <button id="btnSave_new_participant1" class="btn btn-primary" onclick="SaveNewParticipantToExistIns()"> שמור משתתף </button>
-                            </th>
-                        </tr>
-                    </table>
-                    <form id="pForm">
-                        <table id="participantsTable" class="display" style="width:100%" dir="rtl">
-                            <thead>
-                                <tr>
-                                    <th>ת.ז</th>
-                                    <th>שם מלא</th>
-                                    <th>טלפון</th>
-                                    <th>מייל</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </form>
-                    <button id="btn_save_inst" class="btn btn-primary" onclick="insertNewInst()"> שמור הדרכה</button>
-                    <button id="btn_update_inst" class="btn btn-primary" onclick="updateInst()"> עדכן הדרכה</button>
-                </div>
-                <br />
-            </div>
-        </div>
-    </div>
-    <div class="w3-container">
-        <div id="id01" class="w3-modal">
-            <div class="w3-modal-content">
-                <div class="w3-container" dir="rtl">
-                    <span onclick="document.getElementById('id01').style.display='none',closeWindow()" class="w3-button w3-display-topright">&times;</span>
-                    <form id="pForm">
-                        <h2 id="new_inst">משתתפים בהדרכה</h2>
-                        <table id="participantsTable1" class="display" style="width:100%" dir="rtl">
-                            <thead>
-                                <tr>
-                                    <th>ת.ז</th>
-                                    <th>שם מלא</th>
-                                    <th>טלפון</th>
-                                    <th>מייל</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="w3-container">
-        <div id="id02" class="w3-modal">
-            <div class="w3-modal-content">
-                <div class="w3-container" dir="rtl">
-                    <span onclick="document.getElementById('id02').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-                    <form id="pForm">
-                        <h2 id="update_participant">עריכת משתתף</h2>
-                        <br />
-                        <table id="updatePaticipantTb">
+    <div id="main">
+        <div class="row">
+            <div class="col-md-12 col-sm-2">
+                <form id="pForm">
+                    <table id="instructionTable" class="display" style="width:100%" dir="rtl">
+                        <thead>
                             <tr>
-                                <th>
-                                    <div class="form-group">
-                                        <label for="participant_id"><span class="red-star">★ </span>תעודת זהות</label>
-                                        <textarea rows="1" class="form-control groupDetails" id="participant_id1" placeholder=" הזן ת.ז "></textarea>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="form-group">
-                                        <label for="participant_name"><span class="red-star">★ </span>שם מלא</label>
-                                        <textarea rows="1" class="form-control groupDetails" id="participant_name1" placeholder=" הזן שם מלא "></textarea>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="form-group">
-                                        <label for="participant_phone"><span class="red-star">★ </span>טלפון</label>
-                                        <textarea rows="1" class="form-control groupDetails" id="participant_phone1" placeholder=" הזן טלפון "></textarea>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="form-group">
-                                        <label for="participant_mail"><span class="red-star">★ </span>מייל</label>
-                                        <textarea rows="1" class="form-control groupDetails" id="participant_mail1" placeholder=" הזן מייל "></textarea>
-                                    </div>
-                                </th>
+                                <th>מספר הדרכה</th>
+                                <th>שם סוג</th>
+                                <th>חברה</th>
+                                <th>תאריך</th>
+                                <th>שעה</th>
+                                <th>כתובת</th>
+                                <th>משתתפים</th>
+                                <th>סטטוס תשלום</th>
+                                <th>מספר חשבונית</th>
+                                <th>מחיר כולל</th>
+                                <th></th>
                             </tr>
-                        </table>
-                    </form>
-                    <br />
-                    <button id="btnUpdate_participant" class="btn btn-primary" onclick="updateParticipant()"> עדכן משתתף </button>
-                </div>
+                        </thead>
+                    </table>
+                </form>
             </div>
         </div>
+                <div class="w3-container">
+                    <div id="id03" class="w3-modal">
+                        <div class="w3-modal-content">
+                            <div class="w3-container" dir="rtl">
+                                <span onclick="document.getElementById('id03').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                                <form id="newCertForm">
+                                    <br />
+                                    <h2 id="new_inst">הדרכה חדשה</h2>
+                                    <table class="display" style="width:100%" dir="rtl">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    <div class="form-group">
+                                                        <label for="instructionType"><span class="red-star">★ </span>סוג הדרכה</label>
+                                                        <select id="instructionType" class="form-control groupDetails" required>
+                                                            <option value="">בחר סוג הדרכה</option>
+                                                        </select>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="form-group">
+                                                        <label for="checkpayStatus"><span class="red-star">★ </span>סטאטוס תשלום</label>
+                                                        <select class="form-control groupDetails" id="checkpayStatus" required>
+                                                            <option value="">בחר סטאטוס תשלום</option>
+                                                            <option value="1">שולם</option>
+                                                            <option value="2">לא שולם</option>
+                                                        </select>
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    <div class="form-group">
+                                                        <label for="company">שם החברה</label>
+                                                        <textarea rows="1" class="form-control groupDetails" id="company" placeholder="הזן שם החברה"></textarea>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="form-group">
+                                                        <label for="address">כתובת</label>
+                                                        <textarea rows="1" class="form-control groupDetails" id="address" placeholder="הזן כתובת"></textarea>
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    <div class="form-group">
+                                                        <label for="checkDate"><span class="red-star">★ </span>תאריך הדרכה</label>
+                                                        <br />
+                                                        <input type="date" class="groupDetails" id="checkDate" required>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="form-group">
+                                                        <label for="time"><span class="red-star">★</span>שעת הדרכה</label>
+                                                        <br />
+                                                        <input type="time" id="time" class="form-control groupDetails" required>
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    <div class="form-group">
+                                                        <label for="participants_num">מספר משתתפים</label>
+                                                        <textarea rows="1" class="form-control groupDetails" id="participants_num" placeholder=" הזן מספר משתתפים"></textarea>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="form-group">
+                                                        <label for="invoice_num">מספר חשבונית</label>
+                                                        <textarea rows="1" class="form-control groupDetails" id="invoice_num" placeholder=" הזן מספר חשבונית"></textarea>
+                                                    </div>
+                                                </th>
+                                                <th id="price_th">
+                                                    <div class="form-group">
+                                                        <label for="price">מחיר כולל</label>
+                                                        <textarea rows="1" class="form-control groupDetails" id="price" placeholder=" הזן מחיר כולל"></textarea>
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                            <br />
+                                        </thead>
+                                    </table>
+                                </form>
+                                <table>
+                                    <tr>
+                                        <td id="searchParticipant">
+                                            <div class="form-group">
+                                                <label for="searchParticipant1"><span class="red-star">★ </span>חיפוש משתתף</label>
+                                                <select onchange="" class="form-control groupDetails" id="searchParticipant1" required>
+                                                    <option value="">בחר משתתף קיים:</option>
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <button id="btn_saveExist_participant" onclick="SaveExistContact()" class="btn btn-primary"> שמור משתתף</button>
+                                        </td>
+                                        <td>
+                                            <button id="btn_saveExist_participant1" onclick="SaveContactToExistIns()" class="btn btn-primary"> שמור משתתף</button>
+                                        </td>
+                                    </tr>
+                                    <br />
+                                    <tr>
+                                        <td>
+                                            <button id="btn_new_participant" class="btn btn-primary" onclick="newParticipant()"> הוספת משתתף חדש</button>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <table id="new_participant">
+                                    <tr>
+                                        <th>
+                                            <div class="form-group">
+                                                <label for="participant_id"><span class="red-star">★ </span>תעודת זהות</label>
+                                                <textarea rows="1" class="form-control groupDetails" id="participant_id" placeholder=" הזן ת.ז "></textarea>
+                                            </div>
+                                        </th>
+                                        <th>
+                                            <div class="form-group">
+                                                <label for="participant_name"><span class="red-star">★ </span>שם מלא</label>
+                                                <textarea rows="1" class="form-control groupDetails" id="participant_name" placeholder=" הזן שם מלא "></textarea>
+                                            </div>
+                                        </th>
+                                        <th>
+                                            <div class="form-group">
+                                                <label for="participant_phone"><span class="red-star">★ </span>טלפון</label>
+                                                <textarea rows="1" class="form-control groupDetails" id="participant_phone" placeholder=" הזן טלפון "></textarea>
+                                            </div>
+                                        </th>
+                                        <th>
+                                            <div class="form-group">
+                                                <label for="participant_mail"><span class="red-star">★ </span>מייל</label>
+                                                <textarea rows="1" class="form-control groupDetails" id="participant_mail" placeholder=" הזן מייל "></textarea>
+                                            </div>
+                                        </th>
+                                        <th>
+
+                                            <button id="btnSave_new_participant" class="btn btn-primary" onclick="SaveNewParticipant()"> שמור משתתף </button>
+                                        </th>
+                                        <th>
+
+                                            <button id="btnSave_new_participant1" class="btn btn-primary" onclick="SaveNewParticipantToExistIns()"> שמור משתתף </button>
+                                        </th>
+                                    </tr>
+                                </table>
+                                <form id="pForm">
+                                    <table id="participantsTable" class="display" style="width:100%" dir="rtl">
+                                        <thead>
+                                            <tr>
+                                                <th>ת.ז</th>
+                                                <th>שם מלא</th>
+                                                <th>טלפון</th>
+                                                <th>מייל</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </form>
+                                <button id="btn_save_inst" class="btn btn-primary" onclick="insertNewInst()"> שמור הדרכה</button>
+                                <button id="btn_update_inst" class="btn btn-primary" onclick="updateInst()"> עדכן הדרכה</button>
+                            </div>
+                            <br />
+                        </div>
+                    </div>
+                </div>
+                <div class="w3-container">
+                    <div id="id01" class="w3-modal">
+                        <div class="w3-modal-content">
+                            <div class="w3-container" dir="rtl">
+                                <span onclick="document.getElementById('id01').style.display='none',closeWindow()" class="w3-button w3-display-topright">&times;</span>
+                                <form id="pForm">
+                                    <h2 id="new_inst">משתתפים בהדרכה</h2>
+                                    <table id="participantsTable1" class="display" style="width:100%" dir="rtl">
+                                        <thead>
+                                            <tr>
+                                                <th>ת.ז</th>
+                                                <th>שם מלא</th>
+                                                <th>טלפון</th>
+                                                <th>מייל</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </form>
+                                <button id="btn_send_pdf" class="btn btn-primary" onclick="sendPdfOnMail()"> שלח תעודה למשתתפים</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="w3-container">
+                    <div id="id02" class="w3-modal">
+                        <div class="w3-modal-content">
+                            <div class="w3-container" dir="rtl">
+                                <span onclick="document.getElementById('id02').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                                <form id="pForm">
+                                    <h2 id="update_participant">עריכת משתתף</h2>
+                                    <br />
+                                    <table id="updatePaticipantTb">
+                                        <tr>
+                                            <th>
+                                                <div class="form-group">
+                                                    <label for="participant_id"><span class="red-star">★ </span>תעודת זהות</label>
+                                                    <textarea rows="1" class="form-control groupDetails" id="participant_id1" placeholder=" הזן ת.ז "></textarea>
+                                                </div>
+                                            </th>
+                                            <th>
+                                                <div class="form-group">
+                                                    <label for="participant_name"><span class="red-star">★ </span>שם מלא</label>
+                                                    <textarea rows="1" class="form-control groupDetails" id="participant_name1" placeholder=" הזן שם מלא "></textarea>
+                                                </div>
+                                            </th>
+                                            <th>
+                                                <div class="form-group">
+                                                    <label for="participant_phone"><span class="red-star">★ </span>טלפון</label>
+                                                    <textarea rows="1" class="form-control groupDetails" id="participant_phone1" placeholder=" הזן טלפון "></textarea>
+                                                </div>
+                                            </th>
+                                            <th>
+                                                <div class="form-group">
+                                                    <label for="participant_mail"><span class="red-star">★ </span>מייל</label>
+                                                    <textarea rows="1" class="form-control groupDetails" id="participant_mail1" placeholder=" הזן מייל "></textarea>
+                                                </div>
+                                            </th>
+                                        </tr>
+                                    </table>
+                                </form>
+                                <br />
+                                <button id="btnUpdate_participant" class="btn btn-primary" onclick="updateParticipant()"> עדכן משתתף </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
     </div>
 </body>
 </html>

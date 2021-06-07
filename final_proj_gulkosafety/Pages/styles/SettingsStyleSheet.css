@@ -18,24 +18,27 @@
         border-bottom: none; /* Prevent double borders */
 }
 
-    /* Add a background color on hover */
+/* Add a background color on hover */
     .btn-group button:hover {
-        background-color: #3e8e41;
+        background-color: #5bbabd;
     }
+#select_item {
+    background-color: #5bbabd;
+}
 .btn-group, .btn-group-vertical {
     /*position: relative;*/
     vertical-align: middle;
     width: 90%;
-    float:right;
+    float: right;
     /*margin-left: 90%;*/
- 
 }
 #headline {
     font-family: 'Suez One', serif;
     color: cadetblue;
-    /*margin-right:3%;*/
-    margin-top:2%
-   
+}
+#new_defect_type_headline, #new_instruction_type_headline, #new_user_type_headline, #new_certificate_type_headline, #new_item_headline {
+    font-family: 'Suez One', serif;
+    color: cadetblue;
 }
 button#myBtn {
     margin-right: 15%;
@@ -60,18 +63,22 @@ button#myBtn {
     margin-top: 5%;
 }
 
+.form-group {
+    margin-bottom: 5px;
+    text-align: right;
+    max-width: 80%;
+}
+
 th {
     text-align: right;
 }
-    th.sorting {
+th.sorting {
         text-align: center;
-    }
+
+}
 button#myBtn {
     float: left;
     margin-right: 15%;
-}
-#main{
-
 }
 #active {
     color: cadetblue;
@@ -105,4 +112,13 @@ button#myBtn {
     }
 body {
     background-color: #eeeeee;
+}
+.red-star, #dateError {
+    color: red;
+}
+#saveBTN, #btn_update_defect_type, #btn_update_instruction_type, #btn_update_user_type, #btn_update_certificate_type, #btn_update_item {
+    float: left;
+    color: #fff;
+    background-color: cadetblue;
+    border-color: cadetblue;
 }

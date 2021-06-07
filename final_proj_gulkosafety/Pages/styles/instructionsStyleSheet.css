@@ -6,7 +6,7 @@
 
 #headline {
     font-family: 'Suez One', serif;
-    color: blue;
+    color: cadetblue;
 }
 
 #header {
@@ -45,7 +45,7 @@
     background-color: cadetblue;
     border-color: cadetblue;
 }
-#btn_save_inst, #btn_update_inst, #btnUpdate_participant {
+#btn_save_inst, #btn_update_inst, #btnUpdate_participant, #btn_send_pdf {
     float: left;
     color: #fff;
     background-color: cadetblue;

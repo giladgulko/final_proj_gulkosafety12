@@ -25,6 +25,7 @@
     <link href="styles/SettingsStyleSheet.css" rel="stylesheet" />
 
     <title>הגדרות</title>
+
     <script>
 
         $(document).ready(function () {
@@ -961,6 +962,9 @@
         function deleteItemError() {
             swal("פריט לא נמחק!", err, "warning");
         }
+        function changeColor() {
+            document.getElementById('select_item');
+        }
     </script>
 </head>
 <body>
@@ -981,7 +985,7 @@
                 <div class="collapse navbar-collapse" id="navbarMenu">
                     <ul class="nav navbar-nav navbar-right  bts-nav">
                         <li class="nav-item" id="active">
-                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="#"></a>
+                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="settings.html"></a>
                         </li>
                         <li></li>
                         <li>
@@ -989,7 +993,7 @@
                         </li>
 
                         <li><a href="#">סטטיסטיקות</a></li>
-                        <li><a href="#">משתמשים</a></li>
+                        <li><a href="users.html">משתמשים</a></li>
                         <li><a href="orders.html">הזמנות</a></li>
                         <li><a href="certificates.html">אישורים</a></li>
                         <li><a href="instructions.html">הדרכות<span class="sr-only">(current)</span></a></li>
@@ -1017,11 +1021,11 @@
             <div class="col-md-10 col-sm-9">
                 <div>
                     <div id="addbuttons">
-                        <button id="addDefectTypeBtn" class="btn btn-primary" onclick="document.getElementById('id01').style.display='block',clearPopuP()">הוסף סוג ליקוי חדש</button>
-                        <button id="addInstructionTypeBtn" class="btn btn-primary" onclick="document.getElementById('id02').style.display='block',clearPopuP()">הוסף סוג הדרכה חדש</button>
-                        <button id="addUserTypeBtn" class="btn btn-primary" onclick="document.getElementById('id03').style.display='block',clearPopuP()">הוסף סוג משתמש חדש</button>
-                        <button id="addCertificateTypeBtn" class="btn btn-primary" onclick="document.getElementById('id04').style.display='block',clearPopuP()">הוסף סוג אישור חדש</button>
-                        <button id="addItemBtn" class="btn btn-primary" onclick="document.getElementById('id05').style.display='block',clearPopuP()">הוסף פריט חדש</button>
+                        <button id="addDefectTypeBtn" class="btn btn-primary" onclick="document.getElementById('id01').style.display='block'">הוסף סוג ליקוי חדש</button>
+                        <button id="addInstructionTypeBtn" class="btn btn-primary" onclick="document.getElementById('id02').style.display='block',changeColor()">הוסף סוג הדרכה חדש</button>
+                        <button id="addUserTypeBtn" class="btn btn-primary" onclick="document.getElementById('id03').style.display='block'">הוסף סוג משתמש חדש</button>
+                        <button id="addCertificateTypeBtn" class="btn btn-primary" onclick="document.getElementById('id04').style.display='block'">הוסף סוג אישור חדש</button>
+                        <button id="addItemBtn" class="btn btn-primary" onclick="document.getElementById('id05').style.display='block'">הוסף פריט חדש</button>
                     </div>
                 </div>
                 </br>
@@ -1102,18 +1106,18 @@
             <div id="id01" class="w3-modal">
                 <div class="w3-modal-content">
                     <div class="w3-container" dir="rtl">
-                        <!--<span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>-->
+                        <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                         <form id="newDefectTypeForm">
                             <br />
                             <h2 id="new_defect_type_headline">סוג ליקוי חדש</h2>
                             <br />
-                            <table class="display" style="width:100%" dir="rtl">
+                            <table class="display" dir="rtl">
                                 <thead>
                                     <tr>
                                         <td>
                                             <div class="form-group">
-                                                <label for="defect_type_name">שם סוג ליקוי</label>
-                                                <textarea rows="1" class="form-control groupDetails" id="defect_type_name" placeholder="שם סוג ליקוי"></textarea>
+                                                <label for="defect_type_name"><span class="red-star">★ </span>שם סוג ליקוי</label>
+                                                <textarea rows="1" class="form-control groupDetails" id="defect_type_name" placeholder="הזן שם סוג ליקוי"></textarea>
                                             </div>
                                         </td>
                                     </tr>
@@ -1123,6 +1127,7 @@
                         <br />
                         <button id="saveBTN" onclick="insert_new_defect_type()" class="btn btn-primary"> שמור סוג ליקוי</button>
                     </div>
+                    <br />
                 </div>
             </div>
         </div>
@@ -1130,7 +1135,7 @@
             <div id="id02" class="w3-modal">
                 <div class="w3-modal-content">
                     <div class="w3-container" dir="rtl">
-                        <!--<span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>-->
+                        <span onclick="document.getElementById('id02').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                         <form id="newInstructionTypeForm">
                             <br />
                             <h2 id="new_instruction_type_headline">סוג הדרכה חדש</h2>
@@ -1140,16 +1145,20 @@
                                     <tr>
                                         <td>
                                             <div class="form-group">
-                                                <label for="instruction_type_name">שם סוג הדרכה</label>
-                                                <textarea rows="1" class="form-control groupDetails" id="instruction_type_name" placeholder="שם סוג ליקוי"></textarea>
+                                                <label for="instruction_type_name"><span class="red-star">★ </span>שם סוג הדרכה</label>
+                                                <textarea rows="1" class="form-control groupDetails" id="instruction_type_name" placeholder="הזן שם סוג הדרכה"></textarea>
                                             </div>
+                                        </td>
+                                        <td>
                                             <div class="form-group">
-                                                <label for="instruction_expiration">תוקף </label>
-                                                <textarea rows="1" class="form-control groupDetails" id="instruction_expiration" placeholder="שם סוג ליקוי"></textarea>
+                                                <label for="instruction_expiration"><span class="red-star">★ </span>תוקף </label>
+                                                <textarea rows="1" class="form-control groupDetails" id="instruction_expiration" placeholder="הזן תוקף "></textarea>
                                             </div>
+                                        </td>
+                                        <td>
                                             <div class="form-group">
-                                                <label for="instruction_price">מחיר</label>
-                                                <textarea rows="1" class="form-control groupDetails" id="instruction_price" placeholder="שם סוג ליקוי"></textarea>
+                                                <label for="instruction_price"><span class="red-star">★ </span>מחיר</label>
+                                                <textarea rows="1" class="form-control groupDetails" id="instruction_price" placeholder="הזן מחיר"></textarea>
                                             </div>
                                         </td>
                                     </tr>
@@ -1157,8 +1166,9 @@
                             </table>
                         </form>
                         <br />
-                        <button id="saveBTN" onclick="insert_new_instruction_type()" class="btn btn-primary"> שמור סוג ליקוי</button>
+                        <button id="saveBTN" onclick="insert_new_instruction_type()" class="btn btn-primary"> שמור סוג הדרכה</button>
                     </div>
+                    <br />
                 </div>
             </div>
         </div>
@@ -1166,18 +1176,18 @@
             <div id="id03" class="w3-modal">
                 <div class="w3-modal-content">
                     <div class="w3-container" dir="rtl">
-                        <!--<span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>-->
+                        <span onclick="document.getElementById('id03').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                         <form id="newUserTypeForm">
                             <br />
                             <h2 id="new_user_type_headline">סוג משתמש חדש</h2>
                             <br />
-                            <table class="display" style="width:100%" dir="rtl">
+                            <table class="display" dir="rtl">
                                 <thead>
                                     <tr>
                                         <td>
                                             <div class="form-group">
-                                                <label for="user_type_name">שם סוג משתמש</label>
-                                                <textarea rows="1" class="form-control groupDetails" id="user_type_name" placeholder="שם סוג משתמש"></textarea>
+                                                <label for="user_type_name"><span class="red-star">★ </span>שם סוג משתמש</label>
+                                                <textarea rows="1" class="form-control groupDetails" id="user_type_name" placeholder="הזן שם סוג משתמש"></textarea>
                                             </div>
                                         </td>
                                     </tr>
@@ -1187,6 +1197,7 @@
                         <br />
                         <button id="saveBTN" onclick="insert_new_user_type()" class="btn btn-primary"> שמור סוג משתמש</button>
                     </div>
+                    <br />
                 </div>
             </div>
         </div>
@@ -1194,7 +1205,7 @@
             <div id="id04" class="w3-modal">
                 <div class="w3-modal-content">
                     <div class="w3-container" dir="rtl">
-                        <!--<span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>-->
+                        <span onclick="document.getElementById('id04').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                         <form id="newCertificateTypeForm">
                             <br />
                             <h2 id="new_certificate_type_headline">סוג אישור חדש</h2>
@@ -1204,16 +1215,20 @@
                                     <tr>
                                         <td>
                                             <div class="form-group">
-                                                <label for="certificate_type_name">שם סוג אישור</label>
-                                                <textarea rows="1" class="form-control groupDetails" id="certificate_type_name" placeholder="שם סוג אישור"></textarea>
+                                                <label for="certificate_type_name"><span class="red-star">★ </span>שם סוג אישור</label>
+                                                <textarea rows="1" class="form-control groupDetails" id="certificate_type_name" placeholder="הזן שם סוג אישור"></textarea>
                                             </div>
+                                        </td>
+                                        <td>
                                             <div class="form-group">
-                                                <label for="certificate_expiration">תוקף </label>
-                                                <textarea rows="1" class="form-control groupDetails" id="certificate_expiration" placeholder="תוקף"></textarea>
+                                                <label for="certificate_expiration"><span class="red-star">★ </span>תוקף </label>
+                                                <textarea rows="1" class="form-control groupDetails" id="certificate_expiration" placeholder="הזן תוקף"></textarea>
                                             </div>
+                                        </td>
+                                        <td>
                                             <div class="form-group">
-                                                <label for="certificate_price">מחיר</label>
-                                                <textarea rows="1" class="form-control groupDetails" id="certificate_price" placeholder="מחיר"></textarea>
+                                                <label for="certificate_price"><span class="red-star">★ </span>מחיר</label>
+                                                <textarea rows="1" class="form-control groupDetails" id="certificate_price" placeholder="הזן מחיר"></textarea>
                                             </div>
                                         </td>
                                     </tr>
@@ -1223,6 +1238,7 @@
                         <br />
                         <button id="saveBTN" onclick="insert_new_certificate_type()" class="btn btn-primary"> שמור סוג אישור</button>
                     </div>
+                    <br />
                 </div>
             </div>
         </div>
@@ -1230,22 +1246,24 @@
             <div id="id05" class="w3-modal">
                 <div class="w3-modal-content">
                     <div class="w3-container" dir="rtl">
-                        <!--<span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>-->
+                        <span onclick="document.getElementById('id05').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                         <form id="newItemForm">
                             <br />
-                            <h2 id="new_item_headline">סוג אישור חדש</h2>
+                            <h2 id="new_item_headline">פריט חדש</h2>
                             <br />
-                            <table class="display" style="width:100%" dir="rtl">
+                            <table class="display" dir="rtl">
                                 <thead>
                                     <tr>
                                         <td>
                                             <div class="form-group">
-                                                <label for="item_name">שם פריט</label>
-                                                <textarea rows="1" class="form-control groupDetails" id="item_name" placeholder="שם פריט"></textarea>
+                                                <label for="item_name"><span class="red-star">★ </span>שם פריט</label>
+                                                <textarea rows="1" class="form-control groupDetails" id="item_name" placeholder="הזן שם פריט"></textarea>
                                             </div>
+                                        </td>
+                                        <td>
                                             <div class="form-group">
-                                                <label for="item_price">מחיר</label>
-                                                <textarea rows="1" class="form-control groupDetails" id="item_price" placeholder="מחיר"></textarea>
+                                                <label for="item_price"><span class="red-star">★ </span>מחיר</label>
+                                                <textarea rows="1" class="form-control groupDetails" id="item_price" placeholder="הזן מחיר"></textarea>
                                             </div>
                                         </td>
                                     </tr>
@@ -1253,8 +1271,9 @@
                             </table>
                         </form>
                         <br />
-                        <button id="saveBTN" onclick="insert_new_item()" class="btn btn-primary"> שמור סוג אישור</button>
+                        <button id="saveBTN" onclick="insert_new_item()" class="btn btn-primary"> שמור פריט</button>
                     </div>
+                    <br />
                 </div>
             </div>
         </div>
@@ -1264,14 +1283,14 @@
                     <div class="w3-container" dir="rtl">
                         <span onclick="document.getElementById('id011').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                         <form id="updateDefectTypeForm">
-                            <h2 id="update_defect_type">עריכת סוג ליקוי</h2>
                             <br />
                             <table id="updateDefectTypeTb">
+                                <br />
                                 <tr>
                                     <td>
                                         <div class="form-group">
                                             <label for="defect_type_number"><span class="red-star">★ </span>מספר סוג ליקוי</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="defect_type_number" placeholder=" מספר סוג ליקוי "></textarea>
+                                            <textarea rows="1" class="form-control groupDetails" id="defect_type_number" placeholder="הזן מספר סוג ליקוי "></textarea>
                                         </div>
                                     </td>
                                     <td>
@@ -1296,32 +1315,32 @@
                     <div class="w3-container" dir="rtl">
                         <span onclick="document.getElementById('id022').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                         <form id="updateInstructionTypeForm">
-                            <h2 id="update_instruction_type">עריכת סוג הדרכה</h2>
                             <br />
                             <table id="updateInstructionTypeTb">
+                                <br />
                                 <tr>
                                     <td>
                                         <div class="form-group">
                                             <label for="instruction_type_number"><span class="red-star">★ </span>מספר סוג הדרכה</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="instruction_type_number" placeholder=" מספר סוג הדרכה "></textarea>
+                                            <textarea rows="1" class="form-control groupDetails" id="instruction_type_number"></textarea>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-group">
                                             <label for="instruction_type_name1"><span class="red-star">★ </span>שם סוג הדרכה</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="instruction_type_name1" placeholder=" הזן שם סוג הדרכה "></textarea>
+                                            <textarea rows="1" class="form-control groupDetails" id="instruction_type_name1"></textarea>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-group">
                                             <label for="instruction_expiration1"><span class="red-star">★ </span>תוקף</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="instruction_expiration1" placeholder=" הזן תוקף הדרכה "></textarea>
+                                            <textarea rows="1" class="form-control groupDetails" id="instruction_expiration1"></textarea>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-group">
                                             <label for="instruction_price1"><span class="red-star">★ </span>מחיר</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="instruction_price1" placeholder=" הזן מחיר הדרכה "></textarea>
+                                            <textarea rows="1" class="form-control groupDetails" id="instruction_price1"></textarea>
                                         </div>
                                     </td>
                                 </tr>
@@ -1340,20 +1359,20 @@
                     <div class="w3-container" dir="rtl">
                         <span onclick="document.getElementById('id033').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                         <form id="updateUserTypeForm">
-                            <h2 id="update_user_type">עריכת סוג משתמש</h2>
                             <br />
                             <table id="updateUserTypeTb">
+                                <br />
                                 <tr>
                                     <td>
                                         <div class="form-group">
                                             <label for="user_type_number"><span class="red-star">★ </span>מספר סוג משתמש</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="user_type_number" placeholder=" מספר סוג משתמש "></textarea>
+                                            <textarea rows="1" class="form-control groupDetails" id="user_type_number"></textarea>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-group">
                                             <label for="user_type_name1"><span class="red-star">★ </span>שם סוג משתמש</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="user_type_name1" placeholder=" הזן שם סוג משתמש "></textarea>
+                                            <textarea rows="1" class="form-control groupDetails" id="user_type_name1"></textarea>
                                         </div>
                                     </td>
                                 </tr>
@@ -1372,32 +1391,32 @@
                     <div class="w3-container" dir="rtl">
                         <span onclick="document.getElementById('id044').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                         <form id="updateCertificateTypeForm">
-                            <h2 id="update_certificate_type">עריכת סוג אישור</h2>
                             <br />
                             <table id="updateCertificateTypeTb">
+                                <br />
                                 <tr>
                                     <td>
                                         <div class="form-group">
                                             <label for="certificate_type_number"><span class="red-star">★ </span>מספר סוג הדרכה</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="certificate_type_number" placeholder=" מספר סוג אישור "></textarea>
+                                            <textarea rows="1" class="form-control groupDetails" id="certificate_type_number"></textarea>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-group">
                                             <label for="certificate_type_name1"><span class="red-star">★ </span>שם סוג הדרכה</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="certificate_type_name1" placeholder=" הזן שם סוג אישור "></textarea>
+                                            <textarea rows="1" class="form-control groupDetails" id="certificate_type_name1"></textarea>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-group">
                                             <label for="certificate_expiration1"><span class="red-star">★ </span>תוקף</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="certificate_expiration1" placeholder=" הזן תוקף אישור "></textarea>
+                                            <textarea rows="1" class="form-control groupDetails" id="certificate_expiration1"></textarea>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-group">
                                             <label for="certificate_price1"><span class="red-star">★ </span>מחיר</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="certificate_price1" placeholder=" הזן מחיר אישור "></textarea>
+                                            <textarea rows="1" class="form-control groupDetails" id="certificate_price1"></textarea>
                                         </div>
                                     </td>
                                 </tr>
@@ -1416,26 +1435,26 @@
                     <div class="w3-container" dir="rtl">
                         <span onclick="document.getElementById('id055').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                         <form id="updateItemForm">
-                            <h2 id="update_item">עריכת פריט</h2>
                             <br />
                             <table id="updateItemTb">
+                                <br />
                                 <tr>
                                     <td>
                                         <div class="form-group">
                                             <label for="item_number"><span class="red-star">★ </span>מספר פריט</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="item_number" placeholder=" מספר פריט "></textarea>
+                                            <textarea rows="1" class="form-control groupDetails" id="item_number"></textarea>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-group">
                                             <label for="item_name1"><span class="red-star">★ </span>שם פריט</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="item_name1" placeholder=" הזן שם פריט "></textarea>
+                                            <textarea rows="1" class="form-control groupDetails" id="item_name1"></textarea>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-group">
                                             <label for="item_price1"><span class="red-star">★ </span>מחיר</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="item_price1" placeholder=" הזן מחיר פריט "></textarea>
+                                            <textarea rows="1" class="form-control groupDetails" id="item_price1"></textarea>
                                         </div>
                                     </td>
                                 </tr>
