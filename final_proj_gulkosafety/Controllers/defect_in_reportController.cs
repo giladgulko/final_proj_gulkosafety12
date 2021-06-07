@@ -99,7 +99,7 @@ namespace final_proj_gulkosafety.Controllers
 
                 }
 
-                return Request.CreateResponse(HttpStatusCode.Created);
+                return Request.CreateResponse(HttpStatusCode.Created, defectInReport);
             }
             catch (Exception ex)
             {

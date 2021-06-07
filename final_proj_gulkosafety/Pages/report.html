@@ -51,6 +51,33 @@
 
             //get all weight by project type.
             getProjTypeWeights();
+
+            $('#savePicToDefBTN').on('click', function () {
+                var data = new FormData();
+                var files = document.getElementById('img').files;
+
+                // Add the uploaded file to the form data collection
+                if (files.length > 0) {
+                    for (f = 0; f < files.length; f++) {
+                        data.append("UploadedImage", files[f]);
+                    }
+                    data.append("name", "benny"); // append what ever data you want to send along with the files. See how you extract it in the controller.
+                }
+
+                // Ajax upload
+                $.ajax({
+                    type: "POST",
+                    url: "../Api/FileUpload",
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: updateImageLink,
+                    error: updateImgError
+                });
+
+                return false;
+            });
+
         });
 
 
@@ -74,10 +101,10 @@
             $('.fixBTNs').hide();
             $('.editReportDetailsBtns').hide();
             //if save pic button is clicked
-            $('#savePicToDefBTN').click(function () {
-                uploadImg();
+            //$('#savePicToDefBTN').click(function () {
+            //    uploadImg();
 
-            });
+            //});
         }
 
         function bringDataFromLocal() {
@@ -92,8 +119,8 @@
                 }
 
                 $("#saveNewReport").hide();
-                $('#sendPdf').show(); 
-                $('#calcAndSend').show(); 
+                $('#sendPdf').show();
+                $('#calcAndSend').show();
                 $(".groupDetails").prop('disabled', true);
 
                 renderReportDetails();
@@ -107,14 +134,14 @@
                 $("#lastReportdefectsTBL").hide();
                 $('.editReportDetailsBtns').hide();
                 $('#sendPdf').hide();
-                $('#calcAndSend').hide(); 
+                $('#calcAndSend').hide();
             }
         }
 
         function renderReportDetails() {
             report = JSON.parse(localStorage["report"]);
             allReports = JSON.parse(localStorage["allReports"]);
-            if (report.Report_num < allReports[allReports.length-1].Report_num) {
+            if (report.Report_num < allReports[allReports.length - 1].Report_num) {
                 $("#calcGrade").hide();
                 $("#addDefectToRBtn").hide();
             }
@@ -226,31 +253,31 @@
 
         }
 
-        function uploadImg() {
-            //upload img link
+        //function uploadImg() {
+        //    //upload img link
 
-            var data = new FormData();
-            var files = document.getElementById('img').files;
+        //    var data = new FormData();
+        //    var files = document.getElementById('img').files;
 
-            if (files.length > 0) {
-                for (f = 0; f < files.length; f++) {
-                    data.append("UploadedImage", files[f]);
-                }
-                data.append("name", "NewImgDefect");
-            }
+        //    if (files.length > 0) {
+        //        for (f = 0; f < files.length; f++) {
+        //            data.append("UploadedImage", files[f]);
+        //        }
+        //        data.append("name", "NewImgDefect");
+        //    }
 
-            $.ajax({
-                type: "POST",
-                url: "../Api/FileUpload",
-                contentType: false,
-                processData: false,
-                data: data,
-                success: updateImageLink,
-                error: updateImgError
-            });
+        //    $.ajax({
+        //        type: "POST",
+        //        url: "../Api/FileUpload",
+        //        contentType: false,
+        //        processData: false,
+        //        data: data,
+        //        success: updateImageLink,
+        //        error: updateImgError
+        //    });
 
-            return false;
-        }
+        //    return false;
+        //}
 
         function updateImageLink(data) {
 
@@ -259,17 +286,14 @@
             temp.Picture_link = picture_link;
             console.log(temp.Picture_link)
             let api = "../api/defect_in_report?picture_link=" + picture_link;
-            ajaxCall("PUT", api, JSON.stringify(temp), updateImgLinkSuccess, updateImgLinkError);
+            ajaxCall("PUT", api, JSON.stringify(temp), updateLinkSuccess, updateImgLinkError);
         }
 
-        function updateImgLinkError(data){
-            alert("לינק התמונה לא הועלה לשרת");
-            location.reload();
-        }
 
-        function updateImgLinkSuccess(data) {
+
+        function updateLinkSuccess(data) {
             swal({
-                title: "מצוין!", text: "תמונה הועלתה בהצלחה!", type: "success", icon: "success"
+                title: "מצוין!", text: "תמונה הועלתה בהצלחה", type: "success", icon: "success"
             }).then(function () {
                 location.reload();
 
@@ -287,11 +311,20 @@
             let api1 = "../api/alert";
             ajaxCall("POST", api1, JSON.stringify(newAlertOnAprroveIMG), PostAlertSuccess, PostAlertError);
         }
+
+        function updateImgLinkError(data) {
+            alert("לינק התמונה לא הועלה לשרת");
+            location.reload();
+        }
+
         function updateImgError(err) {
             alert("תמונה לא נשמרה");
         }
 
         function checkImg(def) {
+            $('.image').attr({
+                'src': ""
+            });
             defectToEdit = JSON.parse(def);
             $('#uploadImg').hide();
             $('#mask').addClass('showing');
@@ -884,23 +917,25 @@
                 <div class="inner">
                     <div id="dialog" class="window">
                         <a href="#" class="close">x</a>
-                        <div id="uploadImg" class="row" dir="rtl">
-                            <div class="col-12">
-                                <h3>העלה תמונה לליקוי:</h3>
+                        <form method="post" enctype="multipart/form-data" id="formUpload">
+                            <div id="uploadImg" class="row" dir="rtl">
+                                <div class="col-12">
+                                    <h3>העלה תמונה לליקוי:</h3>
+                                </div>
+                                <br />
+                                <div class="col-12">
+                                    <input type="file" id="img" />
+                                </div>
+                                <div class="col-12">
+                                    <button id="savePicToDefBTN" class="btn btn-primary">שמור</button>
+                                </div>
                             </div>
-                            <br />
-                            <div class="col-12">
-                                <input type="file" id="img" />
+                        </form>
+                            <div id="showImg">
+                                <div id="popupfoot"> <img src="#" class="image" alt="Loading..." /> </div>
+                                <button class="btn btn-danger fixBTNs" onclick="defectNotApprove()">ליקוי לא תוקן</button>
+                                <button class="btn btn-success fixBTNs" onclick="updateDefectStatus()">אשר תקינות ליקוי</button>
                             </div>
-                            <div class="col-12">
-                                <button id="savePicToDefBTN" class="btn btn-primary">שמור</button>
-                            </div>
-                        </div>
-                        <div id="showImg">
-                            <div id="popupfoot"> <img src="#" class="image" alt="Loading..." /> </div>
-                            <button class="btn btn-danger fixBTNs" onclick="defectNotApprove()">ליקוי לא תוקן</button>
-                            <button class="btn btn-success fixBTNs" onclick="updateDefectStatus()">אשר תקינות ליקוי</button>
-                        </div>
 
                     </div>
                 </div>
