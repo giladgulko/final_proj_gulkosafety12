@@ -24,7 +24,12 @@
     <link href="styles/reportStyleSheet.css" rel="stylesheet" />
     <link href="styles/nav_bar_style.css" rel="stylesheet" />
     <link href="styles/alertsStyles.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.8.1/html2pdf.bundle.min.js" integrity="sha512-vDKWohFHe2vkVWXHp3tKvIxxXg0pJxeid5eo+UjdjME3DBFBn2F8yWOE0XmiFcFbXxrEOR1JriWEno5Ckpn15A==" crossorigin="anonymous"></script>
+    <!---->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.8.1/html2pdf.bundle.js" integrity="sha512-CAlCnxBY4CJKhSvYNsnWtMxKjwLgRhHuJw7wUoOmjlrTDcRLQ5LD9P6YgWETJAmZTurlU86vBovlySF3KvjPeg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.8.1/html2pdf.bundle.min.js" integrity="sha512-vDKWohFHe2vkVWXHp3tKvIxxXg0pJxeid5eo+UjdjME3DBFBn2F8yWOE0XmiFcFbXxrEOR1JriWEno5Ckpn15A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!--//Email-->
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
+    <!--//Email-->
     <title>דוח ביקור</title>
 
     <script>
@@ -37,6 +42,7 @@
         ptwList = [];
         userType = JSON.parse(localStorage["userType"]);
         Users = JSON.parse(localStorage["projContacts"]);
+        pdf = "";
         $(document).ready(function () {
             //build view page
             if (userType != 1)
@@ -500,7 +506,7 @@
             }).then(function () {
                 location.reload();
             }
-                );
+            );
         }
         function postDefectInReportError(err) {
             swal("הליקוי לא נוסף לדוח!", err, "warning");
@@ -743,9 +749,10 @@
             }
 
         }
-        function topdf() {
+        function topdf(){
 
             var element = document.getElementById('allPage');
+            
             var opt = {
                 margin: 0,
                 filename: 'report-' + report.Report_num + '.pdf',
@@ -753,9 +760,10 @@
                 html2canvas: { scale: 2 },
                 jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
             };
-            html2pdf(element, opt);
-
-            console.log(result)
+           // pdf = html2pdf(element, opt);
+            var worker = html2pdf(element).from(element).save();
+            console.log(worker)
+           
         }
         function changeUser() {
             if (userType == 1) {
@@ -767,6 +775,39 @@
             }
             location.reload()
 
+        }
+
+        function sendEmail() {
+            mail = "<p>היי</p>"
+            mail += "<p>עלה דוח חדש לאתר בפרוייקט-"+project.Name+"</p>"
+            mail += "<a href='http://proj.ruppin.ac.il/igroup60/test2/A/tar5/Pages/projects.html'>כניסה למערכת</a>"
+                Email.send({
+                    Host: "smtp.google.com",
+                    Username: "reactapptest230@gmail.com",
+                    Password: "FA1278973EE70094257D1CFD15BECDBA0BDC",
+
+                    To: "giladgulko@gmail.com",
+                    From: "giladgulko@gmail.com",
+                    Subject: "דוח חדש באתר",
+
+                    Body: mail
+
+                }).then(
+                    alert("מעולה!")
+                    //Swal.fire({
+                     //   icon: 'success',
+                     //   title: 'פניה נשלחה לעמותה בהצלחה!',
+                        //showConfirmButton: false,
+                        //timer: 1500
+                   // })
+                );
+                
+            
+                return false;
+            
+        }
+        function goto() {
+            alert('hii')
         }
 
     </script>
@@ -815,7 +856,7 @@
         <div class="row">
             <div id="pdfAndSendBTN" class="col-sm-2">
                 <button id="downPdf" class="btn btn-primary" onclick="topdf()">הורד דוח</button>
-                <button id="sendPdf" class="btn btn-primary" onclick="topdf()">שלח לבעלי עניין</button>
+                <button id="sendPdf" class="btn btn-primary" onclick="sendEmail()">שלח לבעלי עניין</button>
             </div>
             <div id="proj_bar" class="col-sm-10" dir="rtl">
 

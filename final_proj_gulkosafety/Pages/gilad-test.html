@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.8.1/html2pdf.bundle.js" integrity="sha512-CAlCnxBY4CJKhSvYNsnWtMxKjwLgRhHuJw7wUoOmjlrTDcRLQ5LD9P6YgWETJAmZTurlU86vBovlySF3KvjPeg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title></title>
+    <script>
+        function topdf() {
+
+            var element = localStorage["pdf"];
+            
+            var opt = {
+                margin: 0,
+                filename: 'report-.pdf',
+                pagebreak: { mode: 'avoid-all', before: '#page2el', avoid: document.getElementsByClassName('body-wrap') },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
+            };
+            // pdf = html2pdf(element, opt);
+            var worker = html2pdf(element,opt)
+            
+
+        }
+    </script>
+</head>
+<body onload="topdf()">
+
+</body>
+</html>
