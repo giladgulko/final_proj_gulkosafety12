@@ -83,11 +83,14 @@
         function getContactError() {
             swal("נכשל!", "קריאת אנשי קשר נכשלה!", "warning")
         }
-        // קריאת משתתפים בהדרכה
-        function getParticipantsInInst(inst_num) {
-            let api = "../api/contact?instruction_num="+inst_num;
+        //כפתור הצג משתתפים
+        function showPariticiTable() {
+            let inst_num = instToEdit.Instruction_num;
+            let api = "../api/contact?instruction_num=" + inst_num;
             ajaxCall("GET", api, "", getContactInInstSuccess, getContactInInstError);
+
         }
+
         function getContactInInstSuccess(data){
             console.log(data);
             contacts = data;
@@ -306,10 +309,8 @@
 
                                 deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteInstruction(this.value)'> מחיקה </button>";
 
-                                showBtn = "<button type='button' class = 'showBtn btn btn-show' value='" + def + "' onclick='showPariticiTable(this.value)'>  הצג משתתפים </button>";
-
-                                pdfBtn = "<button type='button' class = 'pdfBtn btn btn-pdf' value='" + def + "' onclick='showPariticiTable(this.value)'>  הורד תעודה הדרכה </button>";
-                                return editBtn + deleteBtn + showBtn + pdfBtn ;
+                                pdfBtn = "<button type='button' class = 'pdfBtn btn btn-pdf' value='" + def + "' onclick=''>  הורד תעודה הדרכה </button>";
+                                return editBtn + deleteBtn + pdfBtn ;
 
                             }
                         },
@@ -345,6 +346,7 @@
             $("#invoice_num").val(instToEdit.Invoice_num);
             $("#price").val(instToEdit.Total_price);
             $("#price").prop('disabled', true);
+            $("#searchParticipant1").val("");
             $("#btn_update_inst").show();
             $("#btn_save_inst").hide();
             $("#new_inst").hide();
@@ -355,6 +357,7 @@
             $("#btnSave_new_participant1").show();
             $("#btnSave_new_participant").hide();
             $("#new_participant").hide();
+            $("#btn_show_participants").show();
         }
 
         //ניקוי שדות הוספת הדרכה חדשה
@@ -382,6 +385,7 @@
             $("#btn_saveExist_participant1").hide();
             $("#btnSave_new_participant1").hide();
             $("#new_participant").hide();
+            $("#btn_show_participants").hide();
         }
         //הוספת משתתף חדש
         function newParticipant() {
@@ -483,12 +487,6 @@
         }
         function deleteContactError() {
             swal("המשתתף לא נמחק!", err, "warning");
-        }
-        //כפתור הצג משתתפים
-        function showPariticiTable(def) {
-            console.log(def);
-            inst_num = JSON.parse(def);
-            getParticipantsInInst(inst_num.Instruction_num);
         }
         function createNewpartiSuccess(data) {
             swal({
@@ -642,10 +640,56 @@
         function createNewInstError() {
             swal("נשכל!", " יצירת הדרכה חדשה נכשלה!", "warning")
         }
-        function closeWindow() {
-            location.reload();
+
+        //שמירת משתתף קיים להדרכה קיימת
+        function SaveContactToExistIns() {
+            let contactId = $("#searchParticipant1").val();
+            for (var i = 0; i < AllContacts.length; i++) {
+                if (contactId == AllContacts[i].Id) {
+                    participant1 = {
+                        Contact_id: AllContacts[i].Id,
+                        Instruction_num: instToEdit.Instruction_num,
+                    }
+                    let api = "../api/contact_in_instruction";
+                    ajaxCall("POST", api, JSON.stringify(participant1), createNewpartiSuccess, createNewpartiError);
+                }
+            }
+            $("#searchParticipant1").val("");
         }
- 
+        //שמירת משתתף חדש להדרכה קיימת
+        function SaveContactToExistIns1() {
+            participant = {
+                  Id: $("#participant_id").val(),
+                  Full_name: $("#participant_name").val(),
+                  Phone: $("#participant_phone").val(),
+                  Mail: $("#participant_mail").val(),
+
+            }
+            let api = "../api/contact";
+            ajaxCall("POST", api, JSON.stringify(participant), createNewpartiSuccess, createNewpartiError);
+            participant1 = {
+
+                Contact_id: $("#participant_id").val(),
+                Instruction_num: instToEdit.Instruction_num,
+            }
+            let api1 = "../api/contact_in_instruction";
+            ajaxCall("POST", api1, JSON.stringify(participant1), createNewparticSuccess, createNewparticError);
+
+            $("#participant_id").val("");
+            $("#participant_name").val("");
+            $("#participant_phone").val("");
+            $("#participant_mail").val("");
+        }
+
+        function createNewparticSuccess() {
+            swal({
+                title: "מצוין!", text: "הוספת משתתף בהדרכה בוצע בהצלחה!", type: "success", icon: "success"
+            })
+        }
+        function createNewparticError() {
+            swal("נשכל!", "הוספת משתתף בהדרכה נכשל!", "warning")
+        }
+
     </script>
 </head>
 <body>
@@ -731,15 +775,15 @@
                                     <table class="display" style="width:100%" dir="rtl">
                                         <thead>
                                             <tr>
-                                                <th>
+                                                <td>
                                                     <div class="form-group">
                                                         <label for="instructionType"><span class="red-star">★ </span>סוג הדרכה</label>
                                                         <select id="instructionType" class="form-control groupDetails" required>
                                                             <option value="">בחר סוג הדרכה</option>
                                                         </select>
                                                     </div>
-                                                </th>
-                                                <th>
+                                                </td>
+                                                <td>
                                                     <div class="form-group">
                                                         <label for="checkpayStatus"><span class="red-star">★ </span>סטאטוס תשלום</label>
                                                         <select class="form-control groupDetails" id="checkpayStatus" required>
@@ -748,62 +792,64 @@
                                                             <option value="2">לא שולם</option>
                                                         </select>
                                                     </div>
-                                                </th>
+                                                </td>
                                             </tr>
                                             <tr>
-                                                <th>
+                                                <td>
                                                     <div class="form-group">
                                                         <label for="company">שם החברה</label>
                                                         <textarea rows="1" class="form-control groupDetails" id="company" placeholder="הזן שם החברה"></textarea>
                                                     </div>
-                                                </th>
-                                                <th>
+                                                </td>
+                                                <td>
                                                     <div class="form-group">
                                                         <label for="address">כתובת</label>
                                                         <textarea rows="1" class="form-control groupDetails" id="address" placeholder="הזן כתובת"></textarea>
                                                     </div>
-                                                </th>
+                                                </td>
                                             </tr>
                                             <tr>
-                                                <th>
+                                                <td>
                                                     <div class="form-group">
                                                         <label for="checkDate"><span class="red-star">★ </span>תאריך הדרכה</label>
                                                         <br />
                                                         <input type="date" class="groupDetails" id="checkDate" required>
                                                     </div>
-                                                </th>
-                                                <th>
+                                                </td>
+                                                <td>
                                                     <div class="form-group">
                                                         <label for="time"><span class="red-star">★</span>שעת הדרכה</label>
                                                         <br />
                                                         <input type="time" id="time" class="form-control groupDetails" required>
                                                     </div>
-                                                </th>
+                                                </td>
                                             </tr>
                                             <tr>
-                                                <th>
+                                                <td>
                                                     <div class="form-group">
                                                         <label for="participants_num">מספר משתתפים</label>
                                                         <textarea rows="1" class="form-control groupDetails" id="participants_num" placeholder=" הזן מספר משתתפים"></textarea>
                                                     </div>
-                                                </th>
-                                                <th>
+                                                </td>
+                                                <td>
                                                     <div class="form-group">
                                                         <label for="invoice_num">מספר חשבונית</label>
                                                         <textarea rows="1" class="form-control groupDetails" id="invoice_num" placeholder=" הזן מספר חשבונית"></textarea>
                                                     </div>
-                                                </th>
-                                                <th id="price_th">
+                                                </td>
+                                                <td id="price_th">
                                                     <div class="form-group">
                                                         <label for="price">מחיר כולל</label>
                                                         <textarea rows="1" class="form-control groupDetails" id="price" placeholder=" הזן מחיר כולל"></textarea>
                                                     </div>
-                                                </th>
+                                                </td>
                                             </tr>
                                             <br />
                                         </thead>
                                     </table>
                                 </form>
+                                <br />
+                                <button id="btn_show_participants" class="btn btn-primary" onclick="showPariticiTable()">הצג משתתפים</button>
                                 <table>
                                     <tr>
                                         <td id="searchParticipant">
@@ -818,7 +864,7 @@
                                             <button id="btn_saveExist_participant" onclick="SaveExistContact()" class="btn btn-primary"> שמור משתתף</button>
                                         </td>
                                         <td>
-                                            <button id="btn_saveExist_participant1" onclick="SaveContactToExistIns()" class="btn btn-primary"> שמור משתתף</button>
+                                            <button id="btn_saveExist_participant1" onclick="SaveContactToExistIns()" class="btn btn-primary"> שמור משתתף </button>
                                         </td>
                                     </tr>
                                     <br />
@@ -831,38 +877,38 @@
 
                                 <table id="new_participant">
                                     <tr>
-                                        <th>
+                                        <td>
                                             <div class="form-group">
                                                 <label for="participant_id"><span class="red-star">★ </span>תעודת זהות</label>
                                                 <textarea rows="1" class="form-control groupDetails" id="participant_id" placeholder=" הזן ת.ז "></textarea>
                                             </div>
-                                        </th>
-                                        <th>
+                                        </td>
+                                        <td>
                                             <div class="form-group">
                                                 <label for="participant_name"><span class="red-star">★ </span>שם מלא</label>
                                                 <textarea rows="1" class="form-control groupDetails" id="participant_name" placeholder=" הזן שם מלא "></textarea>
                                             </div>
-                                        </th>
-                                        <th>
+                                        </td>
+                                        <td>
                                             <div class="form-group">
                                                 <label for="participant_phone"><span class="red-star">★ </span>טלפון</label>
                                                 <textarea rows="1" class="form-control groupDetails" id="participant_phone" placeholder=" הזן טלפון "></textarea>
                                             </div>
-                                        </th>
-                                        <th>
+                                        </td>
+                                        <td>
                                             <div class="form-group">
                                                 <label for="participant_mail"><span class="red-star">★ </span>מייל</label>
                                                 <textarea rows="1" class="form-control groupDetails" id="participant_mail" placeholder=" הזן מייל "></textarea>
                                             </div>
-                                        </th>
-                                        <th>
+                                        </td>
+                                        <td>
 
                                             <button id="btnSave_new_participant" class="btn btn-primary" onclick="SaveNewParticipant()"> שמור משתתף </button>
-                                        </th>
-                                        <th>
+                                        </td>
+                                        <td>
 
-                                            <button id="btnSave_new_participant1" class="btn btn-primary" onclick="SaveNewParticipantToExistIns()"> שמור משתתף </button>
-                                        </th>
+                          <button id="btnSave_new_participant1" class="btn btn-primary" onclick="SaveContactToExistIns1()"> שמור משתתף </button>
+                                        </td>
                                     </tr>
                                 </table>
                                 <form id="pForm">
@@ -889,7 +935,7 @@
                     <div id="id01" class="w3-modal">
                         <div class="w3-modal-content">
                             <div class="w3-container" dir="rtl">
-                                <span onclick="document.getElementById('id01').style.display='none',closeWindow()" class="w3-button w3-display-topright">&times;</span>
+                                <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                                 <form id="pForm">
                                     <h2 id="new_inst">משתתפים בהדרכה</h2>
                                     <table id="participantsTable1" class="display" style="width:100%" dir="rtl">
