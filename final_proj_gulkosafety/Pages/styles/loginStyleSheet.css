@@ -9,7 +9,7 @@
     border-color: cadetblue;
 }
 body {
-    background-color: cadetblue;
+    background-color: #eeeeee;
 }
 #logo {
     margin-top: 5%;
@@ -22,7 +22,7 @@ body {
     margin-top: 10%;
     margin-left: 15%;
     margin-right: 15%;
-    background-color: #eeeeee;
+    background-color: cadetblue;
 }
 .form-check {
     float: right;
