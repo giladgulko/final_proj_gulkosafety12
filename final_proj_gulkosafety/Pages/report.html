@@ -809,6 +809,11 @@
         function goto() {
             alert('hii')
         }
+        function logout() {
+            localStorage.removeItem("user");
+            window.location = "login.html";
+
+        }
 
     </script>
 
@@ -817,6 +822,7 @@
     <div id="allPage">
         <div id="logo">
             <img class="logo" src="photos/logo.jpeg" height="50" />
+            <button onclick="logout()" id="logout">התנתקות</button>
         </div>
         <div class="body-wrap">
             <nav class="navbar navbar-inverse">

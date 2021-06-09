@@ -70,19 +70,24 @@
             document.getElementById('report_paragraph').innerHTML = ""
             document.getElementById('id04').style.display = 'block';
             for (var i = 0; i < reportList.length; i++) {
-             
-                document.getElementById('report_paragraph').innerHTML += "<div class='reportPopUp'><h3>פרויקט:  " + reportList[i].Proj_name + "</h3><h3> דוח מספר: " + reportList[i].Report_num + "</h3><h3> בוצע בתאריך: " + reportList[i].Date.split("T")[0] + "</h3><h3> ציון הדוח הינו: " + reportList[i].Grade+"</h3></div>";
-                  
-                }
+
+                document.getElementById('report_paragraph').innerHTML += "<div class='reportPopUp'><h3>פרויקט:  " + reportList[i].Proj_name + "</h3><h3> דוח מספר: " + reportList[i].Report_num + "</h3><h3> בוצע בתאריך: " + reportList[i].Date.split("T")[0] + "</h3><h3> ציון הדוח הינו: " + reportList[i].Grade + "</h3></div>";
 
             }
+        }
+        function logout() {
+            localStorage.removeItem("user");
+            window.location = "login.html";
 
-        
+        }
+
+
     </script>
 </head>
 <body>
     <div id="logo">
         <img class="logo" src="photos/logo.jpeg" height="50" />
+        <button onclick="logout()" id="logout">התנתקות</button>
     </div>
     <div class="body-wrap">
         <nav class="navbar navbar-inverse">

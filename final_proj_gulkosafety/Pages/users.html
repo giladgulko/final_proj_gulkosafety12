@@ -223,11 +223,17 @@
         function deleteUserError() {
             swal("משתמש לא נמחק!", err, "warning");
         }
+        function logout() {
+            localStorage.removeItem("user");
+            window.location = "login.html";
+
+        }
     </script>
     </head>
 <body>
     <div id="logo">
         <img class="logo" src="photos/logo.jpeg" height="50" />
+        <button onclick="logout()" id="logout">התנתקות</button>
     </div>
     <div class="body-wrap">
         <nav class="navbar navbar-inverse">

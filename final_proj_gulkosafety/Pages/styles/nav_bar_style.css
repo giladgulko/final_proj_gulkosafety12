@@ -38,6 +38,13 @@ div#navbarMenu {
 img {
     /*padding-left: 10px;*/
 }
+#logout {
+    float: right;
+    margin-top: 1%;
+    margin-right: 1%;
+    font-weight: bold;
+    text-decoration: underline;
+}
 
 .navbar-collapse {
     text-align: center;

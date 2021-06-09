@@ -202,4 +202,6 @@ p {
     left: 50px;
     top: 20px;
 }
-
+#logout {
+    border: unset;
+}

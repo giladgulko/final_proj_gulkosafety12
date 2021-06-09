@@ -65,3 +65,7 @@ h1.instructions {
     margin-right: -15px;
     direction: ltr;
 }
+#logout {
+    border: unset;
+}
+    

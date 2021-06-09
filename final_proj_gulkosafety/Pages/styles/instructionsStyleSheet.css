@@ -123,4 +123,6 @@ th.sorting {
 th {
     text-align: right;
 }
-
+#logout {
+    border: unset;
+}
