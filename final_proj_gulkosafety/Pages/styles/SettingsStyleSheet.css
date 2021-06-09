@@ -125,3 +125,9 @@ body {
 #logout {
     border: unset;
 }
+.activeColor {
+    background-color: darkgrey !important;
+}
+.deactiveColor {
+    background-color: cadetblue !important;
+}
