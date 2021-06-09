@@ -20,7 +20,6 @@
         function checkUser() {
             email = $("#exampleInputEmail").val();
             password = $("#exampleInputPassword").val();
-            //let api = "../api/user"
             let api = "../api/user/" + email + "/" + password;
             ajaxCall("GET", api, "", getUserSuccess, getUserError)
         }
@@ -31,8 +30,13 @@
             else {
                 console.log(user)
                 localStorage["user"] = JSON.stringify(user);
-                window.location = "projects.html"
-                alert("היי" + " " + user.Name)
+                if (user.User_type_num == 1) {
+                    window.location = "home.html";
+                }
+                else {
+                    window.location = "projects.html";
+                }
+                alert("שלום" + " " + user.Name)
             }
 
         }

@@ -49,6 +49,12 @@ h3 {
 #report_paragraph {
     padding: 2%;
 }
+#active {
+    color: cadetblue;
+    background-color: #eeeeee;
+    FONT-WEIGHT: bold;
+    border-color: cadetblue;
+}
 
 #logo{
     direction:ltr;
