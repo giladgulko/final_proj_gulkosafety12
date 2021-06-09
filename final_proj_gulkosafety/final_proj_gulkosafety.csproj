@@ -223,7 +223,6 @@
     <Content Include="Pages\home.html" />
     <Content Include="Pages\instructions.html" />
     <Content Include="Pages\login.html" />
-    <Content Include="Pages\loginpage.html" />
     <Content Include="Pages\orders.html" />
     <Content Include="Pages\photos\logo.jpeg" />
     <Content Include="Pages\project.html" />
@@ -233,7 +232,6 @@
     <Content Include="Pages\styles\certificatesStyleSheet.css" />
     <Content Include="Pages\styles\homeStyleSheet.css" />
     <Content Include="Pages\styles\instructionsStyleSheet.css" />
-    <Content Include="Pages\styles\loginStyleSheet.css" />
     <Content Include="Pages\styles\ordersStyleSheet.css" />
     <Content Include="Pages\styles\projectsStyles.css" />
     <Content Include="Pages\projects.html" />
@@ -242,7 +240,7 @@
     <Content Include="Pages\styles\reportStyleSheet.css" />
     <Content Include="Pages\styles\nav_bar_style.css" />
     <Content Include="Pages\styles\settingsStyleSheet.css" />
-    <Content Include="Pages\styles\try.css" />
+    <Content Include="Pages\styles\loginStyleSheet.css" />
     <Content Include="Pages\styles\usersStyleSheet.css" />
     <Content Include="Pages\users.html" />
     <Content Include="Scripts\ajaxCalls.js" />
