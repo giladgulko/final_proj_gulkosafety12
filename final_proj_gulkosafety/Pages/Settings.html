@@ -56,8 +56,75 @@
             $("#addItemBtn").hide();
             $("#itemTable").hide();
             FirstTimeUploadItemTable = 0;
+
+            userDetails = JSON.parse(localStorage["user"]);
+            if (userDetails.User_type_num == 1) {
+                $("#navbar_setting_group").show();
+                $("#headline_setting").show();
+                $("#personal_user_headline").hide();
+                $("#personalUserDiv").hide();
+                $("#personal_user_headline").hide();
+            }
+            else {
+                $("#navbar_setting_group").hide();
+                $("#headline_setting").hide();
+                $("#personal_user_headline").show();
+                $("#personalUser").show();
+                $("#personalUserDiv").show();
+                getPersonalUserData();
+
+            }
         });
 
+        //קריאת פרטי משתמש ספציפי
+        function getPersonalUserData() {
+            $("#user_email2").val(userDetails.Email);
+            $("#user_name2").val(userDetails.Name);
+            $("#user_phone2").val(userDetails.Phone);
+            $("#user_password2").val(userDetails.Password);
+            $("#user_password2again").val(userDetails.Password);
+            $("#user_email2").prop('disabled', true);
+            $("#user_name2").prop('disabled', true);
+            $("#user_phone2").prop('disabled', true);
+            $("#user_password2").prop('disabled', true);
+            $("#user_password2again").prop('disabled', true);
+            $("#btn_save_personal_user").hide();
+            $("#btn_update_personal_user").show();
+        }
+        function updatePersonalUser() {
+            $("#user_name2").prop('disabled', false);
+            $("#user_phone2").prop('disabled', false);
+            $("#user_password2").prop('disabled', false);
+            $("#user_password2again").prop('disabled', false);
+            $("#btn_update_personal_user").hide();
+            $("#btn_save_personal_user").show();
+        }
+        //  שמירת עדכון פרטי משתמש אישיים
+        function save_personal_user_changes() {
+            user_update = {
+                Email: $("#user_email2").val(),
+                Name: $("#user_name2").val(),
+                Phone: $("#user_phone2").val(),
+                Password: $("#user_password2").val(),
+                User_type_num: 2,
+                Delete_status: 0,
+            }
+            let api = "../api/user";
+            ajaxCall("PUT", api, JSON.stringify(user_update), UpdatePersonalUserSuccess, UpdateUserError);
+        }
+        function UpdatePersonalUserSuccess(user) {
+            localStorage["user"] = JSON.stringify(user);
+            swal({
+                title: "מצוין!", text: "עדכון משתמש בוצע", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
+        }
+        function UpdateUserError() {
+            swal("עדכון משתמש לא בוצע!", err, "warning");
+        }
+        //החלפת צבע בכפתורים בצד אחרי לחיצה
         function SwitchBtnToColor(BtnId) {
             let switchId = "#" + BtnId;
             $(switchId).removeClass("deactiveColor");
@@ -1034,7 +1101,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <div id="instruction_bar" dir="rtl">
         <div id="headline">
-            <h1 class="instructions">הגדרות</h1>
+            <h1 class="users" id="personal_user_headline">עדכון פרטים</h1>
+            <h1 class="setting" id="headline_setting">הגדרות</h1>
         </div>
         <br />
     </div>
@@ -1116,7 +1184,7 @@
                 </form>
             </div>
             <div class="col-md-2 col-sm-3">
-                <div class="btn-group">
+                <div class="btn-group"id="navbar_setting_group">
                     <button id="defectTypeBtn" onclick="getDefectType(this.id)">סוגי ליקוי</button>
                     <button id="instructionTypeBtn" onclick="getInstructionType(this.id)">סוגי הדרכה</button>
                     <button id="userTypeBtn" onclick="getUserType(this.id)">סוגי משתמש</button>
@@ -1491,7 +1559,64 @@
                 </div>
             </div>
         </div>
-    </div>
+        <div id="personalUserDiv">
+            <div class="row">
+                <form id="personalUsersTypeForm">
+                    <h2 id="update_personal_user">עדכון פרטים</h2>
+                    <table id="personalUser" class="display" style="width:100%" dir="rtl">
+                        <thead>
+                            <tr>
+                                <td>
+                                    <div class="form-group2">
+                                        <label for="user_email2">מייל <span class="red-star">★</span></label>
+                                        <textarea rows="1" class="form-control groupDetails" id="user_email2" placeholder="הזן מייל"></textarea>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group2">
+                                        <label for="user_name2"><span class="red-star">★</span>שם מלא</label>
+                                        <textarea rows="1" class="form-control groupDetails" id="user_name2" placeholder="הזן שם מלא"></textarea>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group2">
+                                        <label for="user_phone2"><span class="red-star">★</span>טלפון</label>
+                                        <textarea rows="1" class="form-control groupDetails" id="user_phone2" placeholder="הזן טלפון"></textarea>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group2">
+                                        <label for="user_password2"><span class="red-star">★</span>סיסמא</label>
+                                        <textarea rows="1" class="form-control groupDetails" id="user_password2" placeholder="הזן סיסמא"></textarea>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group2">
+                                        <label for="user_password2again"><span class="red-star">★</span>סיסמא בשנית</label>
+                                        <textarea rows="1" class="form-control groupDetails" id="user_password2again" placeholder="  הזן סיסמא בשנית"></textarea>
+                                    </div>
+                                </td>
+                            </tr>
+                        </thead>
+                    </table>
+                </form>
+                </br>
+                <div class="btn_personal_user">
+                    <button id="btn_save_personal_user" onclick="save_personal_user_changes()" class="btn btn-primary"> שמור משתמש</button>
+                    <button id="btn_update_personal_user" class="btn btn-primary" onclick="updatePersonalUser()">עדכן פרטי משתמש </button>
+                </div>
+            </div>
+                    </div>
+                </div>
+
 </body>
 </html>
 
