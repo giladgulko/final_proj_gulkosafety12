@@ -285,3 +285,6 @@ input#saveBTN {
 .hide-scroll, .hide-scroll body {
     overflow: hidden !important
 }
+#logout {
+    border: unset;
+}

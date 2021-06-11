@@ -807,7 +807,14 @@
                 return false;
             
         }
-        
+        function goto() {
+            alert('hii')
+        }
+        function logout() {
+            localStorage.removeItem("user");
+            window.location = "login.html";
+
+        }
 
     </script>
 
@@ -816,6 +823,7 @@
     <div id="allPage">
         <div id="logo">
             <img class="logo" src="photos/logo.jpeg" height="50" />
+            <button onclick="logout()" id="logout">התנתקות</button>
         </div>
         <div class="body-wrap">
             <nav class="navbar navbar-inverse">
@@ -830,14 +838,14 @@
                     </div>
                     <div class="collapse navbar-collapse" id="navbarMenu">
                         <ul class="nav navbar-nav navbar-right  bts-nav">
-                            <li><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="#"></a></li>
+                            <li><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="settings.html"></a></li>
                             <li></li>
                             <li class="nav-item">
                                 <span class="glyphicon glyphicon-bell" aria-hidden="true"></span><a href="alerts.html"></a>
                             </li>
 
                             <li><a href="#">סטטיסטיקות</a></li>
-                            <li><a href="#">משתמשים</a></li>
+                            <li><a href="users.html">משתמשים</a></li>
                             <li><a href="orders.html">הזמנות</a></li>
                             <li><a href="certificates.html">אישורים</a></li>
                             <li><a href="instructions.html">הדרכות</a></li>

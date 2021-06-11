@@ -483,12 +483,18 @@
                 Plotly.newPlot('chartContainer', data);
             }
         }
+        function logout() {
+            localStorage.removeItem("user");
+            window.location = "login.html";
+
+        }
 
     </script>
 </head>
 <body>
     <div id="logo">
         <img class="logo" src="photos/logo.jpeg" height="50" />
+        <button onclick="logout()" id="logout">התנתקות</button>
     </div>
     <div class="body-wrap">
         <nav class="navbar navbar-inverse">
@@ -510,7 +516,7 @@
                         </li>
 
                         <li class="type2mode"><a href="#">סטטיסטיקות</a></li>
-                        <li class="type2mode"><a href="#">משתמשים</a></li>
+                        <li class="type2mode"><a href="users.html">משתמשים</a></li>
                         <li class="type2mode"><a href="orders.html">הזמנות</a></li>
                         <li class="type2mode"><a href="certificates.html">אישורים</a></li>
                         <li class="type2mode"><a href="instructions.html">הדרכות</a></li>

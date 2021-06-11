@@ -125,3 +125,6 @@ th {
     background-color: cadetblue;
     border-color: cadetblue;
 }
+#logout {
+    border: unset;
+}

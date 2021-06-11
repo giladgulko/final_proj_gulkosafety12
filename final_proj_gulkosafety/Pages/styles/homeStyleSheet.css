@@ -49,6 +49,12 @@ h3 {
 #report_paragraph {
     padding: 2%;
 }
+#active {
+    color: cadetblue;
+    background-color: #eeeeee;
+    FONT-WEIGHT: bold;
+    border-color: cadetblue;
+}
 
 #logo{
     direction:ltr;
@@ -65,3 +71,7 @@ h1.instructions {
     margin-right: -15px;
     direction: ltr;
 }
+#logout {
+    border: unset;
+}
+    

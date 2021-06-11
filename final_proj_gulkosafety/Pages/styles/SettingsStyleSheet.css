@@ -122,3 +122,12 @@ body {
     background-color: cadetblue;
     border-color: cadetblue;
 }
+#logout {
+    border: unset;
+}
+.activeColor {
+    background-color: darkgrey !important;
+}
+.deactiveColor {
+    background-color: cadetblue !important;
+}

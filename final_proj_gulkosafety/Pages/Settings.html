@@ -30,6 +30,7 @@
 
         $(document).ready(function () {
             // סוגי ליקוי
+            NameOfBtn = ["#defectTypeBtn", "#instructionTypeBtn", "#userTypeBtn", "#certificateTypeBtn", "#itemBtn"];
             $("#defectTypeTable").hide();
             $("#addDefectTypeBtn").hide();
             $("#defectTypeForm").hide();
@@ -57,10 +58,22 @@
             FirstTimeUploadItemTable = 0;
         });
 
+        function SwitchBtnToColor(BtnId) {
+            let switchId = "#" + BtnId;
+            $(switchId).removeClass("deactiveColor");
+            $(switchId).addClass("activeColor");
+            for (var i = 0; i < NameOfBtn.length; i++) {
+                if (switchId != NameOfBtn[i]) {
+                    $(NameOfBtn[i]).removeClass("activeColor");
+                }
+            }
+        }
         //////////////////////////////////////////////////////סוגי ליקויים
         // קריאת כל סוגי ליקויים
-        function getDefectType() {
+        function getDefectType(BtnId) {
+            SwitchBtnToColor(BtnId);
             if (FirstTimeUploadDefectTypeTable == 0) {
+
                 ajaxCall("GET", "../api/defect_type", "", createDtDefectType, getErrorDefectType)
             }
             else {
@@ -235,7 +248,8 @@
         }
         //////////////////////////////////////////////////////סוגי הדרכות
         // קריאת כל סוגי הדרכות
-        function getInstructionType() {
+        function getInstructionType(BtnId) {
+            SwitchBtnToColor(BtnId);
             if (FirstTimeUploadInstructionTypeTable == 0) {
                 ajaxCall("GET", "../api/instruction_type", "", createDtInstructionType, getErrorInstructionType)
             }
@@ -420,7 +434,8 @@
 
         //////////////////////////////////////////////////////סוגי משתמשים
         // קריאת כל סוגי משתמשים
-        function getUserType() {
+        function getUserType(BtnId) {
+            SwitchBtnToColor(BtnId);
             if (FirstTimeUploadUserTypeTable == 0) {
                 ajaxCall("GET", "../api/user_type", "", createDtUserType, getErrorUserType)
             }
@@ -596,7 +611,8 @@
 
         //////////////////////////////////////////////////////סוגי אישורים
         // קריאת כל סוגי אישורים
-        function getCertificateType() {
+        function getCertificateType(BtnId) {
+            SwitchBtnToColor(BtnId);
             if (FirstTimeUploadCertificateTypeTable == 0) {
                 ajaxCall("GET", "../api/certificate_type", "", createDtCertificateType, getErrorCertificateType)
             }
@@ -783,7 +799,8 @@
 
         //////////////////////////////////////////////////////פריטים
         // קריאת כל הפריטים
-        function getItem() {
+        function getItem(BtnId) {
+            SwitchBtnToColor(BtnId);
             if (FirstTimeUploadItemTable == 0) {
                 ajaxCall("GET", "../api/item", "", createDtItem, getErrorItem)
             }
@@ -965,11 +982,18 @@
         function changeColor() {
             document.getElementById('select_item');
         }
+
+        function logout() {
+            localStorage.removeItem("user");
+            window.location = "login.html";
+
+        }
     </script>
 </head>
 <body>
     <div id="logo">
         <img class="logo" src="photos/logo.jpeg" height="50" />
+        <button onclick="logout()" id="logout">התנתקות</button>
     </div>
     <div class="body-wrap">
         <nav class="navbar navbar-inverse">
@@ -1093,11 +1117,11 @@
             </div>
             <div class="col-md-2 col-sm-3">
                 <div class="btn-group">
-                    <button id="defectTypeBtn" onclick="getDefectType()">סוגי ליקוי</button>
-                    <button id="instructionTypeBtn" onclick="getInstructionType()">סוגי הדרכה</button>
-                    <button id="userTypeBtn" onclick="getUserType()">סוגי משתמש</button>
-                    <button id="certificateTypeBtn" onclick="getCertificateType()">סוגי אישורים</button>
-                    <button id="itemBtn" onclick="getItem()">פריטים</button>
+                    <button id="defectTypeBtn" onclick="getDefectType(this.id)">סוגי ליקוי</button>
+                    <button id="instructionTypeBtn" onclick="getInstructionType(this.id)">סוגי הדרכה</button>
+                    <button id="userTypeBtn" onclick="getUserType(this.id)">סוגי משתמש</button>
+                    <button id="certificateTypeBtn" onclick="getCertificateType(this.id)">סוגי אישורים</button>
+                    <button id="itemBtn" onclick="getItem(this.id)">פריטים</button>
                 </div>
             </div>
 
