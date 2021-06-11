@@ -131,3 +131,18 @@ body {
 .deactiveColor {
     background-color: cadetblue !important;
 }
+#personalUserDiv {
+    background-color: white;
+    width: 50%;
+    height: 33%;
+    margin-left: 25%;
+    padding: 2.5%
+}
+.btn_personal_user{
+    float:left;
+}
+#update_personal_user {
+    font-family: 'Suez One', serif;
+    color: cadetblue;
+text-align:right;
+}
