@@ -42,6 +42,7 @@
         userType = JSON.parse(localStorage["userType"]);
         Users = JSON.parse(localStorage["projContacts"]);
         pdf = "";
+        uriToSend =""
         $(document).ready(function () {
             //build view page
             if (userType != 1)
@@ -105,6 +106,10 @@
             $("#calcGrade").hide();
             $('.fixBTNs').hide();
             $('.editReportDetailsBtns').hide();
+            $('.type2mode').hide();
+            $('#sendPdf').hide();
+            
+           
         }
 
         function bringDataFromLocal() {
@@ -748,24 +753,44 @@
             }
 
         }
-        function topdf(){
-
+        function topdf(num){
+            $("#sendPdf").hide()
+            $("#downPdf").hide()
+            $("#logout").hide()
+            $(".body-wrap").hide()
+            $(".logo").show()
             var element = document.getElementById('allPage');
-            
+            name = 'report-' + report.Report_num + '.pdf';
             var opt = {
                 margin: 0,
                 filename: 'report-' + report.Report_num + '.pdf',
-                pagebreak: { mode: 'avoid-all', before: '#page2el', avoid: document.getElementsByClassName('body-wrap') },
+                pagebreak: { mode: 'avoid-all', before: '#page2el' },
                 html2canvas: { scale: 2 },
                 jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
-            };
-           // pdf = html2pdf(element, opt);
-            html2pdf().set(opt).from(element).outputPdf('datauri').then(uri => {
-                sendEmail(uri)
-            })
-            console.log(worker)
            
+            };
+            if (num == 1) {
+                html2pdf(element, opt);
+            }
+            else {
+                html2pdf().set(opt).from(element).outputPdf('datauri').then(uri => {
+                    sendEmail(uri, name)
+                })
+            }
+           
+        
+            console.log(worker)
+           showAfterPDF()
         }
+
+        function showAfterPDF(){
+            $("#sendPdf").show()
+            $("#downPdf").show()
+            $("#logout").show()
+            $(".body-wrap").show()
+            $(".logo").show()
+        }
+
         function changeUser() {
             if (userType == 1) {
                 localStorage["userType"] = 2
@@ -778,23 +803,25 @@
 
         }
 
-        function sendEmail(uri) {
+        function sendEmail(uri, name) {
+            console.log(uri)
             mail = "<p>היי</p>"
             mail += "<p>עלה דוח חדש לאתר בפרוייקט-"+project.Name+"</p>"
             mail += "<a href='http://proj.ruppin.ac.il/igroup60/test2/A/tar5/Pages/projects.html'>כניסה למערכת</a>"
+           
                 Email.send({
                     Host: "smtp.google.com",
                     Username: "reactapptest230@gmail.com",
                     Password: "FA1278973EE70094257D1CFD15BECDBA0BDC",
 
                     To: "giladgulko@gmail.com",
-                    From: "giladgulko@gmail.com",
+                    From: "gulkosafetyuser@gmail.com",
                     Subject: "דוח חדש באתר",
 
                     Body: mail,
                     Attachments: [
                         {
-                            name: "smtpjs.pdf",
+                            name: name,
                             data: uri
                         }]
 
@@ -802,7 +829,8 @@
                     alert("מעולה!")
                     
                 );
-                
+
+            showAfterPDF()
             
                 return false;
             
@@ -838,17 +866,17 @@
                     </div>
                     <div class="collapse navbar-collapse" id="navbarMenu">
                         <ul class="nav navbar-nav navbar-right  bts-nav">
-                            <li><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="settings.html"></a></li>
+                            <li class="type2mode"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="settings.html"></a></li>
                             <li></li>
                             <li class="nav-item">
                                 <span class="glyphicon glyphicon-bell" aria-hidden="true"></span><a href="alerts.html"></a>
                             </li>
 
-                            <li><a href="#">סטטיסטיקות</a></li>
-                            <li><a href="users.html">משתמשים</a></li>
-                            <li><a href="orders.html">הזמנות</a></li>
-                            <li><a href="certificates.html">אישורים</a></li>
-                            <li><a href="instructions.html">הדרכות</a></li>
+                            <li class="type2mode"><a href="#">סטטיסטיקות</a></li>
+                            <li class="type2mode"><a href="users.html">משתמשים</a></li>
+                            <li class="type2mode"><a href="orders.html">הזמנות</a></li>
+                            <li class="type2mode"><a href="certificates.html">אישורים</a></li>
+                            <li class="type2mode"><a href="instructions.html">הדרכות</a></li>
                             <li class="active"><a href="projects.html">פרויקטים<span class="sr-only">(current)</span></a></li>
                             <li>
                                 <span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="home.html"></a>
@@ -862,8 +890,8 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <div class="row">
             <div id="pdfAndSendBTN" class="col-sm-2">
-                <button id="downPdf" class="btn btn-primary" onclick="topdf()">הורד דוח</button>
-                <button id="sendPdf" class="btn btn-primary" onclick="sendEmail()">שלח לבעלי עניין</button>
+                <button id="downPdf" class="btn btn-primary" onclick="topdf(1)">הורד דוח</button>
+                <button id="sendPdf" class="btn btn-primary type2mode" onclick="topdf(2)">שלח לבעלי עניין</button>
             </div>
             <div id="proj_bar" class="col-sm-10" dir="rtl">
 
