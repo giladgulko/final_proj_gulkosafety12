@@ -100,6 +100,10 @@
     float: left;
     direction: rtl;
 }
+.homeDate {
+    font-size: 16px;
+    direction: rtl;
+}
 .archiv > .date {
     font-size: 16px;
     float: left;
@@ -113,7 +117,7 @@
 img {
     height: 5%;
     width: 10%;
-    margin-right: 5%;
+    /*margin-right: 5%;*/
 }
 #pForm {
     margin-left: 10%;

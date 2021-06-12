@@ -1,11 +1,4 @@
-﻿/*form {
-    display: inline;
-    padding: 0px;
-    text-align: right;
-    font-size: 12px;
-}*/
-
-.form-control {
+﻿.form-control {
     font-size: 12px;
 }
 
@@ -214,77 +207,6 @@ p {
     margin-right: 235%;
 }
 
-/*show img input aler*/t
-
-#mask {
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    margin: auto;
-    visibility: hidden;
-    z-index: -2;
-    background: #000;
-    background: rgba(0,0,0,0.8);
-    overflow: hidden;
-    opacity: 0;
-    transition: all .5s ease-in-out;
-}
-
-#mask.showing {
-    opacity: 1;
-    z-index: 9000;
-    visibility: visible;
-    overflow: auto;
-    transition: all .5s ease-in-out;
-}
-
-#boxes {
-    display: table;
-    width: 100%;
-    height: 100%;
-}
-
-.window {
-    max-width: 780px;
-    z-index: 9999;
-    padding: 20px;
-    border-radius: 15px;
-    text-align: center;
-    margin: auto;
-    background-color: #ffffff;
-    font-family: 'Segoe UI Light', sans-serif;
-    font-size: 15pt;
-}
-
-    .window img {
-        width: 100%;
-        height: auto;
-    }
-
-.inner {
-    display: table-cell;
-    vertical-align: middle;
-}
-
-#popupfoot {
-    font-size: 16pt;
-}
-
-.showImage {
-    margin: 0 0 3em;
-    display: table;
-    text-align: center
-}
-
-    .showImage img {
-        display: block
-    }
-
-.hide-scroll, .hide-scroll body {
-    overflow: hidden !important
-}
 #logout {
     border: unset;
 }

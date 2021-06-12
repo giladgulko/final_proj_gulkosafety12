@@ -2549,7 +2549,7 @@ namespace final_proj_gulkosafety.Models.DAL
         }
 
         //read alert from home page
-        public List<alert> ReadAlertFromHome(string user_email, int Alert_type_num)
+        public List<alert> ReadAlertFromHome(string user_email, int alert_type_num)
         {
             SqlConnection con = null;
             List<alert> alertsList = new List<alert>();
@@ -2558,7 +2558,7 @@ namespace final_proj_gulkosafety.Models.DAL
             {
                 con = connect("DBConnectionString");
 
-                String selectSTR = "SELECT a.*,p.name FROM alert a left join project p on a.proj_num=p.project_num WHERE user_email='" + user_email + "'and Alert_type_num=" + Alert_type_num + "and date>= DATEADD(day,-2, GETDATE())";
+                String selectSTR = "SELECT a.*,p.name FROM alert a left join project p on a.proj_num=p.project_num WHERE user_email='" + user_email + "' and a.alert_type_num=" + alert_type_num + " and date <= getdate() and date >= dateadd(day, -3, getdate())";
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
                 // get a reader

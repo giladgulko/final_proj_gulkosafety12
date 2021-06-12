@@ -23,12 +23,12 @@ namespace final_proj_gulkosafety.Controllers
                 throw (ex);
             }
         }
-        public List<alert> Get(string user_email,int Alert_type_num)
+        public List<alert> Get(string user_email,int alert_type_num)
         {
             try
             {
                 alert a = new alert();
-                List<alert> aList = a.ReadAlertFromHome(user_email,Alert_type_num);
+                List<alert> aList = a.ReadAlertFromHome(user_email,alert_type_num);
                 return aList;
             }
             catch (Exception ex)

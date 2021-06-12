@@ -20,7 +20,7 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
 
-
+    <link href="styles/alertsStyles.css" rel="stylesheet" />
     <link href="styles/nav_bar_style.css" rel="stylesheet" />
 
     <link href="styles/homeStyleSheet.css" rel="stylesheet" />
@@ -57,10 +57,10 @@
             if (expiredInstructions.length > 0) {
                 let str = "";
                 for (i = 0; i < expiredInstructions.length; i++) {
-                    str += "<p>" + expiredInstructions[i].Type_name+", " + expiredInstructions[i].Company + "</p>"; 
+                    str += "<p>" + expiredInstructions[i].Type_name + ", " + expiredInstructions[i].Company + "</p>";
                 }
                 $("#instructions_expire_alerts").html(str);
-            }   
+            }
         }
 
         function getExpiredInstructionsError(err) {
@@ -76,7 +76,7 @@
             if (expiredCertificates.length > 0) {
                 let str = "";
                 for (i = 0; i < expiredCertificates.length; i++) {
-                    str += "<p>" + expiredCertificates[i].Type_name + ", "  + expiredCertificates[i].Company + "</p>";
+                    str += "<p>" + expiredCertificates[i].Type_name + ", " + expiredCertificates[i].Company + "</p>";
                 }
                 $("#certificates_expire_alerts").html(str);
             }
@@ -93,26 +93,26 @@
         }
 
         function getAlerts() {
-            let Alert_type_num = 3;
-            let api = "../api/alert?Alert_type_num=" + Alert_type_num+"&user_email=" + user_email;
+            let alert_type_num = 3;
+            let api = "../api/alert?user_email=" + user_email + "&alert_type_num=" + alert_type_num;
             ajaxCall("GET", api, "", getAlertsSuccess, getError);
         }
         function getAlertsSuccess(data) {
             alertList = data;
 
             for (i = 0; i < alertList.length; i++) {
-                        document.getElementById('fixed_defects_photos_alerts').innerHTML += "<div  class='alerts'> <p id='" + alertList[i].Alert_num + "' href='#' </p><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + " </strong> <i class='far fa-calendar-alt' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
+                document.getElementById('fixed_defects_photos_alerts').innerHTML += "<div  class='alerts'> <p id='" + alertList[i].Alert_num + "' href='#' </p><strong class='homeDate'> " + alertList[i].Date.split("T")[0] + " " + " </strong> <i class='far fa-calendar-alt' style='font-size:24px'></i>&nbsp&nbsp<a id='" + alertList[i].Alert_num + "' href='#' onclick='renderDefectPic(this.id)'>" + alertList[i].Content.split(",")[0] + " בפרויקט: " + alertList[i].Proj_name + " </a ></div > ";
             }
             getReports();
         }
         function getReportsuccess(data) {
             reportList = data;
-            for (i = 0; i < alertList.length; i++) {
+            for (i = 0; i < reportList.length; i++) {
                 document.getElementById('recent_visit reports_alerts').innerHTML += "<div class='reports'><p id='" + reportList[i].Report_num + "' href='#' </p> <strong>" + reportList[i].Date.split("T")[0] + "</strong >  בפרויקט " + reportList[i].Proj_name + " " + " דוח מספר " + reportList[i].Report_num + "<a id='" + reportList[i].Report_num + "' href='#' onclick='renderSafetyAlert(this.id)'> לצפייה בפרטי הדוח לחץ כאן </a></div> ";
             }
-        
+
         }
-        
+
         function getError() {
             swal("Failed!", "Failed to read alerts!Please try again", "warning")
         }
@@ -125,6 +125,128 @@
 
             }
         }
+
+        function renderDefectPic(alert_Num) {
+            alertNum = alert_Num;
+            $('.image').attr({
+                'src': ""
+            });
+            $('#mask').addClass('showing');
+            $('html').addClass('hide-scroll');
+            var id = '#dialog';
+            fullImagePath = "";
+            for (var i = 0; i < alertList.length; i++) {
+                if (alertList[i].Alert_num == alertNum) {
+                    $('#alert_title').html(alertList[i].Content.split(",")[0]);
+                    fullImagePath = alertList[i].Content.split(",")[1];
+                    projectNum = alertList[i].Proj_num;
+                    break;
+                }
+            }
+
+            $('.image').attr({
+                'src': fullImagePath
+            });
+
+            getProject();
+
+            //if close button is clicked
+            $('.window .close').click(function (e) {
+                ////Cancel the link behavior
+                e.preventDefault();
+                $('#mask').removeClass('showing');
+                $('html').removeClass('hide-scroll');
+            });
+        }
+
+        function getProject() {
+            let api = "../api/project?project_num=" + projectNum;
+            ajaxCall("GET", api, "", getProjSuccess, getProjError);
+        }
+
+        function getProjSuccess(proj) {
+            project = proj;
+            projContacts = [];
+            projContacts.push(project.Manager_email);
+            projContacts.push(project.Foreman_email);
+        }
+
+        function getProjError(err) {
+            project = "";
+        }
+
+
+        function updateDefectStatus() {
+            $('#mask').removeClass('showing');
+            $('html').removeClass('hide-scroll');
+            var fix_status = 1;
+            let api = "../api/defect_in_report?picture_link=" + fullImagePath + "&fix_status=" + fix_status;
+            ajaxCall("PUT", api, "", postAlertOnImg, updateDefectsInReportError);
+        }
+
+        function updateDefectsInReportError() {
+            alert("ליקוי לא עודכן");
+        }
+
+        function updateDefectImgSuccess() {
+            location.reload();
+            //-יצירת התראה-להשלים
+        }
+        function postAlertOnImg() {
+
+            if (project != null) {
+                for (var i = 0; i < projContacts.length; i++) {
+                    var now = new Date().toISOString();
+                    newAlertOnAprroveIMG = {
+                        Content: "תמונת תיקון ליקוי פיגום אושרה," + fullImagePath,
+                        Date: now,
+                        Alert_type_num: 3,
+                        User_email: projContacts[i],
+                        Status: 0,
+                        Proj_num: project.Project_num
+
+                    }
+                    let api = "../api/alert";
+                    ajaxCall("POST", api, JSON.stringify(newAlertOnAprroveIMG), PostAlertSuccess, PostAlertError)
+
+                }
+            }
+
+            else alert("בעיה בהבאת פרויקט- התראה לא נשלחה");
+        }
+
+        function defectNotApprove() {
+            if (project != "") {
+                var now = new Date().toISOString();
+                for (var i = 0; i < projContacts.length; i++) {
+                    newAlertOnAprroveIMG = {
+                        Content: "תמונת תיקון ליקוי פיגום לא אושרה," + fullImagePath,
+                        Date: now,
+                        Alert_type_num: 3,
+                        User_email: projContacts[i],
+                        Status: 0,
+                        Proj_num: project.Project_num
+
+                    }
+                    let api = "../api/alert";
+                    ajaxCall("POST", api, JSON.stringify(newAlertOnAprroveIMG), PostAlertSuccess, PostAlertError);
+                }
+            }
+
+            else alert("בעיה בהבאת פרויקט- התראה לא נשלחה");
+        }
+
+        function PostAlertSuccess() {
+            swal("סטטוס תיקון עודכן בהצלחה!", "נשלחה התראה לאנשי הקשר בפרויקט", "success");
+            //move alert to archive
+            ChangeStatus(alertNum);
+        }
+
+        function PostAlertError(err) {
+            swal("התראה לאנשי הקשר לא נשלחה!", "סטטוס ליקוי עודכן בהצלחה", "warning")
+        }
+
+
         function logout() {
             localStorage.removeItem("user");
             window.location = "login.html";
@@ -199,9 +321,6 @@
                     <h3>תמונות ליקויים שתוקנו:</h3>
                 </div>
                 <div id="fixed_defects_photos_alerts">
-                    <p>ליקוי תוקן בפרויקט: פרי הגליל בתאריך 26.5.2021  </p>
-                    <p>ליקוי תוקן בפרויקט: רכבת עפולה בתאריך 25.5.2021</p>
-                    <p>ליקוי תוקן בפרויקט: אלקטרה בניה בתאריך 25.5.2021</p>
                 </div>
 
             </div>
@@ -234,14 +353,29 @@
                     <h3>דוחות ביקור אחרונים</h3>
                 </div>
                 <div id="recent_visit reports_alerts">
-                    <p> דוח ביקור מס' 33 בחידוש תשתיות אוניברסיטת חיפה </p>
-                    <p> דוח ביקור מס' 4 בבניין חולון </p>
+
                 </div>
                 <div id="id04" class="w3-modal">
                     <div class="w3-modal-content">
                         <div class="w3-container">
                             <span onclick="document.getElementById('id04').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                             <div id="report_paragraph"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="mask">
+                <div id="boxes">
+                    <div class="inner">
+                        <div id="dialog" class="window">
+                            <a href="#" class="close">x</a>
+                            <div id="showImg">
+                                <div id="popupfoot"> <img src="#" class="image" alt="Loading..." /> </div>
+                                <div id="approvePicBTNs">
+                                    <button class="btn btn-danger fixBTNs" onclick="defectNotApprove()">ליקוי לא תוקן</button>
+                                    <button class="btn btn-success fixBTNs" onclick="updateDefectStatus()">אשר תקינות ליקוי</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
