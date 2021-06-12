@@ -160,17 +160,13 @@
                     document.getElementById('Alerts_div').innerHTML += "<div  class='alert alert-certificate alert-dismissible'> <a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='far fa-calendar-alt' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " בפרויקט: " + alertList[i].Proj_name+ "</div> ";
                 }
                 if (alertList[i].Alert_type_num == 3) {
-                    //document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-Defective-repair alert-dismissible'> <a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='far fa-check-circle' style='font-size:24px'></i >&nbsp&nbsp" + alertList[i].Content + " בפרויקט: " + alertList[i].Proj_name + "</div> ";
-                    document.getElementById('Alerts_div').innerHTML += "<div  class='alert alert-Defective-repair alert-dismissible'> <a id='" + alertList[i].Alert_num + "' href='#' </p><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='fas fa-tachometer-alt' style='font-size:24px'></i>&nbsp&nbsp<a id='" + alertList[i].Alert_num + "' href='#' onclick='renderDefectPic(this.id)'>" + alertList[i].Content.split(",")[0] + " בפרויקט: " + alertList[i].Proj_name + "</a ></div > ";
-
+                    document.getElementById('Alerts_div').innerHTML += "<div  class='alert alert-Defective-repair alert-dismissible'> <a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='fas fa-tachometer-alt' style='font-size:24px'></i>&nbsp&nbsp<a id='" + alertList[i].Alert_num + "' href='#' onclick='renderDefectPic(this.id)'>" + alertList[i].Content.split(",")[0] + " בפרויקט: " + alertList[i].Proj_name + "</a ></div > ";
                 }
                 if (alertList[i].Alert_type_num == 4) {
                     document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-instruction alert-dismissible'><a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='fas fa-chalkboard-teacher' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " בפרויקט: " + alertList[i].Proj_name + "</div> ";
-
                 }
                 if (alertList[i].Alert_type_num == 5) {
                     document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-defect alert-dismissible'><a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='fas fa-exclamation-triangle' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " בפרויקט: " + alertList[i].Proj_name + "</div> ";
-
                 }
             }
 
@@ -188,7 +184,8 @@
 
         }
 
-        function renderDefectPic(alertNum) {
+        function renderDefectPic(alert_Num) {
+            alertNum = alert_Num;
             $('.image').attr({
                 'src': ""
             });
@@ -302,10 +299,13 @@
         }
 
         function PostAlertSuccess() {
-            alert("נשלחה התראה למנהל העבודה");
+            swal("סטטוס תיקון עודכן בהצלחה!", "נשלחה התראה לאנשי הקשר בפרויקט", "success");
+            //move alert to archive
+            ChangeStatus(alertNum);
         }
+
         function PostAlertError(err) {
-            alert("התראה לא נשלחה למנהל עבודה");
+            swal("התראה לאנשי הקשר לא נשלחה!", "סטטוס ליקוי עודכן בהצלחה", "warning")
         }
 
         function RenderAlertDivByType() {
