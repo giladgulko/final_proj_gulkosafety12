@@ -771,16 +771,18 @@
             };
             if (num == 1) {
                 html2pdf(element, opt);
+                showAfterPDF()
             }
             else {
                 html2pdf().set(opt).from(element).outputPdf('datauri').then(uri => {
                     sendEmail(uri, name)
+                    showAfterPDF()
                 })
             }
            
         
             console.log(worker)
-           showAfterPDF()
+           
         }
 
         function showAfterPDF(){
