@@ -160,7 +160,8 @@
                     document.getElementById('Alerts_div').innerHTML += "<div  class='alert alert-certificate alert-dismissible'> <a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='far fa-calendar-alt' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " בפרויקט: " + alertList[i].Proj_name+ "</div> ";
                 }
                 if (alertList[i].Alert_type_num == 3) {
-                    document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-Defective-repair alert-dismissible'> <a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='far fa-check-circle' style='font-size:24px'></i >&nbsp&nbsp" + alertList[i].Content + " בפרויקט: " + alertList[i].Proj_name + "</div> ";
+                    //document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-Defective-repair alert-dismissible'> <a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='far fa-check-circle' style='font-size:24px'></i >&nbsp&nbsp" + alertList[i].Content + " בפרויקט: " + alertList[i].Proj_name + "</div> ";
+                    document.getElementById('Alerts_div').innerHTML += "<div  class='alert alert-Defective-repair alert-dismissible'> <a id='" + alertList[i].Alert_num + "' href='#' </p><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='fas fa-tachometer-alt' style='font-size:24px'></i>&nbsp&nbsp<a id='" + alertList[i].Alert_num + "' href='#' onclick='renderDefectPic(this.id)'>" + alertList[i].Content.split(",")[0] + " בפרויקט: " + alertList[i].Proj_name + "</a ></div > ";
 
                 }
                 if (alertList[i].Alert_type_num == 4) {
@@ -187,6 +188,91 @@
 
         }
 
+        function renderDefectPic(alertNum) {
+            $('#mask').addClass('showing');
+            $('html').addClass('hide-scroll');
+            var id = '#dialog';
+            var fullImagePath = "";
+            for (var i = 0; i < alertList.length; i++) {
+                if (alertList[i].Alert_num == alertNum) {
+                    $('#alert_title').html(alertList[i].Content.split(",")[0]);
+                    fullImagePath = alertList[i].Content.split(",")[1];
+                    break;
+                }
+            }
+
+            $('.image').attr({
+                'src': fullImagePath
+            });
+
+            //if close button is clicked
+            $('.window .close').click(function (e) {
+                ////Cancel the link behavior
+                e.preventDefault();
+                $('#mask').removeClass('showing');
+                $('html').removeClass('hide-scroll');
+            });
+        }
+
+        function updateDefectStatus(alertNum) {
+            $('#mask').removeClass('showing');
+            $('html').removeClass('hide-scroll');
+            for (var i = 0; i < alertList.length; i++) {
+                if (alertList[i].Alert_num == alertNum)
+                    projNum = alertList[i].Proj_num;
+            }
+            defectToEdit.Fix_status = 1;
+            console.log(defectToEdit);
+            let api = "../api/defect_in_report";
+            ajaxCall("PUT", api, JSON.stringify(defectToEdit), postAlertOnImg, updateDefectsInReportError);
+        }
+        function updateDefectImgSuccess() {
+            location.reload();
+            //-יצירת התראה-להשלים
+        }
+        function postAlertOnImg() {
+
+            for (var i = 0; i < Users.length; i++) {
+                var now = new Date().toISOString();
+                newAlertOnAprroveIMG = {
+                    Content: "תמונת תיקון ליקוי פיגום אושרה," + defectToEdit.Picture_link,
+                    Date: now,
+                    Alert_type_num: 3,
+                    User_email: Users[i].Email,
+                    Status: 0,
+                    Proj_num: project.Project_num
+
+                }
+                let api = "../api/alert";
+                ajaxCall("POST", api, JSON.stringify(newAlertOnAprroveIMG), PostAlertSuccess, PostAlertError)
+
+            }
+
+
+        }
+        function PostAlertSuccess() {
+            location.reload();
+        }
+        function PostAlertError(err) {
+            console.log(err)
+        }
+        function defectNotApprove() {
+            var now = new Date().toISOString();
+            for (var i = 0; i < Users.length; i++) {
+                newAlertOnAprroveIMG = {
+                    Content: "תמונת תיקון ליקוי פיגום לא אושרה," + defectToEdit.Picture_link,
+                    Date: now,
+                    Alert_type_num: 3,
+                    User_email: Users[i].Email,
+                    Status: 0,
+                    Proj_num: project.Project_num
+
+                }
+                let api = "../api/alert";
+                ajaxCall("POST", api, JSON.stringify(newAlertOnAprroveIMG), PostAlertSuccess, PostAlertError)
+            }
+
+        }
 
         function RenderAlertDivByType() {
 
@@ -333,7 +419,7 @@
 <body>
     <div id="logo">
         <img class="logo" src="photos/logo.jpeg" height="50" />
-        <button onclick="logout()" id="logout" >התנתקות</button>
+        <button onclick="logout()" id="logout">התנתקות</button>
     </div>
     <div class="body-wrap">
         <nav class="navbar navbar-inverse">
@@ -393,8 +479,8 @@
             </thead>
         </table>
     </form>
-   
-   
+
+
     <div id="ph">
 
     </div>
@@ -404,6 +490,20 @@
                 <div class="w3-container">
                     <span onclick="document.getElementById('id04').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                     <div id="alert_paragraph"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="mask">
+        <div id="boxes">
+            <div class="inner">
+                <div id="dialog" class="window">
+                    <a href="#" class="close">x</a>
+                    <div id="showImg">
+                        <div id="popupfoot"> <img src="#" class="image" alt="Loading..." /> </div>
+                        <button class="btn btn-danger fixBTNs" onclick="defectNotApprove()">ליקוי לא תוקן</button>
+                        <button class="btn btn-success fixBTNs" onclick="updateDefectStatus()">אשר תקינות ליקוי</button>
+                    </div>
                 </div>
             </div>
         </div>
