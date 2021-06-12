@@ -160,7 +160,9 @@
                     document.getElementById('Alerts_div').innerHTML += "<div  class='alert alert-certificate alert-dismissible'> <a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='far fa-calendar-alt' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " בפרויקט: " + alertList[i].Proj_name+ "</div> ";
                 }
                 if (alertList[i].Alert_type_num == 3) {
-                    document.getElementById('Alerts_div').innerHTML += "<div  class='alert alert-Defective-repair alert-dismissible'> <a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='fas fa-tachometer-alt' style='font-size:24px'></i>&nbsp&nbsp<a id='" + alertList[i].Alert_num + "' href='#' onclick='renderDefectPic(this.id)'>" + alertList[i].Content.split(",")[0] + " בפרויקט: " + alertList[i].Proj_name + "</a ></div > ";
+                    if (user.User_type_num != 1 && alertList[i].Content.split(",")[0] == "תמונת תיקון ליקוי לא אושרה")
+                        document.getElementById('Alerts_div').innerHTML += "<div  class='alert alert-Defective-repair-decline alert-dismissible'> <a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='fas fa-tachometer-alt' style='font-size:24px'></i>&nbsp&nbsp<a id='" + alertList[i].Alert_num + "' href='#' onclick='renderDefectPic(this.id)'>" + alertList[i].Content.split(",")[0] + " בפרויקט: " + alertList[i].Proj_name + " </a ></div > ";
+                    else document.getElementById('Alerts_div').innerHTML += "<div  class='alert alert-Defective-repair alert-dismissible'> <a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='fas fa-tachometer-alt' style='font-size:24px'></i>&nbsp&nbsp<a id='" + alertList[i].Alert_num + "' href='#' onclick='renderDefectPic(this.id)'>" + alertList[i].Content.split(",")[0] + " בפרויקט: " + alertList[i].Proj_name + " </a ></div > ";
                 }
                 if (alertList[i].Alert_type_num == 4) {
                     document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-instruction alert-dismissible'><a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='fas fa-chalkboard-teacher' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " בפרויקט: " + alertList[i].Proj_name + "</div> ";
@@ -208,10 +210,9 @@
 
             if (user.User_type_num == 1) {
                 $('#approvePicBTNs').show();
+                getProject();
             }
             else $('#approvePicBTNs').hide();
-
-            getProject();
 
             //if close button is clicked
             $('.window .close').click(function (e) {
