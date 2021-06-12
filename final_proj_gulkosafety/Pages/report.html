@@ -754,11 +754,11 @@
 
         }
         function topdf(num){
-            $("#sendPdf").hide()
-            $("#downPdf").hide()
-            $("#logout").hide()
-            $(".body-wrap").hide()
-            $(".logo").show()
+           // $("#sendPdf").hide()
+           // $("#downPdf").hide()
+           // $("#logout").hide()
+           // $(".body-wrap").hide()
+           // $(".logo").show()
             var element = document.getElementById('allPage');
             name = 'report-' + report.Report_num + '.pdf';
             var opt = {
@@ -770,17 +770,19 @@
            
             };
             if (num == 1) {
-                html2pdf(element, opt);
+                html2pdf(element,opt);
+                //showAfterPDF()
             }
             else {
                 html2pdf().set(opt).from(element).outputPdf('datauri').then(uri => {
                     sendEmail(uri, name)
+                  //  showAfterPDF()
                 })
             }
            
         
             console.log(worker)
-           showAfterPDF()
+           
         }
 
         function showAfterPDF(){
@@ -848,7 +850,7 @@
 
 </head>
 <body>
-    <div id="allPage">
+    
         <div id="logo">
             <img class="logo" src="photos/logo.jpeg" height="50" />
             <button onclick="logout()" id="logout">התנתקות</button>
@@ -897,249 +899,249 @@
 
             </div>
         </div>
+        <div id="allPage">
+            <!--פרטי דוח-->
+            <div id="reportDetails" class="mainCards">
+                <form id="reportDetailsForm" onsubmit="return false">
+                    <div class="row">
+                        <div class="form-group col-sm-4">
+                            <label for="company">שם חברה</label>
+                            <input type="text" class="form-control" id="company" disabled>
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label for="tDate"><span class="red-star">★</span>תאריך ביקור</label>
+                            <br />
+                            <input type="date" id="Date" class="form-control groupDetails" required>
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label for="projManeger">מנהל פרויקט</label>
+                            <input type="text" class="form-control" id="projManeger" disabled>
+                        </div>
+                    </div>
 
-        <!--פרטי דוח-->
-        <div id="reportDetails" class="mainCards">
-            <form id="reportDetailsForm" onsubmit="return false">
-                <div class="row">
-                    <div class="form-group col-sm-4">
-                        <label for="company">שם חברה</label>
-                        <input type="text" class="form-control" id="company" disabled>
+                    <div class="row">
+                        <div class="form-group col-sm-4">
+                            <label for="location">מיקום</label>
+                            <input type="text" class="form-control" id="location" disabled>
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label for="time"><span class="red-star">★</span>שעה</label>
+                            <br />
+                            <input type="time" id="time" class="form-control groupDetails" required>
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label for="forman">מנהל עבודה</label>
+                            <input type="text" class="form-control" id="forman" disabled>
+                        </div>
                     </div>
-                    <div class="form-group col-sm-4">
-                        <label for="tDate"><span class="red-star">★</span>תאריך ביקור</label>
-                        <br />
-                        <input type="date" id="Date" class="form-control groupDetails" required>
+                    <div class="row">
+                        <div class="form-group col-sm-8">
+                            <label for="comments">הערות</label>
+                            <textarea rows="2" class="form-control groupDetails" id="comments" placeholder="הזן הערות לדוח"></textarea>
+                        </div>
+                        <div class="form-group col-sm-4 editReportDetailsBtns">
+                            <p class="editBtns">
+                                <button type="button" id="editReportBTN" class="btn btn-default btn-sm">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </button>
+                                <button type="button" id="updateReportBTN" class="btn btn-default btn-sm cancelUpdateReportBtns" onclick="saveNewReport()">
+                                    <span class="glyphicon glyphicon-floppy-disk"></span>
+                                </button>
+                                <button type="button" id="cancelEditBTN" class="btn btn-default btn-sm cancelUpdateReportBtns">
+                                    בטל עריכה
+                                </button>
+                            </p>
+                        </div>
                     </div>
-                    <div class="form-group col-sm-4">
-                        <label for="projManeger">מנהל פרויקט</label>
-                        <input type="text" class="form-control" id="projManeger" disabled>
+                    <div id="saveNewReport" class="row">
+                        <button type="submit" id="saveReport" class="btn btn-primary">שמור</button>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="form-group col-sm-4">
-                        <label for="location">מיקום</label>
-                        <input type="text" class="form-control" id="location" disabled>
-                    </div>
-                    <div class="form-group col-sm-4">
-                        <label for="time"><span class="red-star">★</span>שעה</label>
-                        <br />
-                        <input type="time" id="time" class="form-control groupDetails" required>
-                    </div>
-                    <div class="form-group col-sm-4">
-                        <label for="forman">מנהל עבודה</label>
-                        <input type="text" class="form-control" id="forman" disabled>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-sm-8">
-                        <label for="comments">הערות</label>
-                        <textarea rows="2" class="form-control groupDetails" id="comments" placeholder="הזן הערות לדוח"></textarea>
-                    </div>
-                    <div class="form-group col-sm-4 editReportDetailsBtns">
-                        <p class="editBtns">
-                            <button type="button" id="editReportBTN" class="btn btn-default btn-sm">
-                                <span class="glyphicon glyphicon-pencil"></span>
-                            </button>
-                            <button type="button" id="updateReportBTN" class="btn btn-default btn-sm cancelUpdateReportBtns" onclick="saveNewReport()">
-                                <span class="glyphicon glyphicon-floppy-disk"></span>
-                            </button>
-                            <button type="button" id="cancelEditBTN" class="btn btn-default btn-sm cancelUpdateReportBtns">
-                                בטל עריכה
-                            </button>
-                        </p>
-                    </div>
-                </div>
-                <div id="saveNewReport" class="row">
-                    <button type="submit" id="saveReport" class="btn btn-primary">שמור</button>
-                </div>
-
-            </form>
-        </div>
-        <div id="mask">
-            <div id="boxes">
-                <div class="inner">
-                    <div id="dialog" class="window">
-                        <a href="#" class="close">x</a>
-                        <form method="post" enctype="multipart/form-data" id="formUpload">
-                            <div id="uploadImg" class="row" dir="rtl">
-                                <div class="col-12">
-                                    <h3>העלה תמונה לליקוי:</h3>
+                </form>
+            </div>
+            <div id="mask">
+                <div id="boxes">
+                    <div class="inner">
+                        <div id="dialog" class="window">
+                            <a href="#" class="close">x</a>
+                            <form method="post" enctype="multipart/form-data" id="formUpload">
+                                <div id="uploadImg" class="row" dir="rtl">
+                                    <div class="col-12">
+                                        <h3>העלה תמונה לליקוי:</h3>
+                                    </div>
+                                    <br />
+                                    <div class="col-12">
+                                        <input type="file" id="img" />
+                                    </div>
+                                    <div class="col-12">
+                                        <button id="savePicToDefBTN" class="btn btn-primary">שמור</button>
+                                    </div>
                                 </div>
-                                <br />
-                                <div class="col-12">
-                                    <input type="file" id="img" />
-                                </div>
-                                <div class="col-12">
-                                    <button id="savePicToDefBTN" class="btn btn-primary">שמור</button>
-                                </div>
-                            </div>
-                        </form>
+                            </form>
                             <div id="showImg">
                                 <div id="popupfoot"> <img src="#" class="image" alt="Loading..." /> </div>
                                 <button class="btn btn-danger fixBTNs" onclick="defectNotApprove()">ליקוי לא תוקן</button>
                                 <button class="btn btn-success fixBTNs" onclick="updateDefectStatus()">אשר תקינות ליקוי</button>
                             </div>
 
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!--last report defect table-->
-        <div id="lastReportdefectsTBL" class="mainCards">
-            <div class="row">
-                <div id="allDefectsFixed" class="col-sm-6">
+            <!--last report defect table-->
+            <div id="lastReportdefectsTBL" class="mainCards">
+                <div class="row">
+                    <div id="allDefectsFixed" class="col-sm-6">
+                    </div>
+                    <div class="col-sm-6">
+                        <h3>ליקויים שלא תוקנו מהביקור הקודם:</h3>
+                    </div>
                 </div>
-                <div class="col-sm-6">
-                    <h3>ליקויים שלא תוקנו מהביקור הקודם:</h3>
-                </div>
-            </div>
-            <br />
-            <br />
-            <div id="table1">
-                <table id="lastReportTable" class="display" style="width:100%" dir="rtl">
-                    <thead>
-                        <tr>
+                <br />
+                <br />
+                <div id="table1">
+                    <table id="lastReportTable" class="display" style="width:100%" dir="rtl">
+                        <thead>
+                            <tr>
 
-                            <th>מספר</th>
-                            <th>סוג</th>
-                            <th>שם</th>
-                            <th>תיאור</th>
-                            <th>תאריך תיקון</th>
-                            <th>שעת תיקון</th>
-                            <th>סטטוס</th>
-                            <th>תמונה</th>
+                                <th>מספר</th>
+                                <th>סוג</th>
+                                <th>שם</th>
+                                <th>תיאור</th>
+                                <th>תאריך תיקון</th>
+                                <th>שעת תיקון</th>
+                                <th>סטטוס</th>
+                                <th>תמונה</th>
 
-                            <th></th>
-                        </tr>
-                    </thead>
+                                <th></th>
+                            </tr>
+                        </thead>
 
-                </table>
-            </div>
-        </div>
-        <!--טבלת ליקויים-->
-        <div id="defectsTBL" class="mainCards">
-            <div class="row">
-                <div class="col-sm-6">
-                    <button id="addDefectToRBtn" class="btn btn-primary" onclick="document.getElementById('id01').style.display='block',newDefect()">הוסף ליקוי לדוח </button>
-                </div>
-                <div class="col-sm-6">
-                    <h3>ליקויים שנמצאו באתר ובסביבתו:</h3>
+                    </table>
                 </div>
             </div>
-            <br />
-            <br />
-            <div id="table">
-                <table id="defectTable" class="display" style="width:100%" dir="rtl">
-                    <thead>
-                        <tr>
-
-                            <th>מספר</th>
-                            <th>סוג</th>
-                            <th>שם</th>
-                            <th>תיאור</th>
-                            <th>תאריך תיקון</th>
-                            <th>שעת תיקון</th>
-                            <th>סטטוס</th>
-                            <th>תמונה</th>
-
-                            <th></th>
-                        </tr>
-                    </thead>
-
-                </table>
-
-            </div>
-        </div>
-        <div id="calcAndSend" class="mainCards">
-            <div class="row">
-                <div class="col-sm-6">
-                    <button id="calcGrade" class="btn btn-primary" onclick="calcGrade()">חשב ציון דוח</button>
+            <!--טבלת ליקויים-->
+            <div id="defectsTBL" class="mainCards">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <button id="addDefectToRBtn" class="btn btn-primary" onclick="document.getElementById('id01').style.display='block',newDefect()">הוסף ליקוי לדוח </button>
+                    </div>
+                    <div class="col-sm-6">
+                        <h3>ליקויים שנמצאו באתר ובסביבתו:</h3>
+                    </div>
                 </div>
-                <div class="col-sm-6">
-                    <h3>ציון דוח:</h3>
-                    <p id="ReportGradeP"></p>
+                <br />
+                <br />
+                <div id="table">
+                    <table id="defectTable" class="display" style="width:100%" dir="rtl">
+                        <thead>
+                            <tr>
+
+                                <th>מספר</th>
+                                <th>סוג</th>
+                                <th>שם</th>
+                                <th>תיאור</th>
+                                <th>תאריך תיקון</th>
+                                <th>שעת תיקון</th>
+                                <th>סטטוס</th>
+                                <th>תמונה</th>
+
+                                <th></th>
+                            </tr>
+                        </thead>
+
+                    </table>
+
                 </div>
             </div>
-        </div>
-        <!--כל החלק מתחת הוא החלון שנפתח ברגע שלוחצים על הוסף ליקוי חדש לדוח-->
-        <div class="w3-container">
-            <div id="id01" class="w3-modal">
-                <div class="w3-modal-content">
-                    <div class="w3-container">
-                        <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-                        <br />
-                        <br />
-                        <form id="defectForm" onsubmit="return false">
-                            <div class="row">
-                                <div class="form-group col-sm-4">
-                                    <label for="defect_type"><span class="red-star">★</span>בחר סוג ליקוי</label>
-                                    <select id="selectType" class="form-control" onchange="createDefectList(this.value)" required></select>
+            <div id="calcAndSend" class="mainCards">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <button id="calcGrade" class="btn btn-primary" onclick="calcGrade()">חשב ציון דוח</button>
+                    </div>
+                    <div class="col-sm-6">
+                        <h3>ציון דוח:</h3>
+                        <p id="ReportGradeP"></p>
+                    </div>
+                </div>
+            </div>
+            <!--כל החלק מתחת הוא החלון שנפתח ברגע שלוחצים על הוסף ליקוי חדש לדוח-->
+            <div class="w3-container">
+                <div id="id01" class="w3-modal">
+                    <div class="w3-modal-content">
+                        <div class="w3-container">
+                            <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                            <br />
+                            <br />
+                            <form id="defectForm" onsubmit="return false">
+                                <div class="row">
+                                    <div class="form-group col-sm-4">
+                                        <label for="defect_type"><span class="red-star">★</span>בחר סוג ליקוי</label>
+                                        <select id="selectType" class="form-control" onchange="createDefectList(this.value)" required></select>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-sm-10">
-                                    <label for="defect_type"><span class="red-star">★</span>בחר ליקוי</label>
-                                    <select id="selectdefect" class="form-control" style="max-width:-webkit-fill-available;" required></select>
+                                <div class="row">
+                                    <div class="form-group col-sm-10">
+                                        <label for="defect_type"><span class="red-star">★</span>בחר ליקוי</label>
+                                        <select id="selectdefect" class="form-control" style="max-width:-webkit-fill-available;" required></select>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-sm-4">
-                                    <label for="fixDate"><span class="red-star">★</span>תאריך תיקון</label>
-                                    <br />
-                                    <input type="date" id="fixDate" class="form-control" required>
-                                </div>
-                                <div class="form-group col-sm-4">
-                                    <label for="fixTime"><span class="red-star">★</span>עד שעה</label>
-                                    <br />
-                                    <input type="time" id="fixTime" class="form-control" required>
-                                </div>
+                                <div class="row">
+                                    <div class="form-group col-sm-4">
+                                        <label for="fixDate"><span class="red-star">★</span>תאריך תיקון</label>
+                                        <br />
+                                        <input type="date" id="fixDate" class="form-control" required>
+                                    </div>
+                                    <div class="form-group col-sm-4">
+                                        <label for="fixTime"><span class="red-star">★</span>עד שעה</label>
+                                        <br />
+                                        <input type="time" id="fixTime" class="form-control" required>
+                                    </div>
 
-                                <div class="form-group col-sm-4">
-                                    <label for="status">סטאטוס</label>
-                                    <select class="form-control" id="fixStatus">
-                                        <option value="">בחר סטאטוס</option>
-                                        <option value="1"> תוקן </option>
-                                        <option value="0"> לא תוקן </option>
-                                    </select>
+                                    <div class="form-group col-sm-4">
+                                        <label for="status">סטאטוס</label>
+                                        <select class="form-control" id="fixStatus">
+                                            <option value="">בחר סטאטוס</option>
+                                            <option value="1"> תוקן </option>
+                                            <option value="0"> לא תוקן </option>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-sm-10">
-                                    <label for="description">תיאור</label>
-                                    <input type="text" class="form-control" id="description" placeholder="הזן תיאור ">
+                                <div class="row">
+                                    <div class="form-group col-sm-10">
+                                        <label for="description">תיאור</label>
+                                        <input type="text" class="form-control" id="description" placeholder="הזן תיאור ">
+                                    </div>
                                 </div>
-                            </div>
+                                <div class="row">
+                                    <p>
+                                        <button type="submit" id="btn_add_defect" class="btn btn-primary">הוסף ליקוי</button>
+
+                                    </p>
+                                </div>
+                            </form>
                             <div class="row">
                                 <p>
-                                    <button type="submit" id="btn_add_defect" class="btn btn-primary">הוסף ליקוי</button>
 
+                                    <button id="btn_update_defect" class="btn btn-primary" onclick="upDateDefect()"> עדכן ליקוי</button>
                                 </p>
                             </div>
-                        </form>
-                        <div class="row">
-                            <p>
-
-                                <button id="btn_update_defect" class="btn btn-primary" onclick="upDateDefect()"> עדכן ליקוי</button>
-                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="w3-container">
+                <div id="id02" class="w3-modal">
+                    <div class="w3-modal-content">
+                        <div class="w3-container">
+                            <span onclick="document.getElementById('id02').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                            <div id="safetyAlert"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="w3-container">
-            <div id="id02" class="w3-modal">
-                <div class="w3-modal-content">
-                    <div class="w3-container">
-                        <span onclick="document.getElementById('id02').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-                        <div id="safetyAlert"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!--<button onclick="changeUser()">הפוך מסך </button>-->
+        <!--<button onclick="changeUser()">הפוך מסך </button>-->
 </body>
     </html>

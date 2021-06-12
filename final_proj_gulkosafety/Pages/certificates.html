@@ -243,7 +243,7 @@
 
                                 showBtn = "<button type='button' class = 'showBtn btn btn-show' value='" + def + "' onclick='showContact(this.value)'>  הצג איש קשר </button>";
 
-                                pdfBtn = "<button type='button' class = 'pdfBtn btn btn-pdf' value='" + def + "' onclick='(this.value)'> הורדת אישור </button>";
+                                pdfBtn = "<button type='button' class = 'pdfBtn btn btn-pdf' value='" + def + "' onclick='certificate2PDF(this.value)'> הורדת אישור </button>";
 
                                 return editBtn + deleteBtn + showBtn + pdfBtn ;
 
@@ -259,6 +259,13 @@
             catch (err) {
                 alert(err);
             }
+        }
+
+        //יצירת אישור בPDF
+        function certificate2PDF(info) {
+            
+            window.open("cetrificatePdfPage.html", '_blank')
+            localStorage["certipicateInfo"] = info  
         }
         // כפתור הצג איש קשר
         function showContact(def) {
