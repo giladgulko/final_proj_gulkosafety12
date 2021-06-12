@@ -24,6 +24,20 @@ namespace final_proj_gulkosafety.Controllers
             }
         }
 
+        public List<instruction> Get(DateTime date)
+        {
+            try
+            {
+                instruction i = new instruction();
+                List<instruction> iList = i.ReadExpiredInstruction(date);
+                return iList;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
+
         //POST api/<controller>
         public HttpResponseMessage Post([FromBody] instruction i)
         {

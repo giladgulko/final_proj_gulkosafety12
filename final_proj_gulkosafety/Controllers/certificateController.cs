@@ -25,6 +25,20 @@ namespace final_proj_gulkosafety.Controllers
             }
         }
 
+        public List<certificate> Get(DateTime date)
+        {
+            try
+            {
+                certificate c = new certificate();
+                List<certificate> cList = c.ReadExpiredCertificates(date);
+                return cList;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
+
         public HttpResponseMessage Post([FromBody] certificate c)
         {
             try

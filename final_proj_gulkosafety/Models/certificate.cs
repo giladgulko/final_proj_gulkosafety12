@@ -66,6 +66,11 @@ namespace final_proj_gulkosafety.Models
             DBServices dbs = new DBServices();
             return dbs.ReadCertificate();
         }
+        public List<certificate> ReadExpiredCertificates(DateTime date)
+        {
+            DBServices dbs = new DBServices();
+            return dbs.ReadExpiredCertificates(date);
+        }
         public void Insert()
         {
             DBServices dbs = new DBServices();

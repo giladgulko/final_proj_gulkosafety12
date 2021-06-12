@@ -62,6 +62,11 @@ namespace final_proj_gulkosafety.Models
             DBServices dbs = new DBServices();
             return dbs.ReadInstruction();
         }
+        public List<instruction> ReadExpiredInstruction(DateTime date)
+        {
+            DBServices dbs = new DBServices();
+            return dbs.ReadExpiredInstruction(date);
+        }
         public void DeleteInstruction(int instruction_num , int delete_status)
         {
             DBServices dbs = new DBServices();

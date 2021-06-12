@@ -32,9 +32,59 @@
             alertList = [];
             reportList = [];
             getAlerts();
-          
-  
+            checkAboutToExpired();
+
         });
+
+        function checkAboutToExpired() {
+            var today = new Date();
+            var dd_today = String(today.getDate()).padStart(2, '0');
+            var mm_today = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy_today = today.getFullYear();
+
+            today = yyyy_today + '-' + mm_today + '-' + dd_today;
+
+            getExpiredInstructions(today);
+            getExpiredCertificates(today);
+        }
+
+        function getExpiredInstructions(today) {
+            let api = "../api/instruction?date=" + today;
+            ajaxCall("GET", api, "", getExpiredInstructionsSuccess, getExpiredInstructionsError);
+        }
+
+        function getExpiredInstructionsSuccess(expiredInstructions) {
+            if (expiredInstructions.length > 0) {
+                let str = "";
+                for (i = 0; i < expiredInstructions.length; i++) {
+                    str += "<p>" + expiredInstructions[i].Type_name+", " + expiredInstructions[i].Company + "</p>"; 
+                }
+                $("#instructions_expire_alerts").html(str);
+            }   
+        }
+
+        function getExpiredInstructionsError(err) {
+            alert("משיכת הדרכות פגות תוקף נכשלה");
+        }
+
+        function getExpiredCertificates(today) {
+            let api = "../api/certificate?date=" + today;
+            ajaxCall("GET", api, "", getExpiredCertificatesSuccess, getExpiredCertificatesError);
+        }
+
+        function getExpiredCertificatesSuccess(expiredCertificates) {
+            if (expiredCertificates.length > 0) {
+                let str = "";
+                for (i = 0; i < expiredCertificates.length; i++) {
+                    str += "<p>" + expiredCertificates[i].Type_name + ", "  + expiredCertificates[i].Company + "</p>";
+                }
+                $("#certificates_expire_alerts").html(str);
+            }
+        }
+
+        function getExpiredCertificatesError(err) {
+            alert("משיכת אישורים פגי תוקף נכשלה");
+        }
 
         function getReports() {
 
@@ -146,18 +196,6 @@
             <div class="card-body section2">
 
                 <div class="row">
-                    <h3>תזכורות אישיות:</h3>
-                </div>
-                <div id="personal_alerts"><!--//אבדוק אם יש אופציה למשוך מלוח שנה עצמו-->
-                    <p>פגישה עם רואה חשבון</p>
-                    <p>קביעת רענון אצל משרד הבטיחות והגאות</p>
-                    <p>הכנת מצגת חדשה להדרכה בגובה</p>
-                </div>
-
-            </div>
-            <div class="card-body section2">
-
-                <div class="row">
                     <h3>תמונות ליקויים שתוקנו:</h3>
                 </div>
                 <div id="fixed_defects_photos_alerts">
@@ -167,19 +205,29 @@
                 </div>
 
             </div>
+
             <div class="card-body section2">
 
                 <div class="row">
-                    <h3>אישורים פגי תוקף :</h3>
+                    <h3>הדרכות העומדות לפוג בחודש הקרוב:</h3>
                 </div>
-                <div id="certificates_expire_alerts">
-                    <p> אישור עבודה בגובה - בפרויקט בחברת קאופמן </p>
-                    <p>אישור כיבוי אש -במפעל פרי גליל</p>
-                    <p>אישור בטיחות -גן אורלי </p>
+                <div id="instructions_expire_alerts">
+
                 </div>
 
             </div>
-        
+
+            <div class="card-body section2">
+
+                <div class="row">
+                    <h3>אישורים העומדים לפוג בחודש הקרוב:</h3>
+                </div>
+                <div id="certificates_expire_alerts">
+
+                </div>
+
+            </div>
+
             <div class="card-body section2">
 
                 <div class="row">
@@ -197,7 +245,7 @@
                         </div>
                     </div>
                 </div>
-        </div>
+            </div>
 
         </div>
    </div>

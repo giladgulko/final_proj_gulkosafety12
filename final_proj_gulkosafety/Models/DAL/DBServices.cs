@@ -1860,6 +1860,68 @@ namespace final_proj_gulkosafety.Models.DAL
             }
 
         }
+
+        //returns all expired certificates
+        public List<certificate> ReadExpiredCertificates(DateTime date)
+        {
+            SqlConnection con = null;
+            List<certificate> certificateList = new List<certificate>();
+
+            try
+            {
+                con = connect("DBConnectionString");
+                String selectSTR = "";
+
+                selectSTR = "SELECT * FROM certificate c inner join certificate_type ct on c.certificate_type_num = ct.certificate_type_num WHERE Year(DATEADD(year, expiration, date)) = Year(CURRENT_TIMESTAMP) AND Month(DATEADD(year, expiration, date)) = Month(CURRENT_TIMESTAMP)";
+
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {
+                    certificate c = new certificate();
+
+                    c.Certificate_num = Convert.ToInt32(dr["certificate_num"]);
+                    c.Company = (string)dr["company"];
+                    c.Date = Convert.ToDateTime(dr["date"]);
+                    c.Address = (string)dr["address"];
+                    c.Description = (string)dr["description"];
+                    c.Certificate_status = Convert.ToInt32(dr["certificate_status"]);
+                    c.Pay_status = Convert.ToInt32(dr["pay_status"]);
+                    c.Invoice_num = (string)dr["invoice_num"];
+                    c.Certificate_type_num = Convert.ToInt32(dr["certificate_type_num"]);
+                    c.User_email = (string)dr["user_email"];
+                    c.Contact_id = (string)dr["contact_id"];
+                    c.Type_name = (string)dr["type_name"];
+                    c.Price = Convert.ToDouble(dr["price"]);
+                    c.Expiration = Convert.ToInt32(dr["expiration"]);
+                    c.Delete_status = Convert.ToInt32(dr["delete_status"]);
+
+                    certificateList.Add(c);
+
+
+                }
+
+                return certificateList;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
+        
         //return all certificate_types
         public List<certificate_type> ReadCertificate_type()
         {
@@ -2131,6 +2193,68 @@ namespace final_proj_gulkosafety.Models.DAL
             }
 
         }
+
+        //read about to expire instructions
+        public List<instruction> ReadExpiredInstruction(DateTime date)
+        {
+            SqlConnection con = null;
+            List<instruction> instructionList = new List<instruction>();
+
+            try
+            {
+                con = connect("DBConnectionString");
+                String selectSTR = "";
+
+                selectSTR = "SELECT i.*, it.type_name, it.expiration FROM instruction i inner join instruction_type it on i.Instruction_type_num = it.instruction_type_num WHERE Year(DATEADD(year, expiration, date)) = Year(CURRENT_TIMESTAMP) AND Month(DATEADD(year, expiration, date)) = Month(CURRENT_TIMESTAMP) ";
+
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {
+                    instruction i = new instruction();
+
+                    i.Instruction_num = Convert.ToInt32(dr["instruction_num"]);
+                    i.Company = (string)dr["company"];
+                    i.Date = Convert.ToDateTime(dr["date"]);
+                    i.Time = Convert.ToDateTime(dr["time"]);
+                    i.Address = (string)dr["address"];
+                    i.Participants_num = Convert.ToInt32(dr["participants_num"]);
+                    i.Pay_status = Convert.ToInt32(dr["pay_status"]);
+                    i.Total_price = Convert.ToInt32(dr["total_price"]);
+                    i.Invoice_num = Convert.ToInt32(dr["invoice_num"]);
+                    i.Instructor_email = (string)dr["instructor_email"];
+                    i.Instruction_type_num = Convert.ToInt32(dr["instruction_type_num"]);
+                    i.Type_name = (string)dr["type_name"];
+                    i.Expiration = Convert.ToInt32(dr["expiration"]);
+                    i.Delete_status = Convert.ToInt32(dr["delete_status"]);
+
+
+                    instructionList.Add(i);
+
+
+                }
+
+                return instructionList;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
+
         // change delete status of certificate
         public int DeleteCertificate(int certificate_num, int delete_status)
         {
