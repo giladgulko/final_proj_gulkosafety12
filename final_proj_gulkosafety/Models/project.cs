@@ -64,6 +64,14 @@ namespace final_proj_gulkosafety.Models
             DBServices dbs = new DBServices();
             return dbs.ReadProjects();
         }
+
+        public project ReadProject(int project_num)
+        {
+            DBServices dbs = new DBServices();
+            project p = dbs.ReadProject(project_num);
+            return p;
+        }
+
         public List<project> Read(string userEmail)
         {
             DBServices dbs = new DBServices();

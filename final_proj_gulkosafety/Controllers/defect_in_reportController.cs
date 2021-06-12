@@ -107,5 +107,25 @@ namespace final_proj_gulkosafety.Controllers
             }
         }
 
+        public HttpResponseMessage PutDefectStatus(string picture_link, int fix_status)
+        {
+
+            try
+            {
+                {
+                    defect_in_report df = new defect_in_report();
+                    df.UpdateDefectInReportStatus(picture_link, fix_status);
+
+                }
+
+                return Request.CreateResponse(HttpStatusCode.Created, fix_status);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
+            }
+        }
+
+
     }
 }

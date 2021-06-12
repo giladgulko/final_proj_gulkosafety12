@@ -160,7 +160,8 @@
                     document.getElementById('Alerts_div').innerHTML += "<div  class='alert alert-certificate alert-dismissible'> <a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='far fa-calendar-alt' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " בפרויקט: " + alertList[i].Proj_name+ "</div> ";
                 }
                 if (alertList[i].Alert_type_num == 3) {
-                    document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-Defective-repair alert-dismissible'> <a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='far fa-check-circle' style='font-size:24px'></i >&nbsp&nbsp" + alertList[i].Content + " בפרויקט: " + alertList[i].Proj_name + "</div> ";
+                    //document.getElementById('Alerts_div').innerHTML += "<div class='alert alert-Defective-repair alert-dismissible'> <a id='" + alertList[i].Alert_num + "' href='#' onclick='ChangeStatus(this.id)' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='far fa-check-circle' style='font-size:24px'></i >&nbsp&nbsp" + alertList[i].Content + " בפרויקט: " + alertList[i].Proj_name + "</div> ";
+                    document.getElementById('Alerts_div').innerHTML += "<div  class='alert alert-Defective-repair alert-dismissible'> <a id='" + alertList[i].Alert_num + "' href='#' </p><strong class='date'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='fas fa-tachometer-alt' style='font-size:24px'></i>&nbsp&nbsp<a id='" + alertList[i].Alert_num + "' href='#' onclick='renderDefectPic(this.id)'>" + alertList[i].Content.split(",")[0] + " בפרויקט: " + alertList[i].Proj_name + "</a ></div > ";
 
                 }
                 if (alertList[i].Alert_type_num == 4) {
@@ -187,6 +188,125 @@
 
         }
 
+        function renderDefectPic(alertNum) {
+            $('.image').attr({
+                'src': ""
+            });
+            $('#mask').addClass('showing');
+            $('html').addClass('hide-scroll');
+            var id = '#dialog';
+            fullImagePath = "";
+            for (var i = 0; i < alertList.length; i++) {
+                if (alertList[i].Alert_num == alertNum) {
+                    $('#alert_title').html(alertList[i].Content.split(",")[0]);
+                    fullImagePath = alertList[i].Content.split(",")[1];
+                    projectNum = alertList[i].Proj_num;
+                    break;
+                }
+            }
+
+            $('.image').attr({
+                'src': fullImagePath
+            });
+
+            if (user.User_type_num == 1) {
+                $('#approvePicBTNs').show();
+            }
+            else $('#approvePicBTNs').hide();
+
+            getProject();
+
+            //if close button is clicked
+            $('.window .close').click(function (e) {
+                ////Cancel the link behavior
+                e.preventDefault();
+                $('#mask').removeClass('showing');
+                $('html').removeClass('hide-scroll');
+            });
+        }
+
+        function getProject() {
+            let api = "../api/project?project_num=" + projectNum;
+            ajaxCall("GET", api, "", getProjSuccess, getProjError);
+        }
+
+        function getProjSuccess(proj) {
+            project = proj;
+            projContacts = [];
+            projContacts.push(project.Manager_email);
+            projContacts.push(project.Foreman_email);
+        } 
+
+        function getProjError(err) {
+            project = "";
+        }
+
+        function updateDefectStatus() {
+            $('#mask').removeClass('showing');
+            $('html').removeClass('hide-scroll');            
+            var fix_status = 1;
+            let api = "../api/defect_in_report?picture_link=" + fullImagePath + "&fix_status=" + fix_status;
+            ajaxCall("PUT", api, "", postAlertOnImg, updateDefectsInReportError);
+        }
+
+        function updateDefectsInReportError() {
+            alert("ליקוי לא עודכן");
+        }
+
+        function updateDefectImgSuccess() {
+            location.reload();
+            //-יצירת התראה-להשלים
+        }
+        function postAlertOnImg() {
+
+            if (project != null) {
+                for (var i = 0; i < projContacts.length; i++) {
+                    var now = new Date().toISOString();
+                    newAlertOnAprroveIMG = {
+                        Content: "תמונת תיקון ליקוי פיגום אושרה," + fullImagePath,
+                        Date: now,
+                        Alert_type_num: 3,
+                        User_email: projContacts[i],
+                        Status: 0,
+                        Proj_num: project.Project_num
+
+                    }
+                    let api = "../api/alert";
+                    ajaxCall("POST", api, JSON.stringify(newAlertOnAprroveIMG), PostAlertSuccess, PostAlertError)
+
+                }
+            }
+
+            else alert("בעיה בהבאת פרויקט- התראה לא נשלחה");
+        }
+
+        function defectNotApprove() {
+            if (project != "") {
+                var now = new Date().toISOString();
+                for (var i = 0; i < projContacts.length; i++) {
+                    newAlertOnAprroveIMG = {
+                        Content: "תמונת תיקון ליקוי פיגום לא אושרה," + fullImagePath,
+                        Date: now,
+                        Alert_type_num: 3,
+                        User_email: projContacts[i],
+                        Status: 0,
+                        Proj_num: project.Project_num
+
+                    }
+                    let api = "../api/alert";
+                    ajaxCall("POST", api, JSON.stringify(newAlertOnAprroveIMG), PostAlertSuccess, PostAlertError);
+                }
+            }
+
+            else alert("בעיה בהבאת פרויקט- התראה לא נשלחה");
+        }
+
+        function PostAlertSuccess() {
+            alert("נשלחה התראה למנהל העבודה");
+        }
+        function PostAlertError(err) {
+            alert("התראה לא נשלחה למנהל עבודה");
+        }
 
         function RenderAlertDivByType() {
 
@@ -333,7 +453,7 @@
 <body>
     <div id="logo">
         <img class="logo" src="photos/logo.jpeg" height="50" />
-        <button onclick="logout()" id="logout" >התנתקות</button>
+        <button onclick="logout()" id="logout">התנתקות</button>
     </div>
     <div class="body-wrap">
         <nav class="navbar navbar-inverse">
@@ -393,8 +513,8 @@
             </thead>
         </table>
     </form>
-   
-   
+
+
     <div id="ph">
 
     </div>
@@ -404,6 +524,22 @@
                 <div class="w3-container">
                     <span onclick="document.getElementById('id04').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                     <div id="alert_paragraph"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="mask">
+        <div id="boxes">
+            <div class="inner">
+                <div id="dialog" class="window">
+                    <a href="#" class="close">x</a>
+                    <div id="showImg">
+                        <div id="popupfoot"> <img src="#" class="image" alt="Loading..." /> </div>
+                        <div id="approvePicBTNs">
+                            <button class="btn btn-danger fixBTNs" onclick="defectNotApprove()">ליקוי לא תוקן</button>
+                            <button class="btn btn-success fixBTNs" onclick="updateDefectStatus()">אשר תקינות ליקוי</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

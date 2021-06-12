@@ -210,14 +210,14 @@ p {
     background-color: cadetblue;
     border-color: cadetblue;
 }
-input#saveBTN {
+#saveBTN {
     margin-right: 235%;
 }
 
 /*show img input aler*/t
 
 #mask {
-    position: fixed;
+    position: absolute;
     left: 0;
     top: 0;
     bottom: 0;
