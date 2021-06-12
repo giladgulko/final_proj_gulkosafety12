@@ -447,6 +447,61 @@ namespace final_proj_gulkosafety.Models.DAL
             }
 
         }
+
+        //returns one project by his num
+        public project ReadProject(int project_num)
+        {
+            SqlConnection con = null;
+            project project = new project();
+
+            try
+            {
+                con = connect("DBConnectionString");
+                String selectSTR = "";
+
+                selectSTR = "select * from project where project_num=" + project_num;
+
+
+
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {
+                    project.Project_num = Convert.ToInt32(dr["project_num"]);
+                    project.Name = (string)dr["name"];
+                    project.Company = (string)dr["company"];
+                    project.Address = (string)dr["address"];
+                    project.Start_date = Convert.ToDateTime(dr["start_date"]);
+                    project.End_date = Convert.ToDateTime(dr["end_date"]);
+                    project.Status = Convert.ToInt32(dr["status"]);
+                    project.Description = (string)dr["description"];
+                    project.Safety_lvl = Convert.ToDouble(dr["safety_lvl"]);
+                    project.Project_type_num = Convert.ToInt32(dr["project_type_num"]);
+                    project.Manager_email = (string)dr["manager_email"];
+                    project.Foreman_email = (string)dr["foreman_email"];
+                }
+
+                return project;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
+
         //return all users in project
         public List<user> Read_user_in_project(string manager_email, string foreman_email)
         {
@@ -932,6 +987,53 @@ namespace final_proj_gulkosafety.Models.DAL
         {
             String command;
             command = "UPDATE defect_in_report SET picture_link='" + picture_link + "' WHERE defect_num =" + defectInReport.Defect_num + " and report_num=" + defectInReport.Report_num;
+
+            return command;
+        }
+
+        public int UpdateDefectInReportStatus(string picture_link, int fix_status)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            String cStr = BuildupdateStatusCommand(picture_link, fix_status);
+
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+        }
+
+        private string BuildupdateStatusCommand(string picture_link, int fix_status)
+        {
+            String command;
+            command = "UPDATE defect_in_report SET fix_status=" + fix_status + " WHERE picture_link ='" + picture_link +"'";
 
             return command;
         }

@@ -189,14 +189,18 @@
         }
 
         function renderDefectPic(alertNum) {
+            $('.image').attr({
+                'src': ""
+            });
             $('#mask').addClass('showing');
             $('html').addClass('hide-scroll');
             var id = '#dialog';
-            var fullImagePath = "";
+            fullImagePath = "";
             for (var i = 0; i < alertList.length; i++) {
                 if (alertList[i].Alert_num == alertNum) {
                     $('#alert_title').html(alertList[i].Content.split(",")[0]);
                     fullImagePath = alertList[i].Content.split(",")[1];
+                    projectNum = alertList[i].Proj_num;
                     break;
                 }
             }
@@ -204,6 +208,13 @@
             $('.image').attr({
                 'src': fullImagePath
             });
+
+            if (user.User_type_num == 1) {
+                $('#approvePicBTNs').show();
+            }
+            else $('#approvePicBTNs').hide();
+
+            getProject();
 
             //if close button is clicked
             $('.window .close').click(function (e) {
@@ -214,64 +225,87 @@
             });
         }
 
-        function updateDefectStatus(alertNum) {
-            $('#mask').removeClass('showing');
-            $('html').removeClass('hide-scroll');
-            for (var i = 0; i < alertList.length; i++) {
-                if (alertList[i].Alert_num == alertNum)
-                    projNum = alertList[i].Proj_num;
-            }
-            defectToEdit.Fix_status = 1;
-            console.log(defectToEdit);
-            let api = "../api/defect_in_report";
-            ajaxCall("PUT", api, JSON.stringify(defectToEdit), postAlertOnImg, updateDefectsInReportError);
+        function getProject() {
+            let api = "../api/project?project_num=" + projectNum;
+            ajaxCall("GET", api, "", getProjSuccess, getProjError);
         }
+
+        function getProjSuccess(proj) {
+            project = proj;
+            projContacts = [];
+            projContacts.push(project.Manager_email);
+            projContacts.push(project.Foreman_email);
+        } 
+
+        function getProjError(err) {
+            project = "";
+        }
+
+        function updateDefectStatus() {
+            $('#mask').removeClass('showing');
+            $('html').removeClass('hide-scroll');            
+            var fix_status = 1;
+            let api = "../api/defect_in_report?picture_link=" + fullImagePath + "&fix_status=" + fix_status;
+            ajaxCall("PUT", api, "", postAlertOnImg, updateDefectsInReportError);
+        }
+
+        function updateDefectsInReportError() {
+            alert("ליקוי לא עודכן");
+        }
+
         function updateDefectImgSuccess() {
             location.reload();
             //-יצירת התראה-להשלים
         }
         function postAlertOnImg() {
 
-            for (var i = 0; i < Users.length; i++) {
-                var now = new Date().toISOString();
-                newAlertOnAprroveIMG = {
-                    Content: "תמונת תיקון ליקוי פיגום אושרה," + defectToEdit.Picture_link,
-                    Date: now,
-                    Alert_type_num: 3,
-                    User_email: Users[i].Email,
-                    Status: 0,
-                    Proj_num: project.Project_num
+            if (project != null) {
+                for (var i = 0; i < projContacts.length; i++) {
+                    var now = new Date().toISOString();
+                    newAlertOnAprroveIMG = {
+                        Content: "תמונת תיקון ליקוי פיגום אושרה," + fullImagePath,
+                        Date: now,
+                        Alert_type_num: 3,
+                        User_email: projContacts[i],
+                        Status: 0,
+                        Proj_num: project.Project_num
+
+                    }
+                    let api = "../api/alert";
+                    ajaxCall("POST", api, JSON.stringify(newAlertOnAprroveIMG), PostAlertSuccess, PostAlertError)
 
                 }
-                let api = "../api/alert";
-                ajaxCall("POST", api, JSON.stringify(newAlertOnAprroveIMG), PostAlertSuccess, PostAlertError)
-
             }
 
-
+            else alert("בעיה בהבאת פרויקט- התראה לא נשלחה");
         }
+
+        function defectNotApprove() {
+            if (project != "") {
+                var now = new Date().toISOString();
+                for (var i = 0; i < projContacts.length; i++) {
+                    newAlertOnAprroveIMG = {
+                        Content: "תמונת תיקון ליקוי פיגום לא אושרה," + fullImagePath,
+                        Date: now,
+                        Alert_type_num: 3,
+                        User_email: projContacts[i],
+                        Status: 0,
+                        Proj_num: project.Project_num
+
+                    }
+                    let api = "../api/alert";
+                    ajaxCall("POST", api, JSON.stringify(newAlertOnAprroveIMG), PostAlertSuccess, PostAlertError);
+                }
+            }
+
+            else alert("בעיה בהבאת פרויקט- התראה לא נשלחה");
+        }
+
         function PostAlertSuccess() {
-            location.reload();
+            alert("נשלחה התראה למנהל העבודה");
         }
         function PostAlertError(err) {
-            console.log(err)
-        }
-        function defectNotApprove() {
-            var now = new Date().toISOString();
-            for (var i = 0; i < Users.length; i++) {
-                newAlertOnAprroveIMG = {
-                    Content: "תמונת תיקון ליקוי פיגום לא אושרה," + defectToEdit.Picture_link,
-                    Date: now,
-                    Alert_type_num: 3,
-                    User_email: Users[i].Email,
-                    Status: 0,
-                    Proj_num: project.Project_num
-
-                }
-                let api = "../api/alert";
-                ajaxCall("POST", api, JSON.stringify(newAlertOnAprroveIMG), PostAlertSuccess, PostAlertError)
-            }
-
+            alert("התראה לא נשלחה למנהל עבודה");
         }
 
         function RenderAlertDivByType() {
@@ -501,8 +535,10 @@
                     <a href="#" class="close">x</a>
                     <div id="showImg">
                         <div id="popupfoot"> <img src="#" class="image" alt="Loading..." /> </div>
-                        <button class="btn btn-danger fixBTNs" onclick="defectNotApprove()">ליקוי לא תוקן</button>
-                        <button class="btn btn-success fixBTNs" onclick="updateDefectStatus()">אשר תקינות ליקוי</button>
+                        <div id="approvePicBTNs">
+                            <button class="btn btn-danger fixBTNs" onclick="defectNotApprove()">ליקוי לא תוקן</button>
+                            <button class="btn btn-success fixBTNs" onclick="updateDefectStatus()">אשר תקינות ליקוי</button>
+                        </div>
                     </div>
                 </div>
             </div>
