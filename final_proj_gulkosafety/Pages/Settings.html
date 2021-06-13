@@ -29,12 +29,14 @@
     <script>
 
         $(document).ready(function () {
+            defectTypeArr = [];
+            readDefectTypeAtTheBegining();
             // סוגי ליקוי
-            NameOfBtn = ["#defectTypeBtn", "#instructionTypeBtn", "#userTypeBtn", "#certificateTypeBtn", "#itemBtn"];
+            NameOfBtn = ["#defectTypeBtn", "#instructionTypeBtn", "#userTypeBtn", "#certificateTypeBtn", "#itemBtn","#defectBtn"];
             $("#defectTypeTable").hide();
             $("#addDefectTypeBtn").hide();
             $("#defectTypeForm").hide();
-            FirstTimeUploadDefectTypeTable = 0;
+            //FirstTimeUploadDefectTypeTable = 0;
             defectTypeToEdit = [];
             // סוגי הדרכות
             $("#addInstructionTypeBtn").hide();
@@ -56,6 +58,11 @@
             $("#addItemBtn").hide();
             $("#itemTable").hide();
             FirstTimeUploadItemTable = 0;
+            //ליקויים
+            $("#defectForm").hide();
+            $("#addDefectBtn").hide();
+            $("#defectTable").hide();
+            FirstTimeUploadDefectTable = 0;
 
             userDetails = JSON.parse(localStorage["user"]);
             if (userDetails.User_type_num == 1) {
@@ -136,15 +143,14 @@
             }
         }
         //////////////////////////////////////////////////////סוגי ליקויים
+        //קריאה בהתחלה של סוגי ליקויים
+        function readDefectTypeAtTheBegining() {
+         ajaxCall("GET", "../api/defect_type", "", createDtDefectType, getErrorDefectType)
+
+        }
         // קריאת כל סוגי ליקויים
         function getDefectType(BtnId) {
             SwitchBtnToColor(BtnId);
-            if (FirstTimeUploadDefectTypeTable == 0) {
-
-                ajaxCall("GET", "../api/defect_type", "", createDtDefectType, getErrorDefectType)
-            }
-            else {
-
                 $("#addInstructionTypeBtn").hide();
                 $("#instructionTypeTable").hide();
                 $("#instructionTypeForm").hide();
@@ -157,10 +163,13 @@
                 $("#itemForm").hide();
                 $("#addItemBtn").hide();
                 $("#itemTable").hide();
+                $("#defectForm").hide();
+                $("#addDefectBtn").hide();
+                $("#defectTable").hide();
                 $("#addDefectTypeBtn").show();
                 $("#defectTypeTable").show();
                 $("#defectTypeForm").show();
-            }
+           
 
         }
         function getErrorDefectType() {
@@ -168,7 +177,6 @@
         }
         //בניית טבלה של סוגי ליקוי
         function createDtDefectType(defectTypedata) {
-            FirstTimeUploadDefectTypeTable = 1;
             $("#addInstructionTypeBtn").hide();
             $("#instructionTypeTable").hide();
             $("#instructionTypeForm").hide();
@@ -181,9 +189,12 @@
             $("#itemForm").hide();
             $("#addItemBtn").hide();
             $("#itemTable").hide();
-            $("#addDefectTypeBtn").show();
-            $("#defectTypeTable").show();
-            $("#defectTypeForm").show();
+            $("#defectForm").hide();
+            $("#addDefectBtn").hide();
+            $("#defectTable").hide();
+            $("#addDefectTypeBtn").hide();
+            $("#defectTypeTable").hide();
+            $("#defectTypeForm").hide();
             let defectTypeToShow = [];
 
             for (var i = 0; i < defectTypedata.length; i++) {
@@ -192,6 +203,7 @@
                     Type_name: defectTypedata[i].Type_name,
                 }
                 defectTypeToShow.push(defectType);
+                defectTypeArr.push(defectType);
             }
 
             try {
@@ -333,6 +345,9 @@
                 $("#itemForm").hide();
                 $("#addItemBtn").hide();
                 $("#itemTable").hide();
+                $("#defectForm").hide();
+                $("#addDefectBtn").hide();
+                $("#defectTable").hide();
                 $("#addInstructionTypeBtn").show();
                 $("#instructionTypeTable").show();
                 $("#instructionTypeForm").show();
@@ -357,6 +372,9 @@
             $("#itemForm").hide();
             $("#addItemBtn").hide();
             $("#itemTable").hide();
+            $("#defectForm").hide();
+            $("#addDefectBtn").hide();
+            $("#defectTable").hide();
             $("#addInstructionTypeBtn").show();
             $("#instructionTypeTable").show();
             $("#instructionTypeForm").show();
@@ -519,6 +537,9 @@
                 $("#itemForm").hide();
                 $("#addItemBtn").hide();
                 $("#itemTable").hide();
+                $("#defectForm").hide();
+                $("#addDefectBtn").hide();
+                $("#defectTable").hide();
                 $("#addUserTypeBtn").show();
                 $("#userTypeTable").show();
                 $("#userTypeForm").show();
@@ -543,6 +564,9 @@
             $("#itemForm").hide();
             $("#addItemBtn").hide();
             $("#itemTable").hide();
+            $("#defectForm").hide();
+            $("#addDefectBtn").hide();
+            $("#defectTable").hide();
             $("#addUserTypeBtn").show();
             $("#userTypeTable").show();
             $("#userTypeForm").show();
@@ -696,6 +720,9 @@
                 $("#itemForm").hide();
                 $("#addItemBtn").hide();
                 $("#itemTable").hide();
+                $("#defectForm").hide();
+                $("#addDefectBtn").hide();
+                $("#defectTable").hide();
                 $("#certificateTypeForm").show();
                 $("#addCertificateTypeBtn").show();
                 $("#certificateTypeTable").show();
@@ -721,6 +748,9 @@
             $("#itemForm").hide();
             $("#addItemBtn").hide();
             $("#itemTable").hide();
+            $("#defectForm").hide();
+            $("#addDefectBtn").hide();
+            $("#defectTable").hide();
             $("#certificateTypeForm").show();
             $("#addCertificateTypeBtn").show();
             $("#certificateTypeTable").show();
@@ -884,6 +914,9 @@
                 $("#certificateTypeForm").hide();
                 $("#addCertificateTypeBtn").hide();
                 $("#certificateTypeTable").hide();
+                $("#defectForm").hide();
+                $("#addDefectBtn").hide();
+                $("#defectTable").hide();
                 $("#itemForm").show();
                 $("#addItemBtn").show();
                 $("#itemTable").show();
@@ -909,6 +942,9 @@
             $("#certificateTypeForm").hide();
             $("#addCertificateTypeBtn").hide();
             $("#certificateTypeTable").hide();
+            $("#defectForm").hide();
+            $("#addDefectBtn").hide();
+            $("#defectTable").hide();
             $("#itemForm").show();
             $("#addItemBtn").show();
             $("#itemTable").show();
@@ -1046,6 +1082,213 @@
         function deleteItemError() {
             swal("פריט לא נמחק!", err, "warning");
         }
+        //////////////////////////////////////////ליקויים
+        // קריאת כל הליקויים
+        function getDefect(BtnId) {
+            SwitchBtnToColor(BtnId);
+            if (FirstTimeUploadDefectTable == 0) {
+                ajaxCall("GET", "../api/defect", "", createDtDefect, getErrorDefect)
+            }
+            else {
+                $("#defectTypeTable").hide();
+                $("#addDefectTypeBtn").hide();
+                $("#defectTypeForm").hide();
+                $("#addInstructionTypeBtn").hide();
+                $("#instructionTypeTable").hide();
+                $("#instructionTypeForm").hide();
+                $("#addUserTypeBtn").hide();
+                $("#userTypeTable").hide();
+                $("#userTypeForm").hide();
+                $("#certificateTypeForm").hide();
+                $("#addCertificateTypeBtn").hide();
+                $("#certificateTypeTable").hide();
+                $("#itemForm").hide();
+                $("#addItemBtn").hide();
+                $("#itemTable").hide();
+                $("#defectForm").show();
+                $("#addDefectBtn").show();
+                $("#defectTable").show();
+
+            }
+
+        }
+        function getErrorDefect() {
+            swal("נכשל!", "קריאת ליקויים נכשלה!", "warning")
+        }
+        //בניית טבלה של ליקויים
+        function createDtDefect(defectdata) {
+            renderDefectType();
+            FirstTimeUploadDefectTable = 1;
+            $("#defectTypeTable").hide();
+            $("#addDefectTypeBtn").hide();
+            $("#defectTypeForm").hide();
+            $("#addInstructionTypeBtn").hide();
+            $("#instructionTypeTable").hide();
+            $("#instructionTypeForm").hide();
+            $("#certificateTypeForm").hide();
+            $("#addCertificateTypeBtn").hide();
+            $("#certificateTypeTable").hide();
+            $("#itemForm").hide();
+            $("#addItemBtn").hide();
+            $("#itemTable").hide();
+            $("#addUserTypeBtn").hide();
+            $("#userTypeTable").hide();
+            $("#userTypeForm").hide();
+            $("#defectForm").show();
+            $("#addDefectBtn").show();
+            $("#defectTable").show();
+            let defectToShow = [];
+
+            for (var i = 0; i < defectdata.length; i++) {
+                defect_num_ber = "";
+                for (var j = 0; j < defectTypeArr.length; j++) {
+                    if (defectdata[i].Defect_type_num == defectTypeArr[j].Defect_type_num) {
+                        defect_num_ber = defectTypeArr[j].Type_name;
+                    }
+                }
+
+                defect = {
+                    Defect_num: defectdata[i].Defect_num,
+                    Name: defectdata[i].Name,
+                    Grade: defectdata[i].Grade,
+                    Defect_type_num: defect_num_ber,
+                }
+                defectToShow.push(defect);
+            }
+
+            try {
+                tbl = $('#defectTable').DataTable({
+                    data: defectToShow,
+                    pageLength: 10,
+                    columns: [
+
+                        { data: "Defect_num" },
+                        { data: "Name" },
+                        { data: "Grade" },
+                        { data: "Defect_type_num" },
+
+
+                        {
+                            render: function (data, type, row, meta) {
+                                let def = JSON.stringify(row);
+
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editDefect(this.value)'> עריכה </button>";
+
+                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteDefect(this.value)'> מחיקה </button>";
+
+                                return editBtn + deleteBtn;
+
+                            }
+                        },
+
+                    ],
+                });
+
+            }
+
+            catch (err) {
+                alert(err);
+            }
+        }
+        function renderDefectType() {
+            defectTypeSelect = document.getElementById('defect_type_name2');
+            for (i = 0; i < defectTypeArr.length; i++) {
+                defectTypeSelect.innerHTML += "<option value=" + defectTypeArr[i].Defect_type_num + ">" + defectTypeArr[i].Type_name + "</option>";
+            }
+        }        //הוספת ליקוי חדש
+        function insert_new_defect() {
+            $("#notShowingWhileCreating").hide();
+            document.getElementById('id06').style.display = 'none';
+            let newDefect = {
+
+                Name: $("#defect_name").val(),
+                Grade: $("#defect_grade").val(),
+                Defect_type_num: $("#defect_type_name2").val(),
+            }
+
+            let api = "../api/defect";
+            ajaxCall("POST", api, JSON.stringify(newDefect), createNewDefectSuccess, createNewDefectError);
+        }
+
+        function createNewDefectSuccess(defectdata) {
+            swal({
+                title: "מצוין!", text: "ליקוי חדש נוצר בהצלחה!", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+            });
+
+        }
+        function createNewDefectError() {
+            swal("נכשל!", "הכנסת ליקוי חדש נכשל!", "warning")
+        }
+
+        //עריכת ליקוי
+        function editDefect(dataDefect) {
+            $("#notShowingWhileCreating").show();
+            document.getElementById('id06').style.display = 'block';
+            DefectToEdit = JSON.parse(dataDefect);
+            $("#defect_num").val(DefectToEdit.Defect_num);
+            $("#defect_name").val(DefectToEdit.Name);
+            $("#defect_num").prop('disabled', true);
+            $("#defect_grade").val(DefectToEdit.Grade);
+            $("#defect_type_name2").val(DefectToEdit.Defect_type_num);
+        }
+        // עדכון ליקוי
+        function updateDefect() {
+            defect_update = {
+                Defect_num: $("#defect_num").val(),
+                Name: $("#defect_name").val(),
+                Grade: $("#defect_grade").val(),
+                Defect_type_num: $("#defect_type_name2").val(),
+            }
+            let api = "../api/defect";
+            ajaxCall("PUT", api, JSON.stringify(defect_update), UpdateDefectSuccess, UpdateDefectError);
+        }
+        function UpdateDefectSuccess() {
+            swal({
+                title: "מצוין!", text: "עדכון ליקוי בוצע", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
+        }
+        function UpdateDefectError() {
+            swal("עדכון ליקוי לא בוצע!", err, "warning");
+        }
+        //מחיקת ליקוי חדש
+        function deleteDefect(def) {
+            delete_defect = JSON.parse(def);
+            defectToDelete = {
+                Defect_num: delete_defect.Defect_num,
+            }
+            swal({
+                title: "האם אתה בטוח שברצונך למחוק את ליקוי?",
+                text: "",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true
+            })
+                .then(function (willDelete) {
+                    if (willDelete) delete_defect_func(defectTypeToDelete);
+                    else swal("ליקוי לא נמחק!");
+                });
+        }
+        function delete_item_func(defectTypeToDelete) {
+            ajaxCall("DELETE", "../api/defect", JSON.stringify(defectTypeToDelete), deleteDefectSuccess, deleteDefectError);
+
+        }
+        function deleteDefectSuccess() {
+            swal({
+                title: "מצוין!", text: "ליקוי נמחק בהצלחה", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
+
+            });
+        }
+        function deleteDefectError() {
+            swal("ליקוי לא נמחק!", err, "warning");
+        }
+        //פונקציות נוספות של העמוד
         function changeColor() {
             document.getElementById('select_item');
         }
@@ -1118,6 +1361,7 @@
                         <button id="addUserTypeBtn" class="btn btn-primary" onclick="document.getElementById('id03').style.display='block'">הוסף סוג משתמש חדש</button>
                         <button id="addCertificateTypeBtn" class="btn btn-primary" onclick="document.getElementById('id04').style.display='block'">הוסף סוג אישור חדש</button>
                         <button id="addItemBtn" class="btn btn-primary" onclick="document.getElementById('id05').style.display='block'">הוסף פריט חדש</button>
+                        <button id="addDefectBtn" class="btn btn-primary" onclick="document.getElementById('id06').style.display='block'">הוסף ליקוי חדש</button>
                     </div>
                 </div>
                 </br>
@@ -1182,10 +1426,24 @@
                         </thead>
                     </table>
                 </form>
+                <form class="pForm" id="defectForm">
+                    <table id="defectTable" class="display" style="width:100%" dir="rtl">
+                        <thead>
+                            <tr>
+                                <th>מספר ליקוי</th>
+                                <th>שם ליקוי</th>
+                                <th>ציון ליקוי</th>
+                                <th>סוג ליקוי</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </form>
             </div>
             <div class="col-md-2 col-sm-3">
-                <div class="btn-group"id="navbar_setting_group">
+                <div class="btn-group" id="navbar_setting_group">
                     <button id="defectTypeBtn" onclick="getDefectType(this.id)">סוגי ליקוי</button>
+                    <button id="defectBtn" onclick="getDefect(this.id)">ליקויים</button>
                     <button id="instructionTypeBtn" onclick="getInstructionType(this.id)">סוגי הדרכה</button>
                     <button id="userTypeBtn" onclick="getUserType(this.id)">סוגי משתמש</button>
                     <button id="certificateTypeBtn" onclick="getCertificateType(this.id)">סוגי אישורים</button>
@@ -1356,6 +1614,55 @@
                                             <div class="form-group">
                                                 <label for="item_price"><span class="red-star">★ </span>מחיר</label>
                                                 <textarea rows="1" class="form-control groupDetails" id="item_price" placeholder="הזן מחיר"></textarea>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </form>
+                        <br />
+                        <button id="saveBTN" onclick="insert_new_item()" class="btn btn-primary"> שמור פריט</button>
+                    </div>
+                    <br />
+                </div>
+            </div>
+        </div>
+        <div class="w3-container">
+            <div id="id06" class="w3-modal">
+                <div class="w3-modal-content">
+                    <div class="w3-container" dir="rtl">
+                        <span onclick="document.getElementById('id06').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                        <form id="DefectForm">
+                            <br />
+                            <h2 id="defect_headline">ליקוי </h2>
+                            <br />
+                            <table class="display" dir="rtl">
+                                <thead>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group-" id="notShowingWhileCreating">
+                                                <label for="defect_num"><span class="red-star">★ </span>מספר ליקוי</label>
+                                                <textarea rows="1" class="form-control groupDetails" id="defect_num" placeholder="הזן שם פריט"></textarea>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="defect_name"><span class="red-star">★ </span>שם ליקוי</label>
+                                                <textarea rows="1" class="form-control groupDetails" id="defect_name" placeholder="הזן שם פריט"></textarea>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="defect_grade"><span class="red-star">★ </span>ציון</label>
+                                                <textarea rows="1" class="form-control groupDetails" id="defect_grade" placeholder="הזן שם פריט"></textarea>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="defect_type_name2"><span class="red-star">★ </span>סוג ליקוי</label>
+                                                <select id="defect_type_name2" class="form-control groupDetails" required>
+                                                    <option value="">בחר סוג ליקוי</option>
+                                                </select>
                                             </div>
                                         </td>
                                     </tr>
@@ -1614,8 +1921,8 @@
                     <button id="btn_update_personal_user" class="btn btn-primary" onclick="updatePersonalUser()">עדכן פרטי משתמש </button>
                 </div>
             </div>
-                    </div>
-                </div>
+        </div>
+    </div>
 
 </body>
 </html>
