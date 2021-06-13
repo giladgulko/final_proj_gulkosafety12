@@ -3,7 +3,7 @@
     direction:rtl;
 }
 
-a {
+a, p {
     color: black;
     font-size: 16px;
 }
