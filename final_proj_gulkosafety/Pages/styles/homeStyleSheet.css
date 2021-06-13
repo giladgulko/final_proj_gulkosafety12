@@ -3,7 +3,7 @@
     direction:rtl;
 }
 
-a {
+a, p {
     color: black;
     font-size: 16px;
 }
@@ -12,6 +12,10 @@ ul.circle {
 }
 li {
     padding-bottom: 2px;
+}
+th {
+    font-size: 16px;
+    padding-left: 20px;
 }
 #instruction_bar {
     text-align: center;
@@ -52,16 +56,14 @@ h3 {
     direction:rtl;
 }
 .w3-container, .w3-panel {
-    padding-right: 4%;
+    padding: 4%;
     text-align: center;
-    border: 10px solid cadetblue;
-    padding-right: 37%;
-   
+    padding-right: 37%; 
 }
 
-#report_paragraph {
+/*#report_paragraph {
     padding: 2%;
-}
+}*/
 #active {
     color: cadetblue;
     background-color: #eeeeee;
