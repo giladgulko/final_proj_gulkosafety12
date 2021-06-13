@@ -31,6 +31,7 @@
             alertList = [];
             reportList = [];
             getAlerts();
+            getReports();
             checkAboutToExpired();
 
         });
@@ -52,14 +53,17 @@
             ajaxCall("GET", api, "", getExpiredInstructionsSuccess, getExpiredInstructionsError);
         }
 
-        function getExpiredInstructionsSuccess(expiredInstructions) {
+        function getExpiredInstructionsSuccess(instructionsList) {
+            expiredInstructions = instructionsList;
             if (expiredInstructions.length > 0) {
-                let str = "";
+                let str = "<ul class='circle'>";
                 for (i = 0; i < expiredInstructions.length; i++) {
-                    str += "<p>" + expiredInstructions[i].Type_name + ", " + expiredInstructions[i].Company + "</p>";
+                    str += "<li><a id=" + expiredInstructions[i].Instruction_num + " onclick='renderInstruction(this.id)' href='#' >" + expiredInstructions[i].Type_name + " ל" + expiredInstructions[i].Company + "</a></li>";
                 }
+                str += "</ul>";
                 $("#instructions_expire_alerts").html(str);
             }
+            else $("#instructions_expire_alerts").html("<p>אין התראות</p>");
         }
 
         function getExpiredInstructionsError(err) {
@@ -71,14 +75,19 @@
             ajaxCall("GET", api, "", getExpiredCertificatesSuccess, getExpiredCertificatesError);
         }
 
-        function getExpiredCertificatesSuccess(expiredCertificates) {
+        function getExpiredCertificatesSuccess(certificatesList) {
+            expiredCertificates = certificatesList;
             if (expiredCertificates.length > 0) {
-                let str = "";
+                let str = "<ul class='circle'>";
                 for (i = 0; i < expiredCertificates.length; i++) {
-                    str += "<p>" + expiredCertificates[i].Type_name + ", " + expiredCertificates[i].Company + "</p>";
+                     
+                    str += "<li><a id=" + expiredCertificates[i].Certificate_num + " onclick='renderCertificate(this.id)' href='#' >" + expiredCertificates[i].Type_name + " ל" + expiredCertificates[i].Company + "</a></li>";
                 }
+                str += "</ul>";
                 $("#certificates_expire_alerts").html(str);
             }
+
+            else $("#certificates_expire_alerts").html("<p>אין התראות</p>");
         }
 
         function getExpiredCertificatesError(err) {
@@ -98,18 +107,26 @@
         }
         function getAlertsSuccess(data) {
             alertList = data;
-
-            for (i = 0; i < alertList.length; i++) {
-                document.getElementById('fixed_defects_photos_alerts').innerHTML += "<div  class='alerts'> <p id='" + alertList[i].Alert_num + "' href='#' </p><strong class='homeDate'> " + alertList[i].Date.split("T")[0] + " " + " </strong> <i class='far fa-calendar-alt' style='font-size:24px'></i>&nbsp&nbsp<a id='" + alertList[i].Alert_num + "' href='#' onclick='renderDefectPic(this.id)'>" + alertList[i].Content.split(",")[0] + " בפרויקט: " + alertList[i].Proj_name + " </a ></div > ";
+            if (alertList.length > 0) {
+                for (i = 0; i < alertList.length; i++) {
+                    document.getElementById('fixed_defects_photos_alerts').innerHTML += "<div  class='alerts'> <p id='" + alertList[i].Alert_num + "' href='#' </p><strong class='homeDate'> " + alertList[i].Date.split("T")[0] + " " + " </strong> <i class='far fa-calendar-alt' style='font-size:24px'></i>&nbsp&nbsp<a id='" + alertList[i].Alert_num + "' href='#' onclick='renderDefectPic(this.id)'>" + alertList[i].Content.split(",")[0] + " בפרויקט: " + alertList[i].Proj_name + " </a ></div > ";
+                }
             }
-            getReports();
+            else document.getElementById('fixed_defects_photos_alerts').innerHTML += "<p>אין התראות</p>";
         }
+
         function getReportsuccess(data) {
             reportList = data;
-            for (i = 0; i < reportList.length; i++) {
-                document.getElementById('recent_visit reports_alerts').innerHTML += "<div class='reports'><p id='" + reportList[i].Report_num + "' href='#' </p> <strong>" + reportList[i].Date.split("T")[0] + "</strong >  בפרויקט " + reportList[i].Proj_name + " " + " דוח מספר " + reportList[i].Report_num + "<a id='" + reportList[i].Report_num + "' href='#' onclick='renderSafetyAlert(this.id)'> לצפייה בפרטי הדוח לחץ כאן </a></div> ";
-            }
+            if (reportList.length > 0) {
+                let str = "<ul class='circle'>";
+                for (i = 0; i < reportList.length; i++) {
 
+                    str += "<li><strong>" + reportList[i].Date.split("T")[0] + "</strong ><a id='" + reportList[i].Report_num + "' href='#' onclick='renderSafetyAlert(this.id)'> בפרויקט " + reportList[i].Proj_name + " " + " דוח מספר " + reportList[i].Report_num + "</a></li> ";
+                }
+                str += "</ul>";
+                document.getElementById('recent_visit reports_alerts').innerHTML += str;
+            }
+            else document.getElementById('recent_visit reports_alerts').innerHTML += "לא נמצאו דוחות מהשבוע האחרון";
         }
 
         function getError() {
