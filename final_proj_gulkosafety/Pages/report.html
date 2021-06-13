@@ -563,7 +563,7 @@
                 if (localStorage["report"] != "") {
                     //update local storage with new info
                     report.Date = $('#Date').val();
-                    report.Time = "T" + $('#time').val();
+                    report.Time = $('#time').val();
                     report.Comment = $('#comments').val();
                     localStorage["report"] = JSON.stringify(report);
                     //save to db
