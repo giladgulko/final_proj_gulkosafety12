@@ -30,7 +30,7 @@
 
         $(document).ready(function () {
             getusersData();
-
+            $("#newUsersTypeForm").submit(CheckSubmit);
         });
         // קריאת כל המשתמשים
         function getusersData() {
@@ -43,10 +43,10 @@
         }
         function CheckSubmit(){
             if (mode == "new") {
-                $("#newUsersTypeForm").submit(insert_new_user);
+                insert_new_user();
             }
-            else if (mode == "edit") {
-                $("#newUsersTypeForm").submit(updateUser);
+            else {
+                updateUser();
             }
         }
 
@@ -138,8 +138,6 @@
         //ניקוי שדות משתמש חדש
         function clearPopuP() {
             mode = "new";
-            $("#saveBTN").show();
-            $("#btn_update_user").hide();
             $("#user_email").prop('disabled', false);
             $("#user_email").val("");
             $("#user_name").val("");
@@ -158,9 +156,7 @@
                 if (user_data[i].Email == UserToEdit.Email)
                     str = "<option value='" + user_data[i].User_type_num + "'>" + user_data[i].Type_name + "</option>"
             }
-            $("#btn_update_user").show();
             $("#new_user_headline").hide();
-            $("#saveBTN").hide();
             $("#user_email").val(UserToEdit.Email);
             $("#user_email").prop('disabled', true);
             $("#user_name").val(UserToEdit.Name);
@@ -315,7 +311,7 @@
                     <div class="w3-container" dir="rtl">
                         <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                         <br />
-                        <form id="newUsersTypeForm"  onsubmit="return false">
+                        <form id="newUsersTypeForm" onsubmit="return false">
                             <h2 id="new_user_headline">משתמש חדש</h2>
                             <br />
                             <table class="display" style="width:100%" dir="rtl">
@@ -325,15 +321,15 @@
                                             <div class="form-group">
                                                 <label for="user_email">מייל <span class="red-star">★</span></label>
                                                 <input type="email" rows="1" class="form-control groupDetails" id="user_email" placeholder=" הזן מייל " pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$" required="required"
-                                                oninvalid="this.setCustomValidity('הכנס את האימייל שלך- שים לב לתבנית')"
-                                                oninput="this.setCustomValidity('')">
+                                                       oninvalid="this.setCustomValidity('הכנס את האימייל שלך- שים לב לתבנית')"
+                                                       oninput="this.setCustomValidity('')">
                                             </div>
                                         </td>
                                         <td>
                                             <div class="form-group">
                                                 <label for="user_name"><span class="red-star">★</span>שם מלא</label>
                                                 <input type="text" rows="1" class="form-control groupDetails" id="user_name" placeholder=" הזן שם מלא " required="required"
-                                                      oninvalid="this.setCustomValidit('הכנס רק אותיות')"         
+                                                       oninvalid="this.setCustomValidit('הכנס רק אותיות')"
                                                        oninput="this.setCustomValidity('')" />
                                             </div>
                                         </td>
@@ -341,7 +337,7 @@
                                             <div class="form-group">
                                                 <label for="user_phone"><span class="red-star">★</span>טלפון</label>
                                                 <input type="tel" rows="1" class="form-control groupDetails" id="user_phone" placeholder=" הזן טלפון " pattern="[0-9]{3}-[0-9]{7}" required="required"
-                                                      oninvalid="this.setCustomValidity('התבנית הינה 054-6954541')"
+                                                       oninvalid="this.setCustomValidity('התבנית הינה 054-6954541')"
                                                        oninput="this.setCustomValidity('')">
                                             </div>
                                         </td>
@@ -351,7 +347,7 @@
                                             <div class="form-group">
                                                 <label for="user_password"><span class="red-star">★</span>סיסמא</label>
                                                 <input type="text" class="form-control" id="user_password" placeholder="הזן סיסמא" pattern="(?=.*[0-9]+.*)(?=.*[A-Z]+.*)[0-9a-zA-Z]{8,}$" required="required"
-                                                      oninvalid="this.setCustomValidity('סיסמא שגויה- יש להכניס לפחות 8 תווים , לפחות אות גדולה אחת ומספר אחד')"
+                                                       oninvalid="this.setCustomValidity('סיסמא שגויה- יש להכניס לפחות 8 תווים , לפחות אות גדולה אחת ומספר אחד')"
                                                        oninput="this.setCustomValidity('')" />
                                             </div>
                                         </td>
@@ -368,11 +364,10 @@
                                     </tr>
                                 </thead>
                             </table>
+                            <br />
+                            <button type="submit" id="saveBTN" class="btn btn-primary"> שמור </button>
+                            <br />
                         </form>
-                        <br />
-                        <button type="submit" onclick="CheckSubmit()" id="saveBTN" form="newUsersTypeForm" class="btn btn-primary"> שמור משתמש</button>
-                        <button id="btn_update_user" onclick="CheckSubmit()" form="newUsersTypeForm" class="btn btn-primary" >עדכן משתמש </button>
-                        <br />
                     </div>
                     <br />
                 </div>
