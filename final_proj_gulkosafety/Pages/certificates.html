@@ -267,8 +267,13 @@
             window.open("cetrificatePdfPage.html", '_blank')
             localStorage["certipicateInfo"] = info  
         }
+        function sendPdf2Mail(info) {
+            
+            window.open("cetrificatePdf2mailPage.html", '_blank')
+        }
         // כפתור הצג איש קשר
         function showContact(def) {
+            localStorage["certipicateInfo"] = def 
             contactInCert = JSON.parse(def);
             createTBcontact(contactInCert);
         }
@@ -309,7 +314,7 @@
 
                                 editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editContact(this.value)'> עריכה </button>";
 
-                                pdfBtn = "<button type='button' class = 'pdfBtn btn btn-pdf' value='" + def + "' onclick='(this.value)'> שליחת אישור במייל </button>";
+                                pdfBtn = "<button type='button' class = 'pdfBtn btn btn-pdf' value='" + def + "' onclick='sendPdf2Mail(this.value)'> שליחת אישור במייל </button>";
 
                                 return editBtn + pdfBtn;
 
@@ -327,6 +332,7 @@
             }
 
         }
+
         //עריכת איש קשר
         function editContact(datacontact) {
             document.getElementById('id02').style.display = 'block';

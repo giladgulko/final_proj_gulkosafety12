@@ -219,6 +219,7 @@
     <Content Include="Global.asax" />
     <Content Include="Pages\alerts.html" />
     <Content Include="Pages\certificates.html" />
+    <Content Include="Pages\cetrificatePdf2mailPage.html" />
     <Content Include="Pages\cetrificatePdfPage.html" />
     <Content Include="Pages\gilad-test.html" />
     <Content Include="Pages\home.html" />
