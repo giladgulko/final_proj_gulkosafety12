@@ -33,6 +33,7 @@
         var firstTimeAddContact = 1;
         var cert_num = "";
         var user_mail = "gulkosafety@gmail.com";
+        mode = "";
 
         $(document).ready(function () {
             getCertificateTypeList();
@@ -41,6 +42,8 @@
             $("#btn_update_cert").hide();
             $("#contactsTable").hide();
             $("#newContact").hide();
+            $("#newCertForm").submit(saveNewCert);
+            $("#updateContactForm").submit(updateContact);
         });
 
         //get a list of all the certificate type for section list
@@ -75,10 +78,10 @@
         // רינדור של כל אנשי הקשר לרשימה
         function renderContacts(data) {
             AllContacts = data;
-            ExistContact = document.getElementById('searchContact1');
-            for (i = 0; i < AllContacts.length; i++) {
-                ExistContact.innerHTML += "<option value=" + AllContacts[i].Id + ">" + AllContacts[i].Full_name + ", " + AllContacts[i].Id + "</option > ";
-            }
+            //ExistContact = document.getElementById('searchContact1');
+            //for (i = 0; i < AllContacts.length; i++) {
+            //    ExistContact.innerHTML += "<option value=" + AllContacts[i].Id + ">" + AllContacts[i].Full_name + ", " + AllContacts[i].Id + "</option > ";
+            //}
         }
         function getContactError() {
             swal("נכשל!", "קריאת אנשי קשר נכשלה!", "warning")
@@ -166,7 +169,7 @@
             swal({
                 title: "מצוין!", text: "הוספת איש קשר בוצע בהצלחה!", type: "success", icon: "success"
             })
-
+            new_cert();
         }
         function createNewcontactError() {
             swal("נשכל!", "הוספת איש קשר נכשל!", "warning")
@@ -235,9 +238,9 @@
                         { data: "Price" },
                         {
                             render: function (data, type, row, meta) {
-                                let def = JSON.stringify(row);
+                                let def = JSON.stringify(row); 
 
-                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editcertBTN(this.value)'> עריכה </button>";
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editcertBTN(this.value)'> עריכה </button>"; 
 
                                 deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteCertificate(this.value)'> מחיקה </button>";
 
@@ -280,6 +283,7 @@
         //הצגת איש קשר מכפתור של הצג איש קשר
         function createTBcontact(contactInCert) {
             document.getElementById('id01').style.display = 'block';
+            $("#updateContact").hide();
             let cert_num = contactInCert.Certificate_num;
             let contactToShow = [];
             for (var i = 0; i < certificatedata.length; i++) {
@@ -335,8 +339,10 @@
 
         //עריכת איש קשר
         function editContact(datacontact) {
-            document.getElementById('id02').style.display = 'block';
-            let contact_data = JSON.parse(datacontact);
+            contact_data = JSON.parse(datacontact);
+            //document.getElementById('id02').style.display = 'block';
+           
+            $("#updateContact").show();
             $("#contact_id1").val(contact_data.Id);
             $("#contact_id1").prop('disabled', true);
             $("#contact_name1").val(contact_data.Full_name);
@@ -438,8 +444,17 @@
 
         //עריכת אישור
         function editcertBTN(datacert) {
+
             certToEdit = JSON.parse(datacert);
+
+            mode = "edit";
+            document.querySelector('#contact_id').required = false;
+            document.querySelector('#contact_name').required = false;
+            document.querySelector('#contact_phone').required = false;
+            document.querySelector('#contact_mail').required = false;
+
             document.getElementById('id03').style.display = 'block';
+            $("#contactDetails").hide();
             for (var i = 0; i < certificateTypeList.length; i++) {
                 if (certificateTypeList[i].Type_name == certToEdit.Type_name)
                     str = "<option value='" + certificateTypeList[i].Certificate_type_num + "'>" + certificateTypeList[i].Type_name + "</option>"
@@ -499,13 +514,17 @@
         }
         //ניקוי פופ אפ של אישור חדש
         function clearPopuP() {
-            $("#priceTD").hide()
+            mode = "new";
             str = "<option>סוג אישור</option>"
             for (var i = 0; i < certificateTypeList.length; i++) {
                 str += "<option value='" + certificateTypeList[i].Certificate_type_num + "'>" + certificateTypeList[i].Type_name + "</option>"
             }
             $("#certificateType").html(str);
             $("#certificateType").prop('disabled', false);
+            document.querySelector('#contact_id').required = true;
+            document.querySelector('#contact_name').required = true;
+            document.querySelector('#contact_phone').required = true;
+            document.querySelector('#contact_mail').required = true;
             $("#checkStatus").val("");
             $("#company").val("");
             $("#payStatus").val("");
@@ -517,8 +536,30 @@
             $("#searchContact").show();
             $("#new_cert").show();
             $("#saveBTN").show();
+            $("#priceTD").hide();
+            $("#contactDetails").show();
             $("#btn_update_cert").hide();
         }
+
+        function saveNewCert() {
+            if (mode == "new") {
+                new_contact();
+            }
+            else updateCert();
+        }
+
+        function new_contact() {
+            contact = {
+                Id: $("#contact_id").val(),
+                Full_name: $("#contact_name").val(),
+                Phone: $("#contact_phone").val(),
+                Mail: $("#contact_mail").val()
+            }
+
+            let api = "../api/contact";
+            ajaxCall("POST", api, JSON.stringify(contact), createNewcontactSuccess, createNewcontactError);
+        }
+
         //הכנסת אישור חדש לדאטה בייס
         function new_cert() {
             document.getElementById('id03').style.display = 'none';
@@ -535,7 +576,7 @@
                 Delete_status: 0,
                 Invoice_num: $("#invoice_num").val(),
                 User_email: user_mail,
-                Contact_id: contactList[0].Id,
+                Contact_id: $("#contact_id").val()
             }
 
             let api = "../api/certificate";
@@ -555,9 +596,9 @@
             swal("נכשל!", "הכנסת אישור חדש נכשל!", "warning")
         }
 
-        function closeWindow() {
-            location.reload();
-        }
+        //function closeWindow() {
+        //    location.reload();
+        //}
 
         function logout() {
             localStorage.removeItem("user");
@@ -640,7 +681,7 @@
             <div class="w3-modal-content">
                 <div class="w3-container" dir="rtl">
                     <span onclick="document.getElementById('id03').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-                    <form id="newCertForm">
+                    <form id="newCertForm" onsubmit="return false">
                         <br />
                         <h2 id="new_cert">אישור חדש</h2>
                         <br />
@@ -651,7 +692,7 @@
                                         <div class="form-group">
                                             <label for="certificateType"><span class="red-star">★ </span>סוג אישור</label>
                                             <select class="form-control groupDetails" id="certificateType" required>
-                                                <option value="">בחר סוג אישור</option>
+                                                <option value="">בחר</option>
                                             </select>
                                         </div>
                                     </td>
@@ -659,7 +700,7 @@
                                         <div class="form-group">
                                             <label for="checkStatus"><span class="red-star">★ </span>סטאטוס בדיקה</label>
                                             <select class="form-control groupDetails" id="checkStatus" required>
-                                                <option value="">בחר סטאטוס בדיקה</option>
+                                                <option value="">בחר</option>
                                                 <option value="1">עבר</option>
                                                 <option value="2">לא עבר</option>
                                             </select>
@@ -669,7 +710,7 @@
                                         <div class="form-group">
                                             <label for="payStatus"><span class="red-star">★ </span>סטאטוס תשלום</label>
                                             <select class="form-control groupDetails" id="payStatus" required>
-                                                <option value="">בחר סטאטוס תשלום</option>
+                                                <option value="">בחר</option>
                                                 <option value="1">שולם</option>
                                                 <option value="2">לא שולם</option>
                                             </select>
@@ -679,14 +720,14 @@
                                 <tr>
                                     <td>
                                         <div class="form-group">
-                                            <label for="company">שם המוסד/חברה</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="company" placeholder="הזן שם מוסד/חברה"></textarea>
+                                            <label for="company"><span class="red-star">★ </span>שם המוסד/חברה</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="company" placeholder="הזן שם מוסד/חברה" required></textarea>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-group">
-                                            <label for="address">כתובת</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="address" placeholder="הזן כתובת"></textarea>
+                                            <label for="address"><span class="red-star">★ </span>כתובת</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="address" placeholder="הזן כתובת" required></textarea>
                                         </div>
                                     </td>
                                 </tr>
@@ -714,15 +755,48 @@
                                     </td>
                                     <td id="priceTD">
                                         <div class="form-group">
-                                            <label for="price"> מחיר כולל</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="price" placeholder="הזן מחיר"></textarea>
+                                            <label for="price">מחיר</label>
+                                            <textarea rows="1" class="form-control groupDetails" id="price"></textarea>
                                         </div>
                                     </td>
                                 </tr>
+                                    <tr id="contactDetails">
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="contact_id"><span class="red-star">★ </span>תעודת זהות</label>
+                                                <input type="text" class="form-control groupDetails" id="contact_id" placeholder=" הזן ת.ז " pattern="[0-9]+" oninvalid="this.setCustomValidity('הזן מספרים בלבד')" oninput="this.setCustomValidity('')" required>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="contact_name"><span class="red-star">★ </span>שם מלא</label>
+                                                <input type="text" class="form-control groupDetails" id="contact_name" placeholder=" הזן שם מלא " required>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="contact_phone">טלפון<span class="red-star">★ </span></label>
+                                                <input type="text" class="form-control groupDetails" id="contact_phone" placeholder=" הזן טלפון " pattern="[0-9]+" oninvalid="this.setCustomValidity('הזן מספרים בלבד')" oninput="this.setCustomValidity('')" required>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="contact_mail"><span class="red-star">★ </span>מייל</label>
+                                                <input type="text" class="form-control groupDetails" id="contact_mail" placeholder=" הזן מייל " pattern=".+@.+"
+                                                       oninvalid="this.setCustomValidity('כתובת המייל שגויה')"
+                                                       oninput="this.setCustomValidity('')" required>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <button type="submit" id="saveContactsBTN" class="btn btn-primary">שמור</button>
+                                        </td>
+                                    </tr>
                             </thead>
                         </table>
                     </form>
-                    <table>
+                    <!--<table>
                         <tr>
                             <td id="searchContact">
                                 <div class="form-group">
@@ -774,8 +848,8 @@
                                 <button id="btnSave_new_contact" class="btn btn-primary" onclick="SaveNewcontact()"> שמור איש קשר </button>
                             </td>
                         </tr>
-                    </table>
-                    <div>
+                    </table>-->
+                    <!--<div>
                         <form id="pForm">
                             <table id="contactsTable" class="display" style="width:100%" dir="rtl">
                                 <thead>
@@ -791,7 +865,7 @@
                         </form>
                     </div>
                     <button id="saveBTN" onclick="new_cert()" class="btn btn-primary"> שמור אישור</button>
-                    <button id="btn_update_cert" class="btn btn-primary" onclick="updateCert()"> עדכן אישור</button>
+                    <button id="btn_update_cert" class="btn btn-primary" onclick="updateCert()"> עדכן אישור</button>-->
                 </div>
                 <br />
             </div>
@@ -801,26 +875,68 @@
         <div id="id01" class="w3-modal">
             <div class="w3-modal-content">
                 <div class="w3-container" dir="rtl">
-                    <span onclick="document.getElementById('id01').style.display='none',closeWindow()" class="w3-button w3-display-topright">&times;</span>
-                    <form id="pForm">
-                        <h2 id="new_cert">איש קשר</h2>
-                        <table id="ContactTable1" class="display" style="width:100%" dir="rtl">
-                            <thead>
+                    <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                    <!--<form id="pForm">-->
+                    <h3 id="new_cert">איש קשר</h3>
+                    <table id="ContactTable1" class="display" style="width:100%" dir="rtl">
+                        <thead>
+                            <tr>
+                                <th>ת.ז</th>
+                                <th>שם מלא</th>
+                                <th>טלפון</th>
+                                <th>מייל</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <!--</form>-->
+                    <div id="updateContact">
+                        <form id="updateContactForm" onsubmit="return false">
+                            <h3 id="update_contact">עריכת איש קשר</h3>
+                            <br />
+                            <table id="updateContactTb">
                                 <tr>
-                                    <th>ת.ז</th>
-                                    <th>שם מלא</th>
-                                    <th>טלפון</th>
-                                    <th>מייל</th>
-                                    <th></th>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="contact_id1"><span class="red-star">★ </span>תעודת זהות</label>
+                                            <input type="text" class="form-control groupDetails" id="contact_id1" placeholder=" הזן ת.ז " pattern="[0-9]+" oninvalid="this.setCustomValidity('הזן מספרים בלבד')" oninput="this.setCustomValidity('')" required>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="contact_name1"><span class="red-star">★ </span>שם מלא</label>
+                                            <input type="text" class="form-control groupDetails" id="contact_name1" placeholder=" הזן שם מלא " required>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="contact_phone1">טלפון<span class="red-star">★ </span></label>
+                                            <input type="text" class="form-control groupDetails" id="contact_phone1" placeholder=" הזן טלפון " pattern="[0-9]+" oninvalid="this.setCustomValidity('הזן מספרים בלבד')" oninput="this.setCustomValidity('')" required>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="contact_mail1"><span class="red-star">★ </span>מייל</label>
+                                            <input type="text" class="form-control groupDetails" id="contact_mail1" placeholder=" הזן מייל " pattern=".+@.+"
+                                                   oninvalid="this.setCustomValidity('כתובת המייל שגויה')"
+                                                   oninput="this.setCustomValidity('')" required>
+                                        </div>
+                                    </td>
                                 </tr>
-                            </thead>
-                        </table>
-                    </form>
+                                <tr>
+                                    <th>
+                                        <button type="submit" id="btnUpdate_contact" class="btn btn-primary"> עדכן איש קשר </button>
+                                    </th>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
-    <div class="w3-container">
+    <!--<div class="w3-container">
         <div id="id02" class="w3-modal">
             <div class="w3-modal-content">
                 <div class="w3-container" dir="rtl">
@@ -863,6 +979,6 @@
                 <br />
             </div>
         </div>
-    </div>
+    </div>-->
 </body>
 </html>

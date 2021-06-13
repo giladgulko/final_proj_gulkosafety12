@@ -46,7 +46,7 @@
     border-color: cadetblue;
 }
 
-h1, h2, h1.proj {
+h1, h2, h1.proj, h3 {
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     color: cadetblue;
     font-weight: bold;
@@ -119,12 +119,21 @@ th.sorting {
 th {
     text-align: right;
 }
-#saveBTN, #btn_update_cert, #btnSave_new_contact, #btnUpdate_contact {
+#saveBTN, #btn_update_cert, #btnSave_new_contact {
     float: left;
+    color: #fff;
+    background-color: cadetblue;
+    border-color: cadetblue;
+}
+#btnUpdate_contact {
     color: #fff;
     background-color: cadetblue;
     border-color: cadetblue;
 }
 #logout {
     border: unset;
+}
+
+.w3-container, .w3-panel {
+    padding: 4%;
 }
