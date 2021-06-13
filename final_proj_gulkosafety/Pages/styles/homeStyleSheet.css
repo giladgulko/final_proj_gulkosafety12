@@ -22,6 +22,7 @@
     BACKGROUND-COLOR: white;
     margin: 3%;
     padding: 2%;
+    border-radius: 7px;
 }
 .card-body.section1 {
     BACKGROUND-COLOR: white;
@@ -29,6 +30,7 @@
     height: 600px;
     padding: 2%;
     padding-bottom: 6%;
+    border-radius: 7px;
 }
 h3 {
     font-size: 20px;
@@ -36,6 +38,7 @@ h3 {
     color: cadetblue;
     text-align: right;
     margin-top: 0px;
+    margin-right:10px;
     direction:rtl;
 }
 .w3-container, .w3-panel {

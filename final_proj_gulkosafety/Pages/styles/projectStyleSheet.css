@@ -81,10 +81,10 @@ span.glyphicon.glyphicon-floppy-disk, span.glyphicon.glyphicon-pencil {
     left: 0;
 }
 
-p {
+/*p {
     text-align: left;
-    /*margin-bottom:0px;*/
-}
+    margin-bottom:0px;
+}*/
 
 .proj {
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -182,11 +182,12 @@ div#report_BTN {
     padding: 2%;
 
 }
-.alerts > p {
+.projAlerts > p {
     direction:rtl;
     text-align: right;
     font-size: 14px;
-    padding-right:2%
+    padding-right:2%;
+    color:black;
 }
 /*.w3-container, .w3-panel {
     border: 5px solid black;
@@ -202,8 +203,6 @@ p {
     color: #fff;
     background-color: cadetblue;
     border-color: cadetblue;
-}
-#saveBTN {
     margin-right: 235%;
 }
 
