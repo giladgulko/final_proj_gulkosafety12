@@ -36,7 +36,7 @@
     font-family: 'Suez One', serif;
     color: cadetblue;
 }
-#new_defect_type_headline, #new_instruction_type_headline, #new_user_type_headline, #new_certificate_type_headline, #new_item_headline {
+#new_defect_type_headline, #new_defect_headline, #new_instruction_type_headline, #new_user_type_headline, #new_certificate_type_headline, #new_item_headline {
     font-family: 'Suez One', serif;
     color: cadetblue;
 }
@@ -116,11 +116,11 @@ body {
 .red-star, #dateError {
     color: red;
 }
-#saveBTN, #btn_update_defect_type, #btn_update_instruction_type, #btn_update_user_type, #btn_update_certificate_type, #btn_update_item {
-    float: left;
-    color: #fff;
-    background-color: cadetblue;
-    border-color: cadetblue;
+#saveBTN, #btn_update_defect_type, #btn_update_defect, #btn_update_instruction_type, #btn_update_user_type, #btn_update_certificate_type, #btn_update_item, #saveBTN1 {
+float: left;
+color: #fff;
+background-color: cadetblue;
+border-color: cadetblue;
 }
 #logout {
     border: unset;
@@ -145,7 +145,4 @@ body {
     font-family: 'Suez One', serif;
     color: cadetblue;
 text-align:right;
-}
-.form-group6{
-    width:100%;
 }

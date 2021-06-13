@@ -8,7 +8,7 @@ constraint fk_user foreign key(user_type_num) references user_type(user_type_num
 primary key(email)
 )
 
-drop table [order]
+drop table defect
 
 create table [user_type](
 [user_type_num] smallint IDENTITY (1,1) NOT NULL,
@@ -113,20 +113,42 @@ VALUES (2,1,5)
 INSERT INTO [defect](grade,defect_type_num,name)
 VALUES  (6,8,'הצבת חפצים להגבהה על רצפת הפיגום ועבודה מהם')
 
-select * from certificate
-select * from instruction_type
+INSERT INTO items_in_order(order_num,item_num,quantity)
+VALUES  (5,10,13)
 
-select * from items_in_order
+select * from alert
+
+SELECT * FROM [user]
+
+
+select o.*,io.order_num,i.*
+from [order] o inner join items_in_order io on o.order_num=io.order_num inner join item i on io.item_num=i.item_num
+where o.order_num=(select order_num, sum(quantity)
+from items_in_order
+)
+select i.*, io.order_num, io.quantity
+from item i inner join items_in_order io on i.item_num=io.item_num  where io.order_num=6
+
+select * from contact_in_instruction
+
+ALTER TABLE [user]
+ADD delete_status int;
+
+select * from defect
+
+select u.*, ut.type_name from [user] u inner join [user_type] ut on u.user_type_num = ut.user_type_num
 
 select distinct o.order_num, o.bill_num,o.contact_id,o.total_price,oi.quantity
 from [order] o left join items_in_order oi on o.order_num=oi.order_num 
 group by o.order_num, o.bill_num,o.contact_id,o.total_price ,oi.item_num,oi.quantity
 
 SELECT i.*, it.type_name,it.expiration
-FROM instruction i left join instruction_type it on i.instruction_num = it.instruction_type_num 
+FROM instruction i left join instruction_type it on i.instruction_type_num = it.instruction_type_num 
 
-select a.*, at.type_name
-from alert a inner join alert_type at on a.alert_type_num= at.alert_type_num
-where 
+select c.*, ci.*
+from contact_in_instruction ci inner join contact c on ci.contact_id= c.id
+where ci.instruction_num= 2
 
-sp_rename 'order.price', 'total_price', 'COLUMN';
+ALTER TABLE instruction
+ALTER COLUMN [time] datetime;
+sp_rename 'order.bill_num', 'invoice_num', 'COLUMN';

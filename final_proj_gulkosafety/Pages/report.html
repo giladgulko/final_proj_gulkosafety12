@@ -561,17 +561,12 @@
             else {
                 //case update details
                 if (localStorage["report"] != "") {
-                    //update local storage with new info
-                    report.Date = $('#Date').val();
-                    report.Time = "T" + $('#time').val();
-                    report.Comment = $('#comments').val();
-                    localStorage["report"] = JSON.stringify(report);
                     //save to db
                     let reportToSave = {
                         Report_num: report.Report_num,
-                        Date: report.Date,
-                        Time: report.Time,
-                        Comment: report.Comment
+                        Date: $('#Date').val(),
+                        Time: $('#time').val(),
+                        Comment: $('#comments').val()
                     }
                     ajaxCall("PUT", "../api/report", JSON.stringify(reportToSave), updateReportSuccess, updateReportError);
                 }
@@ -597,6 +592,11 @@
             swal({
                 title: "מצוין!", text: "הדוח עודכן בהצלחה", type: "success", icon: "success"
             }).then(function () {
+                //update local storage with new info
+                report.Date = $('#Date').val();
+                report.Time = $('#time').val();
+                report.Comment = $('#comments').val();
+                localStorage["report"] = JSON.stringify(report);
                 $(".groupDetails").prop('disabled', true);
                 $('#editReportBTN').show();
                 $('.cancelUpdateReportBtns').hide();
@@ -868,7 +868,7 @@
                     </div>
                     <div class="collapse navbar-collapse" id="navbarMenu">
                         <ul class="nav navbar-nav navbar-right  bts-nav">
-                            <li class="type2mode"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="settings.html"></a></li>
+                            <li><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><a href="settings.html"></a></li>
                             <li></li>
                             <li class="nav-item">
                                 <span class="glyphicon glyphicon-bell" aria-hidden="true"></span><a href="alerts.html"></a>
@@ -880,7 +880,7 @@
                             <li class="type2mode"><a href="certificates.html">אישורים</a></li>
                             <li class="type2mode"><a href="instructions.html">הדרכות</a></li>
                             <li class="active"><a href="projects.html">פרויקטים<span class="sr-only">(current)</span></a></li>
-                            <li>
+                            <li class="type2mode">
                                 <span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="home.html"></a>
                             </li>
                         </ul>

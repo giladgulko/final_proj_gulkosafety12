@@ -121,7 +121,7 @@
                 let str = "<ul class='circle'>";
                 for (i = 0; i < reportList.length; i++) {
 
-                    str += "<li><strong>" + reportList[i].Date.split("T")[0] + "</strong ><a id='" + reportList[i].Report_num + "' href='#' onclick='renderSafetyAlert(this.id)'> בפרויקט " + reportList[i].Proj_name + " " + " דוח מספר " + reportList[i].Report_num + "</a></li> ";
+                    str += "<li><strong>" + reportList[i].Date.split("T")[0] + "</strong ><a id='" + reportList[i].Report_num + "' href='#' onclick='showReportPage(this.id)'> בפרויקט " + reportList[i].Proj_name + " " + " דוח מספר " + reportList[i].Report_num + "</a></li> ";
                 }
                 str += "</ul>";
                 document.getElementById('recent_visit reports_alerts').innerHTML += str;
@@ -132,11 +132,13 @@
         function getError() {
             swal("Failed!", "Failed to read alerts!Please try again", "warning")
         }
-        function renderSafetyAlert(id) {
-            document.getElementById('display_details').innerHTML = ""
-            document.getElementById('id04').style.display = 'block';
+        function showReportPage(id) {
             for (var i = 0; i < reportList.length; i++) {
-
+                if (reportList[i].Report_num == id) {
+                    localStorage["report"] = JSON.stringify(reportList[i]);
+                    //localStorage["project"] = JSON.stringify(project);
+                    window.location = "report.html";
+                }
                 document.getElementById('display_details').innerHTML += "<div class='reportPopUp'><h3>פרויקט:  " + reportList[i].Proj_name + "</h3><h3> דוח מספר: " + reportList[i].Report_num + "</h3><h3> בוצע בתאריך: " + reportList[i].Date.split("T")[0] + "</h3><h3> ציון הדוח הינו: " + reportList[i].Grade + "</h3></div>";
 
             }
