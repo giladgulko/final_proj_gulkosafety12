@@ -124,13 +124,13 @@
                         {
                             render: function (data, type, row, meta) {
                                 let def = JSON.stringify(row);
-                                checkBox = "<input type='checkbox'>";
+                                //checkBox = "<input type='checkbox'>";
 
                                 editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editContact(this.value)'> עריכה </button>";
-
+                                downBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='downPdf(this.value)'>  הורד אישור הדרכה </button>";
                                 deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteContactInInst(this.value)'> מחיקה </button>";
 
-                                return checkBox + editBtn + deleteBtn;
+                                return  editBtn + downBtn+ deleteBtn;
 
 
                             }
@@ -145,6 +145,11 @@
                 alert(err);
             }
 
+        }
+        function downPdf(i) {
+            localStorage["instructionpart"] = i
+            window.open("instructionPdfPage.html", '_blank')
+            console.log(i)
         }
         function getContactInInstError(){
             swal("נכשל!", "קריאת משתתפים בהדרכה נכשלה!", "warning")
@@ -309,8 +314,8 @@
 
                                 deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteInstruction(this.value)'> מחיקה </button>";
 
-                                pdfBtn = "<button type='button' class = 'pdfBtn btn btn-pdf' value='" + def + "' onclick=''>  הורד תעודה הדרכה </button>";
-                                return editBtn + deleteBtn + pdfBtn ;
+                               // pdfBtn = "<button type='button' class = 'pdfBtn btn btn-pdf' value='" + def + "' onclick=''>  הורד תעודה הדרכה </button>";
+                                return editBtn + deleteBtn //+ pdfBtn ;
 
                             }
                         },
@@ -327,6 +332,7 @@
         }
         //עריכת הדרכה
         function editinstrucBTN(datainst) {
+            localStorage["instructionInfo"] = datainst 
             instToEdit = JSON.parse(datainst);
             document.getElementById('id03').style.display = 'block';
             for (var i = 0; i < instructionTypeList.length; i++) {
@@ -694,6 +700,9 @@
             window.location = "login.html";
 
         }
+        function closeWindow() {
+            location.reload();
+        }
 
     </script>
 </head>
@@ -774,7 +783,7 @@
                     <div id="id03" class="w3-modal">
                         <div class="w3-modal-content">
                             <div class="w3-container" dir="rtl">
-                                <span onclick="document.getElementById('id03').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                                <span onclick="document.getElementById('id03').style.display='none',closeWindow()" class="w3-button w3-display-topright">&times;</span>
                                 <form id="newCertForm">
                                     <br />
                                     <h2 id="new_inst">הדרכה חדשה</h2>
