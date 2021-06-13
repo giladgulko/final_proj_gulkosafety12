@@ -27,8 +27,12 @@
     <title>הגדרות</title>
 
     <script>
-
+        user = JSON.parse(localStorage["user"]);
         $(document).ready(function () {
+            if (user.User_type_num == 2) {
+                userType2Mode();
+            }
+
             defectTypeArr = [];
             readDefectTypeAtTheBegining();
             // סוגי ליקוי
@@ -82,7 +86,10 @@
 
             }
         });
+        function userType2Mode() {
+            $(".type2mode").hide()
 
+        }
         //קריאת פרטי משתמש ספציפי
         function getPersonalUserData() {
             $("#user_email2").val(userDetails.Email);
@@ -1140,10 +1147,10 @@
             let defectToShow = [];
 
             for (var i = 0; i < defectdata.length; i++) {
-                defect_num_ber = "";
+                defect_name_of_type_number = "";
                 for (var j = 0; j < defectTypeArr.length; j++) {
                     if (defectdata[i].Defect_type_num == defectTypeArr[j].Defect_type_num) {
-                        defect_num_ber = defectTypeArr[j].Type_name;
+                        defect_name_of_type_number = defectTypeArr[j].Type_name;
                     }
                 }
 
@@ -1151,7 +1158,7 @@
                     Defect_num: defectdata[i].Defect_num,
                     Name: defectdata[i].Name,
                     Grade: defectdata[i].Grade,
-                    Defect_type_num: defect_num_ber,
+                    Defect_type_name: defect_name_of_type_number,
                 }
                 defectToShow.push(defect);
             }
@@ -1165,7 +1172,7 @@
                         { data: "Defect_num" },
                         { data: "Name" },
                         { data: "Grade" },
-                        { data: "Defect_type_num" },
+                        { data: "Defect_type_name" },
 
 
                         {
@@ -1196,13 +1203,46 @@
                 defectTypeSelect.innerHTML += "<option value=" + defectTypeArr[i].Defect_type_num + ">" + defectTypeArr[i].Type_name + "</option>";
             }
         }
-        //הוספת ליקוי חדש
-        function insert_new_defect() {
+
+        //ניקוי שדות משתמש חדש
+        function clearPopuP() {
             $("#btn_save_defect").show();
             $("#btn_update_defect").hide();
+            $("#defect_num").prop('disabled', false);
+            $("#defect_num").val("");
+            $("#user_name").val("");
+            $("#defect_name").val("");
+            $("#defect_grade").val("");
+            renderDefectType();
+            $("#defect_type_name2").val(str);
+            $("#defect_type_name").val("");
+            $("#instruction_price").val("");
+                $("#instruction_expiration").val("");
+                $("#instruction_type_name").val("");
+                $("#user_type_name").val("");
+            $("#certificate_price").val("");
+                $("#certificate_expiration").val("");
+                $("#certificate_type_name").val("");
+                $("#item_name").val("");
+                $("#item_price").val("");
+
+
+            
+        }
+        //הוספת ליקוי חדש
+        function insert_new_defect() {
+            $("#new_defect_headline").show();
+            $("#saveBTN").show();
+            $("#btn_update_defect").hide();
+            $("#new_defect_headline").show();
             $("#notShowingWhileCreating").hide();
-            document.getElementById('id06').style.display = 'none';
             $("#defect_num").hide();
+            document.getElementById('id06').style.display = 'none';
+            $("#defect_num").val(DefectToEdit.Defect_num);
+            $("#defect_name").val(DefectToEdit.Name);
+            $("#defect_num").prop('disabled', true);
+            $("#defect_grade").val(DefectToEdit.Grade);
+            $("#defect_type_name2").html(str);
             let newDefect = {
 
                 Name: $("#defect_name").val(),
@@ -1228,15 +1268,18 @@
 
         //עריכת ליקוי
         function editDefect(dataDefect) {
-            $("#notShowingWhileCreating").show();
-            $("#btn_save_defect").hide();
+            $("#saveBTN").hide();
             $("#btn_update_defect").show();
-
+            $("#new_defect_headline").hide();
             document.getElementById('id06').style.display = 'block';
             DefectToEdit = JSON.parse(dataDefect);
             for (var i = 0; i < defectTypeArr.length; i++) {
-                if (defectTypeArr[i].Defect_type_num == DefectToEdit.Defect_type_num)
+                if (defectTypeArr[i].Type_name == DefectToEdit.Defect_type_name)
                     str = "<option value='" + defectTypeArr[i].Defect_type_num + "'>" + defectTypeArr[i].Type_name + "</option>"
+            }
+            for (var i = 0; i < defectTypeArr.length; i++) {
+                if (defectTypeArr[i].Type_name != DefectToEdit.Defect_type_name)
+                    str += "<option value='" + defectTypeArr[i].Defect_type_num + "'>" + defectTypeArr[i].Type_name + "</option>"
             }
             $("#defect_num").val(DefectToEdit.Defect_num);
             $("#defect_name").val(DefectToEdit.Name);
@@ -1337,13 +1380,13 @@
                             <span class="glyphicon glyphicon-bell" aria-hidden="true"></span><a href="alerts.html"></a>
                         </li>
 
-                        <li><a href="#">סטטיסטיקות</a></li>
-                        <li><a href="users.html">משתמשים</a></li>
-                        <li><a href="orders.html">הזמנות</a></li>
-                        <li><a href="certificates.html">אישורים</a></li>
-                        <li><a href="instructions.html">הדרכות<span class="sr-only">(current)</span></a></li>
+                        <li class="type2mode"><a href="#">סטטיסטיקות</a></li>
+                        <li class="type2mode"><a href="users.html">משתמשים</a></li>
+                        <li class="type2mode"><a href="orders.html">הזמנות</a></li>
+                        <li class="type2mode"><a href="certificates.html">אישורים</a></li>
+                        <li class="type2mode"><a href="instructions.html">הדרכות</a></li>
                         <li><a href="projects.html">פרויקטים</a></li>
-                        <li>
+                        <li class="type2mode">
                             <span class="glyphicon glyphicon-home" aria-hidden="true"></span><a href="home.html"></a>
                         </li>
                     </ul>
@@ -1367,12 +1410,12 @@
             <div class="col-md-10 col-sm-9">
                 <div>
                     <div id="addbuttons">
-                        <button id="addDefectTypeBtn" class="btn btn-primary" onclick="document.getElementById('id01').style.display='block'">הוסף סוג ליקוי חדש</button>
-                        <button id="addInstructionTypeBtn" class="btn btn-primary" onclick="document.getElementById('id02').style.display='block',changeColor()">הוסף סוג הדרכה חדש</button>
-                        <button id="addUserTypeBtn" class="btn btn-primary" onclick="document.getElementById('id03').style.display='block'">הוסף סוג משתמש חדש</button>
-                        <button id="addCertificateTypeBtn" class="btn btn-primary" onclick="document.getElementById('id04').style.display='block'">הוסף סוג אישור חדש</button>
-                        <button id="addItemBtn" class="btn btn-primary" onclick="document.getElementById('id05').style.display='block'">הוסף פריט חדש</button>
-                        <button id="addDefectBtn" class="btn btn-primary" onclick="document.getElementById('id06').style.display='block'">הוסף ליקוי חדש</button>
+                        <button id="addDefectTypeBtn" class="btn btn-primary" onclick="document.getElementById('id01').style.display='block',clearPopuP()">הוסף סוג ליקוי חדש</button>
+                        <button id="addInstructionTypeBtn" class="btn btn-primary" onclick="document.getElementById('id02').style.display='block',changeColor(),clearPopuP()">הוסף סוג הדרכה חדש</button>
+                        <button id="addUserTypeBtn" class="btn btn-primary" onclick="document.getElementById('id03').style.display='block',clearPopuP()">הוסף סוג משתמש חדש</button>
+                        <button id="addCertificateTypeBtn" class="btn btn-primary" onclick="document.getElementById('id04').style.display='block',clearPopuP()">הוסף סוג אישור חדש</button>
+                        <button id="addItemBtn" class="btn btn-primary" onclick="document.getElementById('id05').style.display='block',clearPopuP()">הוסף פריט חדש</button>
+                        <button id="addDefectBtn" class="btn btn-primary" onclick="document.getElementById('id06').style.display='block',clearPopuP()">הוסף ליקוי חדש</button>
                     </div>
                 </div>
                 </br>
@@ -1645,23 +1688,19 @@
                         <span onclick="document.getElementById('id06').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                         <form id="DefectForm">
                             <br />
-                            <h2 id="defect_headline">ליקוי </h2>
+                            <h2 id="new_defect_headline">ליקוי חדש </h2>
                             <br />
                             <table class="display" dir="rtl">
                                 <thead>
                                     <tr>
                                         <td>
-                                            <div class="form-group-" id="notShowingWhileCreating">
-                                                <label for="defect_num"><span class="red-star">★ </span>מספר ליקוי</label>
-                                                <textarea rows="1" class="form-control groupDetails" id="defect_num" placeholder="הזן שם פריט"></textarea>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="form-group">
+                                            <div class="form-group6">
                                                 <label for="defect_name"><span class="red-star">★ </span>שם ליקוי</label>
                                                 <textarea rows="1" class="form-control groupDetails" id="defect_name" placeholder="הזן שם פריט"></textarea>
                                             </div>
                                         </td>
+                                    </tr>
+                                    <tr>
                                         <td>
                                             <div class="form-group">
                                                 <label for="defect_grade"><span class="red-star">★ </span>ציון</label>
@@ -1670,7 +1709,7 @@
                                         </td>
                                         <td>
                                             <div class="form-group">
-                                                <label for="defect_type_name2"><span class="red-star">★ </span>סוג ליקוי</label>
+                                                <label for="defect_type_name22"><span class="red-star">★ </span>סוג ליקוי</label>
                                                 <select id="defect_type_name2" class="form-control groupDetails" required>
                                                     <option value="">בחר סוג ליקוי</option>
                                                 </select>
@@ -1681,7 +1720,7 @@
                             </table>
                         </form>
                         <br />
-                        <button id="btn_save_defect" onclick="save_defect()" class="btn btn-primary"> שמור ליקוי</button>
+                        <button id="saveBTN" onclick="insert_new_defect()" class="btn btn-primary">שמור ליקוי</button>
                         <button id="btn_update_defect" class="btn btn-primary" onclick="updateDefect()">עדכן פרטי ליקוי </button>
                     </div>
                     <br />
