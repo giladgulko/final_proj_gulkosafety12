@@ -2,18 +2,27 @@
     color: #fff;
     background-color: cadetblue;
     border-color: cadetblue;
-    float: right;
 }
-#new_user_headline {
-    font-family: 'Suez One', serif;
+h2, h1{
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     color: cadetblue;
+    font-weight: bold;
 }
+#users_bar {
+    text-align: center;
+    display: flex;
+    margin-top: 40px
+}
+
 #headline {
-    font-family: 'Suez One', serif;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     color: cadetblue;
 }
-button#myBtn {
-    margin-right: 15%;
+
+#header {
+    height: 100px;
+    width: 100%;
+    text-align: center
 }
 #table {
     margin-top: 30px;
@@ -42,9 +51,9 @@ th {
     th.sorting {
         text-align: center;
     }
-button#myBtn {
-    /*float: left;*/
-    margin-right: 10%;
+#buttons {
+    margin-top: 45px;
+    margin-right: 70px;
 }
 .red-star, #dateError {
     color: red;
