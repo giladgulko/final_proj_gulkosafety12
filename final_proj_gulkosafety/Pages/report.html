@@ -561,17 +561,12 @@
             else {
                 //case update details
                 if (localStorage["report"] != "") {
-                    //update local storage with new info
-                    report.Date = $('#Date').val();
-                    report.Time = "T" + $('#time').val();
-                    report.Comment = $('#comments').val();
-                    localStorage["report"] = JSON.stringify(report);
                     //save to db
                     let reportToSave = {
                         Report_num: report.Report_num,
-                        Date: report.Date,
-                        Time: report.Time,
-                        Comment: report.Comment
+                        Date: $('#Date').val(),
+                        Time: $('#time').val(),
+                        Comment: $('#comments').val()
                     }
                     ajaxCall("PUT", "../api/report", JSON.stringify(reportToSave), updateReportSuccess, updateReportError);
                 }
@@ -597,6 +592,11 @@
             swal({
                 title: "מצוין!", text: "הדוח עודכן בהצלחה", type: "success", icon: "success"
             }).then(function () {
+                //update local storage with new info
+                report.Date = $('#Date').val();
+                report.Time = $('#time').val();
+                report.Comment = $('#comments').val();
+                localStorage["report"] = JSON.stringify(report);
                 $(".groupDetails").prop('disabled', true);
                 $('#editReportBTN').show();
                 $('.cancelUpdateReportBtns').hide();

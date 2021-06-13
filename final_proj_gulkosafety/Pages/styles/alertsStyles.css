@@ -71,9 +71,7 @@
 }
 .alert-Safety-level {
     color: #ee822d;
-    /*background-color: rgba(253, 194, 124, 0.63);*/
-    background-color: rgba(243, 111, 17, 0.50);
-    /*border-color: rgba(245, 117, 27, 0.80);*/
+    background-color: rgba(243, 111, 17, 0.25);
     direction: rtl;
     font-size: 20px;
 }
