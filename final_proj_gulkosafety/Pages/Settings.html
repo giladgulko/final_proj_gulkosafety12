@@ -28,6 +28,13 @@
 
     <script>
         user = JSON.parse(localStorage["user"]);
+        DefectToEdit = [];
+        defectTypeToEdit = [];
+        Instruction_type_num = [];
+        userTypeToEdit = [];
+        ItemToEdit = [];
+        certificateTypeToEdit = [];
+
         $(document).ready(function () {
             if (user.User_type_num == 2) {
                 userType2Mode();
@@ -282,7 +289,7 @@
         // עדכון סוג ליקוי
         function updateDefectType() {
             defect_type_update = {
-                Defect_type_num: $("#defect_type_number").val(),
+                Defect_type_num: defectTypeToEdit.Defect_type_num,
                 Type_name: $("#defect_type_name1").val(),
             }
             let api = "../api/defect_type";
@@ -471,7 +478,7 @@
         // עדכון סוג הדרכה
         function updateInstructionType() {
             instruction_type_update = {
-                Instruction_type_num: $("#instruction_type_number").val(),
+                Instruction_type_num: instructionTypeToEdit.Instruction_type_num,
                 Type_name: $("#instruction_type_name1").val(),
                 Expiration: $("#instruction_expiration1").val(),
                 Price: $("#instruction_price1").val(),
@@ -656,7 +663,7 @@
         // עדכון סוג משתמש
         function updateUserType() {
             user_type_update = {
-                User_type_num: $("#user_type_number").val(),
+                User_type_num: userTypeToEdit.User_type_num,
                 Type_name: $("#user_type_name1").val(),
             }
             let api = "../api/user_type";
@@ -848,7 +855,7 @@
         // עדכון סוג אישור
         function updateCertificateType() {
             certificate_type_update = {
-                Certificate_type_num: $("#certificate_type_number").val(),
+                Certificate_type_num: certificateTypeToEdit.Certificate_type_num,
                 Type_name: $("#certificate_type_name1").val(),
                 Expiration: $("#certificate_expiration1").val(),
                 Price: $("#certificate_price1").val(),
@@ -1038,7 +1045,7 @@
         // עדכון פריט
         function updateItem() {
             item_update = {
-                Item_num: $("#item_number").val(),
+                Item_num: ItemToEdit.Item_num,
                 Name: $("#item_name1").val(),
                 Price: $("#item_price1").val(),
             }
@@ -1181,9 +1188,9 @@
 
                                 editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editDefect(this.value)'> עריכה </button>";
 
-                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteDefect(this.value)'> מחיקה </button>";
+                                //deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteDefect(this.value)'> מחיקה </button>";
 
-                                return editBtn + deleteBtn;
+                                return editBtn;
 
                             }
                         },
@@ -1204,7 +1211,7 @@
             }
         }
 
-        //ניקוי שדות משתמש חדש
+        //ניקוי שדות כללי
         function clearPopuP() {
             $("#btn_save_defect").show();
             $("#btn_update_defect").hide();
@@ -1214,17 +1221,18 @@
             $("#defect_name").val("");
             $("#defect_grade").val("");
             renderDefectType();
-            $("#defect_type_name2").val(str);
+            $("#defect_type_name2").val("");
             $("#defect_type_name").val("");
             $("#instruction_price").val("");
-                $("#instruction_expiration").val("");
-                $("#instruction_type_name").val("");
-                $("#user_type_name").val("");
+            $("#instruction_expiration").val("");
+            $("#instruction_type_name").val("");
+            $("#user_type_name").val("");
             $("#certificate_price").val("");
-                $("#certificate_expiration").val("");
-                $("#certificate_type_name").val("");
-                $("#item_name").val("");
-                $("#item_price").val("");
+            $("#certificate_expiration").val("");
+            $("#certificate_type_name").val("");
+            $("#item_name").val("");
+            $("#item_price").val("");
+            $("#saveBTN1").show();
 
 
             
@@ -1232,7 +1240,6 @@
         //הוספת ליקוי חדש
         function insert_new_defect() {
             $("#new_defect_headline").show();
-            $("#saveBTN").show();
             $("#btn_update_defect").hide();
             $("#new_defect_headline").show();
             $("#notShowingWhileCreating").hide();
@@ -1268,7 +1275,7 @@
 
         //עריכת ליקוי
         function editDefect(dataDefect) {
-            $("#saveBTN").hide();
+            $("#saveBTN1").hide();
             $("#btn_update_defect").show();
             $("#new_defect_headline").hide();
             document.getElementById('id06').style.display = 'block';
@@ -1290,7 +1297,7 @@
         // עדכון ליקוי
         function updateDefect() {
             defect_update = {
-                Defect_num: $("#defect_num").val(),
+                Defect_num: DefectToEdit.Defect_num,
                 Name: $("#defect_name").val(),
                 Grade: $("#defect_grade").val(),
                 Defect_type_num: $("#defect_type_name2").val(),
@@ -1310,38 +1317,38 @@
             swal("עדכון ליקוי לא בוצע!", err, "warning");
         }
         //מחיקת ליקוי חדש
-        function deleteDefect(def) {
-            delete_defect = JSON.parse(def);
-            defectToDelete = {
-                Defect_num: delete_defect.Defect_num,
-            }
-            swal({
-                title: "האם אתה בטוח שברצונך למחוק את ליקוי?",
-                text: "",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true
-            })
-                .then(function (willDelete) {
-                    if (willDelete) delete_defect_func(defectToDelete);
-                    else swal("ליקוי לא נמחק!");
-                });
-        }
-        function delete_defect_func(defectToDelete) {
-            ajaxCall("DELETE", "../api/defect", JSON.stringify(defectToDelete), deleteDefectSuccess, deleteDefectError);
+        ////function deleteDefect(def) {
+        //    delete_defect = JSON.parse(def);
+        //    defectToDelete = {
+        //        Defect_num: delete_defect.Defect_num,
+        //    }
+        //    swal({
+        //        title: "האם אתה בטוח שברצונך למחוק את ליקוי?",
+        //        text: "",
+        //        icon: "warning",
+        //        buttons: true,
+        //        dangerMode: true
+        //    })
+        //        .then(function (willDelete) {
+        //            if (willDelete) delete_defect_func(defectToDelete);
+        //            else swal("ליקוי לא נמחק!");
+        //        });
+        //}
+        //function delete_defect_func(defectToDelete) {
+        //    ajaxCall("DELETE", "../api/defect", JSON.stringify(defectToDelete), deleteDefectSuccess, deleteDefectError);
 
-        }
-        function deleteDefectSuccess() {
-            swal({
-                title: "מצוין!", text: "ליקוי נמחק בהצלחה", type: "success", icon: "success"
-            }).then(function () {
-                location.reload();
+        //}
+        ////function deleteDefectSuccess() {
+        //    swal({
+        //        title: "מצוין!", text: "ליקוי נמחק בהצלחה", type: "success", icon: "success"
+        //    }).then(function () {
+        //        location.reload();
 
-            });
-        }
-        function deleteDefectError() {
-            swal("ליקוי לא נמחק!", err, "warning");
-        }
+        //    });
+        //}
+        //function deleteDefectError() {
+        //    swal("ליקוי לא נמחק!", err, "warning");
+        //}
         //פונקציות נוספות של העמוד
         function changeColor() {
             document.getElementById('select_item');
@@ -1694,17 +1701,15 @@
                                 <thead>
                                     <tr>
                                         <td>
-                                            <div class="form-group6">
+                                            <div class="form-group">
                                                 <label for="defect_name"><span class="red-star">★ </span>שם ליקוי</label>
-                                                <textarea rows="1" class="form-control groupDetails" id="defect_name" placeholder="הזן שם פריט"></textarea>
+                                                <textarea rows="1" class="form-control groupDetails" id="defect_name" placeholder="הזן שם ליקוי"></textarea>
                                             </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
+
                                         <td>
                                             <div class="form-group">
                                                 <label for="defect_grade"><span class="red-star">★ </span>ציון</label>
-                                                <textarea rows="1" class="form-control groupDetails" id="defect_grade" placeholder="הזן שם פריט"></textarea>
+                                                <textarea rows="1" class="form-control groupDetails" id="defect_grade" placeholder="הזן ציון לליקוי"></textarea>
                                             </div>
                                         </td>
                                         <td>
@@ -1720,7 +1725,7 @@
                             </table>
                         </form>
                         <br />
-                        <button id="saveBTN" onclick="insert_new_defect()" class="btn btn-primary">שמור ליקוי</button>
+                        <button id="saveBTN1" onclick="insert_new_defect()" class="btn btn-primary">שמור ליקוי</button>
                         <button id="btn_update_defect" class="btn btn-primary" onclick="updateDefect()">עדכן פרטי ליקוי </button>
                     </div>
                     <br />
