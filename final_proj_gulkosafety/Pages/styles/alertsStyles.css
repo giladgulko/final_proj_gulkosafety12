@@ -6,6 +6,10 @@
     color: cadetblue;
     font-weight: bold;
 }
+.projAlerts {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-weight: bold;
+}
 
 #alert_bar {
     text-align: right;
@@ -100,7 +104,7 @@
     float: left;
     direction: rtl;
 }
-.homeDate {
+.homeDate, .projDate {
     font-size: 16px;
     direction: rtl;
 }

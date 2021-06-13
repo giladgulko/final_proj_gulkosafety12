@@ -188,10 +188,6 @@
             alert("ליקוי לא עודכן");
         }
 
-        function updateDefectImgSuccess() {
-            location.reload();
-            //-יצירת התראה-להשלים
-        }
         function postAlertOnImg() {
 
             if (project != null) {
@@ -212,7 +208,7 @@
                 }
             }
 
-            else alert("בעיה בהבאת פרויקט- התראה לא נשלחה");
+            else swal("התראה לאנשי הקשר לא נשלחה!", "הבאת פרויקט נכשלה", "warning");
         }
 
         function defectNotApprove() {
@@ -233,7 +229,7 @@
                 }
             }
 
-            else alert("בעיה בהבאת פרויקט- התראה לא נשלחה");
+            else swal("התראה לאנשי הקשר לא נשלחה!", "הבאת פרויקט נכשלה", "warning");
         }
 
         function PostAlertSuccess() {
@@ -246,6 +242,33 @@
             swal("התראה לאנשי הקשר לא נשלחה!", "סטטוס ליקוי עודכן בהצלחה", "warning")
         }
 
+        function ChangeStatus(id) {
+            for (var i = 0; i < alertList.length; i++) {
+                if (alertList[i].Alert_num == id) {
+                    update_status = {
+                        Alert_num: Number(id),
+                        Content: alertList[i].Content,
+                        Date: alertList[i].Date,
+                        Alert_type_num: alertList[i].Alert_type_num,
+                        User_email: alertList[i].User_email,
+                        Status: 1,
+                        Proj_num: alertList[i].Proj_num,
+                        Proj_name: alertList[i].Proj_name
+
+                    }
+                }
+            }
+
+            let api = "../api/alert";
+            ajaxCall("PUT", api, JSON.stringify(update_status), UpdateAlertStatusSuccess, UpdateAlertStatusError)
+        }
+        function UpdateAlertStatusSuccess() {
+            swal("Good job!", "Alert status update successfully!", "success")
+            location.reload();
+        }
+        function UpdateAlertStatusError() {
+            swal("Failed!", "Failed to update the alerts!", "warning")
+        }
 
         function logout() {
             localStorage.removeItem("user");

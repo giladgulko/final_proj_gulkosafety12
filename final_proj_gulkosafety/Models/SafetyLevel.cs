@@ -181,63 +181,63 @@ namespace final_proj_gulkosafety.Models
 
             //build alerts in html format
             string alretHtml = "<h2>סיכום עדכון רמת בטיחות בפרויקט " + Project.Name + "</h2></br>";
-            alretHtml += "<h3 class='grades'>ציון דוח ביקור מספר " + ReportNum + ": " + report_Grade + "</h3>";
-            alretHtml += "<h3 class='grades'>ציון רמת בטיחות פרויקט: " + safetyLvL_Grade + "</h3><br />";
+            alretHtml += "<h3>ציון דוח ביקור מספר " + ReportNum + ": " + report_Grade + "</h3>";
+            alretHtml += "<h3>ציון רמת בטיחות פרויקט: " + safetyLvL_Grade + "</h3><br />";
             alretHtml += "<h3>פירוט ממצאים דוח ביקור:</h3>";
 
             //if num of defects bigger than 10 reduce points
             if (CurrentReportDefects.Count > maxdefects)
             {
-                alretHtml += "<p class='algoHeader'>נמצא מספר חריג של ליקויים: מעל 10 ליקויים</p>";
+                alretHtml += "<p>נמצא מספר חריג של ליקויים: מעל 10 ליקויים</p>";
             }
 
             if (severeDefects.Count > 0)
             {
-                alretHtml += "<p class='algoHeader'>נמצאו " + severeDefects.Count + " ליקויים חמורים בביקור הנוכחי:</p>";
+                alretHtml += "<p>נמצאו " + severeDefects.Count + " ליקויים חמורים בביקור הנוכחי:</p>";
                 for (var d = 0; d < severeDefects.Count; d++)
                 {
-                    alretHtml += "<p class='algoBadFind'>" + (d+1) +". " + severeDefects[d].Defect_type_name + "- " + severeDefects[d].Defect_name + " </p>";
+                    alretHtml += "<p>" + (d+1) +". " + severeDefects[d].Defect_type_name + "- " + severeDefects[d].Defect_name + " </p>";
                 }
             }
-            else alretHtml += "<p class='algoHeader'>לא נמצאו ליקויים חמורים</p>";
+            else alretHtml += "<p>לא נמצאו ליקויים חמורים</p>";
 
             if (TenGradeDefects.Count > 0)
             {
-                alretHtml += "<p class='algoHeader'>נמצאו " + TenGradeDefects.Count + " ליקויים חמורים ביותר בציון 10: ";
+                alretHtml += "<p>נמצאו " + TenGradeDefects.Count + " ליקויים חמורים ביותר בציון 10: ";
                 for (var d1 = 0; d1 < TenGradeDefects.Count; d1++)
                 {
-                    alretHtml += "<p class='algoBadFind'>" + (d1+1) + ". " + TenGradeDefects[d1].Defect_name + " </p>";
+                    alretHtml += "<p>" + (d1+1) + ". " + TenGradeDefects[d1].Defect_name + " </p>";
                 }
             }
             
             alretHtml += "<h3>פירוט ממצאים רמת הבטיחות:</h3>";
-            alretHtml += "<p class='algoRepAvg algoHeader'>ממוצע ציוני דוחות הביקור בפרויקט עד כה: " + avg + "</p >";
+            alretHtml += "<p>ממוצע ציוני דוחות הביקור בפרויקט עד כה: " + avg + "</p >";
 
             if (returnDefects.Count > 0)
             {
-                alretHtml += "<p class='algoHeader'>מספר הליקויים החוזרים מהביקור הקודם: " + returnDefects.Count + "</p>";
+                alretHtml += "<p>מספר הליקויים החוזרים מהביקור הקודם: " + returnDefects.Count + "</p>";
                 for (var r = 0; r < returnDefects.Count; r++)
                 {
-                    alretHtml += "<p class='algoBadFind'>" + (r + 1) + ". " + returnDefects[r].Defect_type_name + "- " + returnDefects[r].Defect_name + " </p>";
+                    alretHtml += "<p>" + (r + 1) + ". " + returnDefects[r].Defect_type_name + "- " + returnDefects[r].Defect_name + " </p>";
                 }
             }
-            else alretHtml += "<p class='algoHeader'>לא נמצאו ליקויים שחזרו על עצמם מהביקור הקודם</p>";
+            else alretHtml += "<p>לא נמצאו ליקויים שחזרו על עצמם מהביקור הקודם</p>";
 
             if (notFixedDefects.Count > 0)
             {
-                alretHtml += "<p class='algoHeader'>ליקויים מהביקור הקודם שלא תוקנו בזמן: </p>";
+                alretHtml += "<p>ליקויים מהביקור הקודם שלא תוקנו בזמן: </p>";
                 for (var n = 0; n < notFixedDefects.Count; n++)
                 {
-                    alretHtml += "<p class='algoBadFind'>"+(n+1)+". " + notFixedDefects[n].Defect_name + " </p>";
+                    alretHtml += "<p>"+(n+1)+". " + notFixedDefects[n].Defect_name + " </p>";
                 }
             }
 
             if (ProjReportGrades.Length>0)
             {
                 if((report_Grade - ProjReportGrades[ProjReportGrades.Length - 1]) >= 10)
-                    alretHtml += "<p class='algoGoodFind algoHeader'>ניכר שיפור משמעותי- ציון הדוח הנוכחי גבוה ב-10 נק' מציון הדוח הקודם</p>";
+                    alretHtml += "<p>ניכר שיפור משמעותי- ציון הדוח הנוכחי גבוה ב-10 נק' מציון הדוח הקודם</p>";
                 if ((ProjReportGrades[ProjReportGrades.Length - 1] - report_Grade) >= 10)
-                    alretHtml += "<p class='algoBadFind algoHeader'>שים לב! חלה הדרדרות משמעותית מהדוח הקודם שציונו גבוה ב-10 נק' מהדוח הנוכחי</p>";
+                    alretHtml += "<p>שים לב! חלה הדרדרות משמעותית מהדוח הקודם שציונו גבוה ב-10 נק' מהדוח הנוכחי</p>";
             }
 
             ReportGrade = report_Grade;

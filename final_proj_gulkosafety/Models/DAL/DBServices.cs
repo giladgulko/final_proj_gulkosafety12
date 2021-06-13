@@ -2558,7 +2558,7 @@ namespace final_proj_gulkosafety.Models.DAL
             {
                 con = connect("DBConnectionString");
 
-                String selectSTR = "SELECT a.*,p.name FROM alert a left join project p on a.proj_num=p.project_num WHERE user_email='" + user_email + "' and a.alert_type_num=" + alert_type_num + " and date <= getdate() and date >= dateadd(day, -3, getdate())";
+                String selectSTR = "SELECT a.*,p.name FROM alert a left join project p on a.proj_num=p.project_num WHERE user_email='" + user_email + "' and a.alert_type_num=" + alert_type_num + " and date <= getdate() and date >= dateadd(day, -3, getdate()) and a.status=0";
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
                 // get a reader
