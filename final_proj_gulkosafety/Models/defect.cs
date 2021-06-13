@@ -41,5 +41,17 @@ namespace final_proj_gulkosafety.Models
             List<defect> defectList = dbs.ReadDefect();
             return defectList;
         }
+        public void UpdateDefect()
+        {
+            DBServices dbs = new DBServices();
+            dbs.UpdateDefect(this);
+
+        }
+        public void DeleteDefect(int Defect_num)
+        {
+            DBServices dbs = new DBServices();
+            dbs.DeleteDefect(Defect_num);
+
+        }
     }
 }

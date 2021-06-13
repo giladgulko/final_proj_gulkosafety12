@@ -1195,10 +1195,14 @@
             for (i = 0; i < defectTypeArr.length; i++) {
                 defectTypeSelect.innerHTML += "<option value=" + defectTypeArr[i].Defect_type_num + ">" + defectTypeArr[i].Type_name + "</option>";
             }
-        }        //הוספת ליקוי חדש
+        }
+        //הוספת ליקוי חדש
         function insert_new_defect() {
+            $("#btn_save_defect").show();
+            $("#btn_update_defect").hide();
             $("#notShowingWhileCreating").hide();
             document.getElementById('id06').style.display = 'none';
+            $("#defect_num").hide();
             let newDefect = {
 
                 Name: $("#defect_name").val(),
@@ -1225,13 +1229,20 @@
         //עריכת ליקוי
         function editDefect(dataDefect) {
             $("#notShowingWhileCreating").show();
+            $("#btn_save_defect").hide();
+            $("#btn_update_defect").show();
+
             document.getElementById('id06').style.display = 'block';
             DefectToEdit = JSON.parse(dataDefect);
+            for (var i = 0; i < defectTypeArr.length; i++) {
+                if (defectTypeArr[i].Defect_type_num == DefectToEdit.Defect_type_num)
+                    str = "<option value='" + defectTypeArr[i].Defect_type_num + "'>" + defectTypeArr[i].Type_name + "</option>"
+            }
             $("#defect_num").val(DefectToEdit.Defect_num);
             $("#defect_name").val(DefectToEdit.Name);
             $("#defect_num").prop('disabled', true);
             $("#defect_grade").val(DefectToEdit.Grade);
-            $("#defect_type_name2").val(DefectToEdit.Defect_type_num);
+            $("#defect_type_name2").html(str);
         }
         // עדכון ליקוי
         function updateDefect() {
@@ -1269,12 +1280,12 @@
                 dangerMode: true
             })
                 .then(function (willDelete) {
-                    if (willDelete) delete_defect_func(defectTypeToDelete);
+                    if (willDelete) delete_defect_func(defectToDelete);
                     else swal("ליקוי לא נמחק!");
                 });
         }
-        function delete_item_func(defectTypeToDelete) {
-            ajaxCall("DELETE", "../api/defect", JSON.stringify(defectTypeToDelete), deleteDefectSuccess, deleteDefectError);
+        function delete_defect_func(defectToDelete) {
+            ajaxCall("DELETE", "../api/defect", JSON.stringify(defectToDelete), deleteDefectSuccess, deleteDefectError);
 
         }
         function deleteDefectSuccess() {
@@ -1670,7 +1681,8 @@
                             </table>
                         </form>
                         <br />
-                        <button id="saveBTN" onclick="insert_new_item()" class="btn btn-primary"> שמור פריט</button>
+                        <button id="btn_save_defect" onclick="save_defect()" class="btn btn-primary"> שמור ליקוי</button>
+                        <button id="btn_update_defect" class="btn btn-primary" onclick="updateDefect()">עדכן פרטי ליקוי </button>
                     </div>
                     <br />
                 </div>

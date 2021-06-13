@@ -43,13 +43,38 @@ namespace final_proj_gulkosafety.Controllers
         }
 
         // PUT api/<controller>/5
-        public void Put(int id, [FromBody] string value)
+        public HttpResponseMessage Put([FromBody] defect _defect)
         {
+            try
+            {
+                {
+                    _defect.UpdateDefect();
+                }
+
+                return Request.CreateResponse(HttpStatusCode.Created, _defect);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
+            }
         }
 
         // DELETE api/<controller>/5
-        public void Delete(int id)
+        public HttpResponseMessage Delete([FromBody] defect _defect)
         {
+
+            try
+            {
+                {
+                    _defect.DeleteDefect(_defect.Defect_num);
+                }
+
+                return Request.CreateResponse(HttpStatusCode.Created, _defect);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
+            }
         }
     }
 }
