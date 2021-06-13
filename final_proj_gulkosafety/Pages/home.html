@@ -133,17 +133,17 @@
             swal("Failed!", "Failed to read alerts!Please try again", "warning")
         }
         function renderSafetyAlert(id) {
-            document.getElementById('report_paragraph').innerHTML = ""
+            document.getElementById('display_details').innerHTML = ""
             document.getElementById('id04').style.display = 'block';
             for (var i = 0; i < reportList.length; i++) {
 
-                document.getElementById('report_paragraph').innerHTML += "<div class='reportPopUp'><h3>פרויקט:  " + reportList[i].Proj_name + "</h3><h3> דוח מספר: " + reportList[i].Report_num + "</h3><h3> בוצע בתאריך: " + reportList[i].Date.split("T")[0] + "</h3><h3> ציון הדוח הינו: " + reportList[i].Grade + "</h3></div>";
+                document.getElementById('display_details').innerHTML += "<div class='reportPopUp'><h3>פרויקט:  " + reportList[i].Proj_name + "</h3><h3> דוח מספר: " + reportList[i].Report_num + "</h3><h3> בוצע בתאריך: " + reportList[i].Date.split("T")[0] + "</h3><h3> ציון הדוח הינו: " + reportList[i].Grade + "</h3></div>";
 
             }
         }
 
         function renderInstruction(id) {
-            document.getElementById('report_paragraph').innerHTML = ""
+            document.getElementById('display_details').innerHTML = ""
             document.getElementById('id04').style.display = 'block';
             for (i = 0; i < expiredInstructions.length; i++) {
                 if (expiredInstructions[i].Instruction_num == id) {
@@ -152,14 +152,14 @@
                     str += "<tr><th>כתובת: </th><th>" + expiredInstructions[i].Address + "</th></tr>";
                     str += "<tr><th>מספר משתתפים: </th><th>" + expiredInstructions[i].Participants_num + "</th></tr>";
                     str += "<tr><th>סכום כולל: </th><th>" + expiredInstructions[i].Total_price + "</th></tr></table>";
-                    document.getElementById('report_paragraph').innerHTML = str;
+                    document.getElementById('display_details').innerHTML = str;
                     break;
                 }
             }
         }
 
         function renderCertificate(id) {
-            document.getElementById('report_paragraph').innerHTML = ""
+            document.getElementById('display_details').innerHTML = ""
             document.getElementById('id04').style.display = 'block';
             for (i = 0; i < expiredCertificates.length; i++) {
                 if (expiredCertificates[i].Certificate_num == id) {
@@ -167,7 +167,7 @@
                     str += "<table><tr><th>תאריך הנפקת אישור: </th><th>" + expiredCertificates[i].Date.split("T")[0] + "</th></tr>";
                     str += "<tr><th>כתובת: </th><th>" + expiredCertificates[i].Address + "</th></tr>";
                     str += "<tr><th>עלות אישור: </th><th>" + expiredCertificates[i].Price + "</th></tr></table>";
-                    document.getElementById('report_paragraph').innerHTML = str;
+                    document.getElementById('display_details').innerHTML = str;
                     break;
                 }
             }
@@ -425,12 +425,12 @@
                 <div id="recent_visit reports_alerts">
 
                 </div>
-                <div id="id04" class="w3-modal">
-                    <div class="w3-modal-content">
-                        <div class="w3-container">
-                            <span onclick="document.getElementById('id04').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-                            <div id="report_paragraph"></div>
-                        </div>
+            </div>
+            <div id="id04" class="w3-modal">
+                <div class="w3-modal-content">
+                    <div class="w3-container">
+                        <span onclick="document.getElementById('id04').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                        <div id="display_details"></div>
                     </div>
                 </div>
             </div>
