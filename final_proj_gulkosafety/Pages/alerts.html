@@ -140,7 +140,6 @@
             ajaxCall("PUT", api, JSON.stringify(update_status), UpdateAlertStatusSuccess, UpdateAlertStatusError)
         }
         function UpdateAlertStatusSuccess() {
-            swal("Good job!", "Alert status update successfully!", "success")
             location.reload();
         }
         function UpdateAlertStatusError() {
