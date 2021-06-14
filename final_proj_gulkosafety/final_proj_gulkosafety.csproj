@@ -177,6 +177,7 @@
     <Compile Include="Controllers\reportController.cs" />
     <Compile Include="Controllers\safety_levelController.cs" />
     <Compile Include="Controllers\settingsController.cs" />
+    <Compile Include="Controllers\testDinRController.cs" />
     <Compile Include="Controllers\userController.cs" />
     <Compile Include="Controllers\user_typeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />

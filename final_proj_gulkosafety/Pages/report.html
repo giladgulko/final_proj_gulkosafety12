@@ -260,11 +260,15 @@
 
         function updateImageLink(data) {
 
-            let picture_link = "../" + data[0];
+            //let picture_link = "../" + data[0];
+            let picture_link = data[0].split("/");
+            picture_link = picture_link[2]
+            console.log(picture_link)
             let temp = JSON.parse(defectToEdit);
             temp.Picture_link = picture_link;
             console.log(temp.Picture_link)
-            let api = "../api/defect_in_report?picture_link=" + picture_link;
+            //let api = "../api/defect_in_report?picture_link=" + picture_link;
+            let api = "../api/testDinR?picture_link=" + picture_link;
             ajaxCall("PUT", api, JSON.stringify(temp), updateLinkSuccess, updateImgLinkError);
         }
 
@@ -309,7 +313,7 @@
             $('#mask').addClass('showing');
             $('html').addClass('hide-scroll');
             var id = '#dialog';
-            var fullImagePath = defectToEdit.Picture_link;
+            var fullImagePath = "../uploadedFiles/"+defectToEdit.Picture_link;
             $('.image').attr({
                 'src': fullImagePath
             });
@@ -587,7 +591,9 @@
             return false;
 
         }
-
+        function getError(arr) {
+            console.log(arr)
+        }
         function updateReportSuccess() {
             swal({
                 title: "מצוין!", text: "הדוח עודכן בהצלחה", type: "success", icon: "success"
