@@ -602,7 +602,9 @@
             window.location = "login.html";
 
         }
-
+        function closeWindow() {
+            location.reload();
+        }
     </script>
 </head>
 <body>
@@ -872,7 +874,7 @@
         <div id="id01" class="w3-modal">
             <div class="w3-modal-content">
                 <div class="w3-container" dir="rtl">
-                    <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                    <span onclick="document.getElementById('id01').style.display='none',closeWindow()" class="w3-button w3-display-topright">&times;</span>
                     <!--<form id="pForm">-->
                     <h3 id="new_cert">איש קשר</h3>
                     <table id="ContactTable1" class="display" style="width:100%" dir="rtl">
