@@ -106,29 +106,13 @@
             ajaxCall("GET", api, "", getAlertsSuccess, getError);
         }
         function getAlertsSuccess(data) {
-
-            
-
-                //<ul class="read-more-wrap">
-                //    <li>lorem</li>
-                //    <li>lorem 2</li>
-                //    <li class="read-more-target">lorem 3</li>
-                //    <li class="read-more-target">lorem 4</li>
-                //</ul>
-
-                //<label for="post-2" class="read-more-trigger">
-
             alertList = data;
             if (alertList.length > 0) {
-                let str = "<input type='checkbox' class='read-more-state' id='post-2' />";
-                str = "<ul class='circle read-more-wrap'>";
+                let str = "<ul class='circle'>";
                 for (i = 0; i < alertList.length; i++) {
-                    if (i<3){
-                        str += "<li><strong>" + alertList[i].Date.split("T")[0] + "</strong ><a id='" + alertList[i].Alert_num + "' href='#' onclick='renderDefectPic(this.id)'>" + alertList[i].Content.split(",")[0] + " " + alertList[i].Proj_name + " </a></li> ";
-                    }
-                    else str += "<li class='read-more-target'><strong>" + alertList[i].Date.split("T")[0] + "</strong ><a id='" + alertList[i].Alert_num + "' href='#' onclick='renderDefectPic(this.id)'>" + alertList[i].Content.split(",")[0] + " " + alertList[i].Proj_name + " </a></li> ";
+                   str += "<li><strong>" + alertList[i].Date.split("T")[0] + "</strong ><a id='" + alertList[i].Alert_num + "' href='#' onclick='renderDefectPic(this.id)'>" + alertList[i].Content.split(",")[0] + " " + alertList[i].Proj_name + " </a></li> ";
                 }
-                str += "</ul><label for='post - 2' class='read-more-trigger'>";
+                str += "</ul>";
                 $("#fixed_defects_photos_alerts").html(str);
             }
             else d$("#fixed_defects_photos_alerts").html("<p>אין התראות</p>");
