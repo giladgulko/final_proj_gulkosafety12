@@ -244,7 +244,7 @@
         }
 
         function updateDefectsInReportError() {
-            alert("ליקוי לא עודכן");
+            swal("נכשל!", "ליקוי לא עודכן", "warning");
         }
 
         function postAlertOnImg() {
@@ -292,7 +292,6 @@
         }
 
         function PostAlertSuccess() {
-            swal("סטטוס תיקון עודכן בהצלחה!", "נשלחה התראה לאנשי הקשר בפרויקט", "success");
             //move alert to archive
             ChangeStatus(alertNum);
         }
@@ -322,7 +321,7 @@
             ajaxCall("PUT", api, JSON.stringify(update_status), UpdateAlertStatusSuccess, UpdateAlertStatusError)
         }
         function UpdateAlertStatusSuccess() {
-            swal("מעולה!", "סטטוס התראה עודכן בהצלחה!", "success")
+            swal("סטטוס תיקון עודכן בהצלחה!", "נשלחה התראה לאנשי הקשר בפרויקט", "success");
             location.reload();
         }
         function UpdateAlertStatusError() {

@@ -24,7 +24,7 @@ th {
     margin-top: 40px
 }
 
-#headline {
+h1.instructions {
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     color: cadetblue;
     font-weight: bold;
@@ -80,9 +80,7 @@ h3 {
     height:100%;
     width:100%;
 }
-h1.instructions {
-    margin-right: 10px;
-}
+
 .navbar-right {
     float: right!important;
     margin-right: -15px;
