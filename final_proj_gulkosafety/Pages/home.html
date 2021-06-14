@@ -106,13 +106,33 @@
             ajaxCall("GET", api, "", getAlertsSuccess, getError);
         }
         function getAlertsSuccess(data) {
+
+            
+
+                //<ul class="read-more-wrap">
+                //    <li>lorem</li>
+                //    <li>lorem 2</li>
+                //    <li class="read-more-target">lorem 3</li>
+                //    <li class="read-more-target">lorem 4</li>
+                //</ul>
+
+                //<label for="post-2" class="read-more-trigger">
+
             alertList = data;
             if (alertList.length > 0) {
+                let str = "<input type='checkbox' class='read-more-state' id='post-2' />";
+                str = "<ul class='circle read-more-wrap'>";
                 for (i = 0; i < alertList.length; i++) {
-                    document.getElementById('fixed_defects_photos_alerts').innerHTML += "<div  class='alerts'> <p id='" + alertList[i].Alert_num + "' href='#' </p><strong class='homeDate'> " + alertList[i].Date.split("T")[0] + " " + " </strong> <i class='far fa-calendar-alt' style='font-size:24px'></i>&nbsp&nbsp<a id='" + alertList[i].Alert_num + "' href='#' onclick='renderDefectPic(this.id)'>" + alertList[i].Content.split(",")[0] + " בפרויקט: " + alertList[i].Proj_name + " </a ></div > ";
+                    if (i<3){
+                        str += "<li><strong>" + alertList[i].Date.split("T")[0] + "</strong ><a id='" + alertList[i].Alert_num + "' href='#' onclick='renderDefectPic(this.id)'>" + alertList[i].Content.split(",")[0] + " " + alertList[i].Proj_name + " </a></li> ";
+                    }
+                    else str += "<li class='read-more-target'><strong>" + alertList[i].Date.split("T")[0] + "</strong ><a id='" + alertList[i].Alert_num + "' href='#' onclick='renderDefectPic(this.id)'>" + alertList[i].Content.split(",")[0] + " " + alertList[i].Proj_name + " </a></li> ";
                 }
+                str += "</ul>";
+                $("#fixed_defects_photos_alerts").html(str);
             }
-            else document.getElementById('fixed_defects_photos_alerts').innerHTML += "<p>אין התראות</p>";
+            else d$("#fixed_defects_photos_alerts").html("<p>אין התראות</p>");
+
         }
 
         function getReportsuccess(data) {
@@ -187,7 +207,7 @@
             for (var i = 0; i < alertList.length; i++) {
                 if (alertList[i].Alert_num == alertNum) {
                     $('#alert_title').html(alertList[i].Content.split(",")[0]);
-                    fullImagePath = alertList[i].Content.split(",")[1];
+                    fullImagePath = "../uploadedFiles/" + alertList[i].Content.split(",")[1];
                     projectNum = alertList[i].Proj_num;
                     break;
                 }
@@ -243,7 +263,7 @@
                 for (var i = 0; i < projContacts.length; i++) {
                     var now = new Date().toISOString();
                     newAlertOnAprroveIMG = {
-                        Content: "תמונת תיקון ליקוי פיגום אושרה," + fullImagePath,
+                        Content: "תמונת תיקון ליקוי אושרה," + fullImagePath,
                         Date: now,
                         Alert_type_num: 3,
                         User_email: projContacts[i],
@@ -265,7 +285,7 @@
                 var now = new Date().toISOString();
                 for (var i = 0; i < projContacts.length; i++) {
                     newAlertOnAprroveIMG = {
-                        Content: "תמונת תיקון ליקוי פיגום לא אושרה," + fullImagePath,
+                        Content: "תמונת תיקון ליקוי לא אושרה," + fullImagePath,
                         Date: now,
                         Alert_type_num: 3,
                         User_email: projContacts[i],
@@ -312,11 +332,11 @@
             ajaxCall("PUT", api, JSON.stringify(update_status), UpdateAlertStatusSuccess, UpdateAlertStatusError)
         }
         function UpdateAlertStatusSuccess() {
-            swal("Good job!", "Alert status update successfully!", "success")
+            swal("מעולה!", "סטטוס התראה עודכן בהצלחה!", "success")
             location.reload();
         }
         function UpdateAlertStatusError() {
-            swal("Failed!", "Failed to update the alerts!", "warning")
+            swal("נכשל!", "עדכון סטטוס התראה נכשל!", "warning")
         }
 
         function logout() {
@@ -390,17 +410,16 @@
             <div class="card-body section2">
 
                 <div class="row">
-                    <h3>תמונות ליקויים שתוקנו:</h3>
+                    <h3>תמונות ליקויים שתוקנו</h3>
                 </div>
                 <div id="fixed_defects_photos_alerts">
                 </div>
-
             </div>
 
             <div class="card-body section2">
 
                 <div class="row">
-                    <h3>הדרכות העומדות לפוג בחודש הקרוב:</h3>
+                    <h3>הדרכות העומדות לפוג בחודש הקרוב</h3>
                 </div>
                 <div id="instructions_expire_alerts">
 
@@ -411,7 +430,7 @@
             <div class="card-body section2">
 
                 <div class="row">
-                    <h3>אישורים העומדים לפוג בחודש הקרוב:</h3>
+                    <h3>אישורים העומדים לפוג בחודש הקרוב</h3>
                 </div>
                 <div id="certificates_expire_alerts">
 

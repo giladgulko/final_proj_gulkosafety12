@@ -145,11 +145,14 @@
 
         function renderReportDetails() {
             report = JSON.parse(localStorage["report"]);
-            allReports = JSON.parse(localStorage["allReports"]);
-            if (report.Report_num < allReports[allReports.length - 1].Report_num) {
-                $("#calcGrade").hide();
-                $("#addDefectToRBtn").hide();
+            if (localStorage["allReports"] != "") {
+                allReports = JSON.parse(localStorage["allReports"]);
+                if (report.Report_num < allReports[allReports.length - 1].Report_num) {
+                    $("#calcGrade").hide();
+                    $("#addDefectToRBtn").hide();
+                }
             }
+           
             headLine = "<h1>" + report.Report_num + " דוח ביקור " + "</h1>";
             time = report.Time.split('T');
             date = report.Date.split('T');
@@ -259,15 +262,10 @@
         }
 
         function updateImageLink(data) {
-
-            //let picture_link = "../" + data[0];
             let picture_link = data[0].split("/");
-            picture_link = picture_link[2]
-            console.log(picture_link)
+            picture_link = picture_link[2];
             let temp = JSON.parse(defectToEdit);
             temp.Picture_link = picture_link;
-            console.log(temp.Picture_link)
-            //let api = "../api/defect_in_report?picture_link=" + picture_link;
             let api = "../api/testDinR?picture_link=" + picture_link;
             ajaxCall("PUT", api, JSON.stringify(temp), updateLinkSuccess, updateImgLinkError);
         }
@@ -560,7 +558,7 @@
             $("#dateError").hide();
             let date = $('#Date').val();
             if (date < project.Start_date || date > project.End_date) {
-                $('#Date').after('<p id="dateError">תאריך התחלה גדול מתאריך הסיום</p>');
+                $('#Date').after('<p id="dateError">התאריך מחוץ לתאריכי הפרויקט</p>');
             }
             else {
                 //case update details

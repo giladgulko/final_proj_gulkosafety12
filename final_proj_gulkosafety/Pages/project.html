@@ -91,7 +91,7 @@
                     document.getElementById('alerts').innerHTML += "<div  class='projAlerts'> <p id='" + alertList[i].Alert_num + "' href='#' </p><strong class='projDate'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='fas fa-tachometer-alt' style='font-size:24px'></i>&nbsp&nbsp<a id='" + alertList[i].Alert_num + "' href='#' onclick='renderSafetyAlert(this.id)'>סיכום עדכון רמת בטיחות פרויקט " + alertList[i].Proj_num + "</a></div> ";
 
                 }
-                if (alertList[i].Alert_type_num == 3)
+                else if (alertList[i].Alert_type_num == 3)
                     document.getElementById('alerts').innerHTML += "<div  class='projAlerts'> <p id='" + alertList[i].Alert_num + "' href='#' </p><strong class='projDate'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='fas fa-tachometer-alt' style='font-size:24px'></i>&nbsp&nbsp<a id='" + alertList[i].Alert_num + "' href='#' onclick='renderDefectPic(this.id)'>" + alertList[i].Content.split(",")[0]+"</a ></div > ";
                 else {
                     document.getElementById('alerts').innerHTML += "<div  class='projAlerts'> <p id='" + alertList[i].Alert_num + "' href='#' </p><strong class='projDate'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='far fa-calendar-alt' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
@@ -119,7 +119,7 @@
             for (var i = 0; i < alertList.length; i++) {
                 if (alertList[i].Alert_num == alertNum) {
                     $('#alert_title').html(alertList[i].Content.split(",")[0]);
-                    fullImagePath = alertList[i].Content.split(",")[1];
+                    fullImagePath = "../uploadedFiles/" + alertList[i].Content.split(",")[1];
                     break;
                 }
             }
@@ -139,7 +139,9 @@
         }
 
         function getAlertError() {
-            swal("Failed!", "Failed to read alerts!Please try again", "warning")
+            swal({
+                title: "נכשל!", text: "שגיאה במשיכת התראות!", type: "warning", icon: "warning"
+            });
         }
 
         function saveContactForm() {
@@ -180,7 +182,9 @@
             localStorage["projContacts"] = JSON.stringify(projContactsTest);
         }
         function updateProjContactsError(data) {
-            swal("Failed!", "Failed to update contacts! Please try again", "warning")
+            swal({
+                title: "נכשל!", text: "אנשי קשר לא עודכנו!", type: "warning", icon: "warning"
+            });
         }
 
         function saveProjForm() {
@@ -223,7 +227,7 @@
         }
 
         function updateProjectError() {
-            swal("כישלון!", "עדכון פרטי הפרויקט נכשל!", "warning");
+            swal("נכשל!", "פרויקט לא עודכן!", "warning");
         }
 
         function editProjBtnEvents() {
@@ -366,7 +370,9 @@
                 );
         }
         function deleteReportError() {
-            swal("Failed!", "Failed to delete the report!", "warning");
+            swal({
+                title: "נכשל!", text: "דוח לא נמחק!", type: "warning", icon: "warning"
+            });
         }
 
         // mark the selected row
@@ -409,7 +415,9 @@
             ajaxCall("GET", api, "", getReportsSuccess, getReportError);
         }
         function getReportError() {
-            swal("Failed!", "Failed to read the reports!", "warning");
+            swal({
+                title: "נכשל!", text: "שגיאה במשיכת דוחות!", type: "warning", icon: "warning"
+            });
         }
 
 
@@ -424,7 +432,7 @@
                 let r = {
                     Report_num: reports[i].Report_num,
                     Date: reports[i].Date.split("T")[0],
-                    Time: reports[i].Time.split('T'),
+                    Time: reports[i].Time.split("T")[1],
                     Grade: reports[i].Grade
                 }
                 reportsToShow.push(r);

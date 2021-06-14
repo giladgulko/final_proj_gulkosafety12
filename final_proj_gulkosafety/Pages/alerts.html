@@ -198,7 +198,7 @@
             for (var i = 0; i < alertList.length; i++) {
                 if (alertList[i].Alert_num == alertNum) {
                     $('#alert_title').html(alertList[i].Content.split(",")[0]);
-                    fullImagePath = alertList[i].Content.split(",")[1];
+                    fullImagePath = "../uploadedFiles/" + alertList[i].Content.split(",")[1];
                     projectNum = alertList[i].Proj_num;
                     break;
                 }

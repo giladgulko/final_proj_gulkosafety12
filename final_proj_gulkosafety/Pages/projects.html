@@ -77,7 +77,9 @@
             renderContacts();
         }
         function getContactListError() {
-            swal("Failed!", "Failed to read the contacts!", "warning")
+            swal({
+                title: "נכשל!", text: "שגיאה במשיכת אנשי קשר!", type: "warning", icon: "warning"
+            });
         }
 
         function renderContacts() {
@@ -104,7 +106,9 @@
             localStorage["projectTypes"] = JSON.stringify(projectTypes);
         }
         function getProjTypesError() {
-            swal("Failed!", "Failed to read project types!", "warning")
+            swal({
+                title: "נכשל!", text: "שגיאה במשיכת סוגי פרויקטים!", type: "warning", icon: "warning"
+            });
         }
 
         function newProjForm() {
@@ -135,14 +139,16 @@
         }
 
         function createNewProjSuccess(data) {
-            swal({ title: "Good job!", text: "You created new project successfully!", type: "success",icon:"success" 
+            swal({ title: "מעולה!", text: "פרויקט נוצר בהצלחה!", type: "success",icon:"success" 
             }).then(function () {
                 location.reload();
 
             });
         }
         function createNewProjError() {
-            swal("Failed!", "You failed to create a new project!", "warning")
+            swal({
+                title: "נכשל!", text: "פרויקט לא נשמר!", type: "warning", icon: "warning"
+            });
         }
 
         function buttonEvents() {
@@ -165,7 +171,7 @@
                 projId = this.getAttribute('project_data');
 
                 swal({
-                    title: "Are you sure ??",
+                    title: "האם אתה בטוח שברצונך למחוק את הפרויקט?",
                     text: "",
                     icon: "warning",
                     buttons: true,
@@ -173,7 +179,7 @@
                 })
                     .then(function (willDelete) {
                         if (willDelete) delete_proj(projId);
-                        else swal("Not Deleted!");
+                        else swal("מחיקה בוטלה!");
                     });
             });
         }
@@ -186,15 +192,16 @@
         }
         function deleteProjectSuccess() {
             swal({
-                title: "Good job", text: "The project was successfully deleted!", type:
-                    "success",icon:"success"
+                title: "מעולה!", text: "פרויקט נמחק בהצלחה!", type: "success",icon:"success"
             }).then(function () {
                 location.reload();
-            }
-            );
+            });
+
         }
         function deleteProjectError() {
-            swal("Failed!", "Failed to delete the project!", "warning");
+            swal({
+                title: "נכשל!", text: "פרויקט לא נמחק!", type: "warning", icon: "warning"
+            });
         }
         function getProjData() {
 
@@ -202,7 +209,9 @@
         }
 
         function getError() {
-            swal("Failed!", "Failed to read the project!", "warning")
+            swal({
+                title: "נכשל!", text: "שגיאה במשיכת פרטי פרויקט!", type: "warning", icon: "warning"
+            });
         }
         function createDt(projdata) {
             for (var i = 0; i < projdata.length; i++) {
