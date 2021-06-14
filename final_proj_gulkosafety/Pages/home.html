@@ -128,7 +128,7 @@
                     }
                     else str += "<li class='read-more-target'><strong>" + alertList[i].Date.split("T")[0] + "</strong ><a id='" + alertList[i].Alert_num + "' href='#' onclick='renderDefectPic(this.id)'>" + alertList[i].Content.split(",")[0] + " " + alertList[i].Proj_name + " </a></li> ";
                 }
-                str += "</ul>";
+                str += "</ul><label for='post - 2' class='read-more-trigger'>";
                 $("#fixed_defects_photos_alerts").html(str);
             }
             else d$("#fixed_defects_photos_alerts").html("<p>אין התראות</p>");
