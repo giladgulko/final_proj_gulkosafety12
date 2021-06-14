@@ -140,12 +140,18 @@
             for (var i = 0; i < reportList.length; i++) {
                 if (reportList[i].Report_num == id) {
                     localStorage["report"] = JSON.stringify(reportList[i]);
-                    //localStorage["project"] = JSON.stringify(project);
-                    window.location = "report.html";
+                    let api = "../api/project?project_num=" + reportList[i].Project_num;
+                    ajaxCall("GET", api, "", moveToReport, getProjError);
+                   
                 }
                 document.getElementById('display_details').innerHTML += "<div class='reportPopUp'><h3>פרויקט:  " + reportList[i].Proj_name + "</h3><h3> דוח מספר: " + reportList[i].Report_num + "</h3><h3> בוצע בתאריך: " + reportList[i].Date.split("T")[0] + "</h3><h3> ציון הדוח הינו: " + reportList[i].Grade + "</h3></div>";
 
             }
+        }
+
+        function moveToReport(data) {
+            localStorage["project"] = JSON.stringify(data);
+            window.location = "report.html";
         }
 
         function renderInstruction(id) {
