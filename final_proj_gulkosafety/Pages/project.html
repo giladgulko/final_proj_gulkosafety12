@@ -310,7 +310,6 @@
 
             //new report btn
             $("#newBTN").on("click", function () {
-                markSelected(this);
                 localStorage["report"] = "";
                 localStorage["projContacts"] = JSON.stringify(projContacts);
                 window.location = "report.html";
