@@ -186,6 +186,7 @@
         }
 
         function renderDefectPic(alert_Num) {
+            fullImagePath
             alertNum = alert_Num;
             $('.image').attr({
                 'src': ""
@@ -198,6 +199,7 @@
                 if (alertList[i].Alert_num == alertNum) {
                     $('#alert_title').html(alertList[i].Content.split(",")[0]);
                     fullImagePath = "../uploadedFiles/" + alertList[i].Content.split(",")[1];
+                    imagePath = alertList[i].Content.split(",")[1];
                     projectNum = alertList[i].Proj_num;
                     break;
                 }
@@ -242,7 +244,7 @@
             $('#mask').removeClass('showing');
             $('html').removeClass('hide-scroll');            
             var fix_status = 1;
-            let api = "../api/defect_in_report?picture_link=" + fullImagePath + "&fix_status=" + fix_status;
+            let api = "../api/defect_in_report?picture_link=" + imagePath + "&fix_status=" + fix_status;
             ajaxCall("PUT", api, "", postAlertOnImg, updateDefectsInReportError);
         }
 
@@ -260,7 +262,7 @@
                 for (var i = 0; i < projContacts.length; i++) {
                     var now = new Date().toISOString();
                     newAlertOnAprroveIMG = {
-                        Content: "תמונת תיקון ליקוי פיגום אושרה," + fullImagePath,
+                        Content: "תמונת תיקון ליקוי פיגום אושרה," + imagePath,
                         Date: now,
                         Alert_type_num: 3,
                         User_email: projContacts[i],
@@ -282,7 +284,7 @@
                 var now = new Date().toISOString();
                 for (var i = 0; i < projContacts.length; i++) {
                     newAlertOnAprroveIMG = {
-                        Content: "תמונת תיקון ליקוי פיגום לא אושרה," + fullImagePath,
+                        Content: "תמונת תיקון ליקוי פיגום לא אושרה," + imagePath,
                         Date: now,
                         Alert_type_num: 3,
                         User_email: projContacts[i],
