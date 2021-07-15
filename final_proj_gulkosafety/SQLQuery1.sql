@@ -116,9 +116,9 @@ VALUES  (6,8,'הצבת חפצים להגבהה על רצפת הפיגום ועב
 INSERT INTO items_in_order(order_num,item_num,quantity)
 VALUES  (5,10,13)
 
-select * from alert
+select * from project
 
-SELECT * FROM [user]
+SELECT * FROM defect
 
 
 select o.*,io.order_num,i.*
@@ -131,7 +131,7 @@ from item i inner join items_in_order io on i.item_num=io.item_num  where io.ord
 
 select * from contact_in_instruction
 
-ALTER TABLE [user]
+ALTER TABLE project
 ADD delete_status int;
 
 select * from defect

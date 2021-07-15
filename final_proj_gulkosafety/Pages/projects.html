@@ -133,7 +133,8 @@
                 Safety_lvl: 100,
                 Project_type_num: document.getElementById("projectType").value,
                 Manager_email: $('#manager').val(),
-                Foreman_email: $('#foreman').val()
+                Foreman_email: $('#foreman').val(),
+                Delete_status:0,
             }
             ajaxCall("POST", "../api/project", JSON.stringify(newProj), createNewProjSuccess, createNewProjError);
         }
@@ -186,6 +187,7 @@
         function delete_proj(proj) {
             projToDelete = {
 
+                Delete_status:1,
                 Project_num: proj
             }
             ajaxCall("DELETE", "../api/project", JSON.stringify(projToDelete), deleteProjectSuccess, deleteProjectError)
@@ -217,18 +219,17 @@
             for (var i = 0; i < projdata.length; i++) {
                 projdata[i].Start_date = projdata[i].Start_date.split("T")[0];
                 projdata[i].End_date = projdata[i].End_date.split("T")[0];
-                if (projdata[i].Status == 1) {
+                if (projdata[i].Status == 1 && projdata[i].Delete_status == 0) {
                     statues1proj.push(projdata[i]);
                 }
                 else
                     status0proj.push(projdata[i]);
             }
 
-            if (status == 1) {
-                dataToShow = statues1proj;
+            if (status == 1 ) {
+                    dataToShow = statues1proj;
 
             }
-
             allProj = projdata;
 
             try {

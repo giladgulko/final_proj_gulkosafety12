@@ -212,7 +212,8 @@
                 Safety_lvl: project.Safety_lvl,
                 Project_type_num: $('#projectType').val(),
                 Manager_email: project.Manager_email,
-                Foreman_email: project.Foreman_email
+                Foreman_email: project.Foreman_email,
+                Delete_status: project.Delete_status
             }
             localStorage["project"] = JSON.stringify(projToEdit);
             ajaxCall("PUT", "../api/project", JSON.stringify(projToEdit), updateProjectSuccess, updateProjectError);
@@ -382,7 +383,6 @@
         }
 
         function renderProjectDetails() {
-            //alert("in render details");
             $('.proj').text('');
             $('.proj').append(project.Name);
             $('#projectNum').val(project.Project_num);

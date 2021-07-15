@@ -286,7 +286,7 @@ namespace final_proj_gulkosafety.Models.DAL
         private String BuildupdateCommand(project p)
         {
             String command;
-            command = "UPDATE project SET name='" + p.Name + "', company='" + p.Company + "', address='" + p.Address + "', start_date='" + p.Start_date.ToString("yyyy-MM-dd") + "', end_date='" + p.End_date.ToString("yyyy-MM-dd") + "', status=" + p.Status + ", description='" + p.Description + "', project_type_num=" + p.Project_type_num + ", manager_email='" + p.Manager_email + "', foreman_email='" + p.Foreman_email + "' WHERE project_num =" + p.Project_num;
+            command = "UPDATE project SET name='" + p.Name + "', company='" + p.Company + "', address='" + p.Address + "', start_date='" + p.Start_date.ToString("yyyy-MM-dd") + "', end_date='" + p.End_date.ToString("yyyy-MM-dd") + "', status=" + p.Status + ", description='" + p.Description + "', project_type_num=" + p.Project_type_num + ", manager_email='" + p.Manager_email + "', foreman_email='" + p.Foreman_email + "', delete_status=" + p.Delete_status + " WHERE project_num =" + p.Project_num;
 
             return command;
         }
@@ -424,6 +424,7 @@ namespace final_proj_gulkosafety.Models.DAL
                     p.Project_type_num = Convert.ToInt32(dr["project_type_num"]);
                     p.Manager_email = (string)dr["manager_email"];
                     p.Foreman_email = (string)dr["foreman_email"];
+                    p.Delete_status = Convert.ToInt32(dr["delete_status"]);
 
                     projectList.Add(p);
 
@@ -482,6 +483,7 @@ namespace final_proj_gulkosafety.Models.DAL
                     project.Project_type_num = Convert.ToInt32(dr["project_type_num"]);
                     project.Manager_email = (string)dr["manager_email"];
                     project.Foreman_email = (string)dr["foreman_email"];
+                    project.Delete_status = Convert.ToInt32(dr["delete_status"]);
                 }
 
                 return project;
@@ -594,8 +596,8 @@ namespace final_proj_gulkosafety.Models.DAL
 
             }
         }
-        //delete project 
-        public int DeleteProject(int proj_num)
+        //change delete status project 
+        public int DeleteProject(int proj_num, int delete_status)
         {
 
             SqlConnection con;
@@ -611,7 +613,7 @@ namespace final_proj_gulkosafety.Models.DAL
             }
 
 
-            String cStr = BuildDeleteCommand(proj_num);
+            String cStr = BuildDeleteProjCommand(proj_num, delete_status);
 
             cmd = CreateCommand(cStr, con);
 
@@ -635,10 +637,10 @@ namespace final_proj_gulkosafety.Models.DAL
             }
 
         }
-        private String BuildDeleteCommand(int proj_num)
+        private String BuildDeleteProjCommand(int proj_num, int delete_status)
         {
             String command;
-            command = "delete from project where project_num=" + proj_num;
+            command = "UPDATE project SET delete_status = " + delete_status + " WHERE project_num=" + proj_num;
             return command;
         }
 
@@ -744,7 +746,7 @@ namespace final_proj_gulkosafety.Models.DAL
 
         }
 
-        //insert a whole new project
+        //insert a new project
         public int InsertProject(project _project)
         {
 
@@ -789,8 +791,8 @@ namespace final_proj_gulkosafety.Models.DAL
 
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
-            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', '{10}')", _project.Name, _project.Company, _project.Address, _project.Start_date.ToString("yyyy-MM-dd"), _project.End_date.ToString("yyyy-MM-dd"), _project.Status, _project.Description, _project.Safety_lvl, _project.Project_type_num, _project.Manager_email, _project.Foreman_email);
-            String prefix = "INSERT INTO project " + "(name,company,address,start_date,end_date,status,description,safety_lvl,project_type_num,manager_email,foreman_email)";
+            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', '{10}','{11}')", _project.Name, _project.Company, _project.Address, _project.Start_date.ToString("yyyy-MM-dd"), _project.End_date.ToString("yyyy-MM-dd"), _project.Status, _project.Description, _project.Safety_lvl, _project.Project_type_num, _project.Manager_email, _project.Foreman_email,_project.Delete_status);
+            String prefix = "INSERT INTO project " + "(name,company,address,start_date,end_date,status,description,safety_lvl,project_type_num,manager_email,foreman_email,delete_status)";
             command = prefix + sb.ToString();
 
             return command;

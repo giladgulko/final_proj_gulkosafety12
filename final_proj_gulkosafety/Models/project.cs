@@ -20,8 +20,9 @@ namespace final_proj_gulkosafety.Models
         int project_type_num;
         string manager_email;
         string foreman_email;
+        int delete_status;
 
-        public project(int project_num, string name, string company, string address, DateTime start_date, DateTime end_date, int status, string description, double safety_lvl, int project_type_num, string manager_email, string foreman_email)
+        public project(int project_num, string name, string company, string address, DateTime start_date, DateTime end_date, int status, string description, double safety_lvl, int project_type_num, string manager_email, string foreman_email, int delete_status)
         {
             Project_num = project_num;
             Name = name;
@@ -35,6 +36,7 @@ namespace final_proj_gulkosafety.Models
             Project_type_num = project_type_num;
             Manager_email = manager_email;
             Foreman_email = foreman_email;
+            Delete_status = delete_status;
         }
 
         public project(int project_num, string manager_email, string foreman_email)
@@ -56,6 +58,7 @@ namespace final_proj_gulkosafety.Models
         public int Project_type_num { get => project_type_num; set => project_type_num = value; }
         public string Manager_email { get => manager_email; set => manager_email = value; }
         public string Foreman_email { get => foreman_email; set => foreman_email = value; }
+        public int Delete_status { get => delete_status; set => delete_status = value; }
 
         public project() { }
 
@@ -102,10 +105,10 @@ namespace final_proj_gulkosafety.Models
             DBServices dbs = new DBServices();
             dbs.UpdateProjectUser(this);
         }
-        public void DeleteProject(int proj_num)
+        public void DeleteProject(int proj_num, int delete_status)
         {
             DBServices dbs = new DBServices();
-            dbs.DeleteProject(proj_num);
+            dbs.DeleteProject(proj_num, delete_status);
 
         }
     }

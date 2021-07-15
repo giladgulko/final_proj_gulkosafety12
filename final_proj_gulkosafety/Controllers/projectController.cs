@@ -85,25 +85,6 @@ namespace final_proj_gulkosafety.Controllers
             }
         }
 
-
-        //public HttpResponseMessage PutProjectSafetyLevel(int project_num, double safety_lvl)
-        //{
-        //    project p = new project();
-        //    try
-        //    {
-        //        {
-        //            p.UpdateProjectSafetyLevel(project_num, safety_lvl);
-
-        //        }
-
-        //        return Request.CreateResponse(HttpStatusCode.Created, p);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
-        //    }
-        //}
-
         public HttpResponseMessage PutProjectUsers(int project_num, [FromBody] project p)
         {
             try
@@ -126,7 +107,7 @@ namespace final_proj_gulkosafety.Controllers
             try
             {
                 {
-                    p.DeleteProject(p.Project_num);
+                    p.DeleteProject(p.Project_num,p.Delete_status);
                 }
 
                 return Request.CreateResponse(HttpStatusCode.Created, p);
