@@ -278,11 +278,15 @@
 
             if (status == 1) {
                 $("#old_proj_btn").text("פרוייקטים פעילים");
-
-
-                status = 0;
-                $('#projTable').dataTable().fnClearTable();
-                $('#projTable').dataTable().fnAddData(status0proj);
+                if (status0proj == 0) {
+                    $("#old_proj_btn").text("ארכיון פרוייקטים");
+                    alert("אין פרויקטים בארכיון")
+                }
+                else {
+                    status = 0;
+                    $('#projTable').dataTable().fnClearTable();
+                    $('#projTable').dataTable().fnAddData(status0proj);
+                }
             }
             else {
                 $("#old_proj_btn").text("ארכיון פרוייקטים");
