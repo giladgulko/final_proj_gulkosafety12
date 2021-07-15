@@ -3108,6 +3108,7 @@ namespace final_proj_gulkosafety.Models.DAL
                     p.Project_type_num = Convert.ToInt32(dr["project_type_num"]);
                     p.Manager_email = (string)dr["manager_email"];
                     p.Foreman_email = (string)dr["foreman_email"];
+                    p.Delete_status= Convert.ToInt32(dr["delete_status"]);
 
                     projectList.Add(p);
 
