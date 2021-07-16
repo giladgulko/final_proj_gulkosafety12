@@ -154,7 +154,7 @@
             UserToEdit = JSON.parse(dataUser);
             for (var i = 0; i < user_data.length; i++) {
                 if (user_data[i].Email == UserToEdit.Email)
-                    str = "<option value='" + user_data[i].User_type_num + "'>" + user_data[i].Type_name + "</option>"
+                    $("#user_type").val(user_data[i].User_type_num);
             }
             $("#new_user_headline").hide();
             $("#user_email").val(UserToEdit.Email);
@@ -162,18 +162,11 @@
             $("#user_name").val(UserToEdit.Name);
             $("#user_phone").val(UserToEdit.Phone);
             $("#user_password").val(UserToEdit.Password);
-            $("#user_type").html(str);
         }
         // עדכון משתמש
         function updateUser() {
             document.getElementById('id01').style.display = 'none';
-            let userTypeName = "";
-            if ($("#user_type").val() == "משתמש על") {
-                userTypeName = 1;
-            }
-            else {
-                userTypeName = 2;
-            }
+            let userTypeName = $("#user_type").val();
             user_update = {
                 Email: $("#user_email").val(),
                 Name: $("#user_name").val(),
