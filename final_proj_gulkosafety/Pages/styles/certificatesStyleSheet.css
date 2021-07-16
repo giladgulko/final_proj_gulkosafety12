@@ -119,7 +119,7 @@ th.sorting {
 th {
     text-align: right;
 }
-#saveBTN, #btn_update_cert, #btnSave_new_contact {
+#saveBTN, #btn_update_cert, #btnSave_new_contact, #saveContactsBTN {
     float: left;
     color: #fff;
     background-color: cadetblue;

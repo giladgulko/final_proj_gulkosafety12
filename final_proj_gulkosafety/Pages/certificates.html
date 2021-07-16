@@ -759,41 +759,38 @@
                                         </div>
                                     </td>
                                 </tr>
-                                    <tr id="contactDetails">
-                                        <td>
-                                            <div class="form-group">
-                                                <label for="contact_id"><span class="red-star">★ </span>תעודת זהות</label>
-                                                <input type="text" class="form-control groupDetails" id="contact_id" placeholder=" הזן ת.ז " pattern="[0-9]+" oninvalid="this.setCustomValidity('הזן מספרים בלבד')" oninput="this.setCustomValidity('')" required>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="form-group">
-                                                <label for="contact_name"><span class="red-star">★ </span>שם מלא</label>
-                                                <input type="text" class="form-control groupDetails" id="contact_name" placeholder=" הזן שם מלא " required>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="form-group">
-                                                <label for="contact_phone">טלפון<span class="red-star">★ </span></label>
-                                                <input type="text" class="form-control groupDetails" id="contact_phone" placeholder=" הזן טלפון " pattern="[0-9]+" oninvalid="this.setCustomValidity('הזן מספרים בלבד')" oninput="this.setCustomValidity('')" required>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="form-group">
-                                                <label for="contact_mail"><span class="red-star">★ </span>מייל</label>
-                                                <input type="text" class="form-control groupDetails" id="contact_mail" placeholder=" הזן מייל " pattern=".+@.+"
-                                                       oninvalid="this.setCustomValidity('כתובת המייל שגויה')"
-                                                       oninput="this.setCustomValidity('')" required>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <button type="submit" id="saveContactsBTN" class="btn btn-primary">שמור</button>
-                                        </td>
-                                    </tr>
+                                <tr id="contactDetails">
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="contact_id"><span class="red-star">★ </span>תעודת זהות</label>
+                                            <input type="text" class="form-control groupDetails" id="contact_id" placeholder=" הזן ת.ז " pattern="[0-9]+" oninvalid="this.setCustomValidity('הזן מספרים בלבד')" oninput="this.setCustomValidity('')" required>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="contact_name"><span class="red-star">★ </span>שם מלא</label>
+                                            <input type="text" class="form-control groupDetails" id="contact_name" placeholder=" הזן שם מלא " required>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="contact_phone">טלפון<span class="red-star">★ </span></label>
+                                            <input type="text" class="form-control groupDetails" id="contact_phone" placeholder=" הזן טלפון " pattern="[0-9]+" oninvalid="this.setCustomValidity('הזן מספרים בלבד')" oninput="this.setCustomValidity('')" required>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="contact_mail"><span class="red-star">★ </span>מייל</label>
+                                            <input type="text" class="form-control groupDetails" id="contact_mail" placeholder=" הזן מייל " pattern=".+@.+"
+                                                   oninvalid="this.setCustomValidity('כתובת המייל שגויה')"
+                                                   oninput="this.setCustomValidity('')" required>
+                                        </div>
+                                    </td>
+                                </tr>
                             </thead>
                         </table>
+                        <br />
+                        <button type="submit" id="saveContactsBTN" class="btn btn-primary">שמור</button>
                     </form>
                     <!--<table>
                         <tr>
