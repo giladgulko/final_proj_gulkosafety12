@@ -87,15 +87,22 @@
         function getAlertsSuccess(data) {
             alertList = data;
             for (i = 0; i < alertList.length; i++) {
-                if (alertList[i].Alert_type_num == 1) {
+                if (alertList[i].Alert_type_num == 1 && user.User_type_num == 1) {
                     document.getElementById('alerts').innerHTML += "<div  class='projAlerts'> <p id='" + alertList[i].Alert_num + "' href='#' </p><strong class='projDate'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='fas fa-tachometer-alt' style='font-size:24px'></i>&nbsp&nbsp<a id='" + alertList[i].Alert_num + "' href='#' onclick='renderSafetyAlert(this.id)'>סיכום עדכון רמת בטיחות פרויקט " + alertList[i].Proj_num + "</a></div> ";
 
                 }
-                else if (alertList[i].Alert_type_num == 3)
-                    document.getElementById('alerts').innerHTML += "<div  class='projAlerts'> <p id='" + alertList[i].Alert_num + "' href='#' </p><strong class='projDate'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='fas fa-tachometer-alt' style='font-size:24px'></i>&nbsp&nbsp<a id='" + alertList[i].Alert_num + "' href='#' onclick='renderDefectPic(this.id)'>" + alertList[i].Content.split(",")[0]+"</a ></div > ";
-                else {
-                    document.getElementById('alerts').innerHTML += "<div  class='projAlerts'> <p id='" + alertList[i].Alert_num + "' href='#' </p><strong class='projDate'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='far fa-calendar-alt' style='font-size:24px'></i>&nbsp&nbsp" + alertList[i].Content + " </div> ";
+                if (alertList[i].Alert_type_num == 3) {
+                    if (user.User_type_num != 1 && alertList[i].Content.split(",")[0] == "תמונת תיקון ליקוי לא אושרה") {
+                        document.getElementById('alerts').innerHTML += "<div  class='projAlerts'> <p id='" + alertList[i].Alert_num + "' href='#' </p><strong class='projDate'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='fas fa-tachometer-alt' style='font-size:24px'></i>&nbsp&nbsp<a id='" + alertList[i].Alert_num + "' href='#' onclick='renderDefectPic(this.id)'>" + alertList[i].Content.split(",")[0] + "</a ></div > ";
+                    }
+                    if( user.User_type_num != 1 && alertList[i].Content.split(",")[0] == "תמונת תיקון ליקוי אושרה") {
+                        document.getElementById('alerts').innerHTML += "<div  class='projAlerts'> <p id='" + alertList[i].Alert_num + "' href='#' </p><strong class='projDate'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='fas fa-tachometer-alt' style='font-size:24px'></i>&nbsp&nbsp<a id='" + alertList[i].Alert_num + "' href='#' onclick='renderDefectPic(this.id)'>" + alertList[i].Content.split(",")[0] + "</a ></div > ";
+                    }
+                    else if (user.User_type_num == 1 && alertList[i].Content.split(",")[0] != "תמונת תיקון ליקוי לא אושרה" && alertList[i].Content.split(",")[0] != "תמונת תיקון ליקוי אושרה"){
+                        document.getElementById('alerts').innerHTML += "<div  class='projAlerts'> <p id='" + alertList[i].Alert_num + "' href='#' </p><strong class='projDate'> " + alertList[i].Date.split("T")[0] + " " + alertList[i].Date.split("T")[1] + " </strong> <i class='fas fa-tachometer-alt' style='font-size:24px'></i>&nbsp&nbsp<a id='" + alertList[i].Alert_num + "' href='#' onclick='renderDefectPic(this.id)'>" + alertList[i].Content.split(",")[0] + "</a ></div > ";
+                    }
                 }
+                
             }
         }
         function renderSafetyAlert(id) {

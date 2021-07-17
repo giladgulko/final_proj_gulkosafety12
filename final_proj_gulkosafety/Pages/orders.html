@@ -523,9 +523,7 @@
 
                                 deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteOrder(this.value)'> מחיקה </button>";
 
-                                showBtn = "<button type='button' class = 'showBtn btn btn-show' value='" + def + "' onclick='showContact(this.value)'>  הצג איש קשר </button>";
-
-                                return editBtn + deleteBtn + showBtn;
+                                return editBtn + deleteBtn;
 
                             }
                         },
@@ -541,13 +539,12 @@
 
         }
         //כפתור הצג איש קשר
-        function showContact(def) {
-            console.log(def);
+        function showContact() {
             document.getElementById('id01').style.display = 'block';
-            order_number = JSON.parse(def);
+            //order_number = JSON.parse(def);
             let contactToShow = [];
             for (var i = 0; i < AllContacts.length; i++) {
-                if (AllContacts[i].Full_name == order_number.Contact_id) {
+                if (AllContacts[i].Full_name == orderToEdit.Contact_id) {
                     contact = {
                         Id: AllContacts[i].Id,
                         Full_name: AllContacts[i].Full_name,
@@ -841,7 +838,8 @@
         <div id="id03" class="w3-modal">
             <div class="w3-modal-content">
                 <div class="w3-container" dir="rtl">
-                    <span onclick="document.getElementById('id03').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                    <span onclick="document.getElementById('id03').style.display='none',clearPopuP()" class="w3-button w3-display-topright">&times;</span>
+                    <br />
                     <form id="newOrderForm">
                         <br />
                         <h2 id="NewOrder">הזמנה חדשה</h2>
@@ -873,6 +871,7 @@
                             </thead>
                         </table>
                     </form>
+                    <button id="btn_show_contact" class="btn btn-primary" onclick="showContact()">הצג איש קשר</button>
                     <button id="btn_ShowItems" onclick="showItems()" class="btn btn-primary"> הצג פריטים</button>
                     <table id="search_item">
                         <tr>
