@@ -121,11 +121,12 @@ body {
 .red-star, #dateError {
     color: red;
 }
-#saveBTN, #btn_update_defect_type, #btn_update_defect, #btn_update_instruction_type, #btn_update_user_type, #btn_update_certificate_type, #btn_update_item, #saveBTN1 {
-float: left;
-color: #fff;
-background-color: cadetblue;
-border-color: cadetblue;
+
+#saveBTN, #saveBTN_item, #saveBTN_defect_type, #saveBTN_certificate_type, #saveBTN_user_type, #saveBTN_instruction_type, #btn_update_defect_type, #btn_update_defect, #btn_update_instruction_type, #btn_update_user_type, #btn_update_certificate_type, #btn_update_item, #saveBTN1 {
+    float: left;
+    color: #fff;
+    background-color: cadetblue;
+    border-color: cadetblue;
 }
 #logout {
     border: unset;
