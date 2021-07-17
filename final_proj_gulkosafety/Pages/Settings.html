@@ -34,12 +34,12 @@
         userTypeToEdit = [];
         ItemToEdit = [];
         certificateTypeToEdit = [];
-
+        var mode = "";
         $(document).ready(function () {
             if (user.User_type_num == 2) {
                 userType2Mode();
             }
-
+            $(".allforms").submit(CheckSubmit);
             defectTypeArr = [];
             readDefectTypeAtTheBegining();
             // סוגי ליקוי
@@ -145,6 +145,46 @@
         function UpdateUserError() {
             swal("עדכון משתמש לא בוצע!", err, "warning");
         }
+        //אחרי submit
+        function CheckSubmit() {
+            if (mode == "newDefectType") {
+                insert_new_defect_type();
+            }
+            if (mode == "newInstructionType") {
+                insert_new_instruction_type();
+            }
+            if (mode == "newUserType") {
+                insert_new_user_type();
+            }
+            if (mode == "newCertificateType") {
+
+                insert_new_certificate_type();
+            }
+            if (mode == "newItem") {
+                insert_new_item();
+            }
+            if (mode == "newDefect") {
+                insert_new_defect();
+            }
+            if (mode == "editDefectType") {
+                updateDefectType();
+            }
+            if (mode == "editInstructionType") {
+                updateInstructionType();
+            }
+            if (mode == "editUserType") {
+                updateUserType();
+            }
+            if (mode == "editCertificateType") {
+                updateCertificateType();
+            }
+            if (mode == "editItem") {
+                updateItem();
+            }
+            if (mode == "editDefect") {
+                updateDefect();
+            }
+        }
         //החלפת צבע בכפתורים בצד אחרי לחיצה
         function SwitchBtnToColor(BtnId) {
             let switchId = "#" + BtnId;
@@ -156,7 +196,11 @@
                 }
             }
         }
-        //////////////////////////////////////////////////////סוגי ליקויים
+        function switch_btn_fit_insert_new(valueOfModeNew) {
+            mode = valueOfModeNew;
+        }
+        
+        ////////סוגי ליקויים
         //קריאה בהתחלה של סוגי ליקויים
         function readDefectTypeAtTheBegining() {
          ajaxCall("GET", "../api/defect_type", "", createDtDefectType, getErrorDefectType)
@@ -233,7 +277,7 @@
                             render: function (data, type, row, meta) {
                                 let def = JSON.stringify(row);
 
-                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editDefectType(this.value)'> עריכה </button>";
+                                editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "'onclick='editDefectType(this.value)'> עריכה </button>";
 
                                 deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteDefectType(this.value)'> מחיקה </button>";
 
@@ -253,7 +297,6 @@
         }
         //הוספת סוג ליקוי חדש
         function insert_new_defect_type() {
-
             document.getElementById('id01').style.display = 'none';
 
             let newDefectType = {
@@ -280,17 +323,16 @@
 
         //עריכת סוג ליקוי
         function editDefectType(dataDefectType) {
-            document.getElementById('id011').style.display = 'block';
+            mode = "editDefectType";
+            document.getElementById('id01').style.display = 'block';
             defectTypeToEdit = JSON.parse(dataDefectType);
-            $("#defect_type_number").val(defectTypeToEdit.Defect_type_num);
-            $("#defect_type_number").prop('disabled', true);
-            $("#defect_type_name1").val(defectTypeToEdit.Type_name);
+            $("#defect_type_name").val(defectTypeToEdit.Type_name);
         }
         // עדכון סוג ליקוי
         function updateDefectType() {
             defect_type_update = {
                 Defect_type_num: defectTypeToEdit.Defect_type_num,
-                Type_name: $("#defect_type_name1").val(),
+                Type_name: $("#defect_type_name").val(),
             }
             let api = "../api/defect_type";
             ajaxCall("PUT", api, JSON.stringify(defect_type_update), UpdateDefectTypeSuccess, UpdateDefectTypetError);
@@ -339,7 +381,7 @@
         function deleteDefectTypeError() {
             swal("סוג ליקוי לא נמחק!", err, "warning");
         }
-        //////////////////////////////////////////////////////סוגי הדרכות
+        ////////סוגי הדרכות
         // קריאת כל סוגי הדרכות
         function getInstructionType(BtnId) {
             SwitchBtnToColor(BtnId);
@@ -439,7 +481,6 @@
         }
         //הוספת סוג הדרכה חדש
         function insert_new_instruction_type() {
-
             document.getElementById('id02').style.display = 'none';
 
             let newInstructionType = {
@@ -467,21 +508,20 @@
 
         //עריכת סוג הדרכה
         function editInstructionType(dataInstructionType) {
-            document.getElementById('id022').style.display = 'block';
+            mode = "editInstructionType";
+            document.getElementById('id02').style.display = 'block';
             instructionTypeToEdit = JSON.parse(dataInstructionType);
-            $("#instruction_type_number").val(instructionTypeToEdit.Instruction_type_num);
-            $("#instruction_type_number").prop('disabled', true);
-            $("#instruction_type_name1").val(instructionTypeToEdit.Type_name);
-            $("#instruction_expiration1").val(instructionTypeToEdit.Expiration);
-            $("#instruction_price1").val(instructionTypeToEdit.Price);
+            $("#instruction_type_name").val(instructionTypeToEdit.Type_name);
+            $("#instruction_expiration").val(instructionTypeToEdit.Expiration);
+            $("#instruction_price").val(instructionTypeToEdit.Price);
         }
         // עדכון סוג הדרכה
         function updateInstructionType() {
             instruction_type_update = {
                 Instruction_type_num: instructionTypeToEdit.Instruction_type_num,
-                Type_name: $("#instruction_type_name1").val(),
-                Expiration: $("#instruction_expiration1").val(),
-                Price: $("#instruction_price1").val(),
+                Type_name: $("#instruction_type_name").val(),
+                Expiration: $("#instruction_expiration").val(),
+                Price: $("#instruction_price").val(),
             }
             let api = "../api/instruction_type";
             ajaxCall("PUT", api, JSON.stringify(instruction_type_update), UpdateInstructionTypeSuccess, UpdateInstructionTypetError);
@@ -531,7 +571,7 @@
             swal("סוג הדרכה לא נמחק!", err, "warning");
         }
 
-        //////////////////////////////////////////////////////סוגי משתמשים
+        ////////סוגי משתמשים
         // קריאת כל סוגי משתמשים
         function getUserType(BtnId) {
             SwitchBtnToColor(BtnId);
@@ -628,7 +668,6 @@
         }
         //הוספת סוג משתמש חדש
         function insert_new_user_type() {
-
             document.getElementById('id03').style.display = 'none';
 
             let newUserType = {
@@ -654,17 +693,16 @@
 
         //עריכת סוג משתמש
         function editUserType(dataUserType) {
-            document.getElementById('id033').style.display = 'block';
+            mode = "editUserType";
+            document.getElementById('id03').style.display = 'block';
             userTypeToEdit = JSON.parse(dataUserType);
-            $("#user_type_number").val(userTypeToEdit.User_type_num);
-            $("#user_type_number").prop('disabled', true);
-            $("#user_type_name1").val(userTypeToEdit.Type_name);
+            $("#user_type_name").val(userTypeToEdit.Type_name);
         }
         // עדכון סוג משתמש
         function updateUserType() {
             user_type_update = {
                 User_type_num: userTypeToEdit.User_type_num,
-                Type_name: $("#user_type_name1").val(),
+                Type_name: $("#user_type_name").val(),
             }
             let api = "../api/user_type";
             ajaxCall("PUT", api, JSON.stringify(user_type_update), UpdateUserTypeSuccess, UpdateUserTypetError);
@@ -714,7 +752,7 @@
             swal("סוג משתמש לא נמחק!", err, "warning");
         }
 
-        //////////////////////////////////////////////////////סוגי אישורים
+        ////////סוגי אישורים
         // קריאת כל סוגי אישורים
         function getCertificateType(BtnId) {
             SwitchBtnToColor(BtnId);
@@ -816,7 +854,6 @@
         }
         //הוספת סוג אישור חדש
         function insert_new_certificate_type() {
-
             document.getElementById('id04').style.display = 'none';
 
             let newCertificateType = {
@@ -844,21 +881,20 @@
 
         //עריכת סוג אישור
         function editCertificateType(dataCertificateType) {
-            document.getElementById('id044').style.display = 'block';
+            mode = "editCertificateType";
+            document.getElementById('id04').style.display = 'block';
             certificateTypeToEdit = JSON.parse(dataCertificateType);
-            $("#certificate_type_number").val(certificateTypeToEdit.Certificate_type_num);
-            $("#certificate_type_number").prop('disabled', true);
-            $("#certificate_type_name1").val(certificateTypeToEdit.Type_name);
-            $("#certificate_expiration1").val(certificateTypeToEdit.Expiration);
-            $("#certificate_price1").val(certificateTypeToEdit.Price);
+            $("#certificate_type_name").val(certificateTypeToEdit.Type_name);
+            $("#certificate_expiration").val(certificateTypeToEdit.Expiration);
+            $("#certificate_price").val(certificateTypeToEdit.Price);
         }
         // עדכון סוג אישור
         function updateCertificateType() {
             certificate_type_update = {
                 Certificate_type_num: certificateTypeToEdit.Certificate_type_num,
-                Type_name: $("#certificate_type_name1").val(),
-                Expiration: $("#certificate_expiration1").val(),
-                Price: $("#certificate_price1").val(),
+                Type_name: $("#certificate_type_name").val(),
+                Expiration: $("#certificate_expiration").val(),
+                Price: $("#certificate_price").val(),
             }
             let api = "../api/certificate_type";
             ajaxCall("PUT", api, JSON.stringify(certificate_type_update), UpdateCertificateTypeSuccess, UpdateCertificateTypetError);
@@ -908,7 +944,7 @@
             swal("סוג אישור לא נמחק!", err, "warning");
         }
 
-        //////////////////////////////////////////////////////פריטים
+        ////////פריטים
         // קריאת כל הפריטים
         function getItem(BtnId) {
             SwitchBtnToColor(BtnId);
@@ -1008,7 +1044,6 @@
         }
         //הוספת פריט חדש
         function insert_new_item() {
-
             document.getElementById('id05').style.display = 'none';
 
             let newItem = {
@@ -1035,19 +1070,18 @@
 
         //עריכת פריט
         function editItem(dataItem) {
-            document.getElementById('id055').style.display = 'block';
+            mode = "editItem";
+            document.getElementById('id05').style.display = 'block';
             ItemToEdit = JSON.parse(dataItem);
-            $("#item_number").val(ItemToEdit.Item_num);
-            $("#item_number").prop('disabled', true);
-            $("#item_name1").val(ItemToEdit.Name);
-            $("#item_price1").val(ItemToEdit.Price);
+            $("#item_name").val(ItemToEdit.Name);
+            $("#item_price").val(ItemToEdit.Price);
         }
         // עדכון פריט
         function updateItem() {
             item_update = {
                 Item_num: ItemToEdit.Item_num,
-                Name: $("#item_name1").val(),
-                Price: $("#item_price1").val(),
+                Name: $("#item_name").val(),
+                Price: $("#item_price").val(),
             }
             let api = "../api/item";
             ajaxCall("PUT", api, JSON.stringify(item_update), UpdateItemSuccess, UpdateItemError);
@@ -1096,7 +1130,7 @@
         function deleteItemError() {
             swal("פריט לא נמחק!", err, "warning");
         }
-        //////////////////////////////////////////ליקויים
+        ////////ליקויים
         // קריאת כל הליקויים
         function getDefect(BtnId) {
             SwitchBtnToColor(BtnId);
@@ -1188,9 +1222,9 @@
 
                                 editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editDefect(this.value)'> עריכה </button>";
 
-                                //deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteDefect(this.value)'> מחיקה </button>";
+                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteDefect(this.value)'> מחיקה </button>";
 
-                                return editBtn;
+                                return editBtn + deleteBtn;
 
                             }
                         },
@@ -1243,18 +1277,13 @@
             $("#btn_update_defect").hide();
             $("#new_defect_headline").show();
             $("#notShowingWhileCreating").hide();
-            $("#defect_num").hide();
             document.getElementById('id06').style.display = 'none';
-            $("#defect_num").val(DefectToEdit.Defect_num);
-            $("#defect_name").val(DefectToEdit.Name);
-            $("#defect_num").prop('disabled', true);
-            $("#defect_grade").val(DefectToEdit.Grade);
-            $("#defect_type_name2").html(str);
+            let defect_type_number_for_insert = $("#defect_type_name2").val();
             let newDefect = {
 
                 Name: $("#defect_name").val(),
                 Grade: $("#defect_grade").val(),
-                Defect_type_num: $("#defect_type_name2").val(),
+                Defect_type_num: defect_type_number_for_insert,
             }
 
             let api = "../api/defect";
@@ -1275,6 +1304,7 @@
 
         //עריכת ליקוי
         function editDefect(dataDefect) {
+            mode = "editDefect";
             $("#saveBTN1").hide();
             $("#btn_update_defect").show();
             $("#new_defect_headline").hide();
@@ -1317,38 +1347,38 @@
             swal("עדכון ליקוי לא בוצע!", err, "warning");
         }
         //מחיקת ליקוי חדש
-        ////function deleteDefect(def) {
-        //    delete_defect = JSON.parse(def);
-        //    defectToDelete = {
-        //        Defect_num: delete_defect.Defect_num,
-        //    }
-        //    swal({
-        //        title: "האם אתה בטוח שברצונך למחוק את ליקוי?",
-        //        text: "",
-        //        icon: "warning",
-        //        buttons: true,
-        //        dangerMode: true
-        //    })
-        //        .then(function (willDelete) {
-        //            if (willDelete) delete_defect_func(defectToDelete);
-        //            else swal("ליקוי לא נמחק!");
-        //        });
-        //}
-        //function delete_defect_func(defectToDelete) {
-        //    ajaxCall("DELETE", "../api/defect", JSON.stringify(defectToDelete), deleteDefectSuccess, deleteDefectError);
+        function deleteDefect(def) {
+            delete_defect = JSON.parse(def);
+            defectToDelete = {
+                Defect_num: delete_defect.Defect_num,
+            }
+            swal({
+                title: "האם אתה בטוח שברצונך למחוק את ליקוי?",
+                text: "",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true
+            })
+                .then(function (willDelete) {
+                    if (willDelete) delete_defect_func(defectToDelete);
+                    else swal("ליקוי לא נמחק!");
+                });
+        }
+        function delete_defect_func(defectToDelete) {
+            ajaxCall("DELETE", "../api/defect", JSON.stringify(defectToDelete), deleteDefectSuccess, deleteDefectError);
 
-        //}
-        ////function deleteDefectSuccess() {
-        //    swal({
-        //        title: "מצוין!", text: "ליקוי נמחק בהצלחה", type: "success", icon: "success"
-        //    }).then(function () {
-        //        location.reload();
+        }
+        function deleteDefectSuccess() {
+            swal({
+                title: "מצוין!", text: "ליקוי נמחק בהצלחה", type: "success", icon: "success"
+            }).then(function () {
+                location.reload();
 
-        //    });
-        //}
-        //function deleteDefectError() {
-        //    swal("ליקוי לא נמחק!", err, "warning");
-        //}
+            });
+        }
+        function deleteDefectError() {
+            swal("ליקוי לא נמחק!", err, "warning");
+        }
         //פונקציות נוספות של העמוד
         function changeColor() {
             document.getElementById('select_item');
@@ -1417,12 +1447,12 @@
             <div class="col-md-10 col-sm-9">
                 <div>
                     <div id="addbuttons">
-                        <button id="addDefectTypeBtn" class="btn btn-primary" onclick="document.getElementById('id01').style.display='block',clearPopuP()">הוסף סוג ליקוי חדש</button>
-                        <button id="addInstructionTypeBtn" class="btn btn-primary" onclick="document.getElementById('id02').style.display='block',changeColor(),clearPopuP()">הוסף סוג הדרכה חדש</button>
-                        <button id="addUserTypeBtn" class="btn btn-primary" onclick="document.getElementById('id03').style.display='block',clearPopuP()">הוסף סוג משתמש חדש</button>
-                        <button id="addCertificateTypeBtn" class="btn btn-primary" onclick="document.getElementById('id04').style.display='block',clearPopuP()">הוסף סוג אישור חדש</button>
-                        <button id="addItemBtn" class="btn btn-primary" onclick="document.getElementById('id05').style.display='block',clearPopuP()">הוסף פריט חדש</button>
-                        <button id="addDefectBtn" class="btn btn-primary" onclick="document.getElementById('id06').style.display='block',clearPopuP()">הוסף ליקוי חדש</button>
+                        <button id="addDefectTypeBtn" class="btn btn-primary" value="newDefectType" onclick="document.getElementById('id01').style.display='block',switch_btn_fit_insert_new(this.value),clearPopuP()">הוסף סוג ליקוי חדש</button>
+                        <button id="addInstructionTypeBtn" class="btn btn-primary" value="newInstructionType" onclick="document.getElementById('id02').style.display = 'block', changeColor(), switch_btn_fit_insert_new(this.value), clearPopuP()">הוסף סוג הדרכה חדש</button>
+                        <button id="addUserTypeBtn" class="btn btn-primary" value="newUserType" onclick="document.getElementById('id03').style.display='block',switch_btn_fit_insert_new(this.value),clearPopuP()">הוסף סוג משתמש חדש</button>
+                        <button id="addCertificateTypeBtn" class="btn btn-primary" value="newCertificateType" onclick="document.getElementById('id04').style.display='block',switch_btn_fit_insert_new(this.value),clearPopuP()">הוסף סוג אישור חדש</button>
+                        <button id="addItemBtn" class="btn btn-primary" value="newItem" onclick="document.getElementById('id05').style.display='block',switch_btn_fit_insert_new(this.value),clearPopuP()">הוסף פריט חדש</button>
+                        <button id="addDefectBtn" class="btn btn-primary" value="newDefect" onclick="document.getElementById('id06').style.display='block',switch_btn_fit_insert_new(this.value),clearPopuP()">הוסף ליקוי חדש</button>
                     </div>
                 </div>
                 </br>
@@ -1444,7 +1474,7 @@
                             <tr>
                                 <th>מספר סוג הדרכה</th>
                                 <th>שם סוג הדרכה</th>
-                                <th>תוקף</th>
+                                <th>תוקף בשנים</th>
                                 <th>מחיר</th>
                                 <th></th>
                             </tr>
@@ -1469,7 +1499,7 @@
                                 <th>מספר סוג אישור</th>
                                 <th>שם סוג אישור</th>
                                 <th>מחיר</th>
-                                <th>תוקף </th>
+                                <th>תוקף בשנים </th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -1518,9 +1548,9 @@
                 <div class="w3-modal-content">
                     <div class="w3-container" dir="rtl">
                         <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-                        <form id="newDefectTypeForm">
+                        <form id="DefectTypeForm" class="allforms" onsubmit="return false">
                             <br />
-                            <h2 id="new_defect_type_headline">סוג ליקוי חדש</h2>
+                            <h2 id="defect_type_headline">סוג ליקוי</h2>
                             <br />
                             <table class="display" dir="rtl">
                                 <thead>
@@ -1534,9 +1564,10 @@
                                     </tr>
                                 </thead>
                             </table>
+                            <br />
+                            <button type="submit" id="saveBTN" class="btn btn-primary"> שמור </button>
+                            <br />
                         </form>
-                        <br />
-                        <button id="saveBTN" onclick="insert_new_defect_type()" class="btn btn-primary"> שמור סוג ליקוי</button>
                     </div>
                     <br />
                 </div>
@@ -1547,9 +1578,9 @@
                 <div class="w3-modal-content">
                     <div class="w3-container" dir="rtl">
                         <span onclick="document.getElementById('id02').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-                        <form id="newInstructionTypeForm">
+                        <form id="InstructionTypeForm" class="allforms" onsubmit="return false">
                             <br />
-                            <h2 id="new_instruction_type_headline">סוג הדרכה חדש</h2>
+                            <h2 id="instruction_type_headline">סוג הדרכה</h2>
                             <br />
                             <table class="display" style="width:100%" dir="rtl">
                                 <thead>
@@ -1562,22 +1593,27 @@
                                         </td>
                                         <td>
                                             <div class="form-group">
-                                                <label for="instruction_expiration"><span class="red-star">★ </span>ימים לתוקף </label>
-                                                <textarea rows="1" class="form-control groupDetails" id="instruction_expiration" placeholder="הזן מספר ימים לתוקף "></textarea>
+                                                <label for="instruction_expiration"><span class="red-star">★ </span>תוקף בשנים </label>
+                                                <input type="text" rows="1" class="form-control groupDetails" id="instruction_expiration" placeholder=" הזן מספר שנים לתוקף " pattern="[0-9]+" required="required"
+                                                       oninvalid="this.setCustomValidity('הכנס רק מספרים')"
+                                                       oninput="this.setCustomValidity('')">
                                             </div>
                                         </td>
                                         <td>
                                             <div class="form-group">
                                                 <label for="instruction_price"><span class="red-star">★ </span>מחיר</label>
-                                                <textarea rows="1" class="form-control groupDetails" id="instruction_price" placeholder="הזן מחיר"></textarea>
+                                                <input type="text" rows="1" class="form-control groupDetails" id="instruction_price" placeholder=" הזן מחיר " pattern="[0-9]+" required="required"
+                                                       oninvalid="this.setCustomValidity('הכנס רק מספרים')"
+                                                       oninput="this.setCustomValidity('')">
                                             </div>
                                         </td>
                                     </tr>
                                 </thead>
                             </table>
+                            <br />
+                            <button type="submit" id="saveBTN" class="btn btn-primary"> שמור </button>
+                            <br />
                         </form>
-                        <br />
-                        <button id="saveBTN" onclick="insert_new_instruction_type()" class="btn btn-primary"> שמור סוג הדרכה</button>
                     </div>
                     <br />
                 </div>
@@ -1588,9 +1624,9 @@
                 <div class="w3-modal-content">
                     <div class="w3-container" dir="rtl">
                         <span onclick="document.getElementById('id03').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-                        <form id="newUserTypeForm">
+                        <form id="UserTypeForm" class="allforms" onsubmit="return false">
                             <br />
-                            <h2 id="new_user_type_headline">סוג משתמש חדש</h2>
+                            <h2 id="user_type_headline">סוג משתמש</h2>
                             <br />
                             <table class="display" dir="rtl">
                                 <thead>
@@ -1604,9 +1640,10 @@
                                     </tr>
                                 </thead>
                             </table>
+                            <br />
+                            <button type="submit" id="saveBTN" class="btn btn-primary"> שמור </button>
+                            <br />
                         </form>
-                        <br />
-                        <button id="saveBTN" onclick="insert_new_user_type()" class="btn btn-primary"> שמור סוג משתמש</button>
                     </div>
                     <br />
                 </div>
@@ -1617,9 +1654,9 @@
                 <div class="w3-modal-content">
                     <div class="w3-container" dir="rtl">
                         <span onclick="document.getElementById('id04').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-                        <form id="newCertificateTypeForm">
+                        <form id="CertificateTypeForm" class="allforms" onsubmit="return false">
                             <br />
-                            <h2 id="new_certificate_type_headline">סוג אישור חדש</h2>
+                            <h2 id="certificate_type_headline">סוג אישור</h2>
                             <br />
                             <table class="display" style="width:100%" dir="rtl">
                                 <thead>
@@ -1632,22 +1669,27 @@
                                         </td>
                                         <td>
                                             <div class="form-group">
-                                                <label for="certificate_expiration"><span class="red-star">★ </span>ימים לתוקף </label>
-                                                <textarea rows="1" class="form-control groupDetails" id="certificate_expiration" placeholder="הזן מספר ימים לתוקף"></textarea>
+                                                <label for="certificate_expiration"><span class="red-star">★ </span>תוקף בשנים </label>
+                                                <input type="text" rows="1" class="form-control groupDetails" id="certificate_expiration" placeholder=" הזן מספר שנים לתוקף " pattern="[0-9]+" required="required"
+                                                       oninvalid="this.setCustomValidity('הכנס רק מספרים')"
+                                                       oninput="this.setCustomValidity('')">
                                             </div>
                                         </td>
                                         <td>
                                             <div class="form-group">
                                                 <label for="certificate_price"><span class="red-star">★ </span>מחיר</label>
-                                                <textarea rows="1" class="form-control groupDetails" id="certificate_price" placeholder="הזן מחיר"></textarea>
+                                                <input type="text" rows="1" class="form-control groupDetails" id="certificate_price" placeholder=" הזן מחיר " pattern="[0-9]+" required="required"
+                                                       oninvalid="this.setCustomValidity('הכנס רק מספרים')"
+                                                       oninput="this.setCustomValidity('')">
                                             </div>
                                         </td>
                                     </tr>
                                 </thead>
                             </table>
+                            <br />
+                            <button type="submit" id="saveBTN" class="btn btn-primary"> שמור </button>
+                            <br />
                         </form>
-                        <br />
-                        <button id="saveBTN" onclick="insert_new_certificate_type()" class="btn btn-primary"> שמור סוג אישור</button>
                     </div>
                     <br />
                 </div>
@@ -1658,9 +1700,9 @@
                 <div class="w3-modal-content">
                     <div class="w3-container" dir="rtl">
                         <span onclick="document.getElementById('id05').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-                        <form id="newItemForm">
+                        <form id="ItemForm" class="allforms" onsubmit="return false">
                             <br />
-                            <h2 id="new_item_headline">פריט חדש</h2>
+                            <h2 id="item_headline">פריט </h2>
                             <br />
                             <table class="display" dir="rtl">
                                 <thead>
@@ -1674,15 +1716,18 @@
                                         <td>
                                             <div class="form-group">
                                                 <label for="item_price"><span class="red-star">★ </span>מחיר</label>
-                                                <textarea rows="1" class="form-control groupDetails" id="item_price" placeholder="הזן מחיר"></textarea>
+                                                <input type="text" rows="1" class="form-control groupDetails" id="item_price" placeholder=" הזן מחיר " pattern="[0-9]+" required="required"
+                                                       oninvalid="this.setCustomValidity('הכנס רק מספרים')"
+                                                       oninput="this.setCustomValidity('')">
                                             </div>
                                         </td>
                                     </tr>
                                 </thead>
                             </table>
+                            <br />
+                            <button type="submit" id="saveBTN" class="btn btn-primary"> שמור </button>
+                            <br />
                         </form>
-                        <br />
-                        <button id="saveBTN" onclick="insert_new_item()" class="btn btn-primary"> שמור פריט</button>
                     </div>
                     <br />
                 </div>
@@ -1693,9 +1738,9 @@
                 <div class="w3-modal-content">
                     <div class="w3-container" dir="rtl">
                         <span onclick="document.getElementById('id06').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-                        <form id="DefectForm">
+                        <form id="DefectForm" class="allforms" onsubmit="return false">
                             <br />
-                            <h2 id="new_defect_headline">ליקוי חדש </h2>
+                            <h2 id="defect_headline">ליקוי חדש </h2>
                             <br />
                             <table class="display" dir="rtl">
                                 <thead>
@@ -1703,13 +1748,15 @@
                                         <td>
                                             <div class="form-group">
                                                 <label for="defect_name"><span class="red-star">★ </span>שם ליקוי</label>
-                                                <textarea rows="1" class="form-control groupDetails" id="defect_name" placeholder="הזן שם ליקוי"></textarea>
+                                                <textarea rows="1" class="form-control groupDetails" id="defect_name" required="required" placeholder="הזן שם ליקוי"></textarea>
                                             </div>
 
                                         <td>
                                             <div class="form-group">
                                                 <label for="defect_grade"><span class="red-star">★ </span>ציון</label>
-                                                <textarea rows="1" class="form-control groupDetails" id="defect_grade" placeholder="הזן ציון לליקוי"></textarea>
+                                                <input type="text" class="form-control groupDetails" id="defect_grade" placeholder=" הזן ציון לליקוי " pattern="[1-9]{1}|10" required="required"
+                                                       oninvalid="this.setCustomValidity(' 1-10 הכנס רק מספרים')"
+                                                       oninput="this.setCustomValidity('')">
                                             </div>
                                         </td>
                                         <td>
@@ -1723,200 +1770,10 @@
                                     </tr>
                                 </thead>
                             </table>
-                        </form>
-                        <br />
-                        <button id="saveBTN1" onclick="insert_new_defect()" class="btn btn-primary">שמור ליקוי</button>
-                        <button id="btn_update_defect" class="btn btn-primary" onclick="updateDefect()">עדכן פרטי ליקוי </button>
-                    </div>
-                    <br />
-                </div>
-            </div>
-        </div>
-        <div class="w3-container">
-            <div id="id011" class="w3-modal">
-                <div class="w3-modal-content">
-                    <div class="w3-container" dir="rtl">
-                        <span onclick="document.getElementById('id011').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-                        <form id="updateDefectTypeForm">
                             <br />
-                            <table id="updateDefectTypeTb">
-                                <br />
-                                <tr>
-                                    <td>
-                                        <div class="form-group">
-                                            <label for="defect_type_number"><span class="red-star">★ </span>מספר סוג ליקוי</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="defect_type_number" placeholder="הזן מספר סוג ליקוי "></textarea>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-group">
-                                            <label for="defect_type_name1"><span class="red-star">★ </span>שם סוג ליקוי</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="defect_type_name1" placeholder=" הזן שם סוג ליקוי "></textarea>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </form>
-                        <br />
-                        <button id="btn_update_defect_type" class="btn btn-primary" onclick="updateDefectType()"> עדכן סוג ליקוי </button>
-                    </div>
-                    <br />
-                </div>
-            </div>
-        </div>
-        <div class="w3-container">
-            <div id="id022" class="w3-modal">
-                <div class="w3-modal-content">
-                    <div class="w3-container" dir="rtl">
-                        <span onclick="document.getElementById('id022').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-                        <form id="updateInstructionTypeForm">
+                            <button type="submit" id="saveBTN" class="btn btn-primary"> שמור </button>
                             <br />
-                            <table id="updateInstructionTypeTb">
-                                <br />
-                                <tr>
-                                    <td>
-                                        <div class="form-group">
-                                            <label for="instruction_type_number"><span class="red-star">★ </span>מספר סוג הדרכה</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="instruction_type_number"></textarea>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-group">
-                                            <label for="instruction_type_name1"><span class="red-star">★ </span>שם סוג הדרכה</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="instruction_type_name1"></textarea>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-group">
-                                            <label for="instruction_expiration1"><span class="red-star">★ </span>ימים לתוקף</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="instruction_expiration1"></textarea>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-group">
-                                            <label for="instruction_price1"><span class="red-star">★ </span>מחיר</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="instruction_price1"></textarea>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
                         </form>
-                        <br />
-                        <button id="btn_update_instruction_type" class="btn btn-primary" onclick="updateInstructionType()"> עדכן סוג הדרכה </button>
-                    </div>
-                    <br />
-                </div>
-            </div>
-        </div>
-        <div class="w3-container">
-            <div id="id033" class="w3-modal">
-                <div class="w3-modal-content">
-                    <div class="w3-container" dir="rtl">
-                        <span onclick="document.getElementById('id033').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-                        <form id="updateUserTypeForm">
-                            <br />
-                            <table id="updateUserTypeTb">
-                                <br />
-                                <tr>
-                                    <td>
-                                        <div class="form-group">
-                                            <label for="user_type_number"><span class="red-star">★ </span>מספר סוג משתמש</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="user_type_number"></textarea>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-group">
-                                            <label for="user_type_name1"><span class="red-star">★ </span>שם סוג משתמש</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="user_type_name1"></textarea>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </form>
-                        <br />
-                        <button id="btn_update_user_type" class="btn btn-primary" onclick="updateUserType()"> עדכן סוג משתמש </button>
-                    </div>
-                    <br />
-                </div>
-            </div>
-        </div>
-        <div class="w3-container">
-            <div id="id044" class="w3-modal">
-                <div class="w3-modal-content">
-                    <div class="w3-container" dir="rtl">
-                        <span onclick="document.getElementById('id044').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-                        <form id="updateCertificateTypeForm">
-                            <br />
-                            <table id="updateCertificateTypeTb">
-                                <br />
-                                <tr>
-                                    <td>
-                                        <div class="form-group">
-                                            <label for="certificate_type_number"><span class="red-star">★ </span>מספר סוג הדרכה</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="certificate_type_number"></textarea>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-group">
-                                            <label for="certificate_type_name1"><span class="red-star">★ </span>שם סוג הדרכה</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="certificate_type_name1"></textarea>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-group">
-                                            <label for="certificate_expiration1"><span class="red-star">★ </span>ימים לתוקף</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="certificate_expiration1"></textarea>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-group">
-                                            <label for="certificate_price1"><span class="red-star">★ </span>מחיר</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="certificate_price1"></textarea>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </form>
-                        <br />
-                        <button id="btn_update_certificate_type" class="btn btn-primary" onclick="updateCertificateType()"> עדכן סוג אישור </button>
-                    </div>
-                    <br />
-                </div>
-            </div>
-        </div>
-        <div class="w3-container">
-            <div id="id055" class="w3-modal">
-                <div class="w3-modal-content">
-                    <div class="w3-container" dir="rtl">
-                        <span onclick="document.getElementById('id055').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-                        <form id="updateItemForm">
-                            <br />
-                            <table id="updateItemTb">
-                                <br />
-                                <tr>
-                                    <td>
-                                        <div class="form-group">
-                                            <label for="item_number"><span class="red-star">★ </span>מספר פריט</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="item_number"></textarea>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-group">
-                                            <label for="item_name1"><span class="red-star">★ </span>שם פריט</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="item_name1"></textarea>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-group">
-                                            <label for="item_price1"><span class="red-star">★ </span>מחיר</label>
-                                            <textarea rows="1" class="form-control groupDetails" id="item_price1"></textarea>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </form>
-                        <br />
-                        <button id="btn_update_item" class="btn btn-primary" onclick="updateItem()"> עדכן פריט </button>
                     </div>
                     <br />
                 </div>
