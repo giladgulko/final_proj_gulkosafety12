@@ -2498,7 +2498,7 @@ namespace final_proj_gulkosafety.Models.DAL
         private String BuildupdateCommand(instruction i)
         {
             String command;
-            command = "UPDATE instruction SET pay_status=" + i.Pay_status + ",instruction_type_num = " + i.Instruction_type_num + ",total_price =" + i.Total_price + ",participants_num=" + i.Participants_num + ",address='" + i.Address + "', date='" + i.Date.ToString("yyyy-MM-dd") + "', company='" + i.Company + "', time='" + i.Time.ToString("HH:mm") + "' WHERE instruction_num =" + i.Instruction_num;
+            command = "UPDATE instruction SET pay_status=" + i.Pay_status + ",invoice_num="+ i.Invoice_num+ ",instruction_type_num = " + i.Instruction_type_num + ",total_price =" + i.Total_price + ",participants_num=" + i.Participants_num + ",address='" + i.Address + "', date='" + i.Date.ToString("yyyy-MM-dd") + "', company='" + i.Company + "', time='" + i.Time.ToString("HH:mm") + "' WHERE instruction_num =" + i.Instruction_num;
 
             return command;
         }

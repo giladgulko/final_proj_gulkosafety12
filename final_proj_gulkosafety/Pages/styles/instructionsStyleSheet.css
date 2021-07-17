@@ -126,3 +126,7 @@ th {
 #logout {
     border: unset;
 }
+#addNewParticipantBtn{
+    float:left;
+    margin-top:20px;
+}
