@@ -29,6 +29,7 @@
     <script>
         user = JSON.parse(localStorage["user"]);
         DefectToEdit = [];
+        var x = "";
         defectTypeToEdit = [];
         Instruction_type_num = [];
         userTypeToEdit = [];
@@ -75,6 +76,8 @@
             $("#defectTable").hide();
             FirstTimeUploadDefectTable = 0;
 
+
+
             userDetails = JSON.parse(localStorage["user"]);
             if (userDetails.User_type_num == 1) {
                 $("#navbar_setting_group").show();
@@ -97,41 +100,47 @@
             $(".type2mode").hide()
 
         }
+        //בדיקת שינוי סיסמא מנהל עבודה
+        function checkPassword() {
+           let pass1=$("#user_password2").val();
+            let pass2 = $("#user_password2again").val();
+            if (pass1 != pass2) {
+                $("#errorPassword").show();
+                x = 0;
+            }
+            else {
+                x = 1;
+                $("#errorPassword").hide();
+            }
+
+        }
         //קריאת פרטי משתמש ספציפי
         function getPersonalUserData() {
+            mode = "personalChanges";
             $("#user_email2").val(userDetails.Email);
             $("#user_name2").val(userDetails.Name);
             $("#user_phone2").val(userDetails.Phone);
             $("#user_password2").val(userDetails.Password);
             $("#user_password2again").val(userDetails.Password);
             $("#user_email2").prop('disabled', true);
-            $("#user_name2").prop('disabled', true);
-            $("#user_phone2").prop('disabled', true);
-            $("#user_password2").prop('disabled', true);
-            $("#user_password2again").prop('disabled', true);
-            $("#btn_save_personal_user").hide();
-            $("#btn_update_personal_user").show();
+            $("#errorPassword").hide();
         }
-        function updatePersonalUser() {
-            $("#user_name2").prop('disabled', false);
-            $("#user_phone2").prop('disabled', false);
-            $("#user_password2").prop('disabled', false);
-            $("#user_password2again").prop('disabled', false);
-            $("#btn_update_personal_user").hide();
-            $("#btn_save_personal_user").show();
-        }
+
         //  שמירת עדכון פרטי משתמש אישיים
         function save_personal_user_changes() {
-            user_update = {
-                Email: $("#user_email2").val(),
-                Name: $("#user_name2").val(),
-                Phone: $("#user_phone2").val(),
-                Password: $("#user_password2").val(),
-                User_type_num: 2,
-                Delete_status: 0,
+            checkPassword();
+            if (x == 1) {
+                    user_update = {
+                        Email: $("#user_email2").val(),
+                        Name: $("#user_name2").val(),
+                        Phone: $("#user_phone2").val(),
+                        Password: $("#user_password2").val(),
+                        User_type_num: 2,
+                        Delete_status: 0,
+                    }
+                    let api = "../api/user";
+                    ajaxCall("PUT", api, JSON.stringify(user_update), UpdatePersonalUserSuccess, UpdateUserError);
             }
-            let api = "../api/user";
-            ajaxCall("PUT", api, JSON.stringify(user_update), UpdatePersonalUserSuccess, UpdateUserError);
         }
         function UpdatePersonalUserSuccess(user) {
             localStorage["user"] = JSON.stringify(user);
@@ -184,6 +193,10 @@
             if (mode == "editDefect") {
                 updateDefect();
             }
+            if (mode == "personalChanges") {
+                save_personal_user_changes();
+            }
+
         }
         //החלפת צבע בכפתורים בצד אחרי לחיצה
         function SwitchBtnToColor(BtnId) {
@@ -193,7 +206,7 @@
             for (var i = 0; i < NameOfBtn.length; i++) {
                 if (switchId != NameOfBtn[i]) {
                     $(NameOfBtn[i]).removeClass("activeColor");
-                }
+                } 
             }
         }
         function switch_btn_fit_insert_new(valueOfModeNew) {
@@ -1781,8 +1794,7 @@
         </div>
         <div id="personalUserDiv">
             <div class="row">
-                <form id="personalUsersTypeForm">
-                    <h2 id="update_personal_user">עדכון פרטים</h2>
+                <form id="personalUsersTypeForm" class="allforms" onsubmit="return false">
                     <table id="personalUser" class="display" style="width:100%" dir="rtl">
                         <thead>
                             <tr>
@@ -1797,7 +1809,9 @@
                                 <td>
                                     <div class="form-group2">
                                         <label for="user_name2"><span class="red-star">★</span>שם מלא</label>
-                                        <textarea rows="1" class="form-control groupDetails" id="user_name2" placeholder="הזן שם מלא"></textarea>
+                                        <input type="text" rows="1" class="form-control groupDetails" id="user_name2" placeholder=" הזן שם מלא " required="required"
+                                               oninvalid="this.setCustomValidit('הכנס רק אותיות')"
+                                               oninput="this.setCustomValidity('')" />
                                     </div>
                                 </td>
                             </tr>
@@ -1805,7 +1819,9 @@
                                 <td>
                                     <div class="form-group2">
                                         <label for="user_phone2"><span class="red-star">★</span>טלפון</label>
-                                        <textarea rows="1" class="form-control groupDetails" id="user_phone2" placeholder="הזן טלפון"></textarea>
+                                        <input type="tel" rows="1" class="form-control groupDetails" id="user_phone2" placeholder=" הזן טלפון " pattern="[0-9]{3}-[0-9]{7}" required="required"
+                                               oninvalid="this.setCustomValidity('התבנית הינה 054-6954541')"
+                                               oninput="this.setCustomValidity('')">
                                     </div>
                                 </td>
                             </tr>
@@ -1813,7 +1829,9 @@
                                 <td>
                                     <div class="form-group2">
                                         <label for="user_password2"><span class="red-star">★</span>סיסמא</label>
-                                        <textarea rows="1" class="form-control groupDetails" id="user_password2" placeholder="הזן סיסמא"></textarea>
+                                        <input type="password" class="form-control" id="user_password2" placeholder="הזן סיסמא" pattern="(?=.*[0-9]+.*)(?=.*[A-Z]+.*)[0-9a-zA-Z]{8,}$" required="required"
+                                               oninvalid="this.setCustomValidity('סיסמא שגויה- יש להכניס לפחות 8 תווים , לפחות אות גדולה אחת ומספר אחד')"
+                                               oninput="this.setCustomValidity('')" />
                                     </div>
                                 </td>
                             </tr>
@@ -1821,18 +1839,23 @@
                                 <td>
                                     <div class="form-group2">
                                         <label for="user_password2again"><span class="red-star">★</span>סיסמא בשנית</label>
-                                        <textarea rows="1" class="form-control groupDetails" id="user_password2again" placeholder="  הזן סיסמא בשנית"></textarea>
+                                        <input type="password" class="form-control" id="user_password2again" placeholder="הזן סיסמא בשנית" pattern="(?=.*[0-9]+.*)(?=.*[A-Z]+.*)[0-9a-zA-Z]{8,}$" required="required"
+                                               oninvalid="this.setCustomValidity('סיסמא שגויה- יש להכניס לפחות 8 תווים , לפחות אות גדולה אחת ומספר אחד')"
+                                               oninput="this.setCustomValidity('')" />
                                     </div>
                                 </td>
                             </tr>
                         </thead>
                     </table>
+                    </br>
+                    <p id="errorPassword">הסיסמא לא תואמת-נסה שנית</p>
+                    </br>
+                    <div class="btn_personal_user">
+                        <button type="submit" id="saveBTN" class="btn btn-primary"> שמור </button>
+                    </div>
                 </form>
                 </br>
-                <div class="btn_personal_user">
-                    <button id="btn_save_personal_user" onclick="save_personal_user_changes()" class="btn btn-primary"> שמור משתמש</button>
-                    <button id="btn_update_personal_user" class="btn btn-primary" onclick="updatePersonalUser()">עדכן פרטי משתמש </button>
-                </div>
+
             </div>
         </div>
     </div>

@@ -152,3 +152,13 @@ body {
     color: cadetblue;
 text-align:right;
 }
+#errorPassword {
+    color: red;
+    text-align: right;
+}
+#personal_user_headline, #headline_setting {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: cadetblue;
+    font-weight: bold;
+}
+
