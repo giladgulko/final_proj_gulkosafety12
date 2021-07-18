@@ -279,7 +279,9 @@
                 location.reload();
 
             });
-            var now = new Date().toISOString();
+            var now = new Date();
+            now.setHours(now.getHours() + 3);
+            now.toISOString();
             newAlertOnAprroveIMG = {
                 Content: "הועלתה תמונה חדשה לליקוי בדוח-  " + report.Report_num + "," + data.Picture_link,
                 Date: now,
