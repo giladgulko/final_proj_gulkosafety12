@@ -447,6 +447,7 @@
                 tbl = $('#reportsTable').DataTable({
                     data: reportsToShow,
                     pageLength: 5,
+                    responsive: true,
                     columns: [
                         { data: "Report_num" },
                         { data: "Date" },
@@ -493,7 +494,7 @@
                 };
 
                 var data = [trace1];
-
+                var config = { responsive: true }
                 Plotly.newPlot('chartContainer', data);
             }
         }
@@ -751,7 +752,7 @@
                                 <h3>ציוני דוחות</h3>
                             </div>
                         </div>
-                        <div style="width:100%" id="chartContainer">
+                        <div id="chartContainer">
                         </div>
                     </div>
                 </div>
