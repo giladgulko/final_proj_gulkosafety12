@@ -2819,7 +2819,7 @@ namespace final_proj_gulkosafety.Models.DAL
                     contact _contact = new contact();
                     _contact.Id = Convert.ToInt32(dr["id"]);
                     _contact.Full_name = (string)dr["full_name"];
-                    _contact.Phone = Convert.ToInt32(dr["phone"]);
+                    _contact.Phone = (string)dr["phone"];
                     _contact.Mail = (string)dr["mail"];
                     _contact.Instruction_num = Convert.ToInt32(dr["instruction_num"]);
                     contactList.Add(_contact);
@@ -2863,7 +2863,7 @@ namespace final_proj_gulkosafety.Models.DAL
                     contact _contact = new contact();
                     _contact.Id = Convert.ToInt32(dr["id"]);
                     _contact.Full_name = (string)dr["full_name"];
-                    _contact.Phone = Convert.ToInt32(dr["phone"]);
+                    _contact.Phone = (string)dr["phone"];
                     _contact.Mail = (string)dr["mail"];
                     contactList.Add(_contact);
                 }

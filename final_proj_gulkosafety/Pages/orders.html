@@ -29,6 +29,7 @@
         AllContacts = [];
         contactList = [];
         itemList = [];
+        item_data = [];
         AllItems = [];
         orderToEdit = [];
         allItemsInOrder = [];
@@ -36,12 +37,14 @@
         var firstTimeAddItem = 1;
         var firstTimeAddContact = 1;
         var timeOfPost = 1;
-        var order_number = "";
-        var item_data = "";
+        var order_number = 0;
+        var modeForOrders = "";
 
         $(document).ready(function () {
             getcontacts();
             getItem();
+            $("#newOrderForm").submit(saveNewOrder);
+            $("#editContactForm").submit(updateContact);
         });
         //קריאת כל ההזמנות
         function getOrderData() {
@@ -84,10 +87,10 @@
         // רינדור של כל אנשי הקשר לרשימה
         function renderContacts(data) {
             AllContacts = data;
-            ExistContact = document.getElementById("searchContact1");
-            for (i = 0; i < AllContacts.length; i++) {
-                ExistContact.innerHTML += "<option value=" + AllContacts[i].Id + ">" + AllContacts[i].Full_name + ", " + AllContacts[i].Id + "</option > ";
-            }
+            //ExistContact = document.getElementById("searchContact1");
+            //for (i = 0; i < AllContacts.length; i++) {
+            //    ExistContact.innerHTML += "<option value=" + AllContacts[i].Id + ">" + AllContacts[i].Full_name + ", " + AllContacts[i].Id + "</option > ";
+            //}
         }
         function getContactError() {
             swal("נכשל!", "קריאת אנשי קשר נכשלה!", "warning")
@@ -105,6 +108,7 @@
         //הטבלה שמוצגת בכפתור הצג פריטים
         function createTBitems(items) {
             document.getElementById('id04').style.display = 'block';
+            $("#search1").hide();
             let itemToShow = [];
             for (var i = 0; i < items.length; i++) {
                 item = {
@@ -112,6 +116,7 @@
                     Name: items[i].Name1,
                     Price: items[i].Price,
                     Quantity: items[i].Quantity,
+                    Order_num: items[i].Order_num,
                 }
                 itemToShow.push(item);
             }
@@ -133,7 +138,7 @@
 
                                 editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editItem(this.value)'> עריכה </button>";
 
-                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteItem(this.value)'> מחיקה </button>";
+                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteitemOK(this.value)'> מחיקה </button>";
 
                                 return editBtn + deleteBtn;
 
@@ -151,23 +156,36 @@
             }
 
         }
-        //מחיקת פריט בהזמנה
-        function deleteItem(def) {
-            let priceToDelete = "";
+        function deleteitemOK(def) {
             itemToDelete = JSON.parse(def);
+            swal({
+                title: "האם אתה בטוח שברצונך למחוק את הפריט?",
+                text: "",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true
+            })
+                .then(function (willDelete) {
+                    if (willDelete) deleteItem(itemToDelete);
+                    else swal("הפריט לא נמחק!");
+                });
+        }
+        //מחיקת פריט בהזמנה
+        function deleteItem(itemToDelete) {
+            let priceToDelete = "";
             for (var i = 0; i < AllItems.length; i++) {
                 if (itemToDelete.Item_num == AllItems[i].Item_num) {
                     priceToDelete += AllItems[i].Price * itemToDelete.Quantity;
                 }
             }
             for (var i = 0; i < orderdata.length; i++) {
-                if (orderdata[i].Order_num == orderToEdit.Order_num) {
+                if (orderdata[i].Order_num == itemToDelete.Order_num) {
                     let newOrder = {
 
-                        Order_num: orderToEdit.Order_num,
-                        Total_price: parseInt(orderToEdit.Total_price) - parseInt(priceToDelete),
-                        Invoice_num: orderToEdit.Invoice_num,
-                        Date: orderToEdit.Date,
+                        Order_num: itemToDelete.Order_num,
+                        Total_price: parseInt(orderdata[i].Total_price) - parseInt(priceToDelete),
+                        Invoice_num: orderdata[i].Invoice_num,
+                        Date: orderdata[i].Date,
                     }
                     let api = "../api/order";
                     ajaxCall("PUT", api, JSON.stringify(newOrder), updateOrderSuccess, updateOrderError);
@@ -175,7 +193,7 @@
             }
             item = {
                 Item_num: itemToDelete.Item_num,
-                Order_num: orderToEdit.Order_num,
+                Order_num: itemToDelete.Order_num,
             }
             let api = "../api/items_in_order";
             ajaxCall("DELETE", api, JSON.stringify(item), deleteItemSuccess,deleteItemError);
@@ -212,13 +230,13 @@
                 }
             }
             for (var j = 0; j < orderdata.length; j++) {
-                if (orderdata[j].Order_num == orderToEdit.Order_num) {
+                if (orderdata[j].Order_num == item_data.Order_num) {
                     let newOrder = {
 
-                        Order_num: orderToEdit.Order_num,
-                        Total_price: parseInt((orderToEdit.Total_price - (item_data.Price * item_data.Quantity))) + parseInt(totaLPrice),
-                        Invoice_num: orderToEdit.Invoice_num,
-                        Date: orderToEdit.Date,
+                        Order_num: item_data.Order_num,
+                        Total_price: parseInt((orderdata[j].Total_price - (item_data.Price * item_data.Quantity))) + parseInt(totaLPrice),
+                        Invoice_num: orderdata[j].Invoice_num,
+                        Date: orderdata[j].Date,
                     }
                     let api = "../api/order";
                     ajaxCall("PUT", api, JSON.stringify(newOrder), updateOrderSuccess, updateOrderError);
@@ -226,7 +244,7 @@
             }
 
             item = {
-                Order_num: orderToEdit.Order_num,
+                Order_num: item_data.Order_num,
                 Item_num: $("#item_num").val(),
                 Quantity: $("#item_quantity1").val(),
             }
@@ -238,6 +256,7 @@
             swal({
                 title: "מצוין!", text: "עדכון פריט בהזמנה בוצע בהצלחה!", type: "success", icon: "success"
             })
+            location.reload();
         }
         function UpdateItemError() {
             swal("נכשל!", "עדכון פריט בהזמנה נכשל!", "warning")
@@ -246,155 +265,164 @@
             swal("נכשל!", "קריאת פריטים בהזמנה נכשלה!", "warning")
         }
         //שמירת איש קשר קיים לאישור חדש
-        function SaveExistContact() {
-            let contactId = $("#searchContact1").val();
-            for (var i = 0; i < AllContacts.length; i++) {
-                if (contactId == AllContacts[i].Id) {
-                    contact1 = {
-                        Id: AllContacts[i].Id,
-                        Full_name: AllContacts[i].Full_name,
-                        Phone: AllContacts[i].Phone,
-                        Mail: AllContacts[i].Mail,
+        //function SaveExistContact() {
+        //    let contactId = $("#searchContact1").val();
+        //    for (var i = 0; i < AllContacts.length; i++) {
+        //        if (contactId == AllContacts[i].Id) {
+        //            contact1 = {
+        //                Id: AllContacts[i].Id,
+        //                Full_name: AllContacts[i].Full_name,
+        //                Phone: AllContacts[i].Phone,
+        //                Mail: AllContacts[i].Mail,
 
-                    }
-                    SaveNewcontact(contact1)
-                }
-            }
+        //            }
+        //            SaveNewcontact(contact1)
+        //        }
+        //    }
 
-        }
+        //}
         // שמירת איש קשר באישור חדש ורנדור לטבלה
-        function SaveNewcontact(contact1) {
-            $("#newContact").hide();
-            $("#contactsTable").show();
-            $("#contactsTable1").show();
-            let contactToShow = [];
-            if (contact1 == null) {
-                checkId = $("#contact_id").val()
-                checkMail = $("#contact_mail").val()
-                contact = {
+        function SaveNewcontact() {
+           // $("#newContact").hide();
+           // $("#contactsTable").show();
+           // $("#contactsTable1").show();
+           // let contactToShow = [];
+              contact = {
                     Id: $("#contact_id").val(),
                     Full_name: $("#contact_name").val(),
                     Phone: $("#contact_phone").val(),
                     Mail: $("#contact_mail").val(),
 
-                }
-                contactToShow.push(contact);
-                contactList.push(contact);
+              }
+                //contactToShow.push(contact);
+                //contactList.push(contact);
 
                 let api = "../api/contact";
                 ajaxCall("POST", api, JSON.stringify(contact), createNewcontactSuccess, createNewcontactError);
 
-            }
-            else {
-                contactToShow.push(contact1);
-                contactList.push(contact1);
-                $("#searchContact1").val("");
-            }
-            try {
-                if (firstTimeAddContact == 1) {
-                    tbl = $("#contactsTable").DataTable({
-                        data: contactToShow,
-                        pageLength: 10,
-                        responsive: true,
-                        columns: [
+            //try {
+            //    if (firstTimeAddContact == 1) {
+            //        tbl = $("#contactsTable").DataTable({
+            //            data: contactToShow,
+            //            pageLength: 10,
+            //            responsive: true,
+            //            columns: [
 
-                            { data: "Id" },
-                            { data: "Full_name" },
-                            { data: "Phone" },
-                            { data: "Mail" },
+            //                { data: "Id" },
+            //                { data: "Full_name" },
+            //                { data: "Phone" },
+            //                { data: "Mail" },
 
-                        ],
-                    });
-                    firstTimeAddContact = 0;
-                }
-                else {
-                    alert("You already add contact!")
-                }
-            }
-            catch (err) {
-                alert(err);
-            }
+            //            ],
+            //        });
+            //        firstTimeAddContact = 0;
+            //    }
+            //    else {
+            //        alert("You already add contact!")
+            //    }
+            //}
+            //catch (err) {
+            //    alert(err);
+            //}
 
         }
         function createNewcontactSuccess(data) {
-            swal({
-                title: "מצוין!", text: "הוספת איש קשר להזמנה בוצע בהצלחה!", type: "success", icon: "success"
-            });
+            //swal({
+            //    title: "מצוין!", text: "הוספת איש קשר להזמנה בוצע בהצלחה!", type: "success", icon: "success"
+            //});
+            insertNewOrder();
         }
         function createNewcontactError() {
             swal("נשכל!", "הוספת איש קשר להזמנה נכשל!", "warning")
         }
         //  שמירת פריט קיים להזמנה חדשה ורנדור לטבלה
         function SaveExistItem() {
+            document.getElementById('id06').style.display = 'block';
             $("#itemsTable").show();
             $("#div_TB_item").show();
-            let itemsToShow = [];
-            let itemId = $("#searchItem1").val();
-            for (var i = 0; i < AllItems.length; i++) {
-                if (itemId == AllItems[i].Item_num) {
-                    item1 = {
-                        Item_num: AllItems[i].Item_num,
-                        Name: AllItems[i].Name,
-                        Price: AllItems[i].Price,
-                        QuantityOfItem: $("#item_quantity").val(),
+                let itemsToShow = [];
+                let itemId = $("#searchItem1").val();
+                for (var i = 0; i < AllItems.length; i++) {
+                    if (itemId == AllItems[i].Item_num) {
+                        item1 = {
+                            Item_num: AllItems[i].Item_num,
+                            Name: AllItems[i].Name,
+                            Price: AllItems[i].Price,
+                            QuantityOfItem: $("#item_quantity").val(),
+                        }
+                        itemsToShow.push(item1);
+                        itemList.push(item1);
                     }
-                    itemsToShow.push(item1);
-                    itemList.push(item1);
                 }
-            }
 
-            try {
-                if (firstTimeAddItem == 1) {
-                    tbl = $("#itemsTable").DataTable({
-                        data: itemsToShow,
-                        pageLength: 10,
-                        responsive: true,
-                        columns: [
+                try {
+                    if (firstTimeAddItem == 1) {
+                        tbl = $("#itemsTable").DataTable({
+                            data: itemsToShow,
+                            pageLength: 10,
+                            responsive: true,
+                            columns: [
 
-                            { data: "Item_num" },
-                            { data: "Name" },
-                            { data: "Price" },
-                            { data: "QuantityOfItem" },
+                                { data: "Item_num" },
+                                { data: "Name" },
+                                { data: "Price" },
+                                { data: "QuantityOfItem" },
 
-                        ],
-                    });
-                    firstTimeAddItem = 0;
-                    $("#item_quantity").val("");
-                    $("#searchItem1").val("");
+                            ],
+                        });
+                        firstTimeAddItem = 0;
+                        $("#item_quantity").val("");
+                        $("#searchItem1").val("");
+                    }
+                    else {
+                        var table = $('#itemsTable').DataTable();
+                        console.table(itemsToShow)
+                        table.row.add({
+                            "Item_num": itemsToShow[itemsToShow.length - 1].Item_num,
+                            "Name": itemsToShow[itemsToShow.length - 1].Name,
+                            "Price": itemsToShow[itemsToShow.length - 1].Price,
+                            "QuantityOfItem": itemsToShow[itemsToShow.length - 1].QuantityOfItem,
+
+                        }).draw();
+                        $("#item_quantity").val("");
+                        $("#searchItem1").val("");
+                    }
                 }
-                else {
-                    var table = $('#itemsTable').DataTable();
-                    console.table(itemsToShow)
-                    table.row.add({
-                        "Item_num": itemsToShow[itemsToShow.length - 1].Item_num,
-                        "Name": itemsToShow[itemsToShow.length - 1].Name,
-                        "Price": itemsToShow[itemsToShow.length - 1].Price,
-                        "QuantityOfItem": itemsToShow[itemsToShow.length - 1].QuantityOfItem,
 
-                    }).draw();
-                    $("#item_quantity").val("");
-                    $("#searchItem1").val("");
+                catch (err) {
+                    alert(err);
                 }
-            }
 
-            catch (err) {
-                alert(err);
-            }
+        }
+        function saveNewOrder() {
 
+           if (modeForOrders == "new") {
+              SaveNewcontact();
+           }
+                else updateOrder();
         }
         //ניקוי פופ אפ של הזמנה חדשה
         function clearPopuP() {
+            modeForOrders = "new";
+            document.querySelector('#orderDate').required = true;
+            document.querySelector('#invoice_num').required = true;
+            document.querySelector('#contact_id').required = true;
+            document.querySelector('#contact_name').required = true;
+            document.querySelector('#contact_phone').required = true;
+            $("#contact_id").val("");
+            $("#contact_name").val("");
+            $("#contact_phone").val("");
+            $("#contact_mail").val("");
             $("#invoice_num").val("");
             $("#orderDate").val("");
             $("#saveBTN").show();
             $("#total_priceTD").hide();
-            $("#btn_update_order").hide();
-            $("#newContact").hide();
-            $("#contactsTable").hide();
-            $("#searchContact1").val("");
+            $("#newContact").show();
+            //$("#contactsTable").hide();
+            //$("#searchContact1").val("");
             $("#quantity_num").hide();
             $("#itemsTable").hide();
-            $("#searchContact").show();
+            //$("#searchContact").show();
             $("#btn_saveExist_contact").show();
             $("#btn_new_contact").show();
             $("#search_item").show();
@@ -409,6 +437,7 @@
         }
         //הכנסת הזמנה חדשה
         function insertNewOrder() {
+            document.getElementById('id03').style.display = 'none';
             let newOrder = "";
             let totalPrice = 0;
             for (var i = 0; i < itemList.length; i++) {
@@ -472,7 +501,6 @@
                     itemList = "";//ניקוי המערך
                     contactList = "";//ניקוי המערך
                     timeOfPost = 1;
-                    location.reload();
                 });
             }
 
@@ -486,21 +514,21 @@
         function InsertError() {
             swal("נשכל!", "יצירת פריט בהזמנה נכשל!", "warning")
         }
-
+        //טבלת הזמנות
         function createDt(order_data) {
             orderdata = order_data;
             let ordersToShow = [];
             for (var i = 0; i < orderdata.length; i++) {
                 orderdata[i].Date = orderdata[i].Date.split("T")[0];
                 for (var j = 0; j < AllContacts.length; j++) {
-                    if (orderdata[i].Contact_id == AllContacts[j].Id) {
+                    if (orderdata[i].Contact_id == AllContacts[j].Id && orderdata[i].Delete_status==0) {
                         order = {
 
                             Order_num: orderdata[i].Order_num,
                             Invoice_num: orderdata[i].Invoice_num,
                             Date: orderdata[i].Date,
                             Total_price: orderdata[i].Total_price,
-                            Contact_id: AllContacts[j].Full_name,
+                            Contact_id: orderdata[i].Contact_id,
 
                         }
                         ordersToShow.push(order);
@@ -518,7 +546,6 @@
                         { data: "Invoice_num" },
                         { data: "Date" },
                         { data: "Total_price" },
-                        { data: "Contact_id" },
 
                         {
                             render: function (data, type, row, meta) {
@@ -528,7 +555,11 @@
 
                                 deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteOrder(this.value)'> מחיקה </button>";
 
-                                return editBtn + deleteBtn;
+                                showItemsBtn = "<button type='button' class ='itemBtn btn btn-item' value='" + def + "' onclick='showItems(this.value)'> הצג פריטים </button>";
+
+                                showContactBtn = "<button type='button' class = 'showBtn btn btn-show' value='" + def + "' onclick='showContact(this.value)'> הצג איש קשר </button>";
+
+                                return editBtn + deleteBtn + showItemsBtn + showContactBtn;
 
                             }
                         },
@@ -543,13 +574,16 @@
             }
 
         }
+        function addNewitem() {
+            $("#search1").show();
+        }
         //כפתור הצג איש קשר
-        function showContact() {
+        function showContact(def) {
+            contactArray = JSON.parse(def);
             document.getElementById('id01').style.display = 'block';
-            //order_number = JSON.parse(def);
             let contactToShow = [];
             for (var i = 0; i < AllContacts.length; i++) {
-                if (AllContacts[i].Full_name == orderToEdit.Contact_id) {
+                if (AllContacts[i].Id == contactArray.Contact_id) {
                     contact = {
                         Id: AllContacts[i].Id,
                         Full_name: AllContacts[i].Full_name,
@@ -605,6 +639,10 @@
         }
         // עדכון איש קשר
         function updateContact() {
+            document.querySelector('#contact_id1').required = true;
+            document.querySelector('#contact_name1').required = true;
+            document.querySelector('#contact_phone1').required = true;
+            document.querySelector('#contact_mail1').required = true;
             contact_update = {
                 Id: $("#contact_id1").val(),
                 Full_name: $("#contact_name1").val(),
@@ -616,38 +654,44 @@
         }
         function UpdateContactSuccess() {
             swal({
-                title: "מצוין!", text: "עדכון משתתף בוצע", type: "success", icon: "success"
+                title: "מצוין!", text: "עדכון אישר קשר בוצע", type: "success", icon: "success"
             }).then(function () {
                 location.reload();
 
             });
         }
         function UpdateContactError() {
-            swal("עדכון משתתף לא בוצע!", err, "warning");
+            swal("עדכון איש קשר לא בוצע!", err, "warning");
         }
         //כפתור הצג פריטים
-        function showItems() {
-            getItemInOrder(orderToEdit.Order_num);
+        function showItems(def) {
+            items = JSON.parse(def);
+            getItemInOrder(items.Order_num);
         }
         //עריכת הזמנה
         function editordertBTN(dataorder) {
+            modeForOrders = "edit";
+            document.querySelector('#orderDate').required = false;
+            document.querySelector('#invoice_num').required = false;
+            document.querySelector('#contact_id').required = false;
+            document.querySelector('#contact_name').required = false;
+            document.querySelector('#contact_phone').required = false;
+            document.querySelector('#contact_mail').required = false;
             orderToEdit = JSON.parse(dataorder);
             document.getElementById('id03').style.display = 'block';
 
             $("#invoice_num").val(orderToEdit.Invoice_num);
             $("#orderDate").val(orderToEdit.Date);
             $("#total_price").val(orderToEdit.Total_price);
-            $("#saveBTN").hide();
-            $("#btn_update_order").show();
             $("#total_priceTD").show();
-            $("#contactsTable").hide();
+            //$("#contactsTable").hide();
             $("#newContact").hide();
-            $("#searchContact").hide();
+           // $("#searchContact").hide();
             $("#btn_new_contact").hide();
             $("#btn_save_item").hide();
             $("#btn_saveExist_contact").hide();
             $("#quantity_num").show();
-            $("#search_item").show();
+            $("#search_item").hide();
             $("#div_TB_item").show();
             $("#btn_saveExist_item").hide();
             $("#itemsTable").hide();
@@ -761,9 +805,9 @@
             swal("נכשל!", "עדכון הזמנה נכשל!", "warning")
         }
 
-        function New_contact() {
-            $("#newContact").show();
-        }
+        //function New_contact() {
+        //    $("#newContact").show();
+        //}
         function AddItem() {
             window.location.href = "settings.html";
         }
@@ -807,8 +851,6 @@
                         <li class="nav-item">
                             <span class="glyphicon glyphicon-bell" aria-hidden="true"></span><a href="alerts.html"></a>
                         </li>
-
-                        <li><a href="#">סטטיסטיקות</a></li>
                         <li><a href="users.html">משתמשים</a></li>
                         <li class="active"><a href="orders.html">הזמנות<span class="sr-only">(current)</span></a></li>
                         <li><a href="certificates.html">אישורים</a></li>
@@ -841,7 +883,6 @@
                     <th>מספר חשבונית</th>
                     <th>תאריך הזמנה</th>
                     <th>סכום הזמנה</th>
-                    <th>שם איש קשר</th>
                     <th></th>
                 </tr>
             </thead>
@@ -853,7 +894,7 @@
                 <div class="w3-container" dir="rtl">
                     <span onclick="document.getElementById('id03').style.display='none',clearPopuP()" class="w3-button w3-display-topright">&times;</span>
                     <br />
-                    <form id="newOrderForm">
+                    <form id="newOrderForm" onsubmit="return false">
                         <br />
                         <h2 id="NewOrder">הזמנה חדשה</h2>
                         <table class="display" style="width:100%" dir="rtl">
@@ -863,7 +904,7 @@
                                         <div class="form-group">
                                             <label for="invoice_num"><span class="red-star">★ </span>מספר חשבונית</label>
                                             <input type="number" rows="1" class="form-control groupDetails" id="invoice_num" placeholder="הזן מספר חשבונית" pattern="[0-9]{1,20}" required="required"
-                                                   oninvalid="this.setCustomValidity('')"
+                                                   oninvalid="this.setCustomValidity('הכנס מספר חשבונית בספרות בלבד!')"
                                                    oninput="this.setCustomValidity('')">
                                         </div>
                                     </td>
@@ -883,79 +924,36 @@
                                 </tr>
                             </thead>
                         </table>
-                    </form>
-                    <button id="btn_show_contact" class="btn btn-primary" onclick="showContact()">הצג איש קשר</button>
-                    <button id="btn_ShowItems" onclick="showItems()" class="btn btn-primary"> הצג פריטים</button>
-                    <table id="search_item">
-                        <tr>
-                            <td id="searchItem">
-                                <div class="form-group">
-                                    <label for="searchItem1"><span class="red-star">★ </span>חיפוש פריט</label>
-                                    <select onchange="" class="form-control groupDetails" id="searchItem1" required>
-                                        <option value="">בחר פריט קיים:</option>
-                                    </select>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-group">
-                                    <label for="item_quantity"><span class="red-star">★ </span>כמות מפריט</label>
-                                    <input type="number" rows="1" class="form-control groupDetails" id="item_quantity" placeholder=" הכנס כמות מפריט ">
-                                </div>
-                            </td>
+                        <table id="search_item">
+                            <tr>
+                                <td id="searchItem">
+                                    <div class="form-group">
+                                        <label for="searchItem1">חיפוש פריט</label>
+                                        <select onchange="" class="form-control groupDetails" id="searchItem1">
+                                            <option value="">בחר פריט קיים:</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="item_quantity">כמות מפריט</label>
+                                        <input type="number" rows="1" class="form-control groupDetails" id="item_quantity" pattern="[0-9]{1,4}" placeholder=" הכנס כמות מפריט " >
+                                    </div>
+                                </td>
+                                <br />
+                                <br />
+                                <td>
+                                    <button id="btn_saveExist_item" onclick="SaveExistItem()" class="btn btn-primary"> שמור פריט</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button id="add_item" onclick="AddItem()" class="btn btn-primary"> הוסף פריט בהגדרות</button>
+                                </td>
+                            </tr>
                             <br />
-                            <br />
-                            <td>
-                                <button id="btn_saveExist_item" onclick="SaveExistItem()" class="btn btn-primary"> שמור פריט</button>
-                            </td>
-                            <td>
-                                <button id="btn_saveExist_itemToOrder" onclick="addItemToExistOrder()" class="btn btn-primary"> שמור פריט להזמנה</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <button id="add_item" onclick="AddItem()" class="btn btn-primary"> הוסף פריט בהגדרות</button>
-                            </td>
-                        </tr>
+                        </table>
                         <br />
-                    </table>
-                    <div id="div_TB_item">
-                        <form id="pForm">
-                            <table id="itemsTable" class="display" style="width:100%" dir="rtl">
-                                <thead>
-                                    <tr>
-                                        <th>מספר פריט</th>
-                                        <th>שם פריט</th>
-                                        <th>מחיר ליחידה</th>
-                                        <th>כמות לפריט</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </form>
-                    </div>
-                    <table>
-                        <tr>
-                            <td id="searchContact">
-                                <div class="form-group">
-                                    <label for="searchContact1">חיפוש איש קשר</label>
-                                    <select class="form-control groupDetails" id="searchContact1">
-                                        <option value="">בחר איש קשר קיים:</option>
-                                    </select>
-                                </div>
-                            </td>
-                            <td>
-                                <button id="btn_saveExist_contact" onclick="SaveExistContact()" class="btn btn-primary"> שמור איש קשר</button>
-                            </td>
-                        </tr>
-                        <br />
-                        <tr>
-                            <td>
-                                <button id="btn_new_contact" class="btn btn-primary" onclick="New_contact()"> איש קשר חדש</button>
-                            </td>
-                        </tr>
-                    </table>
-
-                    <form>
                         <table id="newContact">
 
                             <tr>
@@ -991,32 +989,13 @@
                                                oninput="this.setCustomValidity('')">
                                     </div>
                                 </td>
-                                <td>
-
-                                    <button id="btnSave_new_contact" class="btn btn-primary" onclick="SaveNewcontact()"> שמור איש קשר </button>
-                                </td>
                             </tr>
                         </table>
+                        <button type="submit" id="saveBTN" class="btn btn-primary"> שמור </button>
                     </form>
-                    <div id="contactsTable1">
-                        <form id="pForm">
-                            <table id="contactsTable" class="display" style="width:100%" dir="rtl">
-                                <thead>
-                                    <tr>
-                                        <th>ת.ז</th>
-                                        <th>שם מלא</th>
-                                        <th>טלפון</th>
-                                        <th>מייל</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </form>
-                    </div>
-                    <button type="submit" id="saveBTN" onclick="insertNewOrder()" class="btn btn-primary"> שמור הזמנה</button>
-                    <button id="btn_update_order" class="btn btn-primary" onclick="updateOrder()"> עדכן הזמנה</button>
                 </div>
                 <br />
+
             </div>
         </div>
     </div>
@@ -1048,7 +1027,7 @@
             <div class="w3-modal-content">
                 <div class="w3-container" dir="rtl">
                     <span onclick="document.getElementById('id02').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-                    <form id="pForm">
+                    <form id="editContactForm" onsubmit="return false">
                         <h2 id="update_contact">עריכת איש קשר</h2>
                         <br />
                         <table id="updateContactTb">
@@ -1087,9 +1066,9 @@
                                 </td>
                             </tr>
                         </table>
+                        <br />
+                        <button type="submit" id="btnUpdate_contact" class="btn btn-primary"> עדכן איש קשר </button>
                     </form>
-                    <br />
-                    <button id="btnUpdate_contact" class="btn btn-primary" onclick="updateContact()"> עדכן איש קשר </button>
                 </div>
                 <br />
             </div>
@@ -1100,21 +1079,88 @@
             <div class="w3-modal-content">
                 <div class="w3-container" dir="rtl">
                     <span onclick="document.getElementById('id04').style.display='none',refreshTB()" class="w3-button w3-display-topright">&times;</span>
-                    <form id="pForm">
-                        <h2 id="itemInOrder">פריטים בהזמנה</h2>
-                        <table id="itemTable1" class="display" style="width:100%" dir="rtl">
-                            <thead>
-                                <tr>
-                                    <th>מספר פריט</th>
-                                    <th>שם פריט</th>
-                                    <th>מחיר ליחידה</th>
-                                    <th>כמות לפריט</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
+                    <div>
+                        <br />
+                        <br />
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <button id="addNewItem" class="btn btn-primary" onclick="addNewitem()"> הוסף פריט </button>
+                        </div>
+                        <div class="col-sm-8">
+                            <h2 id="itemInOrder">פריטים בהזמנה</h2>
+                        </div>
+                     </div>
+                        <table id="search1">
+                            <tr>
+                                <td id="searchItem">
+                                    <div class="form-group">
+                                        <label for="searchItem1" style="width:100%">חיפוש פריט</label>
+                                        <select onchange="" class="form-control groupDetails" id="searchItem1">
+                                            <option value="">בחר פריט קיים:</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="item_quantity">כמות מפריט</label>
+                                        <input type="number" rows="1" class="form-control groupDetails" id="item_quantity" pattern="[0-9]{1,4}" placeholder=" הכנס כמות מפריט ">
+                                    </div>
+                                </td>
+                                <br />
+                                <br />
+                                <td>
+                                    <button id="btn_saveExist_itemToOrder" onclick="addItemToExistOrder()" class="btn btn-primary"> שמור פריט להזמנה</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button id="add_item" onclick="AddItem()" class="btn btn-primary"> הוסף פריט בהגדרות</button>
+                                </td>
+                            </tr>
+                            <br />
                         </table>
+                    </div>
+                    <form id="pForm">
+                        <div class="row">
+                            <table id="itemTable1" class="display" style="width:100%" dir="rtl">
+                                <thead>
+                                    <tr>
+                                        <th>מספר פריט</th>
+                                        <th>שם פריט</th>
+                                        <th>מחיר ליחידה</th>
+                                        <th>כמות לפריט</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
                     </form>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="w3-container">
+        <div id="id06" class="w3-modal">
+            <div class="w3-modal-content">
+                <div class="w3-container" dir="rtl">
+                    <span onclick="document.getElementById('id06').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                    <div id="div_TB_item">
+                        <form id="pForm">
+                            <table id="itemsTable" class="display" style="width:100%" dir="rtl">
+                                <thead>
+                                    <tr>
+                                        <th>מספר פריט</th>
+                                        <th>שם פריט</th>
+                                        <th>מחיר ליחידה</th>
+                                        <th>כמות לפריט</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+                <br />
             </div>
         </div>
     </div>
