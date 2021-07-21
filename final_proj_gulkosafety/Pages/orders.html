@@ -87,10 +87,6 @@
         // רינדור של כל אנשי הקשר לרשימה
         function renderContacts(data) {
             AllContacts = data;
-            //ExistContact = document.getElementById("searchContact1");
-            //for (i = 0; i < AllContacts.length; i++) {
-            //    ExistContact.innerHTML += "<option value=" + AllContacts[i].Id + ">" + AllContacts[i].Full_name + ", " + AllContacts[i].Id + "</option > ";
-            //}
         }
         function getContactError() {
             swal("נכשל!", "קריאת אנשי קשר נכשלה!", "warning")
@@ -264,29 +260,9 @@
         function getItemInOrderError() {
             swal("נכשל!", "קריאת פריטים בהזמנה נכשלה!", "warning")
         }
-        //שמירת איש קשר קיים לאישור חדש
-        //function SaveExistContact() {
-        //    let contactId = $("#searchContact1").val();
-        //    for (var i = 0; i < AllContacts.length; i++) {
-        //        if (contactId == AllContacts[i].Id) {
-        //            contact1 = {
-        //                Id: AllContacts[i].Id,
-        //                Full_name: AllContacts[i].Full_name,
-        //                Phone: AllContacts[i].Phone,
-        //                Mail: AllContacts[i].Mail,
 
-        //            }
-        //            SaveNewcontact(contact1)
-        //        }
-        //    }
-
-        //}
         // שמירת איש קשר באישור חדש ורנדור לטבלה
         function SaveNewcontact() {
-           // $("#newContact").hide();
-           // $("#contactsTable").show();
-           // $("#contactsTable1").show();
-           // let contactToShow = [];
               contact = {
                     Id: $("#contact_id").val(),
                     Full_name: $("#contact_name").val(),
@@ -294,42 +270,13 @@
                     Mail: $("#contact_mail").val(),
 
               }
-                //contactToShow.push(contact);
-                //contactList.push(contact);
+                contactList.push(contact);
 
                 let api = "../api/contact";
                 ajaxCall("POST", api, JSON.stringify(contact), createNewcontactSuccess, createNewcontactError);
 
-            //try {
-            //    if (firstTimeAddContact == 1) {
-            //        tbl = $("#contactsTable").DataTable({
-            //            data: contactToShow,
-            //            pageLength: 10,
-            //            responsive: true,
-            //            columns: [
-
-            //                { data: "Id" },
-            //                { data: "Full_name" },
-            //                { data: "Phone" },
-            //                { data: "Mail" },
-
-            //            ],
-            //        });
-            //        firstTimeAddContact = 0;
-            //    }
-            //    else {
-            //        alert("You already add contact!")
-            //    }
-            //}
-            //catch (err) {
-            //    alert(err);
-            //}
-
         }
         function createNewcontactSuccess(data) {
-            //swal({
-            //    title: "מצוין!", text: "הוספת איש קשר להזמנה בוצע בהצלחה!", type: "success", icon: "success"
-            //});
             insertNewOrder();
         }
         function createNewcontactError() {
@@ -418,11 +365,8 @@
             $("#saveBTN").show();
             $("#total_priceTD").hide();
             $("#newContact").show();
-            //$("#contactsTable").hide();
-            //$("#searchContact1").val("");
             $("#quantity_num").hide();
             $("#itemsTable").hide();
-            //$("#searchContact").show();
             $("#btn_saveExist_contact").show();
             $("#btn_new_contact").show();
             $("#search_item").show();
@@ -501,6 +445,7 @@
                     itemList = "";//ניקוי המערך
                     contactList = "";//ניקוי המערך
                     timeOfPost = 1;
+                    location.reload();
                 });
             }
 
@@ -684,9 +629,7 @@
             $("#orderDate").val(orderToEdit.Date);
             $("#total_price").val(orderToEdit.Total_price);
             $("#total_priceTD").show();
-            //$("#contactsTable").hide();
             $("#newContact").hide();
-           // $("#searchContact").hide();
             $("#btn_new_contact").hide();
             $("#btn_save_item").hide();
             $("#btn_saveExist_contact").hide();
