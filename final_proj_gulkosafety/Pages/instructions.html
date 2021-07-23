@@ -125,7 +125,7 @@
                                 let def = JSON.stringify(row);
 
                                 editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editContact(this.value)'> עריכה </button>";
-                                downBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='downPdf(this.value)'>  הורד אישור הדרכה </button>";
+                                downBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='downPdf(this.value)'>  הורד תעודה </button>";
                                 deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteContactInInst(this.value)'> מחיקה </button>";
 
                                 return editBtn + downBtn + deleteBtn;
@@ -154,6 +154,8 @@
         function editContact(datacontact) {
             modeForPart = "edit";
             $("#addParticipants").show();
+            $("#addNewParticipantBtn").hide();
+
             let contact_data = JSON.parse(datacontact);
             $("#participant_id").val(contact_data.Id);
             $("#participant_id").prop('disabled', true);
@@ -393,6 +395,7 @@
             });
 
             $("#addParticipants").hide();
+            $("#addNewParticipantBtn").show();
             $("#partTblDiv").show();
             clearAddParticipantForm();
 
@@ -546,11 +549,18 @@
         }
 
         function addNewParticipant() {
+            $("#participant_id").prop('disabled', false);
             $("#addParticipants").show();
+            $("#addNewParticipantBtn").hide();
         }
 
         function clearAddParticipantForm() {
             $("input[type=text]").val("");
+        }
+
+        function cancelEditNewParticipant() {
+            $("#addParticipants").hide();
+            $("#addNewParticipantBtn").show();
         }
 
         function logout() {
@@ -770,15 +780,13 @@
                                                         </div>
                                                     </td>
                                                 </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div>
-                                                            <br />
-                                                            <button type="submit" id="btnSave_new_participant" class="btn btn-primary"> שמור משתתף </button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
                                             </table>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <button type="submit" id="btnSave_new_participant" class="btn btn-primary"> שמור </button>
+                                                    <button id="btnCancel" class="btn btn-primary" onclick="cancelEditNewParticipant()">  בטל  </button>
+                                                </div>
+                                            </div>
                                         </form>
                                     </div>
                                     <div id="partTblDiv">

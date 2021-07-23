@@ -49,6 +49,7 @@ namespace final_proj_gulkosafety.Models
             const int point = 10;
             const int maxSevereDefects = 2;
             const int maxdefects = 10;
+            const int minGradeAllow = 75;
             double report_Grade = 0;
             double safetyLvL_Grade = 0;
             double total = 0;
@@ -184,6 +185,10 @@ namespace final_proj_gulkosafety.Models
             alretHtml += "<h3>ציון דוח ביקור מספר " + ReportNum + ": " + report_Grade + "</h3>";
             alretHtml += "<h3>ציון רמת בטיחות פרויקט: " + safetyLvL_Grade + "</h3><br />";
             alretHtml += "<h3>פירוט ממצאים דוח ביקור:</h3>";
+            
+            //check if safety level is under 75 = risky project!
+            if (safetyLvL_Grade <= minGradeAllow)
+                alretHtml += "<p>שים לב! ציון הפרויקט חורג מרמת הבטיחות המינימלית שהוגדרה. שקול-העברת הדרכת בטיחות לעובדים ולמנהל העבודה, ביקור פתע באתר, פיזור שלטי בטיחות באתר וצעדי מניעה נוספים./p>";
 
             //if num of defects bigger than 10 reduce points
             if (CurrentReportDefects.Count > maxdefects)
