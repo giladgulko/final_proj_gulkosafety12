@@ -2868,6 +2868,11 @@ namespace final_proj_gulkosafety.Models.DAL
                     _contact.Id = Convert.ToInt32(dr["id"]);
                     _contact.Full_name = (string)dr["full_name"];
                     _contact.Phone = (string)dr["phone"];
+                    if (_contact.Phone.Length != 10)
+                    {
+                        var numberBeforeChange2 = _contact.Phone;
+                        _contact.Phone = "0" + numberBeforeChange2;
+                    }
                     _contact.Mail = (string)dr["mail"];
                     contactList.Add(_contact);
                 }
