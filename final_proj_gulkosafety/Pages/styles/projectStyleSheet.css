@@ -206,6 +206,11 @@ p {
     margin-right: 235%;
 }
 
+#table {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
 #logout {
     border: unset;
 }
