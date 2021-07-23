@@ -85,6 +85,7 @@
         }
         function getContactError() {
             swal("נכשל!", "קריאת אנשי קשר נכשלה!", "warning")
+
         }
 
         function getCertData() {
@@ -144,6 +145,7 @@
                     tbl = $('#contactsTable').DataTable({
                         data: contactToShow,
                         pageLength: 10,
+                        responsive: true,
                         columns: [
 
                             { data: "Id" },
@@ -202,6 +204,7 @@
                 tbl = $('#certTable').DataTable({
                     data: certificatesToShow,
                     pageLength: 10,
+                    responsive: true,
                     columns: [
 
                         { data: "Certificate_num" },
@@ -305,6 +308,7 @@
                 tbl1 = $('#ContactTable1').DataTable({
                     data: contactToShow,
                     pageLength: 10,
+                    responsive: true,
                     columns: [
 
                         { data: "Id" },
