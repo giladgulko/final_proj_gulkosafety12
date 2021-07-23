@@ -30,6 +30,7 @@
         contactList = [];
         itemList = [];
         item_data = [];
+        items = [];
         AllItems = [];
         orderToEdit = [];
         allItemsInOrder = [];
@@ -68,8 +69,10 @@
         function renderItems(data) {
             AllItems = data;
             ExistItem = document.getElementById("searchItem1");
+            ExistItem1 = document.getElementById("searchItem2");
             for (i = 0; i < AllItems.length; i++) {
                 ExistItem.innerHTML += "<option value=" + AllItems[i].Item_num + ">" + AllItems[i].Name + "</option > ";
+                ExistItem1.innerHTML += "<option value=" + AllItems[i].Item_num + ">" + AllItems[i].Name + "</option > ";
             }
         }
 
@@ -198,6 +201,7 @@
             swal({
                 title: "מצוין!", text: "מחיקת פריט בהזמנה בוצעה בהצלחה!", type: "success", icon: "success"
             })
+            location.reload();
         }
         function deleteItemError() {
             swal("נכשל!", "מחיקת פריט בהזמנה נכשלה!", "warning")
@@ -219,7 +223,7 @@
         function updateItem() {
             let totaLPrice = "";
             itemNum = $("#item_num").val();
-            quantity = $("#item_quantity1").val();
+            quantity = $("#item_quantity2").val();
             for (var i = 0; i < AllItems.length; i++) {
                 if (itemNum == AllItems[i].Item_num) {
                     totaLPrice += AllItems[i].Price * quantity;
@@ -242,7 +246,7 @@
             item = {
                 Order_num: item_data.Order_num,
                 Item_num: $("#item_num").val(),
-                Quantity: $("#item_quantity1").val(),
+                Quantity: $("#item_quantity2").val(),
             }
 
             let api = "../api/items_in_order";
@@ -638,7 +642,6 @@
             $("#div_TB_item").show();
             $("#btn_saveExist_item").hide();
             $("#itemsTable").hide();
-            $("#btn_saveExist_itemToOrder").show();
             $("#btn_ShowItems").show();
             $("#NewOrder").hide();
             $("#btn_show_contact").show();
@@ -647,21 +650,22 @@
         //הוספת פריט להזמנה קיימת
         function addItemToExistOrder() {
             let priceToAdd = "";
-            itemid = $("#searchItem1").val();
-            itemToAdd = $("#item_quantity").val();
+            $("#btn_saveExist_itemToOrder").show();
+            itemid = $("#searchItem2").val();
+            itemToAdd = $("#item_quantity2").val();
             for (var i = 0; i < AllItems.length; i++) {
                 if (itemid == AllItems[i].Item_num) {
                     priceToAdd += AllItems[i].Price * itemToAdd;
                 }
             }
             for (var i = 0; i < orderdata.length; i++) {
-                if (orderdata[i].Order_num == orderToEdit.Order_num) {
+                if (orderdata[i].Order_num == items[0].Order_num) {
                     let newOrder = {
 
-                        Order_num: orderToEdit.Order_num,
-                        Total_price: parseInt(orderToEdit.Total_price) + parseInt(priceToAdd),
-                        Invoice_num: orderToEdit.Invoice_num,
-                        Date: orderToEdit.Date,
+                        Order_num: items[0].Order_num,
+                        Total_price: parseInt(orderdata[i].Total_price) + parseInt(priceToAdd),
+                        Invoice_num: orderdata[i].Invoice_num,
+                        Date: orderdata[i].Date,
                     }
                     let api = "../api/order";
                     ajaxCall("PUT", api, JSON.stringify(newOrder), updateOrderSuccess, updateOrderError);
@@ -671,8 +675,8 @@
                 if (itemid == AllItems[i].Item_num) {
                     item = {
                         Item_num: itemid,
-                        Order_num: orderToEdit.Order_num,
-                        quantity: $("#item_quantity").val(),
+                        Order_num: items[0].Order_num,
+                        quantity: $("#item_quantity2").val(),
                     }
                 }
             }
@@ -683,6 +687,7 @@
             swal({
                 title: "מצוין!", text: "הוספת פריט חדש להזמנה בוצעה בהצלחה!", type: "success", icon: "success"
             })
+            location.reload();
         }
         function AddItemError() {
             swal("נכשל!", "הוספת פריט חדש להזמנה נכשלה!", "warning")
@@ -747,10 +752,6 @@
         function updateOrderError() {
             swal("נכשל!", "עדכון הזמנה נכשל!", "warning")
         }
-
-        //function New_contact() {
-        //    $("#newContact").show();
-        //}
         function AddItem() {
             window.location.href = "settings.html";
         }
@@ -919,8 +920,8 @@
                                 <td>
                                     <div class="form-group">
                                         <label for="contact_phone"><span class="red-star">★ </span>טלפון</label>
-                                        <input type="tel" rows="1" class="form-control groupDetails" id="contact_phone" placeholder=" הזן טלפון " pattern="[0-9]{3}-[0-9]{7}" required="required"
-                                               oninvalid="this.setCustomValidity('התבנית הינה 054-6954541')"
+                                        <input type="tel" rows="1" class="form-control groupDetails" id="contact_phone" placeholder=" הזן טלפון " pattern="[0-9]{10}" required="required"
+                                               oninvalid="this.setCustomValidity('התבנית הינה 0546954541')"
                                                oninput="this.setCustomValidity('')">
                                     </div>
                                 </td>
@@ -938,7 +939,6 @@
                     </form>
                 </div>
                 <br />
-
             </div>
         </div>
     </div>
@@ -994,8 +994,8 @@
                                 <td>
                                     <div class="form-group">
                                         <label for="contact_phone"><span class="red-star">★ </span>טלפון</label>
-                                        <input type="tel" rows="1" class="form-control groupDetails" id="contact_phone1" placeholder=" הזן טלפון " pattern="[0-9]{3}-[0-9]{7}" required="required"
-                                               oninvalid="this.setCustomValidity('התבנית הינה 054-6954541')"
+                                        <input type="tel" rows="1" class="form-control groupDetails" id="contact_phone1" placeholder=" הזן טלפון " pattern="[0-9]{10}" required="required"
+                                               oninvalid="this.setCustomValidity('התבנית הינה 0546954541')"
                                                oninput="this.setCustomValidity('')">
                                     </div>
                                 </td>
@@ -1037,16 +1037,16 @@
                             <tr>
                                 <td id="searchItem">
                                     <div class="form-group">
-                                        <label for="searchItem1" style="width:100%">חיפוש פריט</label>
-                                        <select onchange="" class="form-control groupDetails" id="searchItem1">
+                                        <label for="searchItem2" style="width:100%">חיפוש פריט</label>
+                                        <select onchange="" class="form-control groupDetails" id="searchItem2">
                                             <option value="">בחר פריט קיים:</option>
                                         </select>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group">
-                                        <label for="item_quantity">כמות מפריט</label>
-                                        <input type="number" rows="1" class="form-control groupDetails" id="item_quantity" pattern="[0-9]{1,4}" placeholder=" הכנס כמות מפריט ">
+                                        <label for="item_quantity2">כמות מפריט</label>
+                                        <input type="number" rows="1" class="form-control groupDetails" id="item_quantity2" pattern="[0-9]{1,4}" placeholder=" הכנס כמות מפריט ">
                                     </div>
                                 </td>
                                 <br />
