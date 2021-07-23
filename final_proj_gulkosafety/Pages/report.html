@@ -651,7 +651,6 @@
 
             gradesArr = JSON.parse(localStorage["gradesArr"]);
             gradesArr.pop();
-            //safetyLeveL(curentReport, lastReportDefects, gradesArr, ptwList, report.Report_num);
             document.getElementById('id02').style.display = 'block';
 
             let safetyLevel = {
@@ -761,11 +760,6 @@
 
         }
         function topdf(num){
-           // $("#sendPdf").hide()
-           // $("#downPdf").hide()
-           // $("#logout").hide()
-           // $(".body-wrap").hide()
-           // $(".logo").show()
             var element = document.getElementById('allPage');
             name = 'report-' + report.Report_num + '.pdf';
             var opt = {
@@ -880,8 +874,6 @@
                             <li class="nav-item">
                                 <span class="glyphicon glyphicon-bell" aria-hidden="true"></span><a href="alerts.html"></a>
                             </li>
-
-                            <li class="type2mode"><a href="#">סטטיסטיקות</a></li>
                             <li class="type2mode"><a href="users.html">משתמשים</a></li>
                             <li class="type2mode"><a href="orders.html">הזמנות</a></li>
                             <li class="type2mode"><a href="certificates.html">אישורים</a></li>
@@ -1148,7 +1140,5 @@
                 </div>
             </div>
         </div>
-
-        <!--<button onclick="changeUser()">הפוך מסך </button>-->
 </body>
     </html>
