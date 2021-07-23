@@ -190,6 +190,8 @@ span.glyphicon.glyphicon-floppy-disk, span.glyphicon.glyphicon-pencil {
 
 p {
     text-align: right;
+    font-size:16px;
+    margin-right:25px;
 }
 #ReportGradeP {
     text-align: right;

@@ -48,7 +48,7 @@ namespace final_proj_gulkosafety.Models
             //מספר הנקודות שיורדות כתוצאה מבדיקת כללים בדוח הנוכחי
             const int point = 10;
             const int maxSevereDefects = 2;
-            const int maxdefects = 10;
+            const int maxdefects = 9;
             const int minGradeAllow = 75;
             double report_Grade = 0;
             double safetyLvL_Grade = 0;
@@ -128,7 +128,7 @@ namespace final_proj_gulkosafety.Models
             report_Grade = report_Grade + pointsOnDefectGrade10;
 
             //reducing severe def points from report grade
-            if (severeDefects.Count > maxSevereDefects)
+            if (severeDefects.Count >= maxSevereDefects)
             {
                 report_Grade += point;
             }
@@ -175,7 +175,7 @@ namespace final_proj_gulkosafety.Models
                     safetyLvL_Grade = safetyLvL_Grade + 5;
                 }
             }
-            report_Grade = Math.Round(report_Grade, 2);
+            report_Grade = Math.Round(report_Grade, 0);
             safetyLvL_Grade = Math.Round(safetyLvL_Grade, 0);
             UpdateReportGrade(ReportNum, report_Grade);
             UpdateProjectSafetyLvl(Project.Project_num, safetyLvL_Grade);
@@ -190,10 +190,10 @@ namespace final_proj_gulkosafety.Models
             if (safetyLvL_Grade <= minGradeAllow)
                 alretHtml += "<p>שים לב! ציון הפרויקט חורג מרמת הבטיחות המינימלית שהוגדרה. שקול-העברת הדרכת בטיחות לעובדים ולמנהל העבודה, ביקור פתע באתר, פיזור שלטי בטיחות באתר וצעדי מניעה נוספים./p>";
 
-            //if num of defects bigger than 10 reduce points
+            //if num of defects bigger than 9 reduce points
             if (CurrentReportDefects.Count > maxdefects)
             {
-                alretHtml += "<p>נמצא מספר חריג של ליקויים: מעל 10 ליקויים</p>";
+                alretHtml += "<p>נמצא מספר חריג של ליקויים: מעל 9 ליקויים</p>";
             }
 
             if (severeDefects.Count > 0)
@@ -208,11 +208,16 @@ namespace final_proj_gulkosafety.Models
 
             if (TenGradeDefects.Count > 0)
             {
-                alretHtml += "<p>נמצאו " + TenGradeDefects.Count + " ליקויים חמורים ביותר בציון 10: ";
-                for (var d1 = 0; d1 < TenGradeDefects.Count; d1++)
+                if (TenGradeDefects.Count == severeDefects.Count)
                 {
-                    alretHtml += "<p>" + (d1+1) + ". " + TenGradeDefects[d1].Defect_name + " </p>";
+                    alretHtml += "<p>שים לב! כל הליקויים החמורים שנמצאו בציון 10";
                 }
+                else {
+                    alretHtml += "<p>נמצאו " + TenGradeDefects.Count + " ליקויים חמורים ביותר בציון 10: ";
+                    for (var d1 = 0; d1 < TenGradeDefects.Count; d1++)
+                        alretHtml += "<p>" + (d1 + 1) + ". " + TenGradeDefects[d1].Defect_name + " </p>";
+                }
+                
             }
             
             alretHtml += "<h3>פירוט ממצאים רמת הבטיחות:</h3>";
