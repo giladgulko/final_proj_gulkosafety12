@@ -245,9 +245,9 @@ namespace final_proj_gulkosafety.Models
             if (ProjReportGrades.Length>0)
             {
                 if((report_Grade - ProjReportGrades[ProjReportGrades.Length - 1]) >= 10)
-                    alretHtml += "<p>ניכר שיפור משמעותי- ציון הדוח הנוכחי גבוה ב-10 נק' מציון הדוח הקודם</p>";
+                    alretHtml += "<p>ניכר שיפור משמעותי- ציון הדוח הנוכחי גבוה ב-10 נק מציון הדוח הקודם</p>";
                 if ((ProjReportGrades[ProjReportGrades.Length - 1] - report_Grade) >= 10)
-                    alretHtml += "<p>שים לב! חלה הדרדרות משמעותית מהדוח הקודם שציונו גבוה ב-10 נק' מהדוח הנוכחי</p>";
+                    alretHtml += "<p>שים לב! חלה הדרדרות משמעותית מהדוח הקודם שציונו גבוה ב-10 נק מהדוח הנוכחי</p>";
             }
 
             ReportGrade = report_Grade;
