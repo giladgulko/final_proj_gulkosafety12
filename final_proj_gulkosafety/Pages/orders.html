@@ -223,7 +223,7 @@
         function updateItem() {
             let totaLPrice = "";
             itemNum = $("#item_num").val();
-            quantity = $("#item_quantity2").val();
+            quantity = $("#item_quantity1").val();
             for (var i = 0; i < AllItems.length; i++) {
                 if (itemNum == AllItems[i].Item_num) {
                     totaLPrice += AllItems[i].Price * quantity;
@@ -246,7 +246,7 @@
             item = {
                 Order_num: item_data.Order_num,
                 Item_num: $("#item_num").val(),
-                Quantity: $("#item_quantity2").val(),
+                Quantity: $("#item_quantity1").val(),
             }
 
             let api = "../api/items_in_order";
