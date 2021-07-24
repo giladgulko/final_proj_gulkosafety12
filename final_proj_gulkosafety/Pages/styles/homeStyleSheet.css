@@ -52,7 +52,7 @@ h3 {
     font-size: 20px;
     font-weight: bold;
     color: cadetblue;
-    text-align: right;
+    text-align: center;
     margin-top: 0px;
     margin-right:10px;
     direction:rtl;
@@ -93,4 +93,5 @@ h3 {
 .image{
     margin:0!important;
 }
+
 

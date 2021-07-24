@@ -27,6 +27,7 @@
     <title>בית</title>
     <script>
         var user_email = "gulkosafety@gmail.com";// צריך לקחת את היוזר מהלוקאל סטורג - של מי שנמצא בלוג אין
+        var state = "less";
         $(document).ready(function () {
             alertList = [];
             reportList = [];
@@ -58,16 +59,31 @@
             if (expiredInstructions.length > 0) {
                 let str = "<ul class='circle'>";
                 for (i = 0; i < expiredInstructions.length; i++) {
-                    str += "<li><a id='" + expiredInstructions[i].Instruction_num + "' onclick='renderInstruction(this.id)' href='#' >" + expiredInstructions[i].Type_name + " ל" + expiredInstructions[i].Company + "</a></li>";
+                    if (i > 2)
+                        str += "<li><a id='" + expiredInstructions[i].Instruction_num + "' onclick='renderInstruction(this.id)' href='#' >" + expiredInstructions[i].Type_name + " ל" + expiredInstructions[i].Company + "</a></li>";
+                    else
+                        str += "<li><a id='" + expiredInstructions[i].Instruction_num + "' onclick='renderInstruction(this.id)' href='#' >" + expiredInstructions[i].Type_name + " ל" + expiredInstructions[i].Company + "</a></li>";
                 }
                 str += "</ul>";
                 $("#instructions_expire_alerts").html(str);
+
+                if (expiredCertificates.length > 3) {
+                    $("#showInstructions").show();
+                    $(".hideMe").hide();
+                }
+                else $("#showInstructions").hide();
             }
-            else $("#instructions_expire_alerts").html("<p>אין התראות</p>");
+            else {
+                $("#showInstructions").hide();
+                $("#instructions_expire_alerts").html("<ul class='circle'><li><strong>אין התראות</strong ></li></ul>");
+            }
         }
 
         function getExpiredInstructionsError(err) {
-            alert("משיכת הדרכות פגות תוקף נכשלה");
+            swal({
+                title: "נכשל!", text: "משיכת הדרכות פגות תוקף נכשלה", type:
+                    "warning", icon: "warning"
+            });
         }
 
         function getExpiredCertificates(today) {
@@ -80,18 +96,31 @@
             if (expiredCertificates.length > 0) {
                 let str = "<ul class='circle'>";
                 for (i = 0; i < expiredCertificates.length; i++) {
-                     
-                    str += "<li><a id='" + expiredCertificates[i].Certificate_num + "' onclick='renderCertificate(this.id)' href='#' >" + expiredCertificates[i].Type_name + " ל" + expiredCertificates[i].Company + "</a></li>";
+                    if (i > 2)
+                        str += "<li class='hideMe'><a id='" + expiredCertificates[i].Certificate_num + "' onclick='renderCertificate(this.id)' href='#' >" + expiredCertificates[i].Type_name + " ל" + expiredCertificates[i].Company + "</a></li>";
+                    else
+                        str += "<li><a id='" + expiredCertificates[i].Certificate_num + "' onclick='renderCertificate(this.id)' href='#' >" + expiredCertificates[i].Type_name + " ל" + expiredCertificates[i].Company + "</a></li>";
                 }
                 str += "</ul>";
                 $("#certificates_expire_alerts").html(str);
-            }
 
-            else $("#certificates_expire_alerts").html("<p>אין התראות</p>");
+                if (expiredCertificates.length > 3) {
+                    $("#showCertificates").show();
+                    $(".hideMe").hide();
+                }
+                else $("#showCertificates").hide();
+            }
+            else {
+                $("#showCertificates").hide();
+                $("#certificates_expire_alerts").html("<ul class='circle'><li><strong>אין התראות</strong ></li></ul>");
+            }
         }
 
         function getExpiredCertificatesError(err) {
-            alert("משיכת אישורים פגי תוקף נכשלה");
+            swal({
+                title: "נכשל!", text: "משיכת אישורים פגי תוקף נכשלה", type:
+                    "warning", icon: "warning"
+            });
         }
 
         function getReports() {
@@ -105,18 +134,47 @@
             let api = "../api/alert?user_email=" + user_email + "&alert_type_num=" + alert_type_num;
             ajaxCall("GET", api, "", getAlertsSuccess, getError);
         }
+
         function getAlertsSuccess(data) {
             alertList = data;
+            
             if (alertList.length > 0) {
                 let str = "<ul class='circle'>";
                 for (i = 0; i < alertList.length; i++) {
-                   str += "<li><strong>" + alertList[i].Date.split("T")[0] + "</strong ><a id='" + alertList[i].Alert_num + "' href='#' onclick='renderDefectPic(this.id)'> " + alertList[i].Content.split(",")[0] + " " + alertList[i].Proj_name + " </a></li> ";
+                    if (i > 2)
+                        str += "<li class='hideMe'><strong>" + alertList[i].Date.split("T")[0] + "</strong ><a id='" + alertList[i].Alert_num + "' href='#' onclick='renderDefectPic(this.id)'> " + alertList[i].Content.split(",")[0] + " " + alertList[i].Proj_name + " </a></li> ";
+                    else
+                        str += "<li><strong>" + alertList[i].Date.split("T")[0] + "</strong ><a id='" + alertList[i].Alert_num + "' href='#' onclick='renderDefectPic(this.id)'> " + alertList[i].Content.split(",")[0] + " " + alertList[i].Proj_name + " </a></li> ";
                 }
+
                 str += "</ul>";
                 $("#fixed_defects_photos_alerts").html(str);
-            }
-            else d$("#fixed_defects_photos_alerts").html("<p>אין התראות</p>");
 
+                if (alertList.length > 3) {
+                    $("#showPhotos").show();
+                    $(".hideMe").hide();
+                }
+                else $("#showPhotos").hide();
+            }
+            else {
+                $("#showPhotos").hide();
+                $("#fixed_defects_photos_alerts").html("<ul class='circle'><li><strong>אין התראות</strong ></li></ul>");
+            }
+        }
+
+        function showText(aTagId, currentDiv) {
+            
+            if (state == 'less') {
+                $('#' + currentDiv + ' .hideMe').show();
+                $('#' + aTagId).text("הראה פחות");
+                state = 'more';
+            }
+            else {
+                $('#' + currentDiv + ' .hideMe').hide();
+                $('#' + aTagId).text("הראה יותר");
+                state = 'less';
+            }
+                
         }
 
         function getReportsuccess(data) {
@@ -124,13 +182,25 @@
             if (reportList.length > 0) {
                 let str = "<ul class='circle'>";
                 for (i = 0; i < reportList.length; i++) {
-
-                    str += "<li><strong>" + reportList[i].Date.split("T")[0] + "</strong ><a id='" + reportList[i].Report_num + "' href='#' onclick='showReportPage(this.id)'> בפרויקט " + reportList[i].Proj_name + " " + " דוח מספר " + reportList[i].Report_num + "</a></li> ";
+                    if (i > 2)
+                        str += "<li class='hideMe'><strong>" + reportList[i].Date.split("T")[0] + "</strong ><a id='" + reportList[i].Report_num + "' href='#' onclick='showReportPage(this.id)'> בפרויקט " + reportList[i].Proj_name + " " + " דוח מספר " + reportList[i].Report_num + "</a></li> ";
+                    else
+                        str += "<li><strong>" + reportList[i].Date.split("T")[0] + "</strong ><a id='" + reportList[i].Report_num + "' href='#' onclick='showReportPage(this.id)'> בפרויקט " + reportList[i].Proj_name + " " + " דוח מספר " + reportList[i].Report_num + "</a></li> ";
                 }
                 str += "</ul>";
                 document.getElementById('recent_visit reports_alerts').innerHTML += str;
+
+                if (reportList.length > 3) {
+                    $("#showReports").show();
+                    $(".hideMe").hide();
+                }
+
+                else $("#showReports").hide();
             }
-            else document.getElementById('recent_visit reports_alerts').innerHTML += "לא נמצאו דוחות מהשבוע האחרון";
+            else {
+                $("#showReports").hide();
+                document.getElementById('recent_visit reports_alerts').html("<ul class='circle'><li><strong>אין התראות</strong ></li></ul>");
+            }
         }
 
         function getError() {
@@ -246,7 +316,10 @@
         }
 
         function updateDefectsInReportError() {
-            swal("נכשל!", "ליקוי לא עודכן", "warning");
+            swal({
+                title: "נכשל!", text: "סטטוס תיקון ליקוי לא עודכן!", type:
+                    "warning", icon: "warning"
+            });
         }
 
         function postAlertOnImg() {
@@ -269,7 +342,10 @@
                 }
             }
 
-            else swal("התראה לאנשי הקשר לא נשלחה!", "הבאת פרויקט נכשלה", "warning");
+            else swal({
+                title: "התראה לאנשי הקשר לא נשלחה!", text: "הבאת פרטי פרויקט נכשלה", type:
+                    "warning", icon: "warning"
+            });
         }
 
         function defectNotApprove() {
@@ -290,7 +366,10 @@
                 }
             }
 
-            else swal("התראה לאנשי הקשר לא נשלחה!", "הבאת פרויקט נכשלה", "warning");
+            else swal({
+                title: "התראה לאנשי הקשר לא נשלחה!", text: "הבאת פרטי פרויקט נכשלה", type:
+                    "warning", icon: "warning"
+            });
         }
 
         function PostAlertSuccess() {
@@ -299,7 +378,10 @@
         }
 
         function PostAlertError(err) {
-            swal("התראה לאנשי הקשר לא נשלחה!", "סטטוס ליקוי עודכן בהצלחה", "warning")
+            swal({
+                title: "סטטוס תיקון עודכן בהצלחה!", text: "שים לב! לא נשלחה התראה לאנשי הקשר", type:
+                    "warning", icon: "warning"
+            });
         }
 
         function ChangeStatus(id) {
@@ -323,17 +405,23 @@
             ajaxCall("PUT", api, JSON.stringify(update_status), UpdateAlertStatusSuccess, UpdateAlertStatusError)
         }
         function UpdateAlertStatusSuccess() {
-            swal("סטטוס תיקון עודכן בהצלחה!", "נשלחה התראה לאנשי הקשר בפרויקט", "success");
-            location.reload();
+            swal({
+                title: "סטטוס תיקון עודכן בהצלחה!", text: "נשלחה התראה לאנשי הקשר בפרויקט", type:
+                    "success", icon: "success"
+            }).then(function () {
+                location.reload();
+            });
         }
         function UpdateAlertStatusError() {
-            swal("נכשל!", "עדכון סטטוס התראה נכשל!", "warning")
+            swal({
+                title: "עדכון סטטוס תיקון נכשל!", text: "נסה שוב מאוחר יותר", type:
+                    "warning", icon: "warning"
+            });
         }
 
         function logout() {
             localStorage.removeItem("user");
             window.location = "login.html";
-
         }
 
 
@@ -403,6 +491,9 @@
                 </div>
                 <div id="fixed_defects_photos_alerts">
                 </div>
+                <div>
+                    <a id="showPhotos" onclick="showText(this.id,'fixed_defects_photos_alerts')" href="#">הראה יותר</a>
+                </div>
             </div>
 
             <div class="card-body section2">
@@ -413,7 +504,9 @@
                 <div id="instructions_expire_alerts">
 
                 </div>
-
+                <div>
+                    <a id="showInstructions" onclick="showText(this.id,'instructions_expire_alerts')" href="#">הראה יותר</a>
+                </div>
             </div>
 
             <div class="card-body section2">
@@ -424,7 +517,9 @@
                 <div id="certificates_expire_alerts">
 
                 </div>
-
+                <div>
+                    <a id="showCertificates" onclick="showText(this.id,'certificates_expire_alerts')" href="#">הראה יותר</a>
+                </div>
             </div>
 
             <div class="card-body section2">
@@ -434,6 +529,9 @@
                 </div>
                 <div id="recent_visit reports_alerts">
 
+                </div>
+                <div>
+                    <a id="showReports" onclick="showText(this.id,'recent_visit reports_alerts')" href="#">הראה יותר</a>
                 </div>
             </div>
             <div id="id04" class="w3-modal">
