@@ -139,6 +139,7 @@
                 $("#lastReportdefectsTBL").hide();
                 $('.editReportDetailsBtns').hide();
                 $('#sendPdf').hide();
+                $('#downPdf').hide();
                 $('#calcAndSend').hide();
             }
         }
@@ -631,7 +632,7 @@
         }
 
         function calcGrade() {
-            //להוסיף את הליקיים הפתוחים
+            //להוסיף את הליקויים הפתוחים
             let curentReport = [];
             for (i = 0; i < defects.length; i++) {
                 for (j = 0; j < currentReportDefects.length; j++) {
@@ -669,7 +670,8 @@
         function getSafetyLvlSuccess(safetyLvl) {
             $("#safetyAlert").html(safetyLvl.Alert);
             $("#ReportGradeP").html(safetyLvl.ReportGrade);
-            $("#safetyLvlGraph").html(safetyLvl.SafetyLvlGrade);
+            project.Safety_lvl = safetyLvl.SafetyLvlGrade;
+            localStorage["project"] = JSON.stringify(project);
             alertConstractor(safetyLvl.Alert, 1, "gulkosafety@gmail.com", project.Project_num);
         }
 
