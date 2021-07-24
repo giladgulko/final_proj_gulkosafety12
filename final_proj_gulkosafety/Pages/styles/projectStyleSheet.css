@@ -176,7 +176,7 @@ div#report_BTN {
 .w3-container, .w3-panel {
     padding-right: 4%;
     direction: rtl;
-      /*border:2px solid cadetblue;*/
+     
 }
 #alert_paragraph {
     padding: 2%;
@@ -189,14 +189,10 @@ div#report_BTN {
     padding-right:2%;
     color:black;
 }
-/*.w3-container, .w3-panel {
-    border: 5px solid black;
-
-}*/
 
 p {
     text-align: right;
-    /* direction: rtl; */
+   
 }
 
 #saveBTN {

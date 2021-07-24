@@ -55,9 +55,7 @@ h3 {
 .w3-modal-content {
     direction: rtl;
 }
-/*#selectdefect {
-    max-width: -webkit-fill-available;
-}*/
+
 #btn_add_defect, #saveReport, #calcGrade, #addDefectToRBtn, #btn_update_defect, #savePicToDefBTN, #sendPdf, #downPdf {
     float: left;
     color: #fff;

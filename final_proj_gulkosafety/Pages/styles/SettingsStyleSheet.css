@@ -30,11 +30,11 @@ h2, h1 {
     background-color: #5bbabd;
 }
 .btn-group, .btn-group-vertical {
-    /*position: relative;*/
+    
     vertical-align: middle;
     width: 90%;
     float: right;
-    /*margin-left: 90%;*/
+  
 }
 #headline {
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -59,7 +59,7 @@ h2, h1 {
     clear: both;
     *zoom: 1;
     zoom: 1;
-    /*padding-right: 25%;*/
+    
 }
 
 .pForm {

@@ -447,7 +447,7 @@
                 tbl = $('#reportsTable').DataTable({
                     data: reportsToShow,
                     pageLength: 5,
-                    responsive: true,
+                    //responsive: true,
                     columns: [
                         { data: "Report_num" },
                         { data: "Date" },
@@ -495,7 +495,7 @@
 
                 var data = [trace1];
                 var config = { responsive: true }
-                Plotly.newPlot('chartContainer', data);
+                Plotly.newPlot('chartContainer', data,config);
             }
         }
         function logout() {
@@ -727,21 +727,25 @@
                                 <button class='btn btn-primary type2mode' id="newBTN">דוח ביקור חדש</button>
                             </div>
                         </div>
-                        <div id="table">
-                            <table id="reportsTable" class="display" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>מספר דוח</th>
-                                        <th>תאריך</th>
-                                        <th>שעה</th>
-                                        <th>ציון דוח</th>
+                        <form id="pForm">
+                            <div id="table">
+                                <table id="reportsTable" class="display" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>מספר דוח</th>
+                                            <th>תאריך</th>
+                                            <th>שעה</th>
+                                            <th>ציון דוח</th>
 
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>                 
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                </table>
+
+                            </div>
+                        </form>
                     </div>
+                    
               </div>
               </div>
                         <div class="col-lg-4 mb-3">
