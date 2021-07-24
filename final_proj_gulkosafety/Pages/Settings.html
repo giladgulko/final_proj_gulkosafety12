@@ -30,6 +30,7 @@
         user = JSON.parse(localStorage["user"]);
         DefectToEdit = [];
         var x = "";
+        var weightsTbl = 0;
         defectTypeToEdit = [];
         Instruction_type_num = [];
         userTypeToEdit = [];
@@ -55,11 +56,11 @@
             $("#instructionTypeTable").hide();
             $("#instructionTypeForm").hide();
             FirstTimeUploadInstructionTypeTable = 0;
-            // סוגי משתמשים
+            // סוגי פרויקטים
             $("#addUserTypeBtn").hide();
-            $("#userTypeTable").hide();
-            $("#userTypeForm").hide();
-            FirstTimeUploadUserTypeTable = 0;
+            $("#projTypeTable").hide();
+            $("#projTypeForm").hide();
+            FirstTimeUploadProjTypeTable = 0;
             // סוגי אישורים
             $("#certificateTypeForm").hide();
             $("#addCertificateTypeBtn").hide();
@@ -163,7 +164,7 @@
                 insert_new_instruction_type();
             }
             if (mode == "newUserType") {
-                insert_new_user_type();
+                insert_new_proj_type();
             }
             if (mode == "newCertificateType") {
 
@@ -226,8 +227,8 @@
                 $("#instructionTypeTable").hide();
                 $("#instructionTypeForm").hide();
                 $("#addUserTypeBtn").hide();
-                $("#userTypeTable").hide();
-                $("#userTypeForm").hide();
+                $("#projTypeTable").hide();
+                $("#projTypeForm").hide();
                 $("#certificateTypeForm").hide();
                 $("#addCertificateTypeBtn").hide();
                 $("#certificateTypeTable").hide();
@@ -252,8 +253,8 @@
             $("#instructionTypeTable").hide();
             $("#instructionTypeForm").hide();
             $("#addUserTypeBtn").hide();
-            $("#userTypeTable").hide();
-            $("#userTypeForm").hide();
+            $("#projTypeTable").hide();
+            $("#projTypeForm").hide();
             $("#certificateTypeForm").hide();
             $("#addCertificateTypeBtn").hide();
             $("#certificateTypeTable").hide();
@@ -406,8 +407,8 @@
                 $("#addDefectTypeBtn").hide();
                 $("#defectTypeForm").hide();
                 $("#addUserTypeBtn").hide();
-                $("#userTypeTable").hide();
-                $("#userTypeForm").hide();
+                $("#projTypeTable").hide();
+                $("#projTypeForm").hide();
                 $("#certificateTypeForm").hide();
                 $("#addCertificateTypeBtn").hide();
                 $("#certificateTypeTable").hide();
@@ -433,8 +434,8 @@
             $("#addDefectTypeBtn").hide();
             $("#defectTypeForm").hide();
             $("#addUserTypeBtn").hide();
-            $("#userTypeTable").hide();
-            $("#userTypeForm").hide();
+            $("#projTypeTable").hide();
+            $("#projTypeForm").hide();
             $("#certificateTypeForm").hide();
             $("#addCertificateTypeBtn").hide();
             $("#certificateTypeTable").hide();
@@ -584,12 +585,12 @@
             swal("סוג הדרכה לא נמחק!", err, "warning");
         }
 
-        ////////סוגי משתמשים
-        // קריאת כל סוגי משתמשים
+        ////////סוגי פרויקטים
+        // קריאת כל סוגי פרויקטים
         function getUserType(BtnId) {
             SwitchBtnToColor(BtnId);
-            if (FirstTimeUploadUserTypeTable == 0) {
-                ajaxCall("GET", "../api/user_type", "", createDtUserType, getErrorUserType)
+            if (FirstTimeUploadProjTypeTable == 0) {
+                ajaxCall("GET", "../api/project_type", "", createDtProjType, getErrorProjType)
             }
             else {
                 $("#defectTypeTable").hide();
@@ -608,17 +609,17 @@
                 $("#addDefectBtn").hide();
                 $("#defectTable").hide();
                 $("#addUserTypeBtn").show();
-                $("#userTypeTable").show();
-                $("#userTypeForm").show();
+                $("#projTypeTable").show();
+                $("#projTypeForm").show();
             }
 
         }
-        function getErrorUserType() {
-            swal("נכשל!", "קריאת סוגי משתמשים נכשלה!", "warning")
+        function getErrorProjType() {
+            swal("נכשל!", "קריאת סוגי פרויקטים נכשלה!", "warning")
         }
-        //בניית טבלה של סוגי משתמשים
-        function createDtUserType(userTypedata) {
-            FirstTimeUploadUserTypeTable = 1;
+        //בניית טבלה של סוגי פרויקטים
+        function createDtProjType(projTypedata) {
+            FirstTimeUploadProjTypeTable = 1;
             $("#defectTypeTable").hide();
             $("#addDefectTypeBtn").hide();
             $("#defectTypeForm").hide();
@@ -635,26 +636,26 @@
             $("#addDefectBtn").hide();
             $("#defectTable").hide();
             $("#addUserTypeBtn").show();
-            $("#userTypeTable").show();
-            $("#userTypeForm").show();
-            let userTypeToShow = [];
+            $("#projTypeTable").show();
+            $("#projTypeForm").show();
+            let projTypeToShow = [];
 
-            for (var i = 0; i < userTypedata.length; i++) {
-                userType = {
-                    User_type_num: userTypedata[i].User_type_num,
-                    Type_name: userTypedata[i].Type_name,
+            for (var i = 0; i < projTypedata.length; i++) {
+                projType = {
+                    Project_type_num: projTypedata[i].Project_type_num,
+                    Project_type_name: projTypedata[i].Project_type_name,
                 }
-                userTypeToShow.push(userType);
+                projTypeToShow.push(projType);
             }
 
             try {
-                tbl = $('#userTypeTable').DataTable({
-                    data: userTypeToShow,
+                tbl = $('#projTypeTable').DataTable({
+                    data: projTypeToShow,
                     pageLength: 10,
                     columns: [
 
-                        { data: "User_type_num" },
-                        { data: "Type_name" },
+                        { data: "Project_type_num" },
+                        { data: "Project_type_name" },
 
 
                         {
@@ -663,9 +664,11 @@
 
                                 editBtn = "<button type='button' class = 'editBtn btn btn-success' value='" + def + "' onclick='editUserType(this.value)'> עריכה </button>";
 
+                                showBtn = "<button type='button' class = 'showBtn btn btn-success' value='" + def + "' onclick='showProjWeights(this.value)'> הצג משקלי פרויקט </button>";
+
                                 deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' value='" + def + "' onclick='deleteUserType(this.value)'> מחיקה </button>";
 
-                                return editBtn + deleteBtn;
+                                return showBtn + deleteBtn;
 
                             }
                         },
@@ -679,91 +682,77 @@
                 alert(err);
             }
         }
-        //הוספת סוג משתמש חדש
-        function insert_new_user_type() {
-            document.getElementById('id03').style.display = 'none';
 
-            let newUserType = {
+        function showProjWeights(projType) {
+            pType = JSON.parse(projType);
+            let api = "../api/proj_type_weight?proj_type=" + pType.Project_type_num;
+            ajaxCall("GET", api, "", getWeightsSuccess, getWeightsError);
+        }
 
-                Type_name: $("#user_type_name").val(),
+        function getWeightsError(err) {
+            swal("נכשל!", "קריאת משקלים נכשלה!", "warning")
+        }
+
+        function getWeightsSuccess(weightsList) {
+            document.getElementById('id07').style.display = 'block';
+            weightsTbl++;
+            if (weightsList.length > 0) {
+                $("#partTblDiv").show();
+                weightsToShow = [];
+                for (i = 0; i < weightsList.length; i++) {
+                    for (j = 0; j < defectTypeArr.length; j++) {
+                        if (weightsList[i].Defect_type_num == defectTypeArr[j].Defect_type_num) {
+                            let weight = {
+                                Project_type_num: weightsList[i].Project_type_num,
+                                Defect_type_num: weightsList[i].Defect_type_num,
+                                Defect_type_name: defectTypeArr[j].Type_name,
+                                Weight: weightsList[i].Weight
+                            }
+                            weightsToShow.push(weight);
+                            break;
+                        }
+
+                    }
+                }
+
+                if (weightsTbl == 1) {
+                    buildProjWeightsTbl();
+                }
+                else {
+                    tblW.clear().rows.add(weightsToShow).draw();
+                }
             }
 
-            let api = "../api/user_type";
-            ajaxCall("POST", api, JSON.stringify(newUserType), createNewUserTypeSuccess, createNewUserTypeError);
-        }
-
-        function createNewUserTypeSuccess(userdata) {
-            swal({
-                title: "מצוין!", text: "סוג משתמש חדש נוצר בהצלחה!", type: "success", icon: "success"
-            }).then(function () {
-                location.reload();
-            });
-
-        }
-        function createNewUserTypeError() {
-            swal("נכשל!", "הכנסת סוג משתמש חדש נכשל!", "warning")
-        }
-
-        //עריכת סוג משתמש
-        function editUserType(dataUserType) {
-            mode = "editUserType";
-            document.getElementById('id03').style.display = 'block';
-            userTypeToEdit = JSON.parse(dataUserType);
-            $("#user_type_name").val(userTypeToEdit.Type_name);
-        }
-        // עדכון סוג משתמש
-        function updateUserType() {
-            user_type_update = {
-                User_type_num: userTypeToEdit.User_type_num,
-                Type_name: $("#user_type_name").val(),
+            else {
+                $("#partTblDiv").hide();
             }
-            let api = "../api/user_type";
-            ajaxCall("PUT", api, JSON.stringify(user_type_update), UpdateUserTypeSuccess, UpdateUserTypetError);
-        }
-        function UpdateUserTypeSuccess() {
-            swal({
-                title: "מצוין!", text: "עדכון סוג משתמש בוצע", type: "success", icon: "success"
-            }).then(function () {
-                location.reload();
 
-            });
         }
-        function UpdateUserTypetError() {
-            swal("עדכון סוג משתמש לא בוצע!", err, "warning");
-        }
-        //מחיקת סוג משתמש חדש
-        function deleteUserType(def) {
-            delete_user_type = JSON.parse(def);
-            userTypeToDelete = {
-                User_type_num: delete_user_type.User_type_num,
+
+
+
+        function buildProjWeightsTbl() {
+            try {
+                tblW = $('#weightsTBL').DataTable({
+                    data: weightsToShow,
+                    pageLength: 10,
+                    columns: [
+
+                        { data: "Project_type_num" },
+                        { data: "Defect_type_num" },
+                        { data: "Defect_type_name" },
+                        { data: "Weight" },
+
+                    ],
+                })
+
             }
-            swal({
-                title: "האם אתה בטוח שברצונך למחוק את סוג המשתמש?",
-                text: "",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true
-            })
-                .then(function (willDelete) {
-                    if (willDelete) delete_user_type_func(userTypeToDelete);
-                    else swal("סוג משתמש לא נמחק!");
-                });
-        }
-        function delete_user_type_func(userTypeToDelete) {
-            ajaxCall("DELETE", "../api/user_type", JSON.stringify(userTypeToDelete), deleteUserTypeSuccess, deleteUserTypeError);
 
+            catch (err) {
+                alert(err);
+            }
         }
-        function deleteUserTypeSuccess() {
-            swal({
-                title: "מצוין!", text: "סוג משתמש נמחק בהצלחה", type: "success", icon: "success"
-            }).then(function () {
-                location.reload();
 
-            });
-        }
-        function deleteUserTypeError() {
-            swal("סוג משתמש לא נמחק!", err, "warning");
-        }
 
         ////////סוגי אישורים
         // קריאת כל סוגי אישורים
@@ -780,8 +769,8 @@
                 $("#instructionTypeTable").hide();
                 $("#instructionTypeForm").hide();
                 $("#addUserTypeBtn").hide();
-                $("#userTypeTable").hide();
-                $("#userTypeForm").hide();
+                $("#projTypeTable").hide();
+                $("#projTypeForm").hide();
                 $("#itemForm").hide();
                 $("#addItemBtn").hide();
                 $("#itemTable").hide();
@@ -808,8 +797,8 @@
             $("#instructionTypeTable").hide();
             $("#instructionTypeForm").hide();
             $("#addUserTypeBtn").hide();
-            $("#userTypeTable").hide();
-            $("#userTypeForm").hide();
+            $("#projTypeTable").hide();
+            $("#projTypeForm").hide();
             $("#itemForm").hide();
             $("#addItemBtn").hide();
             $("#itemTable").hide();
@@ -972,8 +961,8 @@
                 $("#instructionTypeTable").hide();
                 $("#instructionTypeForm").hide();
                 $("#addUserTypeBtn").hide();
-                $("#userTypeTable").hide();
-                $("#userTypeForm").hide();
+                $("#projTypeTable").hide();
+                $("#projTypeForm").hide();
                 $("#certificateTypeForm").hide();
                 $("#addCertificateTypeBtn").hide();
                 $("#certificateTypeTable").hide();
@@ -1000,8 +989,8 @@
             $("#instructionTypeTable").hide();
             $("#instructionTypeForm").hide();
             $("#addUserTypeBtn").hide();
-            $("#userTypeTable").hide();
-            $("#userTypeForm").hide();
+            $("#projTypeTable").hide();
+            $("#projTypeForm").hide();
             $("#certificateTypeForm").hide();
             $("#addCertificateTypeBtn").hide();
             $("#certificateTypeTable").hide();
@@ -1158,8 +1147,8 @@
                 $("#instructionTypeTable").hide();
                 $("#instructionTypeForm").hide();
                 $("#addUserTypeBtn").hide();
-                $("#userTypeTable").hide();
-                $("#userTypeForm").hide();
+                $("#projTypeTable").hide();
+                $("#projTypeForm").hide();
                 $("#certificateTypeForm").hide();
                 $("#addCertificateTypeBtn").hide();
                 $("#certificateTypeTable").hide();
@@ -1193,8 +1182,8 @@
             $("#addItemBtn").hide();
             $("#itemTable").hide();
             $("#addUserTypeBtn").hide();
-            $("#userTypeTable").hide();
-            $("#userTypeForm").hide();
+            $("#projTypeTable").hide();
+            $("#projTypeForm").hide();
             $("#defectForm").show();
             $("#addDefectBtn").show();
             $("#defectTable").show();
@@ -1460,7 +1449,6 @@
                     <div id="addbuttons">
                         <button id="addDefectTypeBtn" class="btn btn-primary" value="newDefectType" onclick="document.getElementById('id01').style.display='block',switch_btn_fit_insert_new(this.value),clearPopuP()">הוסף סוג ליקוי חדש</button>
                         <button id="addInstructionTypeBtn" class="btn btn-primary" value="newInstructionType" onclick="document.getElementById('id02').style.display = 'block', changeColor(), switch_btn_fit_insert_new(this.value), clearPopuP()">הוסף סוג הדרכה חדש</button>
-                        <button id="addUserTypeBtn" class="btn btn-primary" value="newUserType" onclick="document.getElementById('id03').style.display='block',switch_btn_fit_insert_new(this.value),clearPopuP()">הוסף סוג משתמש חדש</button>
                         <button id="addCertificateTypeBtn" class="btn btn-primary" value="newCertificateType" onclick="document.getElementById('id04').style.display='block',switch_btn_fit_insert_new(this.value),clearPopuP()">הוסף סוג אישור חדש</button>
                         <button id="addItemBtn" class="btn btn-primary" value="newItem" onclick="document.getElementById('id05').style.display='block',switch_btn_fit_insert_new(this.value),clearPopuP()">הוסף פריט חדש</button>
                         <button id="addDefectBtn" class="btn btn-primary" value="newDefect" onclick="document.getElementById('id06').style.display='block',switch_btn_fit_insert_new(this.value),clearPopuP()">הוסף ליקוי חדש</button>
@@ -1492,12 +1480,12 @@
                         </thead>
                     </table>
                 </form>
-                <form class="pForm" id="userTypeForm">
-                    <table id="userTypeTable" class="display" style="width:100%" dir="rtl">
+                <form class="pForm" id="projTypeForm">
+                    <table id="projTypeTable" class="display" style="width:100%" dir="rtl">
                         <thead>
                             <tr>
-                                <th>מספר סוג משתמש</th>
-                                <th>שם סוג משתמש</th>
+                                <th>מספר סוג פרויקט</th>
+                                <th>שם סוג פרויקט</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -1547,7 +1535,7 @@
                     <button id="defectTypeBtn" onclick="getDefectType(this.id)">סוגי ליקוי</button>
                     <button id="defectBtn" onclick="getDefect(this.id)">ליקויים</button>
                     <button id="instructionTypeBtn" onclick="getInstructionType(this.id)">סוגי הדרכה</button>
-                    <button id="userTypeBtn" onclick="getUserType(this.id)">סוגי משתמש</button>
+                    <button id="userTypeBtn" onclick="getUserType(this.id)">סוגי פרויקטים</button>
                     <button id="certificateTypeBtn" onclick="getCertificateType(this.id)">סוגי אישורים</button>
                     <button id="itemBtn" onclick="getItem(this.id)">פריטים</button>
                 </div>
@@ -1576,7 +1564,7 @@
                                 </thead>
                             </table>
                             <br />
-                            <button type="submit" id="saveBTN" class="btn btn-primary"> שמור </button>
+                            <button type="submit" id="saveDefectTypeBTN" class="btn btn-primary"> שמור </button>
                             <br />
                         </form>
                     </div>
@@ -1622,7 +1610,7 @@
                                 </thead>
                             </table>
                             <br />
-                            <button type="submit" id="saveBTN" class="btn btn-primary"> שמור </button>
+                            <button type="submit" id="saveInstTypeBTN" class="btn btn-primary"> שמור </button>
                             <br />
                         </form>
                     </div>
@@ -1637,22 +1625,22 @@
                         <span onclick="document.getElementById('id03').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                         <form id="UserTypeForm" class="allforms" onsubmit="return false">
                             <br />
-                            <h2 id="user_type_headline">סוג משתמש</h2>
+                            <h2 id="user_type_headline">סוג פרויקט</h2>
                             <br />
                             <table class="display" dir="rtl">
                                 <thead>
                                     <tr>
                                         <td>
                                             <div class="form-group">
-                                                <label for="user_type_name"><span class="red-star">★ </span>שם סוג משתמש</label>
-                                                <textarea rows="1" class="form-control groupDetails" id="user_type_name" placeholder="הזן שם סוג משתמש"></textarea>
+                                                <label for="user_type_name"><span class="red-star">★ </span>שם סוג פרויקט</label>
+                                                <textarea rows="1" class="form-control groupDetails" id="user_type_name" placeholder="הזן שם סוג פרויקט"></textarea>
                                             </div>
                                         </td>
                                     </tr>
                                 </thead>
                             </table>
                             <br />
-                            <button type="submit" id="saveBTN" class="btn btn-primary"> שמור </button>
+                            <button type="submit" id="saveProjTypeBTN" class="btn btn-primary"> שמור </button>
                             <br />
                         </form>
                     </div>
@@ -1698,7 +1686,7 @@
                                 </thead>
                             </table>
                             <br />
-                            <button type="submit" id="saveBTN" class="btn btn-primary"> שמור </button>
+                            <button type="submit" id="saveCertTypeBTN" class="btn btn-primary"> שמור </button>
                             <br />
                         </form>
                     </div>
@@ -1736,7 +1724,7 @@
                                 </thead>
                             </table>
                             <br />
-                            <button type="submit" id="saveBTN" class="btn btn-primary"> שמור </button>
+                            <button type="submit" id="saveItemBTN" class="btn btn-primary"> שמור </button>
                             <br />
                         </form>
                     </div>
@@ -1761,7 +1749,9 @@
                                                 <label for="defect_name"><span class="red-star">★ </span>שם ליקוי</label>
                                                 <textarea rows="1" class="form-control groupDetails" id="defect_name" required="required" placeholder="הזן שם ליקוי"></textarea>
                                             </div>
-
+                                        <td>
+                                    </tr>
+                                    <tr>
                                         <td>
                                             <div class="form-group">
                                                 <label for="defect_grade"><span class="red-star">★ </span>ציון</label>
@@ -1782,11 +1772,47 @@
                                 </thead>
                             </table>
                             <br />
-                            <button type="submit" id="saveBTN" class="btn btn-primary"> שמור </button>
+                            <button type="submit" id="saveDefectBTN" class="btn btn-primary"> שמור </button>
                             <br />
                         </form>
                     </div>
                     <br />
+                </div>
+            </div>
+        </div>
+        <div class="w3-container">
+            <div id="id07" class="w3-modal">
+                <div class="w3-modal-content">
+                    <div class="w3-container" dir="rtl">
+                        <span onclick="document.getElementById('id07').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+
+                        <div>
+                            <br />
+                            <br />
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <h2 id="new_inst">משקלים לפי סוגי ליקויים</h2>
+                                </div>
+                            </div>
+
+                            <div id="partTblDiv">
+                                <br />
+                                <br />
+                                <table id="weightsTBL" class="display" style="width:100%" dir="rtl">
+                                    <thead>
+                                        <tr>
+                                            <th>מס' סוג פרויקט</th>
+                                            <th>מס' סוג ליקוי</th>
+                                            <th>שם סוג ליקוי</th>
+                                            <th>משקל</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+
+                        </div>
+                        <br />-->
+                    </div>
                 </div>
             </div>
         </div>
@@ -1849,7 +1875,7 @@
                     <p id="errorPassword">הסיסמא לא תואמת-נסה שנית</p>
                     </br>
                     <div class="btn_personal_user">
-                        <button type="submit" id="saveBTN" class="btn btn-primary"> שמור </button>
+                        <button type="submit" id="saveUserBTN" class="btn btn-primary"> שמור </button>
                     </div>
                 </form>
                 </br>
