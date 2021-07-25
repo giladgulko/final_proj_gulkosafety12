@@ -1874,7 +1874,7 @@ namespace final_proj_gulkosafety.Models.DAL
                 con = connect("DBConnectionString");
                 String selectSTR = "";
 
-                selectSTR = "SELECT * FROM certificate c inner join certificate_type ct on c.certificate_type_num = ct.certificate_type_num WHERE Year(DATEADD(year, expiration, date)) = Year(CURRENT_TIMESTAMP) AND Month(DATEADD(year, expiration, date)) = Month(CURRENT_TIMESTAMP)";
+                selectSTR = "SELECT c.*, ct.type_name, ct.price,ct.expiration FROM [certificate] c inner join certificate_type ct on c.certificate_type_num = ct.certificate_type_num WHERE DATEADD(YY, ct.expiration, c.date) >= "+date+" AND DATEADD(YY, ct.expiration, c.date) <= DATEADD(MM, 1, "+date+"); ";
 
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
@@ -2207,7 +2207,7 @@ namespace final_proj_gulkosafety.Models.DAL
                 con = connect("DBConnectionString");
                 String selectSTR = "";
 
-                selectSTR = "SELECT i.*, it.type_name, it.expiration FROM instruction i inner join instruction_type it on i.Instruction_type_num = it.instruction_type_num WHERE Year(DATEADD(year, expiration, date)) = Year(CURRENT_TIMESTAMP) AND Month(DATEADD(year, expiration, date)) = Month(CURRENT_TIMESTAMP) ";
+                selectSTR = "SELECT i.*, it.type_name, it.expiration FROM instruction i inner join instruction_type it on i.instruction_type_num = it.instruction_type_num where DATEADD(YY, it.expiration, i.date) >= "+date+"AND DATEADD(YY, it.expiration, i.date) <= DATEADD(MM, 1, "+date+");";
 
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
