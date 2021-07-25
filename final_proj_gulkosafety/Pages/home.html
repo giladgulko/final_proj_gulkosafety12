@@ -55,7 +55,7 @@
         }
 
         function getExpiredInstructionsSuccess(instructionsList) {
-            expiredInstructions = instructionsList;
+            expiredInstructions = JSON.parse(instructionsList);
             if (expiredInstructions.length > 0) {
                 let str = "<ul class='circle'>";
                 for (i = 0; i < expiredInstructions.length; i++) {
