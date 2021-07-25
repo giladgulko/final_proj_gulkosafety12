@@ -29,6 +29,8 @@
     <!--//Email-->
     <script src="https://smtpjs.com/v3/smtp.js"></script>
     <!--//Email-->
+  
+
     <title>דוח ביקור</title>
 
     <script>
@@ -42,7 +44,7 @@
         userType = JSON.parse(localStorage["userType"]);
         Users = JSON.parse(localStorage["projContacts"]);
         pdf = "";
-        uriToSend =""
+        uriToSend = ""
         $(document).ready(function () {
             //build view page
             if (userType != 1)
@@ -108,8 +110,8 @@
             $('.editReportDetailsBtns').hide();
             $('.type2mode').hide();
             $('#sendPdf').hide();
-            
-           
+
+
         }
 
         function bringDataFromLocal() {
@@ -153,7 +155,7 @@
                     $("#addDefectToRBtn").hide();
                 }
             }
-           
+
             headLine = "<h1>" + report.Report_num + " דוח ביקור " + "</h1>";
             time = report.Time.split('T');
             date = report.Date.split('T');
@@ -314,7 +316,7 @@
             $('#mask').addClass('showing');
             $('html').addClass('hide-scroll');
             var id = '#dialog';
-            var fullImagePath = "../uploadedFiles/"+defectToEdit.Picture_link;
+            var fullImagePath = "../uploadedFiles/" + defectToEdit.Picture_link;
             $('.image').attr({
                 'src': fullImagePath
             });
@@ -761,7 +763,7 @@
             }
 
         }
-        function topdf(num){
+        function topdf(num) {
             var element = document.getElementById('allPage');
             name = 'report-' + report.Report_num + '.pdf';
             var opt = {
@@ -770,26 +772,26 @@
                 pagebreak: { mode: 'avoid-all', before: '#page2el' },
                 html2canvas: { scale: 2 },
                 jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
-           
+
             };
             if (num == 1) {
                 //html2pdf(element,opt);
                 window.open("reportToPdf.html", "_blank")
-                    
+
             }
             else {
                 html2pdf().set(opt).from(element).outputPdf('datauri').then(uri => {
                     sendEmail(uri, name)
-                  //  showAfterPDF()
+                    //  showAfterPDF()
                 })
             }
-           
-        
+
+
             console.log(worker)
-           
+
         }
 
-        function showAfterPDF(){
+        function showAfterPDF() {
             $("#sendPdf").show()
             $("#downPdf").show()
             $("#logout").show()
@@ -812,34 +814,34 @@
         function sendEmail(uri, name) {
             console.log(uri)
             mail = "<p>היי</p>"
-            mail += "<p>עלה דוח חדש לאתר בפרוייקט-"+project.Name+"</p>"
+            mail += "<p>עלה דוח חדש לאתר בפרוייקט-" + project.Name + "</p>"
             mail += "<a href='http://proj.ruppin.ac.il/igroup60/test2/A/tar5/Pages/projects.html'>כניסה למערכת</a>"
-           
-                Email.send({
-                    Host: "smtp.google.com",
-                    Username: "reactapptest230@gmail.com",
-                    Password: "FA1278973EE70094257D1CFD15BECDBA0BDC",
 
-                    To: "giladgulko@gmail.com",//כרגע שולח למייל פקטיבי בשביל לא לשלוח מייל לאנשים האמיתיים
-                    From: "gulkosafetyuser@gmail.com",
-                    Subject: "דוח חדש באתר",
+            Email.send({
+                Host: "smtp.google.com",
+                Username: "esports.iesa44@gmail.com",
+                Password: "7CC84767D2FF1C146F7EEAFD7EB3CF71FD3B",
 
-                    Body: mail,
-                    Attachments: [
-                        {
-                            name: name,
-                            data: uri
-                        }]
+                To: "giladgulko@gmail.com",
+                From: "gulkosafetyuser@gmail.com",
+                Subject: "דוח חדש באתר",
 
-                }).then(
-                    alert("מעולה!")
-                    
-                );
+                Body: mail,
+                Attachments: [
+                    {
+                        name: name,
+                        data: uri
+                    }]
+
+            }).then(
+                alert("מעולה!")
+
+            );
 
             showAfterPDF()
-            
-                return false;
-            
+
+            return false;
+
         }
         function goto() {
             alert('hii')
